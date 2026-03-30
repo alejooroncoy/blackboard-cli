@@ -4,6 +4,16 @@ All notable changes to `blackboard-upc` will be documented here.
 
 ---
 
+## [1.0.4] — 2026-03-30
+
+### Changed
+- `download_attachment` y `download_file_url` ya no devuelven base64 — guardan el archivo directamente a disco
+- Directorio por defecto: `process.cwd()` (donde el usuario está trabajando), configurable con `outputDir`
+- Pasar `filename` (el `displayName` de `list_attachments`) para guardar con el nombre correcto
+- Respuesta devuelve `{ saved, size, mimeType }` — sin datos en el contexto
+
+---
+
 ## [1.0.3] — 2026-03-30
 
 ### Changed
