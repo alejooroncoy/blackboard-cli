@@ -4,6 +4,18 @@ All notable changes to `blackboard-upc` will be documented here.
 
 ---
 
+## [1.0.2] — 2026-03-30
+
+### Fixed
+- `list_attachments` — fallback automático a parseo del HTML del `body` para contenido tipo `x-bb-document` y `x-bb-lesson` (antes retornaba 400 en estos casos)
+- `download_attachment` — ahora acepta URLs directas de `bbcswebdav` además de IDs estándar de Blackboard
+
+### Added
+- `download_file_url` (MCP) — nueva herramienta para descargar archivos embebidos directamente desde URLs de `bbcswebdav` con las cookies de sesión autenticadas
+- Todos los tools de descarga ahora retornan `filename`, `mimeType` y `size` junto al contenido `base64`
+
+---
+
 ## [1.0.1] — 2026-03-30
 
 ### Added
