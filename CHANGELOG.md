@@ -4,6 +4,18 @@ All notable changes to `blackboard-upc` will be documented here.
 
 ---
 
+## [1.0.1] — 2026-03-30
+
+### Added
+- `courses members <courseId>` — lista compañeros e instructor de un curso (con `--role` y `--json`)
+
+### Improved
+- `courses list` — usa `expand=course` en una sola llamada en vez de 1+N (antes: 1 llamada por curso)
+- `assignments list` — usa bulk grades (`/gradebook/users/{id}`) en paralelo con columns, eliminando N llamadas individuales
+- `courses members` — usa `expand=user` para traer nombres en una sola llamada
+
+---
+
 ## [1.0.0] — 2026-03-30
 
 ### Added
@@ -53,7 +65,7 @@ All notable changes to `blackboard-upc` will be documented here.
 
 ## Roadmap
 
-- [ ] `npx` install sin clonar repo (publicación en npm)
+- [x] `npx` install sin clonar repo (publicación en npm)
 - [ ] Refresh automático de sesión antes de expirar
 - [ ] Notificaciones de entregas próximas (`assignments due`)
 - [ ] Descarga de videos de grabaciones de clase

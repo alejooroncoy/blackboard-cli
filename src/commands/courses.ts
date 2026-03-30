@@ -231,6 +231,63 @@ export function coursesCommand(program: Command) {
       }
     });
 
+  // Members
+  courses
+    .command('members <courseId>')
+    .description('List students and instructors in a course')
+    .option('--json', 'Output raw JSON')
+    .option('--role <role>', 'Filter by role: Student, Instructor')
+    .action(async (courseId, opts) => {
+      const session = requireSession();
+      const client = createClient(session);
+      const spinner = ora({ text: 'Fetching course members...', stream: process.stderr }).start();
+
+      try {
+        const res = await client.get(
+          `/learn/api/public/v1/courses/${courseId}/users?expand=user&limit=200`
+        );
+        let members: any[] = res.data.results ?? [];
+
+        if (opts.role) {
+          const roleFilter = opts.role.toLowerCase();
+          members = members.filter((m: any) => m.courseRoleId?.toLowerCase() === roleFilter);
+        }
+
+        spinner.succeed(`${members.length} members`);
+
+        if (opts.json) {
+          console.log(JSON.stringify({ results: members }, null, 2));
+          return;
+        }
+
+        const students = members.filter((m: any) => m.courseRoleId === 'Student');
+        const instructors = members.filter((m: any) => m.courseRoleId !== 'Student');
+
+        console.log('');
+        if (instructors.length > 0) {
+          console.log(chalk.bold('  Instructores'));
+          for (const m of instructors) {
+            const name = m.user ? `${m.user.name.given} ${m.user.name.family}` : m.userId;
+            console.log(`  ${chalk.yellow(name)}`);
+          }
+          console.log('');
+        }
+
+        if (students.length > 0) {
+          console.log(chalk.bold(`  Estudiantes (${students.length})`));
+          students.forEach((m: any, i: number) => {
+            const name = m.user ? `${m.user.name.given} ${m.user.name.family}` : m.userId;
+            const num = chalk.gray(`${String(i + 1).padStart(2, ' ')}.`);
+            console.log(`  ${num} ${name}`);
+          });
+        }
+        console.log('');
+      } catch (err: any) {
+        spinner.fail(err.message);
+        process.exit(1);
+      }
+    });
+
   // Grades
   courses
     .command('grades <courseId>')

@@ -61,7 +61,16 @@ export function assignmentsCommand(program: Command) {
         let userId = session.userId;
         if (!userId) { const me = await getMe(client); userId = me.id; }
 
-        const columns = await listAssignments(client, courseId);
+        const [columns, gradesRes] = await Promise.all([
+          listAssignments(client, courseId),
+          client
+            .get(`/learn/api/public/v1/courses/${courseId}/gradebook/users/${userId}`, {
+              params: { limit: 200 },
+            })
+            .then((r) => r.data.results as any[])
+            .catch(() => [] as any[]),
+        ]);
+
         spinner.succeed(`${columns.length} assignments found`);
 
         if (opts.json) { console.log(JSON.stringify(columns, null, 2)); return; }
@@ -71,19 +80,11 @@ export function assignmentsCommand(program: Command) {
           return;
         }
 
-        // Fetch my grade for each assignment in parallel
-        const gradeResults = await Promise.allSettled(
-          columns.map((c) =>
-            client
-              .get(`/learn/api/public/v1/courses/${courseId}/gradebook/users/${userId}/columns/${c.id}`)
-              .then((r) => r.data)
-              .catch(() => null)
-          )
-        );
+        const gradeMap = new Map(gradesRes.map((g: any) => [g.columnId, g]));
 
         console.log('');
-        columns.forEach((col, i) => {
-          const grade = gradeResults[i].status === 'fulfilled' ? gradeResults[i].value : null;
+        columns.forEach((col) => {
+          const grade = gradeMap.get(col.id) ?? null;
           const possible = col.score?.possible ?? '?';
           const due = col.grading?.due;
           const attemptsAllowed = col.grading?.attemptsAllowed === 0

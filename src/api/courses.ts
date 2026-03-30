@@ -14,20 +14,9 @@ export async function getMyCourses(
   const params: Record<string, any> = { limit: opts.limit ?? 50 };
   if (opts.offset) params.offset = opts.offset;
 
+  params.expand = 'course';
   const r = await client.get(`/learn/api/public/v1/users/${userId}/courses`, { params });
-  const memberships: UserCourse[] = r.data.results;
-
-  // Resolve course names in parallel
-  const courseDetails = await Promise.allSettled(
-    memberships.map((m) => getCourse(client, m.courseId))
-  );
-
-  const results = memberships.map((m, i) => ({
-    ...m,
-    course: courseDetails[i].status === 'fulfilled' ? courseDetails[i].value : undefined,
-  }));
-
-  return { results, paging: r.data.paging };
+  return { results: r.data.results, paging: r.data.paging };
 }
 
 export async function getCourse(client: AxiosInstance, courseId: string): Promise<Course> {
