@@ -1,0 +1,6 @@
+.claude/
+node_modules/
+dist/
+*.js.map
+.env
+.DS_Store
