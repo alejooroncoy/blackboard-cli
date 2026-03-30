@@ -4,6 +4,14 @@ All notable changes to `blackboard-upc` will be documented here.
 
 ---
 
+## [1.0.3] — 2026-03-30
+
+### Changed
+- Todos los tools MCP migrados de `server.tool()` a `server.registerTool()` (API nueva del SDK v1.28+)
+- Elimina todos los warnings de TypeScript por uso de API deprecada
+
+---
+
 ## [1.0.2] — 2026-03-30
 
 ### Fixed
