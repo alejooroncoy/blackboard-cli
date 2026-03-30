@@ -143,37 +143,116 @@ export async function startMcpServer() {
   // ── download_attachment ─────────────────────────────────────────────────────
   server.tool(
     'download_attachment',
-    'Download a file from a course content item. Returns base64-encoded content.',
+    'Download a file from a course content item. attachmentId can be a Blackboard attachment ID (for x-bb-file) or a full bbcswebdav URL (for x-bb-document embedded files). Returns base64-encoded content.',
     {
       courseId: z.string().describe('Blackboard course ID'),
       contentId: z.string().describe('Content item ID'),
-      attachmentId: z.string().describe('Attachment ID from list_attachments'),
+      attachmentId: z.string().describe('Attachment ID from list_attachments, or a full bbcswebdav URL for embedded files'),
     },
     async ({ courseId, contentId, attachmentId }) => {
       const { client } = getClient();
-      const r = await client.get(
-        `/learn/api/public/v1/courses/${courseId}/contents/${contentId}/attachments/${attachmentId}/download`,
-        { responseType: 'arraybuffer' }
-      );
+
+      // If attachmentId is a full URL (embedded file), download directly
+      const url = attachmentId.startsWith('http')
+        ? attachmentId
+        : `/learn/api/public/v1/courses/${courseId}/contents/${contentId}/attachments/${attachmentId}/download`;
+
+      const r = await client.get(url, { responseType: 'arraybuffer', headers: { Accept: '*/*' } });
       const b64 = Buffer.from(r.data).toString('base64');
-      return { content: [{ type: 'text', text: b64 }] };
+      const contentDisposition = r.headers['content-disposition'] as string | undefined;
+      const filename = contentDisposition
+        ? (contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/))?.[1]?.replace(/['"]/g, '').trim()
+        : undefined;
+      const mimeType = (r.headers['content-type'] as string | undefined) ?? 'application/octet-stream';
+      return {
+        content: [{
+          type: 'text',
+          text: JSON.stringify({ filename: filename ?? 'file', mimeType, size: r.data.byteLength, base64: b64 }, null, 2),
+        }],
+      };
     }
   );
 
   // ── list_attachments ────────────────────────────────────────────────────────
   server.tool(
     'list_attachments',
-    'List file attachments for a course content item',
+    'List file attachments for a course content item. Works for x-bb-file (REST API) and x-bb-document (embedded files in body HTML).',
     {
       courseId: z.string().describe('Blackboard course ID'),
       contentId: z.string().describe('Content item ID'),
     },
     async ({ courseId, contentId }) => {
       const { client } = getClient();
+
+      // Try standard REST attachments endpoint first (works for x-bb-file)
+      try {
+        const r = await client.get(
+          `/learn/api/public/v1/courses/${courseId}/contents/${contentId}/attachments`
+        );
+        return { content: [{ type: 'text', text: JSON.stringify(r.data, null, 2) }] };
+      } catch (err: any) {
+        if (err.response?.status !== 400 && err.response?.status !== 404) throw err;
+      }
+
+      // Fallback: fetch content and parse embedded files from body HTML (x-bb-document, x-bb-lesson)
       const r = await client.get(
-        `/learn/api/public/v1/courses/${courseId}/contents/${contentId}/attachments`
+        `/learn/api/public/v1/courses/${courseId}/contents/${contentId}`
       );
-      return { content: [{ type: 'text', text: JSON.stringify(r.data, null, 2) }] };
+      const body: string = r.data?.body ?? '';
+      const matches = [...body.matchAll(/data-bbfile="([^"]+)"/g)];
+      const files = matches.map((m) => {
+        try {
+          const meta = JSON.parse(m[1].replace(/&quot;/g, '"'));
+          return {
+            type: 'embedded',
+            displayName: meta.displayName ?? meta.linkName ?? 'unknown',
+            mimeType: meta.mimeType ?? 'application/octet-stream',
+            resourceUrl: meta.resourceUrl ?? null,
+          };
+        } catch {
+          return null;
+        }
+      }).filter(Boolean);
+
+      return {
+        content: [{
+          type: 'text',
+          text: JSON.stringify(
+            { type: 'embedded_files', note: 'Use download_file_url with resourceUrl to download', results: files },
+            null, 2
+          ),
+        }],
+      };
+    }
+  );
+
+  // ── download_file_url ───────────────────────────────────────────────────────
+  server.tool(
+    'download_file_url',
+    'Download a file directly from a Blackboard bbcswebdav URL (for x-bb-document embedded files). Returns base64-encoded content and filename.',
+    {
+      url: z.string().describe('Direct file URL from bbcswebdav (resourceUrl from content body)'),
+      filename: z.string().optional().describe('Desired filename for saving the file'),
+    },
+    async ({ url, filename }) => {
+      const { client } = getClient();
+      const r = await client.get(url, {
+        responseType: 'arraybuffer',
+        headers: { Accept: '*/*' },
+      });
+      const b64 = Buffer.from(r.data).toString('base64');
+      const contentDisposition = r.headers['content-disposition'] as string | undefined;
+      const detectedName = contentDisposition
+        ? (contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/))?.[1]?.replace(/['"]/g, '').trim()
+        : undefined;
+      const finalName = filename ?? detectedName ?? 'file';
+      const mimeType = (r.headers['content-type'] as string | undefined) ?? 'application/octet-stream';
+      return {
+        content: [{
+          type: 'text',
+          text: JSON.stringify({ filename: finalName, mimeType, size: r.data.byteLength, base64: b64 }, null, 2),
+        }],
+      };
     }
   );
 
