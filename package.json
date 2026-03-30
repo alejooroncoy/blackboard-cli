@@ -1,6 +1,6 @@
 {
   "name": "blackboard-upc",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "CLI no oficial para UPC Aula Virtual (Blackboard Learn) — acceso desde la terminal y MCP para Claude",
   "main": "run.js",
   "bin": {

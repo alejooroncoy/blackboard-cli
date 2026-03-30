@@ -1,6 +1,8 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
+import fs from 'fs';
+import path from 'path';
 import { loadSession, isSessionValid } from '../auth/session.js';
 import { createClient } from '../api/client.js';
 import {
@@ -156,32 +158,40 @@ export async function startMcpServer() {
   server.registerTool(
     'download_attachment',
     {
-      description: 'Download a file from a course content item. attachmentId can be a Blackboard attachment ID (for x-bb-file) or a full bbcswebdav URL (for x-bb-document embedded files). Returns base64-encoded content.',
+      description: 'Download a file from a course content item and save it to disk. attachmentId can be a Blackboard attachment ID (for x-bb-file) or a full bbcswebdav URL (for x-bb-document embedded files). Saves to outputDir (default: current working directory).',
       inputSchema: {
         courseId: z.string().describe('Blackboard course ID'),
         contentId: z.string().describe('Content item ID'),
         attachmentId: z.string().describe('Attachment ID from list_attachments, or a full bbcswebdav URL for embedded files'),
+        filename: z.string().optional().describe('Filename to save as (e.g. displayName from list_attachments). Falls back to Content-Disposition header.'),
+        outputDir: z.string().optional().describe('Directory to save the file (default: current working directory)'),
       },
     },
-    async ({ courseId, contentId, attachmentId }) => {
+    async ({ courseId, contentId, attachmentId, filename, outputDir }) => {
       const { client } = getClient();
 
-      // If attachmentId is a full URL (embedded file), download directly
       const url = attachmentId.startsWith('http')
         ? attachmentId
         : `/learn/api/public/v1/courses/${courseId}/contents/${contentId}/attachments/${attachmentId}/download`;
 
       const r = await client.get(url, { responseType: 'arraybuffer', headers: { Accept: '*/*' } });
-      const b64 = Buffer.from(r.data).toString('base64');
+
       const contentDisposition = r.headers['content-disposition'] as string | undefined;
-      const filename = contentDisposition
+      const detectedName = contentDisposition
         ? (contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/))?.[1]?.replace(/['"]/g, '').trim()
         : undefined;
+      const finalName = filename ?? detectedName ?? 'download';
+
+      const dir = path.resolve(outputDir ?? process.cwd());
+      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+      const dest = path.join(dir, finalName);
+      fs.writeFileSync(dest, Buffer.from(r.data));
+
       const mimeType = (r.headers['content-type'] as string | undefined) ?? 'application/octet-stream';
       return {
         content: [{
           type: 'text',
-          text: JSON.stringify({ filename: filename ?? 'file', mimeType, size: r.data.byteLength, base64: b64 }, null, 2),
+          text: JSON.stringify({ saved: dest, size: r.data.byteLength, mimeType }, null, 2),
         }],
       };
     }
@@ -253,29 +263,33 @@ export async function startMcpServer() {
   server.registerTool(
     'download_file_url',
     {
-      description: 'Download a file directly from a Blackboard bbcswebdav URL (for x-bb-document embedded files). Returns base64-encoded content and filename.',
+      description: 'Download a file directly from a Blackboard bbcswebdav URL and save it to disk. Saves to outputDir (default: current working directory).',
       inputSchema: {
         url: z.string().describe('Direct file URL from bbcswebdav (downloadUrl from list_attachments)'),
-        filename: z.string().optional().describe('Desired filename for saving the file'),
+        filename: z.string().optional().describe('Filename to save as (e.g. displayName from list_attachments)'),
+        outputDir: z.string().optional().describe('Directory to save the file (default: current working directory)'),
       },
     },
-    async ({ url, filename }) => {
+    async ({ url, filename, outputDir }) => {
       const { client } = getClient();
-      const r = await client.get(url, {
-        responseType: 'arraybuffer',
-        headers: { Accept: '*/*' },
-      });
-      const b64 = Buffer.from(r.data).toString('base64');
+      const r = await client.get(url, { responseType: 'arraybuffer', headers: { Accept: '*/*' } });
+
       const contentDisposition = r.headers['content-disposition'] as string | undefined;
       const detectedName = contentDisposition
         ? (contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/))?.[1]?.replace(/['"]/g, '').trim()
         : undefined;
-      const finalName = filename ?? detectedName ?? 'file';
+      const finalName = filename ?? detectedName ?? 'download';
+
+      const dir = path.resolve(outputDir ?? process.cwd());
+      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+      const dest = path.join(dir, finalName);
+      fs.writeFileSync(dest, Buffer.from(r.data));
+
       const mimeType = (r.headers['content-type'] as string | undefined) ?? 'application/octet-stream';
       return {
         content: [{
           type: 'text',
-          text: JSON.stringify({ filename: finalName, mimeType, size: r.data.byteLength, base64: b64 }, null, 2),
+          text: JSON.stringify({ saved: dest, size: r.data.byteLength, mimeType }, null, 2),
         }],
       };
     }
