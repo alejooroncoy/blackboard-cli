@@ -21,7 +21,7 @@ npm install -g blackboard-upc
 blackboard login
 
 # Opción 3 — clonar el repo
-git clone https://github.com/aleoroni/blackboard-cli
+git clone https://github.com/alejooroncoy/blackboard-cli
 cd blackboard-cli
 npm install
 npx playwright install chromium
@@ -48,7 +48,7 @@ Se abre una ventana del navegador con el login de Microsoft UPC. Inicia sesión 
   CLI no oficial para UPC Aula Virtual · Blackboard Learn
 
   ✓ Sesión guardada — expira en 8 horas
-    Usuario: Alejandro Daniel Oroncoy Almeyda
+    Usuario: Juan Pérez García
 
   ¿Qué puedo hacer ahora?
 
@@ -63,15 +63,15 @@ Se abre una ventana del navegador con el login de Microsoft UPC. Inicia sesión 
 ```bash
 blackboard courses list
 
-  _529630_1  Fundamentos de Arquitectura de Software [Ultra]
-  _529580_1  Finanzas e Ingeniería Económica [Ultra]
-  _529533_1  Desarrollo de Soluciones IOT [Ultra]
-  _529760_1  Diseño de Experimentos de Ingeniería de Software [Ultra]
+  _100001_1  Cálculo Diferencial e Integral [Ultra]
+  _100002_1  Programación Orientada a Objetos [Ultra]
+  _100003_1  Bases de Datos [Ultra]
+  _100004_1  Algoritmos y Estructuras de Datos [Ultra]
 
-blackboard assignments list _529760_1
+blackboard assignments list _100004_1
 
-  _13890556_1  Tarea 1  [manual]
-    Nota: sin entregar · Máx: 3 pts · Entrega: 05/03/2026 (vencida hace 23d)
+  _200001_1  Tarea 1  [manual]
+    Nota: sin entregar · Máx: 5 pts · Entrega: 15/04/2026 (vence en 17d)
 ```
 
 ---
