@@ -40,6 +40,8 @@ blackboard login
 
 Se abre una ventana del navegador con el login de Microsoft UPC. Inicia sesión con tu cuenta `u20XXXXXXX@upc.edu.pe` (incluye MFA si lo tienes). La ventana se cierra sola y la sesión queda guardada 8 horas.
 
+> **Importante:** durante el login, Microsoft mostrará el mensaje **"Stay signed in?"** con un checkbox **"Don't show this again"**. Activa ese checkbox y haz clic en **Yes** — esto le indica a Microsoft que mantenga la sesión activa y es necesario para que el CLI pueda guardar las cookies correctamente.
+
 ```
   ██████  ██       █████   ██████ ██   ██ ██████   ██████   █████  ██████  ██████
   ...
