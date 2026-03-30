@@ -30,21 +30,21 @@ export async function startMcpServer() {
   });
 
   // ── whoami ─────────────────────────────────────────────────────────────────
-  server.tool('whoami', 'Get the currently authenticated UPC student info', {}, async () => {
+  server.registerTool('whoami', { description: 'Get the currently authenticated UPC student info' }, async () => {
     const { client } = getClient();
     const me = await getMe(client);
     return { content: [{ type: 'text', text: JSON.stringify(me, null, 2) }] };
   });
 
   // ── system_version ─────────────────────────────────────────────────────────
-  server.tool('system_version', 'Get Blackboard Learn server version', {}, async () => {
+  server.registerTool('system_version', { description: 'Get Blackboard Learn server version' }, async () => {
     const { client } = getClient();
     const v = await getSystemVersion(client);
     return { content: [{ type: 'text', text: JSON.stringify(v, null, 2) }] };
   });
 
   // ── list_courses ────────────────────────────────────────────────────────────
-  server.tool('list_courses', 'List all enrolled courses for the current student', {}, async () => {
+  server.registerTool('list_courses', { description: 'List all enrolled courses for the current student' }, async () => {
     const { client, session } = getClient();
     let userId = session.userId;
     if (!userId) { const me = await getMe(client); userId = me.id; }
@@ -53,10 +53,12 @@ export async function startMcpServer() {
   });
 
   // ── get_course ──────────────────────────────────────────────────────────────
-  server.tool(
+  server.registerTool(
     'get_course',
-    'Get details of a specific course by its Blackboard ID (e.g. _529580_1)',
-    { courseId: z.string().describe('Blackboard course ID like _529580_1') },
+    {
+      description: 'Get details of a specific course by its Blackboard ID (e.g. _529580_1)',
+      inputSchema: { courseId: z.string().describe('Blackboard course ID like _529580_1') },
+    },
     async ({ courseId }) => {
       const { client } = getClient();
       const data = await getCourse(client, courseId);
@@ -65,12 +67,14 @@ export async function startMcpServer() {
   );
 
   // ── list_contents ───────────────────────────────────────────────────────────
-  server.tool(
+  server.registerTool(
     'list_contents',
-    'List content items inside a course or folder. Use parentId to navigate into subfolders.',
     {
-      courseId: z.string().describe('Blackboard course ID'),
-      parentId: z.string().optional().describe('Parent folder content ID (omit for root level)'),
+      description: 'List content items inside a course or folder. Use parentId to navigate into subfolders.',
+      inputSchema: {
+        courseId: z.string().describe('Blackboard course ID'),
+        parentId: z.string().optional().describe('Parent folder content ID (omit for root level)'),
+      },
     },
     async ({ courseId, parentId }) => {
       const { client } = getClient();
@@ -80,10 +84,12 @@ export async function startMcpServer() {
   );
 
   // ── list_announcements ──────────────────────────────────────────────────────
-  server.tool(
+  server.registerTool(
     'list_announcements',
-    'List recent announcements for a course',
-    { courseId: z.string().describe('Blackboard course ID') },
+    {
+      description: 'List recent announcements for a course',
+      inputSchema: { courseId: z.string().describe('Blackboard course ID') },
+    },
     async ({ courseId }) => {
       const { client } = getClient();
       const data = await getCourseAnnouncements(client, courseId);
@@ -92,10 +98,12 @@ export async function startMcpServer() {
   );
 
   // ── list_assignments ────────────────────────────────────────────────────────
-  server.tool(
+  server.registerTool(
     'list_assignments',
-    'List assignments and tasks in a course with due dates, scores and submission status',
-    { courseId: z.string().describe('Blackboard course ID') },
+    {
+      description: 'List assignments and tasks in a course with due dates, scores and submission status',
+      inputSchema: { courseId: z.string().describe('Blackboard course ID') },
+    },
     async ({ courseId }) => {
       const { client } = getClient();
       const data = await listAssignments(client, courseId);
@@ -104,12 +112,14 @@ export async function startMcpServer() {
   );
 
   // ── list_attempts ───────────────────────────────────────────────────────────
-  server.tool(
+  server.registerTool(
     'list_attempts',
-    'List submission attempts for a specific assignment (gradebook column)',
     {
-      courseId: z.string().describe('Blackboard course ID'),
-      columnId: z.string().describe('Gradebook column ID (assignment ID)'),
+      description: 'List submission attempts for a specific assignment (gradebook column)',
+      inputSchema: {
+        courseId: z.string().describe('Blackboard course ID'),
+        columnId: z.string().describe('Gradebook column ID (assignment ID)'),
+      },
     },
     async ({ courseId, columnId }) => {
       const { client } = getClient();
@@ -119,10 +129,12 @@ export async function startMcpServer() {
   );
 
   // ── get_grades ──────────────────────────────────────────────────────────────
-  server.tool(
+  server.registerTool(
     'get_grades',
-    'Get all grades for the current student in a course',
-    { courseId: z.string().describe('Blackboard course ID') },
+    {
+      description: 'Get all grades for the current student in a course',
+      inputSchema: { courseId: z.string().describe('Blackboard course ID') },
+    },
     async ({ courseId }) => {
       const { client, session } = getClient();
       let userId = session.userId;
@@ -141,13 +153,15 @@ export async function startMcpServer() {
   );
 
   // ── download_attachment ─────────────────────────────────────────────────────
-  server.tool(
+  server.registerTool(
     'download_attachment',
-    'Download a file from a course content item. attachmentId can be a Blackboard attachment ID (for x-bb-file) or a full bbcswebdav URL (for x-bb-document embedded files). Returns base64-encoded content.',
     {
-      courseId: z.string().describe('Blackboard course ID'),
-      contentId: z.string().describe('Content item ID'),
-      attachmentId: z.string().describe('Attachment ID from list_attachments, or a full bbcswebdav URL for embedded files'),
+      description: 'Download a file from a course content item. attachmentId can be a Blackboard attachment ID (for x-bb-file) or a full bbcswebdav URL (for x-bb-document embedded files). Returns base64-encoded content.',
+      inputSchema: {
+        courseId: z.string().describe('Blackboard course ID'),
+        contentId: z.string().describe('Content item ID'),
+        attachmentId: z.string().describe('Attachment ID from list_attachments, or a full bbcswebdav URL for embedded files'),
+      },
     },
     async ({ courseId, contentId, attachmentId }) => {
       const { client } = getClient();
@@ -174,12 +188,14 @@ export async function startMcpServer() {
   );
 
   // ── list_attachments ────────────────────────────────────────────────────────
-  server.tool(
+  server.registerTool(
     'list_attachments',
-    'List file attachments for a course content item. Works for x-bb-file (REST API) and x-bb-document (embedded files in body HTML).',
     {
-      courseId: z.string().describe('Blackboard course ID'),
-      contentId: z.string().describe('Content item ID'),
+      description: 'List file attachments for a course content item. Works for x-bb-file (REST API) and x-bb-document (embedded files in body HTML).',
+      inputSchema: {
+        courseId: z.string().describe('Blackboard course ID'),
+        contentId: z.string().describe('Content item ID'),
+      },
     },
     async ({ courseId, contentId }) => {
       const { client } = getClient();
@@ -199,15 +215,22 @@ export async function startMcpServer() {
         `/learn/api/public/v1/courses/${courseId}/contents/${contentId}`
       );
       const body: string = r.data?.body ?? '';
-      const matches = [...body.matchAll(/data-bbfile="([^"]+)"/g)];
-      const files = matches.map((m) => {
+
+      // Extract <a> tags with data-bbfile — capture both the JSON metadata and the href (signed download URL)
+      // Handle both attribute orderings: data-bbfile...href and href...data-bbfile
+      const filePattern = /data-bbfile="([^"]+)"[^<]*?href="([^"]+)"|href="([^"]+)"[^<]*?data-bbfile="([^"]+)"/g;
+      const anchorMatches = [...body.matchAll(filePattern)];
+      const files = anchorMatches.map((m) => {
+        const bbfileRaw = m[1] ?? m[4];
+        const hrefRaw   = m[2] ?? m[3];
         try {
-          const meta = JSON.parse(m[1].replace(/&quot;/g, '"'));
+          const meta = JSON.parse(bbfileRaw.replace(/&quot;/g, '"'));
+          const downloadUrl = hrefRaw ? hrefRaw.replace(/&amp;/g, '&') : (meta.resourceUrl ?? null);
           return {
             type: 'embedded',
             displayName: meta.displayName ?? meta.linkName ?? 'unknown',
             mimeType: meta.mimeType ?? 'application/octet-stream',
-            resourceUrl: meta.resourceUrl ?? null,
+            downloadUrl,
           };
         } catch {
           return null;
@@ -218,7 +241,7 @@ export async function startMcpServer() {
         content: [{
           type: 'text',
           text: JSON.stringify(
-            { type: 'embedded_files', note: 'Use download_file_url with resourceUrl to download', results: files },
+            { type: 'embedded_files', note: 'Pass downloadUrl as attachmentId to download_attachment', results: files },
             null, 2
           ),
         }],
@@ -227,12 +250,14 @@ export async function startMcpServer() {
   );
 
   // ── download_file_url ───────────────────────────────────────────────────────
-  server.tool(
+  server.registerTool(
     'download_file_url',
-    'Download a file directly from a Blackboard bbcswebdav URL (for x-bb-document embedded files). Returns base64-encoded content and filename.',
     {
-      url: z.string().describe('Direct file URL from bbcswebdav (resourceUrl from content body)'),
-      filename: z.string().optional().describe('Desired filename for saving the file'),
+      description: 'Download a file directly from a Blackboard bbcswebdav URL (for x-bb-document embedded files). Returns base64-encoded content and filename.',
+      inputSchema: {
+        url: z.string().describe('Direct file URL from bbcswebdav (downloadUrl from list_attachments)'),
+        filename: z.string().optional().describe('Desired filename for saving the file'),
+      },
     },
     async ({ url, filename }) => {
       const { client } = getClient();
@@ -257,14 +282,16 @@ export async function startMcpServer() {
   );
 
   // ── submit_attempt ──────────────────────────────────────────────────────────
-  server.tool(
+  server.registerTool(
     'submit_attempt',
-    'Submit an assignment attempt. ALWAYS confirm with the user before submitting.',
     {
-      courseId: z.string().describe('Blackboard course ID'),
-      columnId: z.string().describe('Assignment (gradebook column) ID'),
-      studentComments: z.string().optional().describe('Comment to the instructor'),
-      studentSubmission: z.string().optional().describe('Text body of the submission'),
+      description: 'Submit an assignment attempt. ALWAYS confirm with the user before submitting.',
+      inputSchema: {
+        courseId: z.string().describe('Blackboard course ID'),
+        columnId: z.string().describe('Assignment (gradebook column) ID'),
+        studentComments: z.string().optional().describe('Comment to the instructor'),
+        studentSubmission: z.string().optional().describe('Text body of the submission'),
+      },
     },
     async ({ courseId, columnId, studentComments, studentSubmission }) => {
       const { client } = getClient();
@@ -278,14 +305,16 @@ export async function startMcpServer() {
   );
 
   // ── raw_api ─────────────────────────────────────────────────────────────────
-  server.tool(
+  server.registerTool(
     'raw_api',
-    'Make a raw REST API call to Blackboard Learn. Use for any endpoint not covered by other tools.',
     {
-      method: z.enum(['GET', 'POST', 'PUT', 'PATCH', 'DELETE']).describe('HTTP method'),
-      path: z.string().describe('API path, e.g. /learn/api/public/v1/users/me'),
-      query: z.string().optional().describe('Query string, e.g. limit=10&offset=0'),
-      body: z.string().optional().describe('JSON body string for POST/PUT/PATCH'),
+      description: 'Make a raw REST API call to Blackboard Learn. Use for any endpoint not covered by other tools.',
+      inputSchema: {
+        method: z.enum(['GET', 'POST', 'PUT', 'PATCH', 'DELETE']).describe('HTTP method'),
+        path: z.string().describe('API path, e.g. /learn/api/public/v1/users/me'),
+        query: z.string().optional().describe('Query string, e.g. limit=10&offset=0'),
+        body: z.string().optional().describe('JSON body string for POST/PUT/PATCH'),
+      },
     },
     async ({ method, path, query, body }) => {
       const { client } = getClient();
