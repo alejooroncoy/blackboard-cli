@@ -1,0 +1,6 @@
+node_modules/
+dist/
+~/.blackboard-cli/
+*.js.map
+.env
+.DS_Store

@@ -1,0 +1,48 @@
+{
+  "name": "blackboard-upc",
+  "version": "1.0.0",
+  "description": "CLI no oficial para UPC Aula Virtual (Blackboard Learn) — acceso desde la terminal y MCP para Claude",
+  "main": "run.js",
+  "bin": {
+    "blackboard": "./run.js",
+    "blackboard-upc": "./run.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js"
+  },
+  "keywords": [
+    "blackboard",
+    "upc",
+    "aula-virtual",
+    "cli",
+    "mcp",
+    "claude",
+    "lms",
+    "peru"
+  ],
+  "author": "Alejandro Oroncoy",
+  "homepage": "https://github.com/aleoroni/blackboard-cli",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aleoroni/blackboard-cli.git"
+  },
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.28.0",
+    "@types/inquirer": "^9.0.9",
+    "@types/node": "^22.0.0",
+    "axios": "^1.7.0",
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "form-data": "^4.0.5",
+    "inquirer": "^10.1.0",
+    "ora": "^8.1.0",
+    "playwright": "^1.47.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.0",
+    "zod": "^4.3.6"
+  }
+}
