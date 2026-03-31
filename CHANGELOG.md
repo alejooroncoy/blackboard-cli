@@ -4,6 +4,14 @@ All notable changes to `blackboard-upc` will be documented here.
 
 ---
 
+## [1.0.5] — 2026-03-31
+
+### Fixed
+- `run.js` ahora prepone el directorio del Node que lo ejecuta al PATH antes de lanzar `tsx`
+- Soluciona el crash en MCP cuando el usuario tiene nvm con Node 16 como default (Playwright requiere >=18)
+
+---
+
 ## [1.0.4] — 2026-03-30
 
 ### Changed
