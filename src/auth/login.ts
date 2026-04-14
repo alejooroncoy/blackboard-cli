@@ -1,12 +1,19 @@
 import { chromium } from 'playwright';
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
 import type { Session, Cookie } from '../types/index.js';
 import { saveSession } from './session.js';
 
 const BASE_URL = 'https://aulavirtual.upc.edu.pe';
 const SAML_URL = `${BASE_URL}/auth-saml/saml/login?apId=_4893_1&redirectUrl=${encodeURIComponent(`${BASE_URL}/ultra`)}`;
 
-// Session duration: 8 hours
-const SESSION_TTL_MS = 8 * 60 * 60 * 1000;
+const SESSION_TTL_FALLBACK_MS = 3 * 60 * 60 * 1000; // 3h — matches BbRouter timeout:10800
+const PROFILE_DIR = path.join(os.homedir(), '.blackboard-cli', 'browser-profile');
+
+const USER_AGENT =
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 ' +
+  '(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 
 export interface LoginOptions {
   headless?: boolean;
@@ -15,14 +22,50 @@ export interface LoginOptions {
   timeout?: number;
 }
 
+export class SilentLoginFailed extends Error {
+  constructor(reason: string) {
+    super(`Silent re-login failed: ${reason}`);
+    this.name = 'SilentLoginFailed';
+  }
+}
+
+function extractBbRouterExpiry(cookies: Cookie[]): number {
+  const bb = cookies.find(c => c.name === 'BbRouter');
+  if (bb) {
+    const m = bb.value.match(/expires:(\d+)/);
+    if (m) {
+      const ms = parseInt(m[1], 10) * 1000;
+      const now = Date.now();
+      // Sanity check: must be a future timestamp within 24 hours
+      if (ms > now && ms < now + 24 * 60 * 60 * 1000) return ms;
+    }
+  }
+  return Date.now() + SESSION_TTL_FALLBACK_MS;
+}
+
+function extractXsrf(cookies: Cookie[]): string {
+  const bb = cookies.find(c => c.name === 'BbRouter');
+  if (bb) {
+    const m = bb.value.match(/xsrf:([a-f0-9-]+)/);
+    if (m) return m[1];
+  }
+  return '';
+}
+
+function ensureProfileDir(): void {
+  if (!fs.existsSync(PROFILE_DIR)) {
+    fs.mkdirSync(PROFILE_DIR, { recursive: true, mode: 0o700 });
+  }
+}
+
 export async function login(opts: LoginOptions = {}): Promise<Session> {
   const { headless = false, timeout = 120_000 } = opts;
 
-  const browser = await chromium.launch({ headless });
-  const context = await browser.newContext({
-    userAgent:
-      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 ' +
-      '(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+  ensureProfileDir();
+
+  const context = await chromium.launchPersistentContext(PROFILE_DIR, {
+    headless,
+    userAgent: USER_AGENT,
   });
 
   const page = await context.newPage();
@@ -31,28 +74,36 @@ export async function login(opts: LoginOptions = {}): Promise<Session> {
     console.log('Navigating to UPC Aula Virtual...');
     await page.goto(SAML_URL, { waitUntil: 'networkidle', timeout });
 
-    // Wait for Microsoft login page
-    await page.waitForURL(/login\.microsoftonline\.com/, { timeout: 30_000 });
-
-    if (opts.username) {
-      await page.fill('input[type="email"], input[name="loginfmt"]', opts.username);
-      await page.click('input[type="submit"], button[type="submit"]');
-      await page.waitForTimeout(1500);
-    }
-
-    if (opts.password) {
-      await page.waitForSelector('input[type="password"], input[name="passwd"]', { timeout: 15_000 });
-      await page.fill('input[type="password"], input[name="passwd"]', opts.password);
-      await page.click('input[type="submit"], button[type="submit"]');
-      await page.waitForTimeout(1500);
-    }
-
-    // Handle "Stay signed in?" prompt
+    // With persistent context, Microsoft SSO may auto-complete without showing the login page
+    let needsInteractiveLogin = false;
     try {
-      await page.waitForSelector('#idBtn_Back, #KmsiCheckboxField', { timeout: 8_000 });
-      const noBtn = page.locator('#idBtn_Back');
-      if (await noBtn.isVisible()) await noBtn.click();
-    } catch {}
+      await page.waitForURL(/login\.microsoftonline\.com/, { timeout: 8_000 });
+      needsInteractiveLogin = true;
+    } catch {
+      // SSO cookies still valid — SAML redirect auto-completing
+    }
+
+    if (needsInteractiveLogin) {
+      if (opts.username) {
+        await page.fill('input[type="email"], input[name="loginfmt"]', opts.username);
+        await page.click('input[type="submit"], button[type="submit"]');
+        await page.waitForTimeout(1500);
+      }
+
+      if (opts.password) {
+        await page.waitForSelector('input[type="password"], input[name="passwd"]', { timeout: 15_000 });
+        await page.fill('input[type="password"], input[name="passwd"]', opts.password);
+        await page.click('input[type="submit"], button[type="submit"]');
+        await page.waitForTimeout(1500);
+      }
+
+      // Handle "Stay signed in?" prompt
+      try {
+        await page.waitForSelector('#idBtn_Back, #KmsiCheckboxField', { timeout: 8_000 });
+        const noBtn = page.locator('#idBtn_Back');
+        if (await noBtn.isVisible()) await noBtn.click();
+      } catch {}
+    }
 
     // Wait for redirect back to aulavirtual.upc.edu.pe/ultra
     console.log('Waiting for authentication to complete...');
@@ -75,37 +126,23 @@ export async function login(opts: LoginOptions = {}): Promise<Session> {
       sameSite: c.sameSite,
     }));
 
-    // Extract XSRF token from page
-    const xsrfToken = await page.evaluate(() => {
-      // Try various sources
-      const metaXsrf = document.querySelector<HTMLMetaElement>(
-        'meta[name="blackboard.platform.security.NonceUtil.nonce"]'
-      )?.content;
-      if (metaXsrf) return metaXsrf;
+    // Extract XSRF token from BbRouter cookie
+    let nonce = extractXsrf(cookies);
 
-      // Try from cookies
-      const allCookies = document.cookie.split(';').reduce<Record<string, string>>((acc, c) => {
-        const [k, v] = c.trim().split('=');
-        acc[k] = v;
-        return acc;
-      }, {});
-      return allCookies['XSRF-TOKEN'] || '';
-    });
-
-    // Get nonce from a page that has it
-    let nonce = xsrfToken;
+    // Fallback: try meta tag in the page
     if (!nonce) {
-      const loginResp = await page.goto(`${BASE_URL}/webapps/login/`, { waitUntil: 'domcontentloaded' });
-      if (loginResp) {
-        nonce = await page.evaluate(() => {
-          return (
-            document.querySelector<HTMLInputElement>(
-              'input[name="blackboard.platform.security.NonceUtil.nonce.ajax"]'
-            )?.value || ''
-          );
-        });
-        await page.goBack();
-      }
+      nonce = await page.evaluate(() => {
+        const metaXsrf = document.querySelector<HTMLMetaElement>(
+          'meta[name="blackboard.platform.security.NonceUtil.nonce"]'
+        )?.content;
+        if (metaXsrf) return metaXsrf;
+        const allCookies = document.cookie.split(';').reduce<Record<string, string>>((acc, c) => {
+          const [k, v] = c.trim().split('=');
+          acc[k] = v;
+          return acc;
+        }, {});
+        return allCookies['XSRF-TOKEN'] || '';
+      });
     }
 
     // Get current user info via direct HTTP call with captured cookies
@@ -126,7 +163,7 @@ export async function login(opts: LoginOptions = {}): Promise<Session> {
       xsrfToken: nonce,
       userId: userData?.id,
       userName: userData?.userName,
-      expiresAt: Date.now() + SESSION_TTL_MS,
+      expiresAt: extractBbRouterExpiry(cookies),
     };
 
     saveSession(session);
@@ -134,6 +171,64 @@ export async function login(opts: LoginOptions = {}): Promise<Session> {
 
     return session;
   } finally {
-    await browser.close();
+    await context.close();
+  }
+}
+
+export async function silentRelogin(previousSession?: Session | null): Promise<Session> {
+  if (!fs.existsSync(PROFILE_DIR)) {
+    throw new SilentLoginFailed('No browser profile — run blackboard login first');
+  }
+
+  let context;
+  try {
+    context = await chromium.launchPersistentContext(PROFILE_DIR, {
+      headless: true,
+      userAgent: USER_AGENT,
+    });
+  } catch (err: any) {
+    throw new SilentLoginFailed(`Could not open browser profile: ${err.message}`);
+  }
+
+  const page = await context.newPage();
+
+  try {
+    await page.goto(SAML_URL, { waitUntil: 'commit', timeout: 20_000 });
+
+    // If SSO cookies are still valid, this redirect completes automatically
+    await page.waitForURL(/aulavirtual\.upc\.edu\.pe\/ultra/, { timeout: 15_000 });
+    await page.waitForLoadState('networkidle', { timeout: 10_000 });
+
+    const rawCookies = await context.cookies();
+    const cookies: Cookie[] = rawCookies.map((c) => ({
+      name: c.name,
+      value: c.value,
+      domain: c.domain,
+      path: c.path,
+      expires: c.expires,
+      httpOnly: c.httpOnly,
+      secure: c.secure,
+      sameSite: c.sameSite,
+    }));
+
+    if (!cookies.some(c => c.name === 'JSESSIONID' || c.name === 'BbRouter')) {
+      throw new SilentLoginFailed('Redirect succeeded but session cookies are missing');
+    }
+
+    const session: Session = {
+      cookies,
+      xsrfToken: extractXsrf(cookies),
+      userId: previousSession?.userId,
+      userName: previousSession?.userName,
+      expiresAt: extractBbRouterExpiry(cookies),
+    };
+
+    saveSession(session);
+    return session;
+  } catch (err: any) {
+    if (err instanceof SilentLoginFailed) throw err;
+    throw new SilentLoginFailed(err.message ?? 'Timed out — SSO session likely expired');
+  } finally {
+    await context.close();
   }
 }

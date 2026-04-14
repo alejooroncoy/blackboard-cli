@@ -24,9 +24,25 @@ If you get `Not authenticated`, ask the user to run `blackboard login`.
 6. list_attachments <courseId> <contentId>→ find downloadable files
 ```
 
+### Quiz workflow
+
+```
+1. list_contents <courseId>              → find the quiz contentId
+2. get_quiz_questions <url|ids>          → load questions + options + attempt policy
+3. save_quiz_answer (per question)       → save each answer individually
+4. submit_quiz (confirm first!)          → finalize and submit the attempt
+```
+
+### Feedback workflow
+
+```
+1. get_assignment_feedback <courseId>    → scores + instructor comments + feedback files for all assignments
+2. download_feedback_file <ids>          → download an annotated file the professor attached to the grade
+```
+
 ## Agent behavior rules
 
-- **Always confirm before submitting** (`submit_attempt`). Show the user what will be submitted and ask for confirmation. Never submit silently.
+- **Always confirm before submitting** (`submit_attempt`, `submit_quiz`). Show the user what will be submitted and ask for confirmation. Never submit silently.
 - **Show grades in context** — when showing grades, also show the assignment name, max score, and due date if available.
 - **Navigate content recursively** — if the user asks for materials, explore subfolders using `list_contents` with `parentId`.
 - **Use `raw_api` for anything not covered** — the Blackboard REST API is extensive. If there's no specific tool, use `raw_api` with the correct endpoint.
@@ -65,6 +81,12 @@ GET /learn/api/public/v1/courses/{courseId}/contents/{id}/attachments/{id}/downl
 | `list_attempts` | Submission history |
 | `get_grades` | Full grade report for a course |
 | `list_attachments` | Files in a content item |
-| `download_attachment` | Download file (base64) |
+| `download_attachment` | Download file to disk |
+| `download_file_url` | Download a bbcswebdav URL directly |
 | `submit_attempt` | Submit assignment (confirm first!) |
+| `get_assignment_feedback` | Scores + instructor comments + feedback files for all assignments in a course |
+| `download_feedback_file` | **[EXPERIMENTAL]** Download a file the professor attached to a graded attempt |
+| `get_quiz_questions` | Load quiz questions + options from an attempt (URL or IDs) |
+| `save_quiz_answer` | Save one answer without submitting |
+| `submit_quiz` | Finalize and submit a quiz attempt (confirm first!) |
 | `raw_api` | Any other Blackboard endpoint |

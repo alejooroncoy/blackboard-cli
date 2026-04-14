@@ -3,7 +3,7 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { z } from 'zod';
 import fs from 'fs';
 import path from 'path';
-import { loadSession, isSessionValid } from '../auth/session.js';
+import { loadOrRefreshSession, isSessionValid } from '../auth/session.js';
 import { createClient } from '../api/client.js';
 import {
   getMe,
@@ -15,10 +15,18 @@ import {
   getGradeColumns,
   getSystemVersion,
 } from '../api/courses.js';
-import { listAssignments, listAttempts, submitAttempt, uploadFile } from '../api/assignments.js';
+import { listAssignments, listAttempts, submitAttempt, uploadFile, getAttemptFiles } from '../api/assignments.js';
+import {
+  getQuizQuestions,
+  saveQuizAnswer,
+  submitQuizAttempt,
+  getQuizColumnId,
+  parseQuizUrl,
+  type QuizQuestion,
+} from '../api/quiz.js';
 
-function getClient() {
-  const session = loadSession();
+async function getClient() {
+  const session = await loadOrRefreshSession();
   if (!isSessionValid(session)) {
     throw new Error('Not authenticated. Ask the user to run: blackboard login');
   }
@@ -33,21 +41,21 @@ export async function startMcpServer() {
 
   // ── whoami ─────────────────────────────────────────────────────────────────
   server.registerTool('whoami', { description: 'Get the currently authenticated UPC student info' }, async () => {
-    const { client } = getClient();
+    const { client } = await getClient();
     const me = await getMe(client);
     return { content: [{ type: 'text', text: JSON.stringify(me, null, 2) }] };
   });
 
   // ── system_version ─────────────────────────────────────────────────────────
   server.registerTool('system_version', { description: 'Get Blackboard Learn server version' }, async () => {
-    const { client } = getClient();
+    const { client } = await getClient();
     const v = await getSystemVersion(client);
     return { content: [{ type: 'text', text: JSON.stringify(v, null, 2) }] };
   });
 
   // ── list_courses ────────────────────────────────────────────────────────────
   server.registerTool('list_courses', { description: 'List all enrolled courses for the current student' }, async () => {
-    const { client, session } = getClient();
+    const { client, session } = await getClient();
     let userId = session.userId;
     if (!userId) { const me = await getMe(client); userId = me.id; }
     const data = await getMyCourses(client, userId!, { limit: 50 });
@@ -62,7 +70,7 @@ export async function startMcpServer() {
       inputSchema: { courseId: z.string().describe('Blackboard course ID like _529580_1') },
     },
     async ({ courseId }) => {
-      const { client } = getClient();
+      const { client } = await getClient();
       const data = await getCourse(client, courseId);
       return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
     }
@@ -79,7 +87,7 @@ export async function startMcpServer() {
       },
     },
     async ({ courseId, parentId }) => {
-      const { client } = getClient();
+      const { client } = await getClient();
       const data = await getCourseContents(client, courseId, parentId);
       return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
     }
@@ -93,7 +101,7 @@ export async function startMcpServer() {
       inputSchema: { courseId: z.string().describe('Blackboard course ID') },
     },
     async ({ courseId }) => {
-      const { client } = getClient();
+      const { client } = await getClient();
       const data = await getCourseAnnouncements(client, courseId);
       return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
     }
@@ -107,7 +115,7 @@ export async function startMcpServer() {
       inputSchema: { courseId: z.string().describe('Blackboard course ID') },
     },
     async ({ courseId }) => {
-      const { client } = getClient();
+      const { client } = await getClient();
       const data = await listAssignments(client, courseId);
       return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
     }
@@ -124,7 +132,7 @@ export async function startMcpServer() {
       },
     },
     async ({ courseId, columnId }) => {
-      const { client } = getClient();
+      const { client } = await getClient();
       const data = await listAttempts(client, courseId, columnId);
       return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
     }
@@ -138,7 +146,7 @@ export async function startMcpServer() {
       inputSchema: { courseId: z.string().describe('Blackboard course ID') },
     },
     async ({ courseId }) => {
-      const { client, session } = getClient();
+      const { client, session } = await getClient();
       let userId = session.userId;
       if (!userId) { const me = await getMe(client); userId = me.id; }
       const [columns, grades] = await Promise.all([
@@ -168,7 +176,7 @@ export async function startMcpServer() {
       },
     },
     async ({ courseId, contentId, attachmentId, filename, outputDir }) => {
-      const { client } = getClient();
+      const { client } = await getClient();
 
       const url = attachmentId.startsWith('http')
         ? attachmentId
@@ -208,7 +216,7 @@ export async function startMcpServer() {
       },
     },
     async ({ courseId, contentId }) => {
-      const { client } = getClient();
+      const { client } = await getClient();
 
       // Try standard REST attachments endpoint first (works for x-bb-file)
       try {
@@ -271,7 +279,7 @@ export async function startMcpServer() {
       },
     },
     async ({ url, filename, outputDir }) => {
-      const { client } = getClient();
+      const { client } = await getClient();
       const r = await client.get(url, { responseType: 'arraybuffer', headers: { Accept: '*/*' } });
 
       const contentDisposition = r.headers['content-disposition'] as string | undefined;
@@ -308,13 +316,235 @@ export async function startMcpServer() {
       },
     },
     async ({ courseId, columnId, studentComments, studentSubmission }) => {
-      const { client } = getClient();
+      const { client } = await getClient();
       const attempt = await submitAttempt(client, courseId, columnId, {
         studentComments,
         studentSubmission,
         status: 'NeedsGrading',
       });
       return { content: [{ type: 'text', text: JSON.stringify(attempt, null, 2) }] };
+    }
+  );
+
+  // ── get_quiz_questions ──────────────────────────────────────────────────────
+  server.registerTool(
+    'get_quiz_questions',
+    {
+      description:
+        'Fetch all questions and answer options from a Blackboard Ultra quiz attempt. ' +
+        'Provide either a full quiz URL, or courseId + contentId + attemptId. ' +
+        'Returns each question with its type, text, options, and current saved answer.',
+      inputSchema: {
+        url: z
+          .string()
+          .optional()
+          .describe(
+            'Full Ultra quiz URL, e.g. https://aulavirtual.upc.edu.pe/ultra/stream/assessment/_69146765_1/overview/attempt/_94898825_1?courseId=_529533_1'
+          ),
+        courseId: z.string().optional().describe('Course ID (e.g. _529533_1) — required if url not given'),
+        contentId: z.string().optional().describe('Quiz content item ID (e.g. _69146765_1) — required if url not given'),
+        attemptId: z.string().optional().describe('Attempt ID (e.g. _94898825_1) — required if url not given'),
+      },
+    },
+    async ({ url, courseId, contentId, attemptId }) => {
+      const { client, session } = await getClient();
+
+      // Resolve IDs from URL or direct params
+      let resolvedCourseId = courseId;
+      let resolvedContentId = contentId;
+      let resolvedAttemptId = attemptId;
+
+      if (url) {
+        const parsed = parseQuizUrl(url);
+        resolvedCourseId = resolvedCourseId || parsed.courseId;
+        resolvedContentId = resolvedContentId || parsed.contentId;
+        resolvedAttemptId = resolvedAttemptId || parsed.attemptId;
+      }
+
+      if (!resolvedCourseId || !resolvedContentId || !resolvedAttemptId) {
+        throw new Error(
+          'Provide either a full quiz URL or all three of: courseId, contentId, attemptId'
+        );
+      }
+
+      // Get columnId + attempt policy — reuse session already obtained above
+      const policy = await getQuizColumnId(client, resolvedCourseId, resolvedContentId, session.userId);
+
+      if (!policy.canAttempt) {
+        return {
+          content: [{
+            type: 'text',
+            text: JSON.stringify({
+              error: 'NO_ATTEMPTS_LEFT',
+              message: `No quedan intentos para este cuestionario. ${policy.attemptSummary}`,
+              policy,
+            }, null, 2),
+          }],
+        };
+      }
+
+      const info = await getQuizQuestions(client, resolvedCourseId, policy.columnId, resolvedAttemptId);
+      return {
+        content: [{
+          type: 'text',
+          text: JSON.stringify({ attemptPolicy: policy, ...info }, null, 2),
+        }],
+      };
+    }
+  );
+
+  // ── save_quiz_answer ────────────────────────────────────────────────────────
+  server.registerTool(
+    'save_quiz_answer',
+    {
+      description:
+        'Save a single answer for a quiz question (does NOT submit — use submit_quiz to finalize). ' +
+        'question is the full question object from get_quiz_questions. ' +
+        'answer: boolean for true/false, or 0-based index number for multiple-choice.',
+      inputSchema: {
+        courseId: z.string().describe('Course ID'),
+        attemptId: z.string().describe('Quiz attempt ID (e.g. _94898825_1)'),
+        question: z.string().describe('JSON string of the question object from get_quiz_questions'),
+        answer: z.union([z.boolean(), z.number()]).describe(
+          'For true/false: true or false. For multiple-choice: 0-based index of selected option.'
+        ),
+      },
+    },
+    async ({ courseId, attemptId, question: questionJson, answer }) => {
+      const { client } = await getClient();
+      const question: QuizQuestion = JSON.parse(questionJson);
+      const result = await saveQuizAnswer(client, courseId, attemptId, question, answer as boolean | number);
+      return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+    }
+  );
+
+  // ── submit_quiz ─────────────────────────────────────────────────────────────
+  server.registerTool(
+    'submit_quiz',
+    {
+      description:
+        'Finalize and submit a quiz attempt. ALWAYS confirm with the user before calling this. ' +
+        'All individual answers should be saved first via save_quiz_answer.',
+      inputSchema: {
+        courseId: z.string().describe('Course ID'),
+        attemptId: z.string().describe('Quiz attempt ID to submit'),
+      },
+    },
+    async ({ courseId, attemptId }) => {
+      const { client } = await getClient();
+      const result = await submitQuizAttempt(client, courseId, attemptId);
+      return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+    }
+  );
+
+  // ── get_assignment_feedback ─────────────────────────────────────────────────
+  server.registerTool(
+    'get_assignment_feedback',
+    {
+      description:
+        'Get professor feedback and scores for all assignments in a course. ' +
+        'For each graded submission, shows score, instructor comments, and any feedback files attached by the professor.',
+      inputSchema: { courseId: z.string().describe('Blackboard course ID') },
+    },
+    async ({ courseId }) => {
+      const { client, session } = await getClient();
+
+      const assignments = await listAssignments(client, courseId);
+
+      const results = await Promise.all(
+        assignments.map(async (col) => {
+          try {
+            const attempts = await listAttempts(client, courseId, col.id);
+            if (!attempts.length) {
+              return { assignment: col.name, columnId: col.id, status: 'no_attempts' };
+            }
+
+            // Most recent attempt first
+            const latest = attempts.sort((a, b) =>
+              (b.attemptDate ?? b.modified ?? '').localeCompare(a.attemptDate ?? a.modified ?? '')
+            )[0];
+
+            // Try to get feedback files (professor may have attached annotated docs)
+            let feedbackFiles: any[] = [];
+            try {
+              feedbackFiles = await getAttemptFiles(client, courseId, col.id, latest.id);
+            } catch {}
+
+            return {
+              assignment: col.name,
+              columnId: col.id,
+              contentId: col.contentId,
+              due: col.grading?.due,
+              maxScore: col.score?.possible,
+              attempt: {
+                id: latest.id,
+                status: latest.status,
+                score: latest.score,
+                grade: latest.displayGrade?.text,
+                submittedAt: latest.attemptDate ?? latest.modified,
+                // Professor feedback — field name varies by BB version
+                instructorFeedback:
+                  latest.text ?? latest.instructorFeedback ?? latest.feedback ?? null,
+                studentComments: latest.studentComments ?? null,
+                feedbackFiles: feedbackFiles.map((f) => ({
+                  id: f.id,
+                  name: f.name,
+                  mimeType: f.mimeType,
+                  size: f.size,
+                })),
+              },
+            };
+          } catch {
+            return { assignment: col.name, columnId: col.id, status: 'error_fetching' };
+          }
+        })
+      );
+
+      return { content: [{ type: 'text', text: JSON.stringify(results, null, 2) }] };
+    }
+  );
+
+  // ── download_feedback_file ───────────────────────────────────────────────────
+  server.registerTool(
+    'download_feedback_file',
+    {
+      description:
+        '[EXPERIMENTAL] Download a feedback file that a professor attached to a graded attempt. ' +
+        'Use the fileId from get_assignment_feedback → attempt.feedbackFiles. ' +
+        'The download endpoint may not be available on all Blackboard versions.',
+      inputSchema: {
+        courseId: z.string().describe('Blackboard course ID'),
+        columnId: z.string().describe('Gradebook column (assignment) ID'),
+        attemptId: z.string().describe('Attempt ID from get_assignment_feedback'),
+        fileId: z.string().describe('File ID from get_assignment_feedback → attempt.feedbackFiles'),
+        filename: z.string().optional().describe('Filename to save as (defaults to the name from feedbackFiles)'),
+        outputDir: z.string().optional().describe('Directory to save the file (default: current working directory)'),
+      },
+    },
+    async ({ courseId, columnId, attemptId, fileId, filename, outputDir }) => {
+      const { client } = await getClient();
+
+      const url = `/learn/api/public/v2/courses/${courseId}/gradebook/columns/${columnId}/attempts/${attemptId}/files/${fileId}/download`;
+      const r = await client.get(url, { responseType: 'arraybuffer', headers: { Accept: '*/*' } });
+
+      const contentDisposition = r.headers['content-disposition'] as string | undefined;
+      const detectedName = contentDisposition
+        ? (contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/))?.[1]?.replace(/['"]/g, '').trim()
+        : undefined;
+      const finalName = filename ?? detectedName ?? `feedback_${fileId}`;
+
+      const dir = path.resolve(outputDir ?? process.cwd());
+      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+      const dest = path.join(dir, finalName);
+      fs.writeFileSync(dest, Buffer.from(r.data));
+
+      const mimeType = (r.headers['content-type'] as string | undefined) ?? 'application/octet-stream';
+      return {
+        content: [{
+          type: 'text',
+          text: JSON.stringify({ saved: dest, size: r.data.byteLength, mimeType }, null, 2),
+        }],
+      };
     }
   );
 
@@ -331,7 +561,7 @@ export async function startMcpServer() {
       },
     },
     async ({ method, path, query, body }) => {
-      const { client } = getClient();
+      const { client } = await getClient();
       const params = query ? Object.fromEntries(new URLSearchParams(query)) : undefined;
       const data = body ? JSON.parse(body) : undefined;
       const r = await client.request({ method: method.toLowerCase() as any, url: path, params, data });

@@ -33,6 +33,17 @@ export interface Attempt {
   modified?: string;
   attemptDate?: string;
   files?: Array<{ id: string; fileName: string; mimeType: string }>;
+  // Instructor feedback fields
+  instructorFeedback?: string;
+  feedback?: string;
+}
+
+export interface AttemptFile {
+  id: string;
+  name: string;
+  mimeType?: string;
+  size?: number;
+  href?: string;
 }
 
 export interface SubmitAttemptBody {
@@ -120,6 +131,18 @@ export async function submitAttempt(
     { ...body, status: body.status ?? 'NeedsGrading' }
   );
   return r.data;
+}
+
+export async function getAttemptFiles(
+  client: AxiosInstance,
+  courseId: string,
+  columnId: string,
+  attemptId: string
+): Promise<AttemptFile[]> {
+  const r = await client.get(
+    `/learn/api/public/v2/courses/${courseId}/gradebook/columns/${columnId}/attempts/${attemptId}/files`
+  );
+  return r.data.results ?? [];
 }
 
 export async function getMyGrade(

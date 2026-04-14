@@ -42,3 +42,25 @@ export function isSessionValid(session: Session | null): boolean {
     session.cookies.some(c => c.name === 'BbRouter');
   return hasCriticalCookies;
 }
+
+export async function loadOrRefreshSession(): Promise<Session | null> {
+  // 1. Session still valid — return directly
+  const session = loadSession();
+  if (session !== null) return session;
+
+  // 2. Session expired — read raw file to preserve userId/userName for silent refresh
+  let expiredSession: Session | null = null;
+  try {
+    const raw = fs.readFileSync(SESSION_FILE, 'utf-8');
+    expiredSession = JSON.parse(raw);
+  } catch {}
+
+  // Dynamic import to avoid circular dependency (login.ts imports from session.ts)
+  const { silentRelogin, SilentLoginFailed } = await import('./login.js');
+  try {
+    return await silentRelogin(expiredSession);
+  } catch (err) {
+    if (err instanceof SilentLoginFailed) return null; // SSO expired — caller must prompt for login
+    throw err;
+  }
+}

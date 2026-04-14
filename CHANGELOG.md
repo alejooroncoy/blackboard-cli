@@ -4,6 +4,36 @@ All notable changes to `blackboard-upc` will be documented here.
 
 ---
 
+## [1.0.7] — 2026-04-12
+
+### Added
+- **Persistent browser context** — el perfil de Playwright se guarda en `~/.blackboard-cli/browser-profile/`; las cookies de Microsoft SSO persisten entre sesiones, eliminando el login manual repetido
+- **Silent auto-refresh** — cuando la sesión expira, la CLI relanza el browser en headless y se re-autentica automáticamente si el SSO de Microsoft sigue activo (sin intervención del usuario)
+- **TTL real del servidor** — la expiración de sesión ya no es hardcoded a 8h; se parsea el campo `expires` del cookie `BbRouter` para usar el timestamp real del servidor (fallback: 3h)
+- `get_assignment_feedback` — muestra nota, comentarios del profesor y archivos de feedback para todas las tareas de un curso
+- `download_feedback_file` *(experimental)* — descarga archivos adjuntados por el profesor a una corrección
+
+### Changed
+- `blackboard login` ahora muestra el tiempo de expiración real (ej. "expira en 2.9h") en vez de "8 horas"
+- `whoami`, `status` y `api` usan `loadOrRefreshSession()` — intentan refresh silencioso antes de pedir login manual
+
+---
+
+## [1.0.6] — 2026-04-12
+
+### Added
+- Soporte completo para quizzes/evaluaciones de Blackboard Ultra:
+  - `get_quiz_questions` — obtiene todas las preguntas, opciones y respuesta actual de un intento; acepta URL directa o IDs separados (`courseId` + `contentId` + `attemptId`)
+  - `save_quiz_answer` — guarda una respuesta individual sin enviar (verdadero/falso o índice de opción)
+  - `submit_quiz` — envía el intento final (siempre pide confirmación)
+- `src/api/quiz.ts` — módulo nuevo con tipos `QuizQuestion`, `QuizInfo`, `QuizAttemptPolicy` y toda la lógica de los endpoints internos de Ultra
+- Verifica intentos restantes antes de cargar preguntas (`getQuizColumnId`)
+
+### Fixed
+- `tsconfig.json` — agrega `"DOM"` a `lib` para que los callbacks de `page.evaluate()` en `login.ts` compilen sin errores
+
+---
+
 ## [1.0.5] — 2026-03-31
 
 ### Fixed

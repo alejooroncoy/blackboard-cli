@@ -6,7 +6,7 @@ import { coursesCommand } from './commands/courses.js';
 import { apiDocsCommand } from './commands/api-docs.js';
 import { downloadCommand } from './commands/download.js';
 import { assignmentsCommand } from './commands/assignments.js';
-import { loadSession, isSessionValid } from './auth/session.js';
+import { loadSession, loadOrRefreshSession, isSessionValid } from './auth/session.js';
 import { createClient } from './api/client.js';
 import { getMe, getSystemVersion } from './api/courses.js';
 import { BANNER, ok, fail, hint } from './ui/theme.js';
@@ -16,7 +16,7 @@ const program = new Command();
 program
   .name('blackboard')
   .description('CLI no oficial para UPC Aula Virtual (Blackboard Learn)')
-  .version('1.0.0')
+  .version('1.0.7')
   .addHelpText('beforeAll', BANNER);
 
 // Auth commands
@@ -31,7 +31,7 @@ program
   .description('Estado de sesión y versión del servidor')
   .option('--json', 'Output raw JSON')
   .action(async (opts) => {
-    const session = loadSession();
+    const session = await loadOrRefreshSession();
     const valid = isSessionValid(session);
 
     const sysVersion = await getSystemVersion(
@@ -75,7 +75,7 @@ program
   .option('-b, --body <json>', 'Cuerpo JSON para POST/PUT')
   .option('-q, --query <params>', 'Query params (ej: "limit=10&offset=0")')
   .action(async (method: string, apiPath: string, opts) => {
-    const session = loadSession();
+    const session = await loadOrRefreshSession();
     if (!isSessionValid(session)) {
       console.error(JSON.stringify({ error: 'Not authenticated. Run: blackboard login' }));
       process.exit(1);

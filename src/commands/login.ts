@@ -3,7 +3,7 @@ import inquirer from 'inquirer';
 import chalk from 'chalk';
 import ora from 'ora';
 import { login } from '../auth/login.js';
-import { loadSession, clearSession, isSessionValid } from '../auth/session.js';
+import { loadSession, loadOrRefreshSession, clearSession, isSessionValid } from '../auth/session.js';
 import { ok, fail, warn, whatNext } from '../ui/theme.js';
 
 export function loginCommand(program: Command) {
@@ -34,7 +34,9 @@ export function loginCommand(program: Command) {
           password: opts.password,
         });
 
-        console.log(ok(`Sesión guardada — expira en 8 horas`));
+        const remainingMin = Math.round((session.expiresAt - Date.now()) / 60_000);
+        const remainingHr  = (remainingMin / 60).toFixed(1);
+        console.log(ok(`Sesión guardada — expira en ${remainingHr}h`));
         if (session.userName) console.log(chalk.gray(`  Usuario: ${session.userName}`));
         if (session.userId)   console.log(chalk.gray(`  ID:      ${session.userId}`));
         whatNext();
@@ -56,7 +58,7 @@ export function loginCommand(program: Command) {
     .command('whoami')
     .description('Show current logged-in user')
     .action(async () => {
-      const session = loadSession();
+      const session = await loadOrRefreshSession();
       if (!isSessionValid(session)) {
         console.log(chalk.red('Not logged in. Run: blackboard login'));
         process.exit(1);
