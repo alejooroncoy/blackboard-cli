@@ -4,3 +4,4 @@ dist/
 *.js.map
 .env
 .DS_Store
+.mcp.json
