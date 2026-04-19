@@ -4,6 +4,16 @@ All notable changes to `blackboard-upc` will be documented here.
 
 ---
 
+## [1.0.8] — 2026-04-19
+
+### Added
+- **Soporte para preguntas `fimb`** (fill-in-multiple-blanks) en `get_quiz_questions`, `save_quiz_answer` y el tipo `QuizQuestion`:
+  - `QuizQuestion.blanks` — array con los nombres de los blanks (ej. `["BLANK-1", "BLANK-2"]`)
+  - `QuizQuestion.currentAnswer` — para fimb, devuelve `Record<string, string|null>` con el valor actual de cada blank
+  - `save_quiz_answer` ahora acepta un JSON string con el mapa `{blankName: value}` (ej. `'{"BLANK-1":"1438.62","BLANK-2":"140.62"}'`)
+
+---
+
 ## [1.0.7] — 2026-04-12
 
 ### Added

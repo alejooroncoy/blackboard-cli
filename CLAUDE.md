@@ -33,6 +33,14 @@ If you get `Not authenticated`, ask the user to run `blackboard login`.
 4. submit_quiz (confirm first!)          → finalize and submit the attempt
 ```
 
+Supported question types in `save_quiz_answer`:
+
+| `question.type`   | `answer` format                                                                |
+|-------------------|--------------------------------------------------------------------------------|
+| `eitherOr`        | boolean (`true` = Verdadero, `false` = Falso)                                  |
+| `multipleanswer`  | number — 0-based index of the chosen option                                    |
+| `fimb`            | JSON string `'{"BLANK-1":"value1","BLANK-2":"value2"}'` — read names from `question.blanks` |
+
 ### Feedback workflow
 
 ```

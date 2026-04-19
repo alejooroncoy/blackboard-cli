@@ -400,20 +400,45 @@ export async function startMcpServer() {
       description:
         'Save a single answer for a quiz question (does NOT submit — use submit_quiz to finalize). ' +
         'question is the full question object from get_quiz_questions. ' +
-        'answer: boolean for true/false, or 0-based index number for multiple-choice.',
+        'answer format depends on question.type:\n' +
+        '  - eitherOr (true/false):       boolean (true = Verdadero)\n' +
+        '  - multipleanswer (MC):         number (0-based index of the chosen option)\n' +
+        '  - fimb (fill-in-multi-blanks): JSON string of an object mapping blank names to values, ' +
+        'e.g. \'{"BLANK-1":"1438.62","BLANK-2":"140.62"}\' (read blank names from question.blanks)',
       inputSchema: {
         courseId: z.string().describe('Course ID'),
         attemptId: z.string().describe('Quiz attempt ID (e.g. _94898825_1)'),
         question: z.string().describe('JSON string of the question object from get_quiz_questions'),
-        answer: z.union([z.boolean(), z.number()]).describe(
-          'For true/false: true or false. For multiple-choice: 0-based index of selected option.'
+        answer: z.union([z.boolean(), z.number(), z.string()]).describe(
+          'eitherOr: true/false. multipleanswer: 0-based index. ' +
+          'fimb: JSON string of {blankName: value} (e.g. \'{"BLANK-1":"1438.62"}\').'
         ),
       },
     },
     async ({ courseId, attemptId, question: questionJson, answer }) => {
       const { client } = await getClient();
       const question: QuizQuestion = JSON.parse(questionJson);
-      const result = await saveQuizAnswer(client, courseId, attemptId, question, answer as boolean | number);
+
+      // For fimb, the MCP transport gives us a JSON string — parse it into the Record<string, string>
+      // saveQuizAnswer expects. boolean / number pass through as-is.
+      let parsedAnswer: boolean | number | Record<string, string>;
+      if (typeof answer === 'string') {
+        try {
+          const obj = JSON.parse(answer);
+          if (obj === null || typeof obj !== 'object' || Array.isArray(obj)) {
+            throw new Error('fimb answer string must parse to a JSON object');
+          }
+          parsedAnswer = obj as Record<string, string>;
+        } catch (e: any) {
+          throw new Error(
+            `Invalid fimb answer: expected a JSON object string like '{"BLANK-1":"value"}'. ${e.message}`
+          );
+        }
+      } else {
+        parsedAnswer = answer;
+      }
+
+      const result = await saveQuizAnswer(client, courseId, attemptId, question, parsedAnswer);
       return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
     }
   );

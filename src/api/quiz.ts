@@ -25,7 +25,7 @@ export interface QuizOption {
   index: number;
 }
 
-export type QuizQuestionType = 'eitherOr' | 'multipleanswer' | 'presentation' | string;
+export type QuizQuestionType = 'eitherOr' | 'multipleanswer' | 'fimb' | 'presentation' | string;
 
 export interface QuizQuestion {
   /** Question attempt ID — used as the URL segment for saving answers */
@@ -34,18 +34,21 @@ export interface QuizQuestion {
   questionId: string;
   /** Position within the quiz (1-based visible number) */
   position: number;
-  /** 'eitherOr' = true/false, 'multipleanswer' = MC, 'presentation' = text only */
+  /** 'eitherOr' = true/false, 'multipleanswer' = MC, 'fimb' = fill-in-multiple-blanks, 'presentation' = text only */
   type: QuizQuestionType;
   /** Plain text of the question (HTML stripped) */
   text: string;
   points: number;
   /** Answer options (present for eitherOr and multipleanswer) */
   options?: QuizOption[];
+  /** Blank names in order (present for fimb), e.g. ['BLANK-1', 'BLANK-2'] */
+  blanks?: string[];
   /** Currently saved answer:
    *   - eitherOr:       true | false | null
    *   - multipleanswer: boolean[] (one per option, in options order)
+   *   - fimb:           Record<string, string|null> (one per blank)
    */
-  currentAnswer?: boolean | boolean[] | null;
+  currentAnswer?: boolean | boolean[] | Record<string, string | null> | null;
   /** Raw question object from API (needed when saving eitherOr answers) */
   _raw: any;
 }
@@ -76,6 +79,8 @@ function parseQuestionAttempt(qa: any, idx: number): QuizQuestion {
   const text = stripHtml(q.questionText?.rawText || q.questionText?.displayText || '');
 
   let options: QuizOption[] | undefined;
+  let blanks: string[] | undefined;
+  let currentAnswer: QuizQuestion['currentAnswer'] = qa.givenAnswer ?? null;
 
   if (qa.questionType === 'eitherOr') {
     // True/False — always two options
@@ -89,6 +94,10 @@ function parseQuestionAttempt(qa: any, idx: number): QuizQuestion {
       text: stripHtml(a.answerText?.rawText || a.answerText?.displayText || ''),
       index: i,
     }));
+  } else if (qa.questionType === 'fimb' && qa.givenAnswers && typeof qa.givenAnswers === 'object') {
+    // Fill-in-multiple-blanks — blank names come from givenAnswers keys (e.g. BLANK-1, BLANK-2)
+    blanks = Object.keys(qa.givenAnswers);
+    currentAnswer = qa.givenAnswers as Record<string, string | null>;
   }
 
   return {
@@ -99,7 +108,8 @@ function parseQuestionAttempt(qa: any, idx: number): QuizQuestion {
     text,
     points: q.points ?? 0,
     options,
-    currentAnswer: qa.givenAnswer ?? null,
+    blanks,
+    currentAnswer,
     _raw: qa,
   };
 }
@@ -165,13 +175,14 @@ export async function getQuizQuestions(
  *   - eitherOr:       boolean  (true = Verdadero, false = Falso)
  *   - multipleanswer: number   (0-based index of the selected option)
  *                    OR boolean[] (one per option)
+ *   - fimb:           Record<string, string>  (one value per blank name, e.g. { "BLANK-1": "1438.62", "BLANK-2": "140.62" })
  */
 export async function saveQuizAnswer(
   client: AxiosInstance,
   courseId: string,
   attemptId: string,
   question: QuizQuestion,
-  answer: boolean | number | boolean[]
+  answer: boolean | number | boolean[] | Record<string, string>
 ): Promise<any> {
   const url = `/learn/api/v1/courses/${courseId}/gradebook/attempts/${attemptId}/assessment/answers/${question.questionAttemptId}`;
 
@@ -201,6 +212,28 @@ export async function saveQuizAnswer(
       givenAnswer,
       lookupOrder: question._raw.lookupOrder || [],
       order: question._raw.order || [],
+      question: question._raw.question,
+    };
+  } else if (question.type === 'fimb') {
+    if (typeof answer !== 'object' || Array.isArray(answer) || answer === null) {
+      throw new Error(
+        `fimb answers must be a Record<string, string> mapping blank name to value. ` +
+        `Expected blanks: ${question.blanks?.join(', ') || '(unknown)'}`
+      );
+    }
+
+    // Build givenAnswers using the question's known blank names — preserves order and
+    // ensures any blank not provided ends up as null (consistent with Blackboard behavior).
+    const blanks = question.blanks ?? Object.keys(answer);
+    const givenAnswers: Record<string, string | null> = {};
+    for (const name of blanks) {
+      const val = (answer as Record<string, string>)[name];
+      givenAnswers[name] = val !== undefined ? String(val) : null;
+    }
+
+    body = {
+      questionType: 'fimb',
+      givenAnswers,
       question: question._raw.question,
     };
   } else {
