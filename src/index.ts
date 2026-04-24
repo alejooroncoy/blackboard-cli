@@ -9,15 +9,15 @@ import { assignmentsCommand } from './commands/assignments.js';
 import { loadSession, loadOrRefreshSession, saveSession, isSessionValid } from './auth/session.js';
 import { createClient } from './api/client.js';
 import { getMe, getSystemVersion } from './api/courses.js';
-import { resolveDisplayName } from './auth/login.js';
-import { BANNER, ok, fail, hint } from './ui/theme.js';
+import { resolveDisplayName, getSsoExpiry } from './auth/login.js';
+import { BANNER, ok, fail, hint, formatSessionLifetime } from './ui/theme.js';
 
 const program = new Command();
 
 program
   .name('blackboard')
   .description('CLI no oficial para UPC Aula Virtual (Blackboard Learn)')
-  .version('1.0.9')
+  .version('1.0.10')
   .addHelpText('beforeAll', BANNER);
 
 // Auth commands
@@ -50,10 +50,13 @@ program
       } catch {}
     }
 
+    const ssoExpiresAt = valid ? getSsoExpiry(session!.cookies) : undefined;
+
     const result = {
       loggedIn: valid,
       user: valid ? { id: session!.userId, name: session!.userName } : null,
       sessionExpiresAt: valid ? new Date(session!.expiresAt).toISOString() : null,
+      ssoExpiresAt: ssoExpiresAt ? new Date(ssoExpiresAt).toISOString() : null,
       server: sysVersion?.learn ?? null,
     };
 
@@ -62,9 +65,10 @@ program
     const v = sysVersion?.learn;
     console.log(`\n  Servidor: ${chalk.cyan(`Blackboard Learn ${v?.major}.${v?.minor}.${v?.patch} (${v?.build})`)}`);
     if (valid) {
-      const remaining = Math.round((session!.expiresAt - Date.now()) / 60_000);
+      const { summary, note } = formatSessionLifetime(session!.expiresAt, ssoExpiresAt);
       console.log(`  Sesión:   ${ok(`autenticado como ${chalk.bold(session!.userName || session!.userId || 'unknown')}`)}`);
-      console.log(`            ${chalk.gray(`expira en ${remaining} min`)}`);
+      console.log(`            ${chalk.gray(summary)}`);
+      console.log(`            ${chalk.gray(note)}`);
     } else {
       console.log(`  Sesión:   ${fail('no autenticado')} — ejecuta: ${hint('blackboard login')}`);
     }

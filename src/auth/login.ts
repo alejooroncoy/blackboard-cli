@@ -57,6 +57,27 @@ export function resolveDisplayName(userData: any): string | undefined {
   return userData.studentId || undefined;
 }
 
+// Microsoft SSO persistence is controlled specifically by ESTSAUTHPERSIST
+// (set when the user accepts "Keep me signed in"). Other cookies on
+// login.microsoftonline.com like MUID/fpc are tracking and persist ~1 year
+// but don't keep the user signed in — ignore them.
+const SSO_COOKIE_NAMES = new Set(['ESTSAUTHPERSISTENT', 'ESTSAUTHLIGHT', 'ESTSAUTH']);
+
+export function getSsoExpiry(cookies: Cookie[]): number | undefined {
+  const ssoCookies = cookies.filter(c =>
+    SSO_COOKIE_NAMES.has(c.name) &&
+    (c.domain.includes('login.microsoftonline.com') || c.domain.includes('login.live.com'))
+  );
+  const now = Date.now();
+  const future = ssoCookies
+    .map(c => c.expires)
+    .filter((e): e is number => typeof e === 'number' && e > 0)
+    .map(e => e * 1000)
+    .filter(ms => ms > now);
+  if (future.length === 0) return undefined;
+  return Math.max(...future);
+}
+
 function extractXsrf(cookies: Cookie[]): string {
   const bb = cookies.find(c => c.name === 'BbRouter');
   if (bb) {

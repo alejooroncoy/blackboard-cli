@@ -2,11 +2,11 @@ import { Command } from 'commander';
 import inquirer from 'inquirer';
 import chalk from 'chalk';
 import ora from 'ora';
-import { login, resolveDisplayName } from '../auth/login.js';
+import { login, resolveDisplayName, getSsoExpiry } from '../auth/login.js';
 import { loadSession, loadOrRefreshSession, saveSession, clearSession, isSessionValid } from '../auth/session.js';
 import { createClient } from '../api/client.js';
 import { getMe } from '../api/courses.js';
-import { ok, fail, warn, whatNext } from '../ui/theme.js';
+import { ok, fail, warn, whatNext, formatSessionLifetime } from '../ui/theme.js';
 
 export function loginCommand(program: Command) {
   program
@@ -36,9 +36,11 @@ export function loginCommand(program: Command) {
           password: opts.password,
         });
 
-        const remainingMin = Math.round((session.expiresAt - Date.now()) / 60_000);
-        const remainingHr  = (remainingMin / 60).toFixed(1);
-        console.log(ok(`Sesión guardada — expira en ${remainingHr}h`));
+        const ssoExpiresAt = getSsoExpiry(session.cookies);
+        const { summary, note } = formatSessionLifetime(session.expiresAt, ssoExpiresAt);
+        console.log(ok(`Sesión guardada`));
+        console.log(chalk.gray(`  ${summary}`));
+        console.log(chalk.gray(`  ${note}`));
         if (session.userName) console.log(chalk.gray(`  Usuario: ${session.userName}`));
         if (session.userId)   console.log(chalk.gray(`  ID:      ${session.userId}`));
         whatNext();
@@ -85,7 +87,9 @@ export function loginCommand(program: Command) {
       }
 
       console.log(chalk.green(`Logged in as: ${chalk.bold(session!.userName || session!.userId || 'unknown')}`));
-      const remaining = Math.round((session!.expiresAt - Date.now()) / 60_000);
-      console.log(chalk.gray(`Session expires in: ${remaining} minutes`));
+      const ssoExpiresAt = getSsoExpiry(session!.cookies);
+      const { summary, note } = formatSessionLifetime(session!.expiresAt, ssoExpiresAt);
+      console.log(chalk.gray(summary));
+      console.log(chalk.gray(note));
     });
 }

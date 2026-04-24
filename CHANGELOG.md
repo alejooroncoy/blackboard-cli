@@ -4,6 +4,22 @@ All notable changes to `blackboard-upc` will be documented here.
 
 ---
 
+## [1.0.10] — 2026-04-24
+
+### Added
+- **TTL real del SSO en `whoami`, `status` y `login`** — ahora se muestran las dos ventanas: la del token de Blackboard (~3h, se auto-renueva) y la del SSO de Microsoft (~90 días, la ventana real hasta que hay que re-loguearse). Ejemplo:
+  ```
+  SSO Microsoft: 89 días · Blackboard: 173 min
+  se auto-renueva hasta que el SSO expire o hagas logout
+  ```
+- `getSsoExpiry()` helper en `src/auth/login.ts` — lee el expiry de `ESTSAUTHPERSISTENT` (la cookie de Microsoft que controla la persistencia del SSO) desde la sesión guardada, sin llamadas de red
+- `formatSessionLifetime()` helper en `src/ui/theme.ts` — centraliza el formato de las dos líneas (resumen + nota) y maneja el caso donde el SSO es session-only
+
+### Changed
+- `blackboard login` ya no muestra "expira en 3h" (engañoso, porque se auto-renueva); muestra la misma info que `whoami`/`status`
+
+---
+
 ## [1.0.9] — 2026-04-24
 
 ### Fixed

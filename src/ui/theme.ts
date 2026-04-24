@@ -21,6 +21,32 @@ ${upcRed('  ██████  ███████ ██   ██  ███
   ${chalk.dim('CLI no oficial para UPC Aula Virtual · Blackboard Learn')}
 `;
 
+export function formatSessionLifetime(bbExpiresAt: number, ssoExpiresAt?: number): {
+  summary: string;
+  note: string;
+} {
+  const now = Date.now();
+  const bbMin = Math.max(0, Math.round((bbExpiresAt - now) / 60_000));
+
+  if (!ssoExpiresAt || ssoExpiresAt <= now) {
+    return {
+      summary: `Blackboard: ${bbMin} min`,
+      note: 'SSO sin "mantener sesión" — deberás reloguearte cuando expire',
+    };
+  }
+
+  const ssoMs = ssoExpiresAt - now;
+  const ssoDays = Math.floor(ssoMs / 86_400_000);
+  const ssoStr = ssoDays >= 1
+    ? `${ssoDays} día${ssoDays === 1 ? '' : 's'}`
+    : `${Math.round(ssoMs / 3_600_000)} h`;
+
+  return {
+    summary: `SSO Microsoft: ${ssoStr} · Blackboard: ${bbMin} min`,
+    note: 'se auto-renueva hasta que el SSO expire o hagas logout',
+  };
+}
+
 export function whatNext() {
   console.log(`
   ${chalk.bold('¿Qué puedo hacer ahora?')}
