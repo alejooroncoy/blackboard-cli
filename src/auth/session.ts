@@ -5,6 +5,7 @@ import type { Session } from '../types/index.js';
 
 const SESSION_DIR = path.join(os.homedir(), '.blackboard-cli');
 const SESSION_FILE = path.join(SESSION_DIR, 'session.json');
+const PROFILE_DIR = path.join(SESSION_DIR, 'browser-profile');
 
 export function saveSession(session: Session): void {
   if (!fs.existsSync(SESSION_DIR)) {
@@ -27,9 +28,19 @@ export function loadSession(): Session | null {
   }
 }
 
-export function clearSession(): void {
+export function clearSession(opts: { keepProfile?: boolean } = {}): void {
   try {
     if (fs.existsSync(SESSION_FILE)) fs.unlinkSync(SESSION_FILE);
+  } catch {}
+  if (!opts.keepProfile) clearBrowserProfile();
+}
+
+// The browser profile holds Microsoft SSO cookies. Without clearing it,
+// the next `login` silently re-authenticates with the same account and
+// switching users becomes impossible.
+export function clearBrowserProfile(): void {
+  try {
+    if (fs.existsSync(PROFILE_DIR)) fs.rmSync(PROFILE_DIR, { recursive: true, force: true });
   } catch {}
 }
 

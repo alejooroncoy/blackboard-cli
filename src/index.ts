@@ -6,9 +6,10 @@ import { coursesCommand } from './commands/courses.js';
 import { apiDocsCommand } from './commands/api-docs.js';
 import { downloadCommand } from './commands/download.js';
 import { assignmentsCommand } from './commands/assignments.js';
-import { loadSession, loadOrRefreshSession, isSessionValid } from './auth/session.js';
+import { loadSession, loadOrRefreshSession, saveSession, isSessionValid } from './auth/session.js';
 import { createClient } from './api/client.js';
 import { getMe, getSystemVersion } from './api/courses.js';
+import { resolveDisplayName } from './auth/login.js';
 import { BANNER, ok, fail, hint } from './ui/theme.js';
 
 const program = new Command();
@@ -16,7 +17,7 @@ const program = new Command();
 program
   .name('blackboard')
   .description('CLI no oficial para UPC Aula Virtual (Blackboard Learn)')
-  .version('1.0.7')
+  .version('1.0.9')
   .addHelpText('beforeAll', BANNER);
 
 // Auth commands
@@ -31,12 +32,23 @@ program
   .description('Estado de sesión y versión del servidor')
   .option('--json', 'Output raw JSON')
   .action(async (opts) => {
-    const session = await loadOrRefreshSession();
+    let session = await loadOrRefreshSession();
     const valid = isSessionValid(session);
 
-    const sysVersion = await getSystemVersion(
-      createClient(session ?? { cookies: [], xsrfToken: '', expiresAt: 0 })
-    ).catch(() => null);
+    const client = createClient(session ?? { cookies: [], xsrfToken: '', expiresAt: 0 });
+    const sysVersion = await getSystemVersion(client).catch(() => null);
+
+    // Self-heal old sessions with userName=null.
+    if (valid && !session!.userName) {
+      try {
+        const me = await getMe(client);
+        const name = resolveDisplayName(me);
+        if (name) {
+          session = { ...session!, userId: session!.userId ?? me?.id, userName: name };
+          saveSession(session!);
+        }
+      } catch {}
+    }
 
     const result = {
       loggedIn: valid,

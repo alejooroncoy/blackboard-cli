@@ -4,6 +4,19 @@ All notable changes to `blackboard-upc` will be documented here.
 
 ---
 
+## [1.0.9] — 2026-04-24
+
+### Fixed
+- **`whoami` y `status` mostraban `unknown`** — el extractor leía `userData.userName`, campo que la API de UPC no devuelve. Ahora se arma desde `name.given + name.family` con fallback a `studentId`
+- **`logout` no permitía cambiar de cuenta** — solo borraba `session.json` pero no el browser profile de Playwright (`~/.blackboard-cli/browser-profile`), donde viven las cookies de Microsoft SSO. El siguiente `login` se auto-autenticaba con la misma cuenta. Ahora `logout` borra también el profile
+
+### Added
+- `blackboard logout --keep-profile` — conserva las cookies SSO (útil para renovar sesión de la misma cuenta sin re-ingresar credenciales)
+- **Self-heal de sesiones viejas** — `whoami` y `status` detectan `userName: null` en sesiones guardadas con versiones previas y rellenan el nombre llamando a `/users/me` una sola vez (sin necesidad de re-login)
+- `resolveDisplayName()` helper en `src/auth/login.ts` — centraliza la lógica de nombre desde la respuesta de `/users/me`
+
+---
+
 ## [1.0.8] — 2026-04-19
 
 ### Added

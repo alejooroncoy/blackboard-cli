@@ -2,8 +2,10 @@ import { Command } from 'commander';
 import inquirer from 'inquirer';
 import chalk from 'chalk';
 import ora from 'ora';
-import { login } from '../auth/login.js';
-import { loadSession, loadOrRefreshSession, clearSession, isSessionValid } from '../auth/session.js';
+import { login, resolveDisplayName } from '../auth/login.js';
+import { loadSession, loadOrRefreshSession, saveSession, clearSession, isSessionValid } from '../auth/session.js';
+import { createClient } from '../api/client.js';
+import { getMe } from '../api/courses.js';
 import { ok, fail, warn, whatNext } from '../ui/theme.js';
 
 export function loginCommand(program: Command) {
@@ -48,21 +50,40 @@ export function loginCommand(program: Command) {
 
   program
     .command('logout')
-    .description('Clear the saved session')
-    .action(() => {
-      clearSession();
-      console.log(chalk.green('✓ Session cleared'));
+    .description('Borra la sesión y las cookies SSO para poder cambiar de cuenta')
+    .option('--keep-profile', 'Conservar las cookies SSO del navegador (no permite cambiar de cuenta)')
+    .action((opts) => {
+      clearSession({ keepProfile: !!opts.keepProfile });
+      if (opts.keepProfile) {
+        console.log(chalk.green('✓ Sesión borrada') + chalk.gray(' (profile SSO conservado)'));
+      } else {
+        console.log(chalk.green('✓ Sesión y profile SSO borrados'));
+        console.log(chalk.gray('  El próximo `blackboard login` te pedirá credenciales de nuevo.'));
+      }
     });
 
   program
     .command('whoami')
     .description('Show current logged-in user')
     .action(async () => {
-      const session = await loadOrRefreshSession();
+      let session = await loadOrRefreshSession();
       if (!isSessionValid(session)) {
         console.log(chalk.red('Not logged in. Run: blackboard login'));
         process.exit(1);
       }
+
+      // Self-heal old sessions that were stored with userName=null.
+      if (!session!.userName) {
+        try {
+          const me = await getMe(createClient(session!));
+          const name = resolveDisplayName(me);
+          if (name) {
+            session = { ...session!, userId: session!.userId ?? me?.id, userName: name };
+            saveSession(session!);
+          }
+        } catch {}
+      }
+
       console.log(chalk.green(`Logged in as: ${chalk.bold(session!.userName || session!.userId || 'unknown')}`));
       const remaining = Math.round((session!.expiresAt - Date.now()) / 60_000);
       console.log(chalk.gray(`Session expires in: ${remaining} minutes`));

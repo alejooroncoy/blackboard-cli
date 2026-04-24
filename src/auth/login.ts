@@ -43,6 +43,20 @@ function extractBbRouterExpiry(cookies: Cookie[]): number {
   return Date.now() + SESSION_TTL_FALLBACK_MS;
 }
 
+// UPC's /users/me omits `userName` at the root. The display name must be
+// assembled from `name.given` + `name.family`, falling back to `studentId`.
+export function resolveDisplayName(userData: any): string | undefined {
+  if (!userData) return undefined;
+  if (typeof userData.userName === 'string' && userData.userName.trim()) return userData.userName.trim();
+  const full = [userData?.name?.given, userData?.name?.family].filter(Boolean).join(' ').trim();
+  if (full) return full;
+  if (userData?.name?.preferredDisplayName && typeof userData.name.preferredDisplayName === 'string') {
+    const pdn = userData.name.preferredDisplayName.trim();
+    if (pdn && pdn !== 'GivenName' && pdn !== 'FamilyName') return pdn;
+  }
+  return userData.studentId || undefined;
+}
+
 function extractXsrf(cookies: Cookie[]): string {
   const bb = cookies.find(c => c.name === 'BbRouter');
   if (bb) {
@@ -158,16 +172,18 @@ export async function login(opts: LoginOptions = {}): Promise<Session> {
       if (resp.ok()) userData = await resp.json();
     } catch {}
 
+    const displayName = resolveDisplayName(userData);
+
     const session: Session = {
       cookies,
       xsrfToken: nonce,
       userId: userData?.id,
-      userName: userData?.userName,
+      userName: displayName,
       expiresAt: extractBbRouterExpiry(cookies),
     };
 
     saveSession(session);
-    console.log(`✓ Logged in as ${userData?.userName || 'unknown'}`);
+    console.log(`✓ Logged in as ${displayName || 'unknown'}`);
 
     return session;
   } finally {
@@ -215,11 +231,33 @@ export async function silentRelogin(previousSession?: Session | null): Promise<S
       throw new SilentLoginFailed('Redirect succeeded but session cookies are missing');
     }
 
+    let userId = previousSession?.userId;
+    let userName = previousSession?.userName;
+
+    // Self-heal: older sessions were stored with userName=null because the
+    // old extractor looked at the wrong field. Refetch once if it's missing.
+    if (!userName || !userId) {
+      try {
+        const cookieStrForApi = cookies
+          .filter(c => c.domain.includes('aulavirtual.upc.edu.pe'))
+          .map(c => `${c.name}=${c.value}`)
+          .join('; ');
+        const resp = await page.request.get(`${BASE_URL}/learn/api/public/v1/users/me`, {
+          headers: { Accept: 'application/json', Cookie: cookieStrForApi },
+        });
+        if (resp.ok()) {
+          const me = await resp.json();
+          userId = userId ?? me?.id;
+          userName = userName ?? resolveDisplayName(me);
+        }
+      } catch {}
+    }
+
     const session: Session = {
       cookies,
       xsrfToken: extractXsrf(cookies),
-      userId: previousSession?.userId,
-      userName: previousSession?.userName,
+      userId,
+      userName,
       expiresAt: extractBbRouterExpiry(cookies),
     };
 
