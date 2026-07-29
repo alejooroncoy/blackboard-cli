@@ -31,14 +31,14 @@ export function registerBlackboardTools(server: McpServer) {
   server.registerTool('blackboard_whoami', { description: 'Get the currently authenticated UPC student info' }, async () => {
     const { client } = await getClient();
     const me = await getMe(client);
-    return { content: [{ type: 'text', text: JSON.stringify(me, null, 2) }] };
+    return { content: [{ type: 'text', text: JSON.stringify(me) }] };
   });
 
   // ── blackboard_system_version ─────────────────────────────────────────────────────────
   server.registerTool('blackboard_system_version', { description: 'Get Blackboard Learn server version' }, async () => {
     const { client } = await getClient();
     const v = await getSystemVersion(client);
-    return { content: [{ type: 'text', text: JSON.stringify(v, null, 2) }] };
+    return { content: [{ type: 'text', text: JSON.stringify(v) }] };
   });
 
   // ── blackboard_list_courses ────────────────────────────────────────────────────────────
@@ -47,7 +47,7 @@ export function registerBlackboardTools(server: McpServer) {
     let userId = session.userId;
     if (!userId) { const me = await getMe(client); userId = me.id; }
     const data = await getMyCourses(client, userId!, { limit: 50 });
-    return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
+    return { content: [{ type: 'text', text: JSON.stringify(data) }] };
   });
 
   // ── blackboard_get_course ──────────────────────────────────────────────────────────────
@@ -60,7 +60,7 @@ export function registerBlackboardTools(server: McpServer) {
     async ({ courseId }) => {
       const { client } = await getClient();
       const data = await getCourse(client, courseId);
-      return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
+      return { content: [{ type: 'text', text: JSON.stringify(data) }] };
     }
   );
 
@@ -77,7 +77,7 @@ export function registerBlackboardTools(server: McpServer) {
     async ({ courseId, parentId }) => {
       const { client } = await getClient();
       const data = await getCourseContents(client, courseId, parentId);
-      return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
+      return { content: [{ type: 'text', text: JSON.stringify(data) }] };
     }
   );
 
@@ -91,7 +91,7 @@ export function registerBlackboardTools(server: McpServer) {
     async ({ courseId }) => {
       const { client } = await getClient();
       const data = await getCourseAnnouncements(client, courseId);
-      return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
+      return { content: [{ type: 'text', text: JSON.stringify(data) }] };
     }
   );
 
@@ -105,7 +105,7 @@ export function registerBlackboardTools(server: McpServer) {
     async ({ courseId }) => {
       const { client } = await getClient();
       const data = await listAssignments(client, courseId);
-      return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
+      return { content: [{ type: 'text', text: JSON.stringify(data) }] };
     }
   );
 
@@ -122,7 +122,7 @@ export function registerBlackboardTools(server: McpServer) {
     async ({ courseId, columnId }) => {
       const { client } = await getClient();
       const data = await listAttempts(client, courseId, columnId);
-      return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
+      return { content: [{ type: 'text', text: JSON.stringify(data) }] };
     }
   );
 
@@ -144,7 +144,7 @@ export function registerBlackboardTools(server: McpServer) {
       return {
         content: [{
           type: 'text',
-          text: JSON.stringify({ columns: columns.results, grades: grades.results }, null, 2),
+          text: JSON.stringify({ columns: columns.results, grades: grades.results }),
         }],
       };
     }
@@ -187,7 +187,7 @@ export function registerBlackboardTools(server: McpServer) {
       return {
         content: [{
           type: 'text',
-          text: JSON.stringify({ saved: dest, size: r.data.byteLength, mimeType }, null, 2),
+          text: JSON.stringify({ saved: dest, size: r.data.byteLength, mimeType }),
         }],
       };
     }
@@ -211,7 +211,7 @@ export function registerBlackboardTools(server: McpServer) {
         const r = await client.get(
           `/learn/api/public/v1/courses/${courseId}/contents/${contentId}/attachments`
         );
-        return { content: [{ type: 'text', text: JSON.stringify(r.data, null, 2) }] };
+        return { content: [{ type: 'text', text: JSON.stringify(r.data) }] };
       } catch (err: any) {
         if (err.response?.status !== 400 && err.response?.status !== 404) throw err;
       }
@@ -247,8 +247,7 @@ export function registerBlackboardTools(server: McpServer) {
         content: [{
           type: 'text',
           text: JSON.stringify(
-            { type: 'embedded_files', note: 'Pass downloadUrl as attachmentId to blackboard_download_attachment', results: files },
-            null, 2
+            { type: 'embedded_files', note: 'Pass downloadUrl as attachmentId to blackboard_download_attachment', results: files }
           ),
         }],
       };
@@ -285,7 +284,7 @@ export function registerBlackboardTools(server: McpServer) {
       return {
         content: [{
           type: 'text',
-          text: JSON.stringify({ saved: dest, size: r.data.byteLength, mimeType }, null, 2),
+          text: JSON.stringify({ saved: dest, size: r.data.byteLength, mimeType }),
         }],
       };
     }
@@ -317,7 +316,7 @@ export function registerBlackboardTools(server: McpServer) {
       return {
         content: [{
           type: 'text',
-          text: JSON.stringify({ fileUploadId, fileName: path.basename(resolved), size }, null, 2),
+          text: JSON.stringify({ fileUploadId, fileName: path.basename(resolved), size }),
         }],
       };
     }
@@ -350,7 +349,7 @@ export function registerBlackboardTools(server: McpServer) {
         fileUploadIds,
         status: 'InProgress',
       });
-      return { content: [{ type: 'text', text: JSON.stringify(attempt, null, 2) }] };
+      return { content: [{ type: 'text', text: JSON.stringify(attempt) }] };
     }
   );
 
@@ -381,7 +380,7 @@ export function registerBlackboardTools(server: McpServer) {
         fileUploadIds,
         status: 'NeedsGrading',
       });
-      return { content: [{ type: 'text', text: JSON.stringify(attempt, null, 2) }] };
+      return { content: [{ type: 'text', text: JSON.stringify(attempt) }] };
     }
   );
 
@@ -448,7 +447,7 @@ export function registerBlackboardTools(server: McpServer) {
         })
       );
 
-      return { content: [{ type: 'text', text: JSON.stringify(results, null, 2) }] };
+      return { content: [{ type: 'text', text: JSON.stringify(results) }] };
     }
   );
 
@@ -490,7 +489,7 @@ export function registerBlackboardTools(server: McpServer) {
       return {
         content: [{
           type: 'text',
-          text: JSON.stringify({ saved: dest, size: r.data.byteLength, mimeType }, null, 2),
+          text: JSON.stringify({ saved: dest, size: r.data.byteLength, mimeType }),
         }],
       };
     }
@@ -513,7 +512,7 @@ export function registerBlackboardTools(server: McpServer) {
       const params = query ? Object.fromEntries(new URLSearchParams(query)) : undefined;
       const data = body ? JSON.parse(body) : undefined;
       const r = await client.request({ method: method.toLowerCase() as any, url: path, params, data });
-      return { content: [{ type: 'text', text: JSON.stringify(r.data, null, 2) }] };
+      return { content: [{ type: 'text', text: JSON.stringify(r.data) }] };
     }
   );
 }
