@@ -4,6 +4,19 @@ All notable changes to `campus-cli` (formerly `blackboard-upc`) will be document
 
 ---
 
+## [1.1.1] — 2026-07-29
+
+### Fixed
+- `campus login`/`silentRelogin` ya no descargan el Chromium de Playwright por defecto: `launchPersistentContextSafe` prueba primero el Chrome o Edge ya instalado en la máquina (mismo binario, misma versión), y solo si ninguno existe recurre al Chromium empaquetado por Playwright, instalándolo la primera vez que hace falta.
+- `run.js` ejecuta `dist/index.js` compilado cuando está disponible en vez de transpilar con `tsx` en cada arranque — inicio más rápido para instalaciones globales/`npx`.
+- El paquete publicado en npm ahora solo incluye `dist`, `run.js`, `README.md` y `CHANGELOG.md` (antes se publicaba todo el repo); se agregó `prepublishOnly` para garantizar que `dist/` siempre esté compilado antes de publicar.
+- El login por SSO de Microsoft ahora detecta el destino real de la navegación (`aulavirtual.upc.edu.pe/ultra`) en vez de depender de tiempos de espera fijos, cerrando un caso donde una redirección lenta o falsificada podía dejar la sesión a medio autenticar.
+- Se corrigieron dos `unhandled rejection` en el flujo de login que podían tumbar el proceso del servidor MCP ante un fallo de red durante la autenticación.
+- Las llamadas concurrentes a las tools de Blackboard (hasta 5 en paralelo, como permite este mismo agente) ya no compiten por el mismo perfil de navegador: los lanzamientos de Chromium se serializan por sesión en vez de arriesgarse a chocar contra el lock del directorio de perfil.
+- Las respuestas de las tools `blackboard_*` vía MCP ahora se devuelven en JSON compacto en vez de indentado, reduciendo el consumo de tokens sin perder información.
+
+---
+
 ## [1.1.0] — 2026-07-21
 
 ### Removed
