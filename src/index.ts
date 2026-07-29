@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+import fs from 'fs';
+import path from 'path';
 import { Command } from 'commander';
 import chalk from 'chalk';
 import { loginCommand } from './providers/blackboard/commands/login.js';
@@ -12,12 +14,14 @@ import { getMe, getSystemVersion } from './providers/blackboard/api/courses.js';
 import { resolveDisplayName, getSsoExpiry } from './providers/blackboard/auth/login.js';
 import { BANNER, ok, fail, hint, formatSessionLifetime } from './ui/theme.js';
 
+const { version } = JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json'), 'utf-8'));
+
 const program = new Command();
 
 program
   .name('campus')
   .description('CLI no oficial para tu campus universitario (Blackboard, Canvas, Moodle...)')
-  .version('1.0.0')
+  .version(version)
   .addHelpText('beforeAll', BANNER);
 
 // Auth commands
