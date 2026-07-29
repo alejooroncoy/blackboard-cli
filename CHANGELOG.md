@@ -4,12 +4,14 @@ All notable changes to `campus-cli` (formerly `blackboard-upc`) will be document
 
 ---
 
-## [1.1.1] — 2026-07-29
+## [1.1.2] — 2026-07-29
+
+> La versión 1.1.1 se publicó y despublicó el mismo día: el build incluía código compilado de trabajo en curso (app de escritorio/backend, no conectado al CLI) por una limpieza incompleta de `dist/`. 1.1.2 es esa misma release, empaquetada correctamente.
 
 ### Fixed
 - `campus login`/`silentRelogin` ya no descargan el Chromium de Playwright por defecto: `launchPersistentContextSafe` prueba primero el Chrome o Edge ya instalado en la máquina (mismo binario, misma versión), y solo si ninguno existe recurre al Chromium empaquetado por Playwright, instalándolo la primera vez que hace falta.
 - `run.js` ejecuta `dist/index.js` compilado cuando está disponible en vez de transpilar con `tsx` en cada arranque — inicio más rápido para instalaciones globales/`npx`.
-- El paquete publicado en npm ahora solo incluye `dist`, `run.js`, `README.md` y `CHANGELOG.md` (antes se publicaba todo el repo); se agregó `prepublishOnly` para garantizar que `dist/` siempre esté compilado antes de publicar.
+- El paquete publicado en npm ahora solo incluye `dist`, `run.js`, `README.md` y `CHANGELOG.md` (antes se publicaba todo el repo); se agregó `prepublishOnly` para garantizar que `dist/` siempre esté compilado antes de publicar, y `build` ahora limpia `dist/` antes de compilar para no arrastrar archivos de builds anteriores.
 - El login por SSO de Microsoft ahora detecta el destino real de la navegación (`aulavirtual.upc.edu.pe/ultra`) en vez de depender de tiempos de espera fijos, cerrando un caso donde una redirección lenta o falsificada podía dejar la sesión a medio autenticar.
 - Se corrigieron dos `unhandled rejection` en el flujo de login que podían tumbar el proceso del servidor MCP ante un fallo de red durante la autenticación.
 - Las llamadas concurrentes a las tools de Blackboard (hasta 5 en paralelo, como permite este mismo agente) ya no compiten por el mismo perfil de navegador: los lanzamientos de Chromium se serializan por sesión en vez de arriesgarse a chocar contra el lock del directorio de perfil.
