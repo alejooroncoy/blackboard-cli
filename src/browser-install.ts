@@ -7,10 +7,13 @@ type PersistentContextOptions = Parameters<typeof chromium.launchPersistentConte
 // Both providers (Blackboard, Mi UPC) launch a persistent Chromium context for
 // their SSO login flow. New installs (npm install -g, npx, --ignore-scripts,
 // or a `postinstall` that silently failed) can end up without the Chromium
-// binary Playwright expects — self-heal once instead of surfacing Playwright's
-// raw "Executable doesn't exist" wall of text.
-let installAttempted = false;
-let systemChannelsExhausted = false;
+// binary Playwright expects — self-heal once per profileDir instead of
+// surfacing Playwright's raw "Executable doesn't exist" wall of text. Keyed
+// by profileDir (not a single process-wide flag) so a second provider
+// (canvas_*/moodle_*, using its own profileDir) doesn't inherit a false
+// "already tried" state from Blackboard's launch, or vice versa.
+const installAttempted = new Set<string>();
+const systemChannelsExhausted = new Set<string>();
 
 // Playwright can drive an already-installed Chromium-based browser via
 // `channel` instead of downloading its own — try the common ones in order.
@@ -72,7 +75,7 @@ async function launchPersistentContextExclusive(
   // case. The stealth patch (navigator.webdriver) applies the same
   // regardless of which binary is driven, so this doesn't reintroduce the
   // Entra bot-detection problem.
-  if (!systemChannelsExhausted && !options?.channel) {
+  if (!systemChannelsExhausted.has(profileDir) && !options?.channel) {
     for (const channel of SYSTEM_CHROMIUM_CHANNELS) {
       try {
         return await doLaunch(profileDir, { ...options, channel });
@@ -82,14 +85,14 @@ async function launchPersistentContextExclusive(
         // should still leave the bundled fallback a chance to work.
       }
     }
-    systemChannelsExhausted = true;
+    systemChannelsExhausted.add(profileDir);
   }
 
   try {
     return await doLaunch(profileDir, options);
   } catch (err: any) {
-    if (installAttempted) throw err;
-    installAttempted = true;
+    if (installAttempted.has(profileDir)) throw err;
+    installAttempted.add(profileDir);
     // Playwright doesn't expose a stable error code for "browser not
     // installed" (just an English message), so instead of pattern-matching
     // it, always try the self-heal install once. `playwright install
