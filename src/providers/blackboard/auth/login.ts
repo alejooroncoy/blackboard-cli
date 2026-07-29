@@ -1,6 +1,7 @@
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
+import type { BrowserContext, Page } from 'playwright';
 import type { Session, Cookie } from '../types.js';
 import { saveSession } from './session.js';
 import { launchPersistentContextSafe } from '../../../browser-install.js';
@@ -93,6 +94,110 @@ function ensureProfileDir(): void {
   }
 }
 
+export function isBlackboardUltraUrl(value: string | URL): boolean {
+  try {
+    const url = value instanceof URL ? value : new URL(value);
+    return url.protocol === 'https:'
+      && url.hostname === 'aulavirtual.upc.edu.pe'
+      && (url.pathname === '/ultra' || url.pathname.startsWith('/ultra/'));
+  } catch {
+    return false;
+  }
+}
+
+async function waitForAuthenticationDestination(
+  page: Page,
+  timeout: number,
+): Promise<'microsoft' | 'ultra'> {
+  return new Promise((resolve, reject) => {
+    let settled = false;
+    const finish = (destination: 'microsoft' | 'ultra') => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      page.off('framenavigated', inspect);
+      page.off('domcontentloaded', inspect);
+      resolve(destination);
+    };
+    const inspect = () => {
+      if (isBlackboardUltraUrl(page.url())) {
+        finish('ultra');
+        return;
+      }
+      void page.locator('input[type="email"], input[name="loginfmt"]')
+        .isVisible()
+        .then(visible => {
+          if (visible) finish('microsoft');
+        })
+        .catch(() => undefined);
+    };
+    const timer = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      page.off('framenavigated', inspect);
+      page.off('domcontentloaded', inspect);
+      reject(new Error('Timed out waiting for Microsoft login or Blackboard Ultra'));
+    }, timeout);
+    page.on('framenavigated', inspect);
+    page.on('domcontentloaded', inspect);
+    inspect();
+  });
+}
+
+async function waitForSessionCookies(context: BrowserContext, timeout = 5_000): Promise<Cookie[]> {
+  const deadline = Date.now() + timeout;
+  do {
+    const cookies = (await context.cookies()).map((cookie) => ({
+      name: cookie.name,
+      value: cookie.value,
+      domain: cookie.domain,
+      path: cookie.path,
+      expires: cookie.expires,
+      httpOnly: cookie.httpOnly,
+      secure: cookie.secure,
+      sameSite: cookie.sameSite,
+    }));
+    if (cookies.some(cookie => cookie.name === 'JSESSIONID' || cookie.name === 'BbRouter')) {
+      return cookies;
+    }
+    await new Promise(resolve => setTimeout(resolve, 100));
+  } while (Date.now() < deadline);
+  throw new Error('Blackboard redirected to Ultra without creating a session');
+}
+
+async function dismissStaySignedInOrContinue(page: Page, timeout = 8_000): Promise<void> {
+  await new Promise<void>((resolve) => {
+    let settled = false;
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      clearInterval(interval);
+      page.off('framenavigated', inspect);
+      page.off('domcontentloaded', inspect);
+      resolve();
+    };
+    const inspect = () => {
+      if (isBlackboardUltraUrl(page.url())) {
+        finish();
+        return;
+      }
+      void page.locator('#idBtn_Back').isVisible()
+        .then(async visible => {
+          if (!visible || settled) return;
+          await page.locator('#idBtn_Back').click();
+          finish();
+        })
+        .catch(() => undefined);
+    };
+    const timer = setTimeout(finish, timeout);
+    const interval = setInterval(inspect, 100);
+    page.on('framenavigated', inspect);
+    page.on('domcontentloaded', inspect);
+    inspect();
+  });
+}
+
 export async function login(opts: LoginOptions = {}): Promise<Session> {
   const { headless = false, timeout = 120_000 } = opts;
 
@@ -107,16 +212,9 @@ export async function login(opts: LoginOptions = {}): Promise<Session> {
 
   try {
     console.log('Navigating to UPC Aula Virtual...');
-    await page.goto(SAML_URL, { waitUntil: 'networkidle', timeout });
-
-    // With persistent context, Microsoft SSO may auto-complete without showing the login page
-    let needsInteractiveLogin = false;
-    try {
-      await page.waitForURL(/login\.microsoftonline\.com/, { timeout: 8_000 });
-      needsInteractiveLogin = true;
-    } catch {
-      // SSO cookies still valid — SAML redirect auto-completing
-    }
+    const destination = waitForAuthenticationDestination(page, timeout);
+    await page.goto(SAML_URL, { waitUntil: 'commit', timeout });
+    const needsInteractiveLogin = await destination === 'microsoft';
 
     if (needsInteractiveLogin) {
       if (opts.username) {
@@ -132,34 +230,18 @@ export async function login(opts: LoginOptions = {}): Promise<Session> {
         await page.waitForTimeout(1500);
       }
 
-      // Handle "Stay signed in?" prompt
-      try {
-        await page.waitForSelector('#idBtn_Back, #KmsiCheckboxField', { timeout: 8_000 });
-        const noBtn = page.locator('#idBtn_Back');
-        if (await noBtn.isVisible()) await noBtn.click();
-      } catch {}
+      await dismissStaySignedInOrContinue(page);
     }
 
-    // Wait for redirect back to aulavirtual.upc.edu.pe/ultra
     console.log('Waiting for authentication to complete...');
-    await page.waitForURL(/aulavirtual\.upc\.edu\.pe\/ultra/, {
-      timeout: timeout - 10_000,
-    });
-
-    await page.waitForLoadState('networkidle', { timeout: 15_000 });
-
-    // Extract cookies
-    const rawCookies = await context.cookies();
-    const cookies: Cookie[] = rawCookies.map((c) => ({
-      name: c.name,
-      value: c.value,
-      domain: c.domain,
-      path: c.path,
-      expires: c.expires,
-      httpOnly: c.httpOnly,
-      secure: c.secure,
-      sameSite: c.sameSite,
-    }));
+    if (!isBlackboardUltraUrl(page.url())) {
+      await page.waitForURL(url => isBlackboardUltraUrl(url), {
+        waitUntil: 'commit',
+        timeout,
+      });
+    }
+    const cookies = await waitForSessionCookies(context);
+    await page.waitForLoadState('domcontentloaded', { timeout: 5_000 }).catch(() => undefined);
 
     // Extract XSRF token from BbRouter cookie
     let nonce = extractXsrf(cookies);
@@ -230,23 +312,13 @@ export async function silentRelogin(previousSession?: Session | null): Promise<S
   const page = await context.newPage();
 
   try {
+    const ultraNavigation = page.waitForURL(url => isBlackboardUltraUrl(url), {
+      waitUntil: 'commit',
+      timeout: 20_000,
+    });
     await page.goto(SAML_URL, { waitUntil: 'commit', timeout: 20_000 });
-
-    // If SSO cookies are still valid, this redirect completes automatically
-    await page.waitForURL(/aulavirtual\.upc\.edu\.pe\/ultra/, { timeout: 15_000 });
-    await page.waitForLoadState('networkidle', { timeout: 10_000 });
-
-    const rawCookies = await context.cookies();
-    const cookies: Cookie[] = rawCookies.map((c) => ({
-      name: c.name,
-      value: c.value,
-      domain: c.domain,
-      path: c.path,
-      expires: c.expires,
-      httpOnly: c.httpOnly,
-      secure: c.secure,
-      sameSite: c.sameSite,
-    }));
+    await ultraNavigation;
+    const cookies = await waitForSessionCookies(context, 3_000);
 
     if (!cookies.some(c => c.name === 'JSESSIONID' || c.name === 'BbRouter')) {
       throw new SilentLoginFailed('Redirect succeeded but session cookies are missing');

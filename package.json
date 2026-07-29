@@ -3,6 +3,12 @@
   "version": "1.1.0",
   "description": "CLI/MCP no oficial para el campus universitario (Blackboard, Canvas, Moodle...) — acceso desde la terminal y MCP para IA",
   "main": "run.js",
+  "files": [
+    "dist",
+    "run.js",
+    "README.md",
+    "CHANGELOG.md"
+  ],
   "bin": {
     "campus": "run.js",
     "campus-cli": "run.js",
@@ -13,8 +19,7 @@
     "build": "tsc",
     "test": "tsx --test tests/**/*.test.ts",
     "dev": "tsx src/index.ts",
-    "start": "node dist/index.js",
-    "postinstall": "playwright install chromium || true"
+    "start": "node dist/index.js"
   },
   "keywords": [
     "campus",
