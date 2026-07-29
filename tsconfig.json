@@ -11,5 +11,15 @@
     "skipLibCheck": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    // Work-in-progress desktop app/cloud backend — not yet merged to git.
+    // Excluded so a dirty working tree can never leak them into a build,
+    // e.g. via `npm publish`'s prepublishOnly.
+    "src/app",
+    "src/cloud",
+    "src/providers/registry.ts",
+    "src/providers/blackboard/commands/app.ts",
+    "src/providers/blackboard/commands/relay.ts"
+  ]
 }
