@@ -62,8 +62,10 @@ export async function launchPersistentContextSafe(
     for (const channel of SYSTEM_CHROMIUM_CHANNELS) {
       try {
         return await doLaunch(profileDir, { ...options, channel });
-      } catch (err: any) {
-        if (!isMissingBrowserError(err)) throw err;
+      } catch {
+        // Try the next system channel, then fall through to the bundled
+        // Chromium below — any launch failure here (not just "not found")
+        // should still leave the bundled fallback a chance to work.
       }
     }
     systemChannelsExhausted = true;

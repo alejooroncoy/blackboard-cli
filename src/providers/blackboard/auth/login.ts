@@ -213,6 +213,7 @@ export async function login(opts: LoginOptions = {}): Promise<Session> {
   try {
     console.log('Navigating to UPC Aula Virtual...');
     const destination = waitForAuthenticationDestination(page, timeout);
+    destination.catch(() => {}); // avoid an unhandled rejection if page.goto throws first
     await page.goto(SAML_URL, { waitUntil: 'commit', timeout });
     const needsInteractiveLogin = await destination === 'microsoft';
 
@@ -316,6 +317,7 @@ export async function silentRelogin(previousSession?: Session | null): Promise<S
       waitUntil: 'commit',
       timeout: 20_000,
     });
+    ultraNavigation.catch(() => {}); // avoid an unhandled rejection if page.goto throws first
     await page.goto(SAML_URL, { waitUntil: 'commit', timeout: 20_000 });
     await ultraNavigation;
     const cookies = await waitForSessionCookies(context, 3_000);
