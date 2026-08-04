@@ -144,14 +144,15 @@ founderForm.addEventListener("submit", async (event) => {
    and hidden entirely if the request fails — the icon still links out. */
 const starsSlot = document.querySelector("[data-github-stars]");
 if (starsSlot) {
-  const starsCount = starsSlot.querySelector("[data-github-stars-count]");
   const githubLink = starsSlot.closest(".header-github");
   const cacheKey = "campus:github-stars";
   const cacheTtl = 3600000;
+  // Compact notation so a five-figure count never widens the header: 1.2K, 107.5K.
+  const compact = new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 });
 
   const renderStars = (stars) => {
     if (!Number.isFinite(stars)) return;
-    starsCount.textContent = new Intl.NumberFormat("es-PE").format(stars);
+    starsSlot.textContent = compact.format(stars);
     starsSlot.hidden = false;
     githubLink.classList.add("has-stars");
     githubLink.setAttribute("aria-label", `Ver Campus en GitHub, ${stars} estrellas`);
