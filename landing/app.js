@@ -21,8 +21,16 @@ let turnstileWidgetId;
 const siteHeader = document.querySelector(".site-header");
 
 let headerFrame;
+let headerCompact = false;
+/* The pill is 24px shorter than the full header, so collapsing it shifts the
+   page up. With a single threshold that shift can push the scroll back below
+   the trigger and the header oscillates, so grow and shrink use separate
+   marks and the gap between them is wider than the height it reclaims. */
 const syncHeader = () => {
-  siteHeader?.classList.toggle("is-scrolled", window.scrollY > 72);
+  const y = window.scrollY;
+  if (!headerCompact && y > 96) headerCompact = true;
+  else if (headerCompact && y < 40) headerCompact = false;
+  siteHeader?.classList.toggle("is-scrolled", headerCompact);
   headerFrame = undefined;
 };
 
