@@ -9,13 +9,64 @@
     <meta name="campus-turnstile-site-key" content="0x4AAAAAAEDTvI0vNf8mWxAL" />
     <title>Blog | Campus para Blackboard UPC</title>
     <link rel="canonical" href="https://campuscli.com/blog/" />
-    <link rel="icon" type="image/png" href="../assets/campus-favicon.png" />
-    <link rel="stylesheet" href="../styles.min.css" />
+    <link rel="icon" type="image/png" href="/assets/campus-favicon.png" />
+    <link rel="stylesheet" href="/styles.min.css" />
     <style>
-      .blog-main{padding:clamp(50px,8vw,100px) 0 110px}.blog-hero{max-width:760px}.blog-hero h1{max-width:760px}.blog-hero p{max-width:640px;color:var(--muted);font-size:19px}.blog-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:54px}.blog-card{display:flex;flex-direction:column;min-height:330px;padding:25px;border:1px solid #d5e3e7;border-radius:8px;background:#fff;box-shadow:0 12px 28px #102a3a0d}.blog-card__tag{color:var(--green);font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase}.blog-card h2{margin:20px 0 12px;font-size:24px;line-height:1.12}.blog-card p{color:var(--muted);font-size:15px}.blog-card .text-link{margin-top:auto}.blog-cta{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:70px;padding:32px;border-radius:8px;background:var(--night);color:#fff}.blog-cta p{max-width:560px;margin:8px 0 0;color:#c7dce2}.blog-cta .button{border-color:#fff;background:#fff;color:var(--night)}@media(max-width:850px){.blog-grid{grid-template-columns:1fr 1fr}}@media(max-width:620px){.blog-grid{grid-template-columns:1fr}.blog-cta{display:block}.blog-cta .button{margin-top:20px}}
+      main.blog-main{padding:clamp(44px,7vw,88px) 0 108px}
+      main .crumbs{display:block;margin:0 0 24px}
+      main .crumbs ol{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0;padding:0;list-style:none}
+      main .crumbs li{margin:0;color:#7d97a5;font-size:14px;line-height:1.4}
+      main .crumbs li+li::before{content:"\203a";margin-right:8px;color:#a7bcc6}
+      main .crumbs a{color:#7d97a5;border-bottom:1px solid transparent}
+      main .crumbs a:hover{color:#17323f;border-bottom-color:#c2d4dc}
+      main .crumbs [aria-current="page"]{color:#17323f;font-weight:600}
+      main .blog-hero{max-width:760px}
+      main .blog-hero h1{max-width:760px;margin:0 0 18px;font-size:clamp(36px,5.6vw,56px);line-height:1.06;letter-spacing:-.02em}
+      main .blog-hero p{max-width:640px;margin:0;color:var(--muted);font-size:19px}
+      main .hub-section{margin-top:56px}
+      main .hub-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:10px 20px;margin-bottom:22px;padding-bottom:14px;border-bottom:1px solid #d5e3e7}
+      main .hub-head h2{margin:0;font-size:22px;line-height:1.2}
+      main .hub-head p{margin:0;color:#7d97a5;font-size:15px}
+      main .feature{position:relative;display:grid;grid-template-columns:1.5fr 1fr;gap:34px;padding:32px;border:1px solid #cfe0e5;border-radius:8px;background:#fff;box-shadow:0 14px 34px #102a3a0f;transition:border-color 160ms ease,box-shadow 160ms ease}
+      main .feature:hover{border-color:#b7cfd7;box-shadow:0 18px 40px #102a3a1a}
+      main .feature__tag{color:var(--green);font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase}
+      main .feature h3{margin:14px 0 12px;font-size:clamp(24px,3vw,32px);line-height:1.12;letter-spacing:-.01em}
+      main .feature h3 a{color:inherit}
+      main .feature h3 a::after{content:"";position:absolute;inset:0;border-radius:8px}
+      main .feature h3 a:focus-visible{outline:none}
+      main .feature h3 a:focus-visible::after{outline:2px solid var(--green);outline-offset:3px}
+      main .feature__excerpt{margin:0 0 20px;color:var(--muted);font-size:17px;line-height:1.55}
+      main .feature__body{display:flex;flex-direction:column}
+      main .feature__go{display:inline-flex;align-items:center;gap:7px;margin-top:auto;color:var(--green);font-size:15px;font-weight:700}
+      main .feature__meta{align-self:start;margin:0;padding:20px;border:1px solid #dfeaee;border-radius:8px;background:#f7fbfb}
+      main .feature__meta dt{color:#7d97a5;font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase}
+      main .feature__meta dd{margin:6px 0 16px;color:#2f4f60;font-size:15px;line-height:1.45}
+      main .feature__meta dd:last-of-type{margin-bottom:0}
+      main .hub-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:0;padding:0;list-style:none}
+      main .hub-card{position:relative;display:flex;flex-direction:column;min-height:216px;padding:22px;border:1px solid #d5e3e7;border-radius:8px;background:#fff;box-shadow:0 12px 28px #102a3a0d;transition:border-color 160ms ease,transform 160ms ease,box-shadow 160ms ease}
+      main .hub-card:hover{border-color:#b7cfd7;transform:translateY(-2px);box-shadow:0 16px 32px #102a3a14}
+      main .hub-card__tag{color:var(--green);font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase}
+      main .hub-card h3{margin:13px 0 10px;font-size:19px;line-height:1.22}
+      main .hub-card h3 a{color:inherit}
+      main .hub-card h3 a::after{content:"";position:absolute;inset:0;border-radius:8px}
+      main .hub-card h3 a:focus-visible{outline:none}
+      main .hub-card h3 a:focus-visible::after{outline:2px solid var(--green);outline-offset:3px}
+      main .hub-card p{margin:0 0 18px;color:var(--muted);font-size:15px;line-height:1.5}
+      main .hub-card__go{margin-top:auto;color:var(--green);font-size:14px;font-weight:700}
+      main .hub-card--soon{border-style:dashed;background:#fbfdfd;box-shadow:none}
+      main .hub-card--soon:hover{transform:none;border-color:#d5e3e7;box-shadow:none}
+      main .hub-card--soon .hub-card__tag{color:#8ba5b0}
+      main .hub-card--soon h3{color:#43606f}
+      main .hub-card__state{margin-top:auto;color:#8ba5b0;font-size:13px;font-weight:600}
+      main .blog-cta{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:68px;padding:32px;border-radius:8px;background:var(--night);color:#fff}
+      main .blog-cta p{max-width:560px;margin:8px 0 0;color:#c7dce2}
+      main .blog-cta .button{border-color:#fff;background:#fff;color:var(--night)}
+      @media(max-width:900px){main .feature{grid-template-columns:1fr;gap:26px}main .hub-grid{grid-template-columns:1fr 1fr}}
+      @media(max-width:620px){main .feature{padding:24px}main .hub-grid{grid-template-columns:1fr}main .blog-hero p{font-size:17px}main .blog-cta{display:block}main .blog-cta .button{margin-top:20px}}
       .site-header.is-scrolled{background:rgba(244,248,248,.96)}
       .site-header .button svg path{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
     </style>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://campuscli.com/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://campuscli.com/blog/"}]}</script>
 <style>.footer__inner{min-height:0!important;grid-template-columns:1.4fr .7fr .8fr 1.2fr!important;align-items:start!important;gap:38px!important;padding-block:54px 22px!important}.footer__brand .brand{margin-bottom:14px}.footer__brand p{margin:0;color:#9fb9c3;font-size:14px}.footer__links{display:grid;gap:9px;align-content:start;font-size:14px}.footer__links strong,.footer__action strong{color:#fff;font-size:12px;letter-spacing:.08em;text-transform:uppercase}.footer__links a{color:#aec5cd}.footer__action p{margin:10px 0 16px;color:#aec5cd;font-size:14px}.footer__action .button{border-color:#fff;background:#fff;color:#112633}.footer__bottom{grid-column:1/-1;display:flex;justify-content:space-between;gap:20px;padding-top:20px;border-top:1px solid rgba(215,230,235,.18);color:#7896a2;font-size:12px}.footer__bottom small{font-size:inherit}@media(max-width:720px){.footer__inner{grid-template-columns:1fr 1fr!important;gap:30px 24px!important;padding-block:38px 20px!important}.footer__brand,.footer__action{grid-column:1/-1}.footer__bottom{display:grid;gap:7px}}@media(max-width:460px){.footer__inner{grid-template-columns:1fr!important}.footer__links{gap:7px}.footer__bottom{margin-top:4px}}</style></head>
   <body>
     <div class="announcement" role="status"><div class="shell announcement__inner"><span>Acceso anticipado para estudiantes UPC</span><a href="/#acceso-anticipado">S/20 por 2 meses <span aria-hidden="true">→</span></a></div></div>
@@ -29,12 +80,96 @@
     </header>
 
     <main class="blog-main shell">
-      <section class="blog-hero"><p class="eyebrow"><span class="dot"></span> Ideas, guías y novedades</p><h1>Aprende a sacarle más provecho a tu campus.</h1><p>Guías prácticas sobre Blackboard UPC, asistentes de IA, Blackboard MCP y Blackboard CLI para estudiar con menos fricción.</p></section>
-      <section class="blog-grid" aria-label="Artículos del blog">
-        <article class="blog-card"><span class="blog-card__tag">Guía · Blackboard MCP</span><h2>Qué es Blackboard MCP y cómo conecta tu campus con la IA</h2><p>Una explicación sencilla de Model Context Protocol y de cómo consultar cursos, tareas y notas desde un asistente.</p><a class="text-link" href="../blackboard-mcp/">Leer la guía <span aria-hidden="true">→</span></a></article>
-        <article class="blog-card"><span class="blog-card__tag">Tutorial · Blackboard CLI</span><h2>Blackboard CLI: consulta tus tareas desde la terminal</h2><p>Instala Campus CLI, inicia sesión y revisa tus cursos y entregas con comandos claros.</p><a class="text-link" href="../blackboard-cli/">Ver el tutorial <span aria-hidden="true">→</span></a></article>
-        <article class="blog-card"><span class="blog-card__tag">Producto · Estudiantes</span><h2>Cómo organizar tu semana usando Blackboard sin perder fechas</h2><p>Un flujo simple para convertir anuncios, tareas y notas en decisiones concretas para tu semana.</p><a class="text-link" href="/blog/organizar-tu-semana-blackboard/">Leer el artículo <span aria-hidden="true">→</span></a></article>
+      <nav class="crumbs" aria-label="Ruta de navegación">
+        <ol>
+          <li><a href="/">Inicio</a></li>
+          <li aria-current="page">Blog</li>
+        </ol>
+      </nav>
+
+      <section class="blog-hero">
+        <p class="eyebrow"><span class="dot"></span> Guías de Blackboard UPC</p>
+        <h1>Todo sobre Blackboard UPC, en un solo lugar.</h1>
+        <p>Cómo organizar tus entregas en el Aula Virtual, cómo conectarla con tu asistente de IA y cómo consultarla desde la terminal. Un solo tema, explicado a fondo.</p>
       </section>
+
+      <section class="hub-section" aria-labelledby="empieza-aqui">
+        <div class="hub-head">
+          <h2 id="empieza-aqui">Empieza aquí</h2>
+          <p>Si es tu primera vez, esta es la guía base del tema.</p>
+        </div>
+        <article class="feature">
+          <div class="feature__body">
+            <span class="feature__tag">Guía base · Estudiantes UPC</span>
+            <h3><a href="/blog/organizar-tu-semana-blackboard/">Cómo organizar tu semana usando Blackboard sin perder fechas</a></h3>
+            <p class="feature__excerpt">En Blackboard Ultra la información de tu semana vive repartida en cuatro vistas que no se hablan entre sí. Esta guía convierte esas cuatro vistas en una sola lista con una rutina de 20 minutos el domingo y 5 minutos diarios, y explica cómo priorizar por peso en la nota final en lugar de por fecha de vencimiento.</p>
+            <span class="feature__go">Leer la guía completa <span aria-hidden="true">→</span></span>
+          </div>
+          <dl class="feature__meta">
+            <dt>Qué resuelve</dt>
+            <dd>Entregas que se pierden porque la fecha estaba en una vista que no revisaste ese día.</dd>
+            <dt>Tiempo de la rutina</dt>
+            <dd>20 min el domingo + 5 min diarios.</dd>
+            <dt>Lectura</dt>
+            <dd><time datetime="2026-08-04">4 de agosto de 2026</time> · 7 min</dd>
+          </dl>
+        </article>
+      </section>
+
+      <section class="hub-section" aria-labelledby="automatizar">
+        <div class="hub-head">
+          <h2 id="automatizar">Automatiza la rutina con Campus</h2>
+          <p>Las herramientas que hacen la recolección de datos por ti.</p>
+        </div>
+        <ul class="hub-grid">
+          <li class="hub-card">
+            <span class="hub-card__tag">Recurso · MCP</span>
+            <h3><a href="/blackboard-mcp/">Blackboard MCP: tu Aula Virtual dentro de tu asistente de IA</a></h3>
+            <p>Qué es Model Context Protocol, qué datos de Blackboard UPC puede consultar y cómo funciona la sesión revocable.</p>
+            <span class="hub-card__go">Ver Blackboard MCP <span aria-hidden="true">→</span></span>
+          </li>
+          <li class="hub-card">
+            <span class="hub-card__tag">Recurso · CLI</span>
+            <h3><a href="/blackboard-cli/">Blackboard CLI: cursos, tareas y notas desde la terminal</a></h3>
+            <p>Instalación, inicio de sesión institucional y los comandos para revisar tus entregas sin abrir el navegador.</p>
+            <span class="hub-card__go">Ver Blackboard CLI <span aria-hidden="true">→</span></span>
+          </li>
+          <li class="hub-card">
+            <span class="hub-card__tag">Producto</span>
+            <h3><a href="/#como-funciona">Cómo funciona Campus con tu Blackboard UPC</a></h3>
+            <p>El recorrido completo: conectas tu cuenta una vez y preguntas por tus cursos, tareas y notas en lenguaje natural.</p>
+            <span class="hub-card__go">Ver cómo funciona <span aria-hidden="true">→</span></span>
+          </li>
+        </ul>
+      </section>
+
+      <section class="hub-section" aria-labelledby="proximamente">
+        <div class="hub-head">
+          <h2 id="proximamente">Próximamente</h2>
+          <p>Guías en preparación. Aún no están publicadas.</p>
+        </div>
+        <ul class="hub-grid">
+          <li class="hub-card hub-card--soon">
+            <span class="hub-card__tag">En preparación</span>
+            <h3>Cómo leer tus calificaciones de Blackboard y saber cuánto queda en juego</h3>
+            <p>Ponderaciones, puntos ya cerrados y porcentaje pendiente a mitad de ciclo.</p>
+            <span class="hub-card__state">Aún no publicado</span>
+          </li>
+          <li class="hub-card hub-card--soon">
+            <span class="hub-card__tag">En preparación</span>
+            <h3>Entregas en Blackboard Ultra: borrador, envío y confirmación</h3>
+            <p>La diferencia entre guardar un borrador y entregar, y cómo verificar que quedó enviado.</p>
+            <span class="hub-card__state">Aún no publicado</span>
+          </li>
+          <li class="hub-card hub-card--soon">
+            <span class="hub-card__tag">En preparación</span>
+            <h3>Cómo aprovechar la retroalimentación del profesor antes del siguiente examen</h3>
+            <p>Dónde vive el feedback de cada actividad calificada y qué hacer con él.</p>
+            <span class="hub-card__state">Aún no publicado</span>
+          </li>
+        </ul>
+      </section>
+
       <section class="blog-cta" id="acceso-anticipado"><div><strong>¿Quieres probar Campus con tu Blackboard UPC?</strong><p>Solicita tu acceso anticipado y te escribiré por WhatsApp para coordinarlo.</p></div><button class="button" type="button" data-open-founder>Quiero acceso anticipado <span aria-hidden="true">→</span></button></section>
     </main>
 
@@ -42,6 +177,6 @@
 
     <dialog class="founder-dialog" aria-labelledby="dialog-title"><button class="dialog-close" type="button" aria-label="Cerrar" data-close-founder>×</button><p class="eyebrow">Acceso anticipado</p><h2 id="dialog-title">Solicita tu cupo.</h2><p>Déjame tus datos. Te escribiré por WhatsApp para coordinar tu acceso.</p><form id="founder-form"><div class="founder-form__grid"><label>Nombre<input name="name" autocomplete="name" required /></label><label>WhatsApp<input name="whatsapp" type="tel" autocomplete="tel" placeholder="+51 999 999 999" required /></label></div><div class="founder-form__grid founder-form__grid--study"><label>Carrera<input name="career" autocomplete="organization-title" required /></label><label>Ciclo<select name="cycle" required><option value="" selected disabled>Elige</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select></label></div><label>¿Qué quieres consultar primero?<select name="intent"><option>Cursos y tareas</option><option>Notas</option><option>Anuncios</option><option>Todo lo anterior</option></select></label><label class="honeypot" aria-hidden="true">Sitio web<input name="website" tabindex="-1" autocomplete="off" /></label><div class="turnstile-slot" aria-label="Verificación de seguridad"></div><button class="button button--full" type="submit">Enviar mi solicitud</button></form><p class="form-note" id="form-note">Tus datos se usan solo para coordinar este piloto.</p><p class="form-status" id="form-status" role="status" aria-live="polite"></p></dialog>
     <div class="toast" id="founder-toast" role="status" aria-live="polite" aria-atomic="true" hidden><span><strong>Solicitud recibida</strong><small>Te escribiré por WhatsApp pronto.</small></span></div>
-    <script defer src="../app.js"></script>
+    <script defer src="/app.js"></script>
   </body>
 </html>

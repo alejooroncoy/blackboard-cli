@@ -17,8 +17,43 @@
     <meta property="og:locale" content="es_PE" />
     <meta property="og:site_name" content="Campus" />
     <link rel="stylesheet" href="/styles.min.css" />
-    <style>main{max-width:760px;margin:auto;padding:64px 24px 96px}main .eyebrow{color:#087f5b;font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:13px}main h1{font-size:clamp(34px,5.4vw,54px);line-height:1.06;margin:16px 0 24px;letter-spacing:-.02em}main h2{margin-top:54px;margin-bottom:14px;font-size:28px;line-height:1.18}main p,main li{color:#506d7f;font-size:18px;line-height:1.65}main p{margin:0 0 18px}main .lede{font-size:20px;color:#3d5a6b}main ul,main ol{margin:0 0 18px;padding-left:22px}main li{margin-bottom:10px}main li::marker{color:#087f5b}main strong{color:#17323f}main em{color:#17323f;font-style:italic}main a{color:inherit}main .byline{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 34px;padding-bottom:26px;border-bottom:1px solid #d5e3e7;color:#7d97a5;font-size:14px}main .button{display:inline-block;margin-top:10px;padding:13px 18px;border-radius:7px;background:#112633;color:#fff;font-weight:700;font-size:16px;text-decoration:none}@media(max-width:620px){main{padding:44px 20px 72px}main h2{font-size:24px;margin-top:42px}main p,main li{font-size:17px}main .lede{font-size:18px}}</style>
+    <style>main{max-width:760px;margin:auto;padding:64px 24px 96px}main .eyebrow{color:#087f5b;font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:13px}main h1{font-size:clamp(34px,5.4vw,54px);line-height:1.06;margin:16px 0 24px;letter-spacing:-.02em}main h2{margin-top:54px;margin-bottom:14px;font-size:28px;line-height:1.18}main p,main li{color:#506d7f;font-size:18px;line-height:1.65}main p{margin:0 0 18px}main .lede{font-size:20px;color:#3d5a6b}main ul,main ol{margin:0 0 18px;padding-left:22px}main li{margin-bottom:10px}main li::marker{color:#087f5b}main strong{color:#17323f}main em{color:#17323f;font-style:italic}main a{color:inherit}main .byline{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 34px;padding-bottom:26px;border-bottom:1px solid #d5e3e7;color:#7d97a5;font-size:14px}main .button{display:inline-block;margin-top:10px;padding:13px 18px;border-radius:7px;background:#112633;color:#fff;font-weight:700;font-size:16px;text-decoration:none}@media(max-width:620px){main{padding:44px 20px 72px}main h2{font-size:24px;margin-top:42px}main p,main li{font-size:17px}main .lede{font-size:18px}}
+      main .crumbs{display:block;margin:0 0 20px}
+      main .crumbs ol{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0;padding:0;list-style:none}
+      main .crumbs li{margin:0;color:#7d97a5;font-size:14px;line-height:1.4}
+      main .crumbs li+li::before{content:"\203a";margin-right:8px;color:#a7bcc6}
+      main .crumbs a{color:#7d97a5;border-bottom:1px solid transparent}
+      main .crumbs a:hover{color:#17323f;border-bottom-color:#c2d4dc}
+      main .crumbs [aria-current="page"]{color:#17323f;font-weight:600}
+      main .prose-link{color:#087f5b;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+      main .prose-link:hover{color:#0b5c45}
+      main .related{margin-top:66px;padding-top:38px;border-top:1px solid #d5e3e7}
+      main .related h2{margin:0 0 8px;font-size:24px;line-height:1.2}
+      main .related__intro{max-width:540px;margin:0 0 26px;color:#7d97a5;font-size:16px}
+      main .related__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:0;padding:0;list-style:none}
+      main .related__card{position:relative;display:flex;flex-direction:column;margin:0;padding:20px;border:1px solid #d5e3e7;border-radius:8px;background:#fff;transition:border-color 160ms ease,transform 160ms ease,box-shadow 160ms ease}
+      main .related__card:hover{border-color:#b7cfd7;transform:translateY(-2px);box-shadow:0 12px 28px #102a3a12}
+      main .related__tag{color:#087f5b;font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase}
+      main .related__card h3{margin:13px 0 9px;color:#17323f;font-size:18px;line-height:1.25}
+      main .related__card h3 a{color:inherit}
+      main .related__card h3 a::after{content:"";position:absolute;inset:0;border-radius:8px}
+      main .related__card h3 a:focus-visible{outline:none}
+      main .related__card h3 a:focus-visible::after{outline:2px solid #087f5b;outline-offset:3px}
+      main .related__card p{margin:0 0 18px;font-size:15px;line-height:1.5}
+      main .related__go{margin-top:auto;color:#087f5b;font-size:14px;font-weight:700}
+      @media(min-width:1000px){main .related{width:calc(100% + 140px);margin-inline:-70px}}
+      @media(max-width:620px){main .related{margin-top:48px}main .related__grid{grid-template-columns:1fr}}
+      main .byline strong{color:#3d5a6b;font-weight:600}
+      main .byline .byline__updated{color:#5f7f8f}
+      main .summary{margin:0 0 38px;padding:24px 26px;border:1px solid #c8dfd8;border-left:3px solid #087f5b;border-radius:8px;background:#f1faf6}
+      main .summary h2{margin:0 0 14px;color:#0b5c45;font-size:13px;font-weight:700;letter-spacing:.08em;line-height:1.2;text-transform:uppercase}
+      main .summary ul{margin:0;padding-left:20px}
+      main .summary li{margin-bottom:9px;color:#2f4f60;font-size:16px;line-height:1.55}
+      main .summary li:last-child{margin-bottom:0}
+      @media(max-width:620px){main .summary{padding:20px}main .summary li{font-size:15px}}</style>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://campuscli.com/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://campuscli.com/blog/"},{"@type":"ListItem","position":3,"name":"Cómo organizar tu semana usando Blackboard sin perder fechas","item":"https://campuscli.com/blog/organizar-tu-semana-blackboard/"}]}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Cómo organizar tu semana usando Blackboard sin perder fechas","description":"Rutina semanal para estudiantes UPC: 20 minutos el domingo y 5 al día para no perder ninguna entrega en Blackboard Ultra, y cómo priorizar por peso en la nota final.","author":{"@type":"Organization","name":"Campus"},"publisher":{"@type":"Organization","name":"Campus"},"datePublished":"2026-08-04","dateModified":"2026-08-04","inLanguage":"es","mainEntityOfPage":{"@type":"WebPage","@id":"https://campuscli.com/blog/organizar-tu-semana-blackboard/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"HowTo","name":"Cómo organizar tu semana en Blackboard sin perder fechas","description":"Rutina de 20 minutos el domingo para construir la lista de entregas de la semana en Blackboard Ultra, revisando calendario, contenido del curso, anuncios y calificaciones en ese orden.","inLanguage":"es","totalTime":"PT20M","step":[{"@type":"HowToStep","position":1,"name":"Empieza por el calendario","text":"Abre la vista de calendario y mira los próximos diez días, no siete. Los diez días te dan el borde: la tarea que vence el lunes siguiente casi siempre es la que se planifica mal. Anota cada entrega con curso, nombre y día.","url":"https://campuscli.com/blog/organizar-tu-semana-blackboard/#domingo"},{"@type":"HowToStep","position":2,"name":"Recorre curso por curso el contenido","text":"Entra a cada curso y baja por Contenido del curso hasta la carpeta o el módulo de la semana. Aquí aparecen las tareas que el calendario no vio: foros, lecturas obligatorias y entregas descritas dentro de un documento.","url":"https://campuscli.com/blog/organizar-tu-semana-blackboard/#domingo"},{"@type":"HowToStep","position":3,"name":"Lee los anuncios de cada curso","text":"Filtra por una sola pregunta: ¿esto cambia una fecha o un entregable? Los cambios de fecha anunciados son la causa número uno de entregas que llegaron tarde.","url":"https://campuscli.com/blog/organizar-tu-semana-blackboard/#domingo"},{"@type":"HowToStep","position":4,"name":"Cierra con calificaciones","text":"Mira lo que ya se calificó esta semana para detectar actividades que no sabías que existían y que ya tienen nota.","url":"https://campuscli.com/blog/organizar-tu-semana-blackboard/#domingo"}],"supply":[{"@type":"HowToSupply","name":"Acceso a Blackboard Ultra (Aula Virtual UPC)"},{"@type":"HowToSupply","name":"Una nota única donde escribir la lista de la semana"}]}</script>
   </head>
   <body>
     <div class="announcement" role="status"><div class="shell announcement__inner"><span>Acceso anticipado para estudiantes UPC</span><a href="/#acceso-anticipado">S/20 por 2 meses <span aria-hidden="true">→</span></a></div></div>
@@ -32,12 +67,30 @@
     </header>
 
 <main>
+  <nav class="crumbs" aria-label="Ruta de navegación">
+    <ol>
+      <li><a href="/">Inicio</a></li>
+      <li><a href="/blog/">Blog</a></li>
+      <li aria-current="page">Organizar tu semana en Blackboard</li>
+    </ol>
+  </nav>
   <p class="eyebrow">Guía · Estudiantes UPC</p>
   <h1>Cómo organizar tu semana usando Blackboard sin perder fechas</h1>
-  <p class="byline"><span>Campus</span><span aria-hidden="true">·</span><time datetime="2026-08-04">4 de agosto de 2026</time><span aria-hidden="true">·</span><span>7 min de lectura</span></p>
+  <p class="byline"><span>Por <strong>el equipo de Campus</strong></span><span aria-hidden="true">·</span><span>Publicado el <time datetime="2026-08-04">4 de agosto de 2026</time></span><span aria-hidden="true">·</span><span class="byline__updated">Actualizado el <time datetime="2026-08-04">4 de agosto de 2026</time></span><span aria-hidden="true">·</span><span>7 min de lectura</span></p>
+
+  <section class="summary" aria-labelledby="resumen-title">
+    <h2 id="resumen-title">En resumen</h2>
+    <ul>
+      <li>En Blackboard Ultra la información de tu semana vive repartida en <strong>cuatro vistas que no se hablan entre sí</strong>: actividad reciente, calendario, anuncios y calificaciones. Ninguna es «la lista de la semana».</li>
+      <li><strong>20 minutos el domingo</strong> para construir esa lista una vez, en este orden: calendario (5 min), contenido de cada curso (8 min), anuncios (4 min) y calificaciones (3 min).</li>
+      <li><strong>5 minutos diarios</strong> para mantenerla: solo revisas lo nuevo en actividad reciente y lo que vence en las próximas 48 horas.</li>
+      <li>Prioriza por <strong>peso en la nota final</strong>, no por fecha de vencimiento: cada semana empiezas por la tarea de mayor peso entre las que vencen en los próximos siete días.</li>
+    </ul>
+  </section>
+
   <p class="lede">Casi nadie pierde una entrega por flojera. Se pierde porque la fecha estaba en un sitio que no revisaste ese día. Esta es una rutina concreta —20 minutos el domingo y 5 minutos diarios— para que ninguna tarea del Aula Virtual te agarre desprevenido, sin apps extra ni sistemas complicados.</p>
 
-  <h2>Por qué se pierden fechas aunque entres a Blackboard todos los días</h2>
+  <h2 id="donde-vive-la-informacion">Por qué se pierden fechas aunque entres a Blackboard todos los días</h2>
   <p>El problema no es que la información no exista: es que vive repartida en vistas que no se hablan entre sí. En Blackboard Ultra, una misma semana tuya está escrita en cuatro lugares distintos.</p>
   <ul>
     <li><strong>Actividad reciente</strong> te muestra lo último que pasó, ordenado por novedad. Es un muro que se corre: lo de hace cuatro días ya no está arriba, aunque venza mañana.</li>
@@ -47,7 +100,7 @@
   </ul>
   <p>Ninguna de esas cuatro vistas es «la lista de la semana». Tu trabajo, entonces, no es revisar más Blackboard: es fabricar una sola vez esa lista y después mantenerla con revisiones cortas.</p>
 
-  <h2>Domingo, 20 minutos: construir la semana</h2>
+  <h2 id="domingo">Domingo, 20 minutos: construir la semana</h2>
   <p>Hazlo siempre en el mismo orden. El orden importa porque cada paso corrige al anterior.</p>
   <ol>
     <li><strong>Empieza por el calendario (5 min).</strong> Abre la vista de calendario y mira los próximos diez días, no siete. Los diez días te dan el borde: la tarea que vence el lunes siguiente casi siempre es la que se planifica mal. Anota cada entrega con curso, nombre y día.</li>
@@ -57,7 +110,7 @@
   </ol>
   <p>Al terminar deberías tener una lista de entre cinco y quince líneas en un solo lugar —una nota en el celular basta— con esta forma: <em>curso, entregable, día, cuánto pesa</em>. Ese último dato es el que casi nadie anota y el que más cambia tus decisiones.</p>
 
-  <h2>Cinco minutos diarios: mantener, no reconstruir</h2>
+  <h2 id="revision-diaria">Cinco minutos diarios: mantener, no reconstruir</h2>
   <p>La revisión diaria no repite el domingo. Solo busca cambios:</p>
   <ul>
     <li>Abre <strong>Actividad reciente</strong> y baja hasta encontrar algo que ya viste. Todo lo nuevo por encima de esa línea es lo único que te interesa.</li>
@@ -67,7 +120,7 @@
   </ul>
   <p>Si un día no puedes, no pasa nada: la lista del domingo aguanta. Lo que no aguanta es no tener lista y depender de la memoria.</p>
 
-  <h2>Cómo leer las calificaciones para priorizar por impacto, no por fecha</h2>
+  <h2 id="priorizar-por-peso">Cómo leer las calificaciones para priorizar por impacto, no por fecha</h2>
   <p>Ordenar tareas por fecha de vencimiento parece lógico y es la peor heurística disponible. Un control de lectura que vale 5% y vence mañana no debería ganarle a un trabajo que vale 25% y vence el viernes, salvo que el primero te tome quince minutos.</p>
   <p>En la vista de calificaciones de cada curso puedes ver los ítems evaluados y el puntaje máximo de cada uno. Si tu curso usa una calificación general ponderada y el profesor la tiene habilitada, tendrás además el porcentaje que representa cada categoría. Con eso arma tu criterio en dos números:</p>
   <ul>
@@ -76,7 +129,7 @@
   </ul>
   <p>Regla práctica: cada semana, la primera tarea que empiezas es la de mayor peso entre las que vencen en los próximos siete días. Las de bajo peso se hacen en los huecos, no al revés.</p>
 
-  <h2>Errores típicos que cuestan puntos</h2>
+  <h2 id="errores-tipicos">Errores típicos que cuestan puntos</h2>
   <ul>
     <li><strong>Confiar en el correo.</strong> Las notificaciones dependen de cómo estén configuradas, de si el profesor las dispara y de que no caigan en «Otros». Sirven como aviso extra, nunca como fuente. Si tu único sistema es la bandeja de entrada, no tienes sistema.</li>
     <li><strong>Asumir que todo lo evaluado está en el calendario.</strong> Muchas actividades se describen dentro del contenido del curso o en un anuncio y no tienen fecha de entrega configurada en Blackboard. Existen igual y se califican igual. Por eso el paso 2 del domingo no es opcional.</li>
@@ -85,9 +138,35 @@
     <li><strong>Ignorar la retroalimentación.</strong> Los comentarios del profesor en una tarea calificada suelen anticipar exactamente qué va a pedir en la siguiente.</li>
   </ul>
 
-  <h2>Campus hace esto en una pregunta</h2>
+  <h2 id="campus">Campus hace esto en una pregunta</h2>
   <p>La rutina de arriba funciona sola: es un método, no una herramienta. Pero los 20 minutos del domingo son, en el fondo, recolección de datos que ya están ahí. Campus conecta tu Aula Virtual con el asistente de IA que ya usas y responde «¿qué tengo esta semana y qué pesa más?» juntando cursos, tareas, fechas y notas en una sola respuesta. Tú te quedas con la parte que importa: decidir por dónde empezar.</p>
+  <p>Hay dos formas de usarlo, según dónde trabajes: desde tu asistente, con <a class="prose-link" href="/blackboard-mcp/">el servidor Blackboard MCP para conectar el Aula Virtual con tu IA</a>; o desde la terminal, con <a class="prose-link" href="/blackboard-cli/">Blackboard CLI para consultar cursos, tareas y notas por comandos</a>.</p>
   <p><a class="button" href="/#acceso-anticipado">Ver el acceso anticipado</a></p>
+
+  <aside class="related" aria-labelledby="related-title">
+    <h2 id="related-title">Continúa por aquí</h2>
+    <p class="related__intro">La rutina de arriba es el método. Estos recursos son las herramientas que la automatizan.</p>
+    <ul class="related__grid">
+      <li class="related__card">
+        <span class="related__tag">Recurso</span>
+        <h3><a href="/blackboard-mcp/">Blackboard MCP: tu Aula Virtual dentro de tu asistente de IA</a></h3>
+        <p>Qué es Model Context Protocol, qué datos de Blackboard UPC puede consultar y cómo se conecta la sesión.</p>
+        <span class="related__go">Ver Blackboard MCP <span aria-hidden="true">→</span></span>
+      </li>
+      <li class="related__card">
+        <span class="related__tag">Recurso</span>
+        <h3><a href="/blackboard-cli/">Blackboard CLI: cursos, tareas y notas desde la terminal</a></h3>
+        <p>Instalación, inicio de sesión y los comandos para revisar tus entregas sin abrir el navegador.</p>
+        <span class="related__go">Ver Blackboard CLI <span aria-hidden="true">→</span></span>
+      </li>
+      <li class="related__card">
+        <span class="related__tag">Índice</span>
+        <h3><a href="/blog/">Todas las guías de Blackboard UPC</a></h3>
+        <p>El resto de artículos y recursos sobre cómo estudiar mejor con el Aula Virtual.</p>
+        <span class="related__go">Ir al blog <span aria-hidden="true">→</span></span>
+      </li>
+    </ul>
+  </aside>
 </main>
 
     <footer class="footer"><div class="shell footer__inner"><div class="footer__brand"><a class="brand" href="/"><img src="/assets/campus-logo.webp" width="160" height="160" loading="lazy" alt="" /><span>Campus</span></a><p>Tu campus, en el chat que ya usas.</p></div><div class="footer__links"><strong>Explora</strong><a href="/#como-funciona">Cómo funciona</a><a href="/#seguridad">Seguridad</a><a href="/blog/">Blog</a></div><div class="footer__links"><strong>Recursos</strong><a href="/blackboard-mcp/">Blackboard MCP</a><a href="/blackboard-cli/">Blackboard CLI</a><a href="https://github.com/alejooroncoy/campus-cli" target="_blank" rel="noreferrer">GitHub ↗</a></div><div class="footer__action"><strong>¿Listo para empezar?</strong><p>Únete al acceso anticipado de Campus.</p><a class="button button--small" href="/#acceso-anticipado">Solicitar acceso</a></div><div class="footer__bottom"><small>© 2026 Campus. Proyecto independiente.</small><small>Campus no está afiliado a UPC, Blackboard, OpenAI ni Anthropic.</small></div></div></footer>
