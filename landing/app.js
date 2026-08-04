@@ -138,3 +138,37 @@ founderForm.addEventListener("submit", async (event) => {
     submitButton.innerHTML = 'Enviar mi solicitud <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><use href="assets/lucide.svg#arrow-right"></use></svg>';
   }
 });
+
+/* Star count next to the GitHub icon. Cached for an hour so a visitor
+   browsing several pages spends one call against the anonymous API quota,
+   and hidden entirely if the request fails — the icon still links out. */
+const starsSlot = document.querySelector("[data-github-stars]");
+if (starsSlot) {
+  const starsCount = starsSlot.querySelector("[data-github-stars-count]");
+  const githubLink = starsSlot.closest(".header-github");
+  const cacheKey = "campus:github-stars";
+  const cacheTtl = 3600000;
+
+  const renderStars = (stars) => {
+    if (!Number.isFinite(stars)) return;
+    starsCount.textContent = new Intl.NumberFormat("es-PE").format(stars);
+    starsSlot.hidden = false;
+    githubLink.classList.add("has-stars");
+    githubLink.setAttribute("aria-label", `Ver Campus en GitHub, ${stars} estrellas`);
+  };
+
+  try {
+    const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
+    if (cached && Date.now() - cached.at < cacheTtl) renderStars(cached.stars);
+  } catch { /* localStorage unavailable or corrupt: just refetch. */ }
+
+  fetch("https://api.github.com/repos/alejooroncoy/campus-cli")
+    .then((response) => (response.ok ? response.json() : Promise.reject(response.status)))
+    .then((repo) => {
+      renderStars(repo.stargazers_count);
+      try {
+        localStorage.setItem(cacheKey, JSON.stringify({ stars: repo.stargazers_count, at: Date.now() }));
+      } catch { /* Quota or private mode: the count still shows this visit. */ }
+    })
+    .catch(() => { /* Rate limited or offline: leave the plain icon. */ });
+}

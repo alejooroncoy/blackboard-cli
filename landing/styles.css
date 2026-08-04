@@ -77,7 +77,10 @@ h1, h2, h3, p { margin-top: 0; }
 .site-header .brand, .site-header .brand img, .site-header nav, .site-header .button { transition: font-size 420ms cubic-bezier(.32, .72, .28, 1), width 420ms cubic-bezier(.32, .72, .28, 1), height 420ms cubic-bezier(.32, .72, .28, 1), min-height 420ms cubic-bezier(.32, .72, .28, 1), padding 420ms cubic-bezier(.32, .72, .28, 1); }
 .site-header .button { border-radius: 999px; }
 .site-header__actions { display: flex; align-items: center; justify-self: end; gap: 16px; margin-left: 26px; padding-left: 22px; border-left: 1px solid #dce7eb; }
-.header-github { display: inline-grid; width: 40px; height: 40px; place-items: center; color: #4f6979; border: 1px solid transparent; border-radius: 999px; transition: background 160ms ease, border-color 160ms ease, color 160ms ease; }
+.header-github { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-width: 40px; height: 40px; padding: 0; color: #4f6979; border: 1px solid transparent; border-radius: 999px; transition: background 160ms ease, border-color 160ms ease, color 160ms ease; }
+.header-github.has-stars { padding-inline: 12px; border-color: #dce7eb; background: rgba(255, 255, 255, .6); }
+.header-github__stars { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1; }
+.header-github__stars svg { width: 14px; height: 14px; }
 .header-github svg { width: 20px; height: 20px; }
 .header-github:hover { color: var(--ink); background: #fff; border-color: #d5e3e7; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
