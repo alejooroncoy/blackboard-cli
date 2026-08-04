@@ -18,6 +18,10 @@
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
+/* Browsers give links a pointer but buttons an arrow, so anything clickable
+   is normalised here instead of repeating the rule per component. */
+button, [role="button"], .button, a[href], summary, select { cursor: pointer; }
+button:disabled, .button:disabled { cursor: not-allowed; }
 body {
   margin: 0;
   overflow-x: hidden;
