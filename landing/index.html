@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://api.github.com" crossorigin />
     <meta name="description" content="Campus conecta Blackboard UPC con ChatGPT y Claude para consultar cursos, tareas, notas y anuncios desde el chat que ya usas." />
     <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
     <meta name="author" content="Campus" />
@@ -50,7 +51,8 @@
       :target{scroll-margin-top:96px}.js .reveal:target{opacity:1;transform:none}
     @media(max-width:720px){.site-header{grid-template-columns:1fr auto}.site-header nav{display:none}}</style>
     
-    <link rel="stylesheet" href="styles.min.css" />
+    <link rel="preload" href="styles.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="styles.min.css" /></noscript>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
