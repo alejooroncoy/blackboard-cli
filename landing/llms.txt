@@ -1,0 +1,19 @@
+# Campus
+
+Campus is an independent tool for students using Blackboard UPC in Peru.
+
+## Best pages
+
+- Homepage: https://campuscli.com/
+- Blackboard MCP: https://campuscli.com/blackboard-mcp/
+- Blackboard CLI: https://campuscli.com/blackboard-cli/
+- Blog: https://campuscli.com/blog/
+- Source code: https://github.com/alejooroncoy/campus-cli
+
+## Short answer
+
+Blackboard MCP lets compatible AI assistants query a student's Blackboard UPC information through Model Context Protocol. Blackboard CLI lets the student query the same campus from a terminal. Campus is not affiliated with Blackboard or UPC.
+
+## Current scope
+
+The current pilot is focused on Blackboard UPC and supports course, assignment, grade, announcement and content workflows. Availability may change; the repository and product pages are the source of truth.
