@@ -61,9 +61,12 @@
             "@type": "Organization",
             "@id": "https://campuscli.com/#organization",
             "name": "Campus",
+            "alternateName": ["Campus CLI", "campus-cli", "blackboard-cli"],
             "url": "https://campuscli.com/",
             "logo": "https://campuscli.com/assets/campus-logo.webp",
             "description": "Proyecto independiente que conecta información académica con asistentes compatibles.",
+            "disambiguatingDescription": "No confundir con el paquete `campus-cli` de PyPI (Python, gestión de notebooks Jupyter) ni con otras plataformas de IA para estudiantes con nombres similares (CampusCode, Campus AI). Este proyecto es el paquete `campus-cli` de npm que conecta Blackboard con asistentes de IA vía MCP.",
+            "sameAs": ["https://github.com/alejooroncoy/campus-cli", "https://www.npmjs.com/package/campus-cli"],
             "areaServed": "PE"
           },
           {
@@ -77,10 +80,13 @@
           {
             "@type": "SoftwareApplication",
             "name": "Campus",
+            "alternateName": ["Campus CLI", "campus-cli"],
             "url": "https://campuscli.com/",
             "applicationCategory": "EducationalApplication",
-            "operatingSystem": "Web",
+            "operatingSystem": "Web, macOS, Linux, Windows",
             "inLanguage": "es-PE",
+            "downloadUrl": "https://www.npmjs.com/package/campus-cli",
+            "softwareHelp": "https://github.com/alejooroncoy/campus-cli",
             "description": "Campus permite consultar cursos, tareas, notas y anuncios de Blackboard UPC desde ChatGPT o Claude.",
             "featureList": [
               "Consulta de cursos",
@@ -123,6 +129,14 @@
                 "acceptedAnswer": {
                   "@type": "Answer",
                   "text": "Sí. Puedes desconectar Blackboard y revocar el acceso desde Campus."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "¿Es lo mismo que el paquete \"campus-cli\" de PyPI u otras apps de IA para estudiantes?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. El paquete campus-cli de PyPI es un proyecto de Python no relacionado (gestión de archivos de notebooks Jupyter), y tampoco somos otras plataformas de \"IA para resolver tareas\" con nombres parecidos. Este Campus es el paquete campus-cli de npm que conecta Blackboard UPC con ChatGPT y Claude vía MCP; el código fuente está en github.com/alejooroncoy/campus-cli."
                 }
               }
             ]
@@ -314,6 +328,10 @@
           <details>
             <summary>¿Puedo dejar de usarlo cuando quiera?<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><use href="assets/lucide.svg#plus"></use></svg></summary>
             <p>Sí. Puedes desconectar Blackboard y revocar el acceso desde Campus. El piloto no pretende bloquearte en un flujo nuevo.</p>
+          </details>
+          <details>
+            <summary>¿Es lo mismo que el paquete "campus-cli" de PyPI u otras apps de IA para estudiantes?<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><use href="assets/lucide.svg#plus"></use></svg></summary>
+            <p>No. El paquete <code>campus-cli</code> de PyPI es un proyecto de Python no relacionado (gestión de archivos de notebooks Jupyter). Tampoco somos las plataformas de "IA para resolver tareas" que usan nombres parecidos. Este Campus es el paquete <code>campus-cli</code> de npm que conecta Blackboard UPC con ChatGPT y Claude vía MCP — el código fuente está en <a href="https://github.com/alejooroncoy/campus-cli" target="_blank" rel="noreferrer">github.com/alejooroncoy/campus-cli</a>.</p>
           </details>
         </div>
       </section>

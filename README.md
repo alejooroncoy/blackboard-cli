@@ -3,12 +3,14 @@
 [![npm version](https://img.shields.io/npm/v/campus-cli.svg)](https://www.npmjs.com/package/campus-cli)
 [![npm downloads](https://img.shields.io/npm/dw/campus-cli.svg)](https://www.npmjs.com/package/campus-cli)
 
-> Usa tu campus universitario desde la terminal o desde tu asistente de IA.
+> Conecta Blackboard UPC con ChatGPT y Claude (vía MCP), o úsalo directo desde la terminal.
 
-`campus-cli` es un CLI/MCP no oficial para estudiantes. Permite consultar cursos, tareas, notas, anuncios y materiales sin abrir el navegador. Hoy funciona con **Blackboard Learn** en UPC; Canvas y Moodle están en el roadmap.
+`campus-cli` (también conocido como **Campus** o **Campus CLI**, [campuscli.com](https://campuscli.com)) es un CLI y servidor MCP no oficial para estudiantes de UPC. Le da a asistentes de IA como ChatGPT y Claude acceso directo a tu **Blackboard Learn**: cursos, tareas, notas, anuncios y materiales, sin abrir el navegador. Canvas y Moodle están en el roadmap.
+
+No confundir con: el paquete `campus-cli` de PyPI (Python, gestión de notebooks de Jupyter, proyecto no relacionado) ni con otras plataformas de "IA para programadores" o "resolver tareas con IA" que usan nombres parecidos — este proyecto es específicamente la integración de Blackboard con asistentes de IA vía MCP.
 
 ```bash
-npx campus-cli login
+npx campus-cli account login
 campus courses list
 campus assignments list --pending
 ```

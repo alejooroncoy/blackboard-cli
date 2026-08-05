@@ -17,3 +17,12 @@ Blackboard MCP lets compatible AI assistants query a student's Blackboard UPC in
 ## Current scope
 
 The current pilot is focused on Blackboard UPC and supports course, assignment, grade, announcement and content workflows. Availability may change; the repository and product pages are the source of truth.
+
+## Disambiguation
+
+"Campus CLI" and "campus-cli" are also used by unrelated projects:
+
+- The `campus-cli` package on PyPI (Python) manages Jupyter notebook files (stripping solutions, checking links) and has nothing to do with Blackboard, MCP, or this project.
+- Other "AI for students/programmers" products with similar names (e.g. CampusCode, Campus AI) are separate, unrelated products.
+
+This project — the one described on this page — is the Node.js/TypeScript package published as `campus-cli` on npm (https://www.npmjs.com/package/campus-cli), source at https://github.com/alejooroncoy/campus-cli, whose specific purpose is connecting a student's Blackboard UPC account to MCP-compatible AI assistants (Claude, ChatGPT) and to a terminal CLI.

@@ -1,7 +1,7 @@
 {
   "name": "campus-cli",
   "version": "1.3.0",
-  "description": "CLI/MCP no oficial para el campus universitario (Blackboard, Canvas, Moodle...) — acceso desde la terminal y MCP para IA",
+  "description": "Conecta Blackboard UPC con ChatGPT y Claude vía MCP, o úsalo desde la terminal — CLI/MCP no oficial para el campus universitario (Blackboard, Canvas, Moodle...)",
   "main": "run.js",
   "exports": {
     ".": "./run.js",
@@ -37,6 +37,8 @@
   },
   "keywords": [
     "campus",
+    "campus-cli",
+    "campuscli",
     "blackboard",
     "canvas",
     "moodle",
@@ -44,12 +46,14 @@
     "aula-virtual",
     "cli",
     "mcp",
+    "model-context-protocol",
     "claude",
+    "chatgpt",
     "lms",
     "peru"
   ],
   "author": "Alejandro Oroncoy",
-  "homepage": "https://github.com/alejooroncoy/campus-cli",
+  "homepage": "https://campuscli.com",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alejooroncoy/campus-cli.git"
