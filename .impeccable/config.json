@@ -11,6 +11,15 @@
         ],
         "createdAt": "2026-08-05T16:19:25.497Z",
         "reason": "Animación intencional del diagrama de red (hub-breathe + paquete viajando por el rail), no un glow decorativo genérico"
+      },
+      {
+        "rule": "single-font",
+        "value": "*",
+        "files": [
+          "landing/index.html"
+        ],
+        "createdAt": "2026-08-05T16:36:58.224Z",
+        "reason": "Confirmado por el usuario: jerarquía lograda por tamaño/peso (Campus Sans regular/semibold), se evaluó un pareo con Fraunces/Instrument Serif y se prefirió mantener el original"
       }
     ]
   }
