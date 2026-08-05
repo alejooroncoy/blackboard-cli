@@ -8,6 +8,7 @@ import { coursesCommand } from './providers/blackboard/commands/courses.js';
 import { apiDocsCommand } from './providers/blackboard/commands/api-docs.js';
 import { downloadCommand } from './providers/blackboard/commands/download.js';
 import { assignmentsCommand } from './providers/blackboard/commands/assignments.js';
+import { accountCommand } from './account/command.js';
 import { loadSession, loadOrRefreshSession, saveSession, isSessionValid } from './providers/blackboard/auth/session.js';
 import { createClient } from './providers/blackboard/api/client.js';
 import { getMe, getSystemVersion } from './providers/blackboard/api/courses.js';
@@ -110,6 +111,9 @@ downloadCommand(program);
 
 // Assignment commands
 assignmentsCommand(program);
+
+// Cuenta Campus (Google) — identidad compartida entre apps del ecosistema
+accountCommand(program);
 
 // API passthrough para LLMs / power users
 program

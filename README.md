@@ -44,14 +44,14 @@ Si estudias en una universidad con Canvas o Moodle y quieres ayudar a probar o i
 ### Usar sin instalar
 
 ```bash
-npx campus-cli login
+npx campus-cli account login
 ```
 
 ### Instalar globalmente
 
 ```bash
 npm install -g campus-cli
-campus login
+campus account login
 ```
 
 ### Clonar el repo
@@ -60,7 +60,7 @@ campus login
 git clone https://github.com/alejooroncoy/campus-cli
 cd campus-cli
 npm install
-node run.js login
+node run.js account login
 ```
 
 `campus-cli` usa Playwright para abrir Chromium durante el login. `npm install` intenta instalar Chromium automáticamente; si el navegador falta, el CLI lo instala la primera vez que lo necesite.
@@ -68,10 +68,12 @@ node run.js login
 ## Primer uso
 
 ```bash
-campus login
+campus account login
 ```
 
-Se abrirá una ventana con el login de Microsoft UPC. Inicia sesión con tu cuenta universitaria y completa MFA si aplica.
+Se abre el navegador para iniciar sesión con tu cuenta Campus (Google) — es la identidad compartida entre las apps del ecosistema Campus, separada de tu sesión de Blackboard. Al terminar, encadena automáticamente el login de Microsoft UPC (Blackboard SSO, 100% local, sin pasar por ningún servidor propio). Si más adelante corres `campus login` por separado, te pedirá primero `campus account login` en caso de no tener una cuenta Campus activa.
+
+Inicia sesión con tu cuenta universitaria y completa MFA si aplica.
 
 Durante el login, Microsoft puede mostrar **"Stay signed in?"** con el checkbox **"Don't show this again"**. Marca ese checkbox y haz clic en **Yes** para que la sesión pueda mantenerse correctamente.
 
@@ -105,10 +107,18 @@ _200001_1  Tarea 1  [manual]
 
 ## Comandos principales
 
-### Sesión
+### Cuenta Campus
 
 ```bash
-campus login              # iniciar sesión con Microsoft SSO
+campus account login      # iniciar sesión con Google (encadena el login de Blackboard)
+campus account whoami     # cuenta Campus activa
+campus account logout     # cerrar sesión de la cuenta Campus en este equipo
+```
+
+### Sesión (Blackboard)
+
+```bash
+campus login              # iniciar sesión con Microsoft SSO (pide cuenta Campus primero)
 campus logout             # borrar sesión local
 campus whoami             # usuario activo y tiempo restante
 campus status             # sesión + versión del servidor Blackboard

@@ -4,6 +4,17 @@ All notable changes to `campus-cli` (formerly `blackboard-upc`) will be document
 
 ---
 
+## [1.3.0] — 2026-08-05
+
+### Added
+- `campus account login|whoami|logout` — cuenta Campus (Google), la identidad compartida entre las apps del ecosistema Campus (CLI, y las que vienen: Profe, Trámites...), separada de la sesión de Blackboard de cada universidad. El login es vía navegador con OAuth2+PKCE (redirect a `127.0.0.1`, igual que `gh auth login`/`gcloud auth login`) contra el servicio ya hospedado en `mcp.campuscli.com`.
+- `campus login` ahora exige tener una cuenta Campus activa antes de iniciar el SSO de Blackboard (que sigue siendo 100% local, sin cambios): si no hay cuenta, te pide correr `campus account login` primero. `campus account login`, al terminar, encadena automáticamente el SSO de Blackboard — no hace falta correr los dos comandos por separado.
+
+### Notes
+- El SSO de Blackboard no cambió: sigue abriendo Chromium/Chrome/Edge local vía Playwright, sin pasar por ningún servidor propio. Solo la nueva cuenta Campus (Google) usa el backend hospedado.
+
+---
+
 ## [1.2.0] — 2026-08-05
 
 ### Added

@@ -8,6 +8,52 @@ import { createClient } from '../api/client.js';
 import { getMe } from '../api/courses.js';
 import { ok, fail, warn, whatNext, formatSessionLifetime } from '../../../ui/theme.js';
 import { track } from '../../../analytics.js';
+import { getValidAccountSession } from '../../../account/session.js';
+
+export type BlackboardLoginOptions = {
+  headless?: boolean;
+  username?: string;
+  password?: string;
+};
+
+// Shared by `campus login` and `campus account login` (which chains into this
+// right after the Campus account is set up) — same Blackboard SSO flow either way.
+export async function runBlackboardLogin(opts: BlackboardLoginOptions = {}): Promise<void> {
+  const existing = loadSession();
+  if (isSessionValid(existing)) {
+    console.log(chalk.yellow(`Already logged in as ${chalk.bold(existing!.userName || 'unknown')}`));
+    const { relogin } = await inquirer.prompt([
+      { type: 'confirm', name: 'relogin', message: 'Re-authenticate?', default: false },
+    ]);
+    if (!relogin) return;
+  }
+
+  console.log(chalk.cyan('\nOpening browser for Microsoft login...'));
+  console.log(chalk.gray('A browser window will open. Complete the login and it will close automatically.\n'));
+  track('login_started', { method: 'microsoft_sso' }, existing?.userId);
+
+  try {
+    const session = await login({
+      headless: opts.headless ?? false,
+      username: opts.username,
+      password: opts.password,
+    });
+    track('login_success', { method: 'microsoft_sso' }, session.userId);
+
+    const ssoExpiresAt = getSsoExpiry(session.cookies);
+    const { summary, note } = formatSessionLifetime(session.expiresAt, ssoExpiresAt);
+    console.log(ok(`Sesión guardada`));
+    console.log(chalk.gray(`  ${summary}`));
+    console.log(chalk.gray(`  ${note}`));
+    if (session.userName) console.log(chalk.gray(`  Usuario: ${session.userName}`));
+    if (session.userId)   console.log(chalk.gray(`  ID:      ${session.userId}`));
+    whatNext();
+  } catch (err: any) {
+    track('login_failed', { method: 'microsoft_sso', error_type: err?.name ?? 'LoginError' });
+    console.error(chalk.red(`\n✗ Login failed: ${err.message}`));
+    process.exit(1);
+  }
+}
 
 export function loginCommand(program: Command) {
   program
@@ -17,41 +63,16 @@ export function loginCommand(program: Command) {
     .option('-u, --username <email>', 'UPC email (optional, can type in browser)')
     .option('-p, --password <password>', 'Password (optional, can type in browser)')
     .action(async (opts) => {
-      // Check if already logged in
-      const existing = loadSession();
-      if (isSessionValid(existing)) {
-        console.log(chalk.yellow(`Already logged in as ${chalk.bold(existing!.userName || 'unknown')}`));
-        const { relogin } = await inquirer.prompt([
-          { type: 'confirm', name: 'relogin', message: 'Re-authenticate?', default: false },
-        ]);
-        if (!relogin) return;
-      }
-
-      console.log(chalk.cyan('\nOpening browser for Microsoft login...'));
-      console.log(chalk.gray('A browser window will open. Complete the login and it will close automatically.\n'));
-      track('login_started', { method: 'microsoft_sso' }, existing?.userId);
-
-      try {
-        const session = await login({
-          headless: opts.headless ?? false,
-          username: opts.username,
-          password: opts.password,
-        });
-        track('login_success', { method: 'microsoft_sso' }, session.userId);
-
-        const ssoExpiresAt = getSsoExpiry(session.cookies);
-        const { summary, note } = formatSessionLifetime(session.expiresAt, ssoExpiresAt);
-        console.log(ok(`Sesión guardada`));
-        console.log(chalk.gray(`  ${summary}`));
-        console.log(chalk.gray(`  ${note}`));
-        if (session.userName) console.log(chalk.gray(`  Usuario: ${session.userName}`));
-        if (session.userId)   console.log(chalk.gray(`  ID:      ${session.userId}`));
-        whatNext();
-      } catch (err: any) {
-        track('login_failed', { method: 'microsoft_sso', error_type: err?.name ?? 'LoginError' });
-        console.error(chalk.red(`\n✗ Login failed: ${err.message}`));
+      // Blackboard SSO is gated behind the Campus account: it's the shared
+      // identity across Campus apps, so it comes first.
+      const accountSession = await getValidAccountSession();
+      if (!accountSession) {
+        console.log(fail('Primero inicia sesión con tu cuenta Campus.'));
+        console.log(chalk.gray(`Ejecuta: ${chalk.cyan('campus account login')}`));
         process.exit(1);
       }
+
+      await runBlackboardLogin(opts);
     });
 
   program
