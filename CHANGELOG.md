@@ -4,6 +4,13 @@ All notable changes to `campus-cli` (formerly `blackboard-upc`) will be document
 
 ---
 
+## [1.3.1] — 2026-08-05
+
+### Changed
+- `description`, `keywords` y `homepage` de `package.json` (visibles en la página de npm) ahora son más específicos: mencionan explícitamente MCP, ChatGPT y Claude, para diferenciarse del paquete `campus-cli` de PyPI (Python, no relacionado) y de otras apps de "IA para estudiantes" con nombres parecidos.
+
+---
+
 ## [1.3.0] — 2026-08-05
 
 ### Added
