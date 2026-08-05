@@ -15,6 +15,7 @@ import {
   getSystemVersion,
 } from './api/courses.js';
 import { listAssignments, listAttempts, submitAttempt, uploadFile, getAttemptFiles } from './api/assignments.js';
+import { track } from '../../analytics.js';
 
 const MAX_UPLOAD_BYTES = 50 * 1024 * 1024; // 50MB
 
@@ -27,22 +28,45 @@ async function getClient() {
 }
 
 export function registerBlackboardTools(server: McpServer) {
+  // Keep usage analytics at the tool boundary. Arguments and Blackboard
+  // responses are deliberately not included in the event.
+  const registerTrackedTool: typeof server.registerTool = (name: any, ...parts: any[]) => {
+    const handler = parts.pop();
+    return (server as any).registerTool(name, ...parts, async (...input: any[]) => {
+      const startedAt = Date.now();
+      let session: any;
+      try {
+        session = await loadOrRefreshSession();
+        const result = await handler(...input);
+        track('mcp_tool_used', { tool: name, success: true, duration_ms: Date.now() - startedAt }, session?.userId);
+        return result;
+      } catch (error) {
+        track('mcp_tool_error', {
+          tool: name,
+          success: false,
+          duration_ms: Date.now() - startedAt,
+          error_type: error instanceof Error ? error.name : 'UnknownError',
+        }, session?.userId);
+        throw error;
+      }
+    });
+  };
   // ── blackboard_whoami ─────────────────────────────────────────────────────────────────
-  server.registerTool('blackboard_whoami', { description: 'Get the currently authenticated UPC student info' }, async () => {
+  registerTrackedTool('blackboard_whoami', { description: 'Get the currently authenticated UPC student info' }, async () => {
     const { client } = await getClient();
     const me = await getMe(client);
     return { content: [{ type: 'text', text: JSON.stringify(me) }] };
   });
 
   // ── blackboard_system_version ─────────────────────────────────────────────────────────
-  server.registerTool('blackboard_system_version', { description: 'Get Blackboard Learn server version' }, async () => {
+  registerTrackedTool('blackboard_system_version', { description: 'Get Blackboard Learn server version' }, async () => {
     const { client } = await getClient();
     const v = await getSystemVersion(client);
     return { content: [{ type: 'text', text: JSON.stringify(v) }] };
   });
 
   // ── blackboard_list_courses ────────────────────────────────────────────────────────────
-  server.registerTool('blackboard_list_courses', { description: 'List all enrolled courses for the current student' }, async () => {
+  registerTrackedTool('blackboard_list_courses', { description: 'List all enrolled courses for the current student' }, async () => {
     const { client, session } = await getClient();
     let userId = session.userId;
     if (!userId) { const me = await getMe(client); userId = me.id; }
@@ -51,7 +75,7 @@ export function registerBlackboardTools(server: McpServer) {
   });
 
   // ── blackboard_get_course ──────────────────────────────────────────────────────────────
-  server.registerTool(
+  registerTrackedTool(
     'blackboard_get_course',
     {
       description: 'Get details of a specific course by its Blackboard ID (e.g. _529580_1)',
@@ -65,7 +89,7 @@ export function registerBlackboardTools(server: McpServer) {
   );
 
   // ── blackboard_list_contents ───────────────────────────────────────────────────────────
-  server.registerTool(
+  registerTrackedTool(
     'blackboard_list_contents',
     {
       description: 'List content items inside a course or folder. Use parentId to navigate into subfolders.',
@@ -82,7 +106,7 @@ export function registerBlackboardTools(server: McpServer) {
   );
 
   // ── blackboard_list_announcements ──────────────────────────────────────────────────────
-  server.registerTool(
+  registerTrackedTool(
     'blackboard_list_announcements',
     {
       description: 'List recent announcements for a course',
@@ -95,8 +119,71 @@ export function registerBlackboardTools(server: McpServer) {
     }
   );
 
+  // ── blackboard_list_people ─────────────────────────────────────────────────────────────
+  // Announcements and grades carry an internal user id and nothing else, so
+  // without this the professor is unnameable. Contact details are held back for
+  // classmates unless the student asks for one by name — see the cloud
+  // executor, which applies the same rule.
+  registerTrackedTool(
+    'blackboard_list_people',
+    {
+      description:
+        "Instructors and classmates of a course. Use it to resolve an internal user id into a person's name. Pass search to look up one person and get their contact details.",
+      inputSchema: {
+        courseId: z.string().describe('Blackboard course ID'),
+        search: z.string().optional().describe('Name of one person in the course'),
+      },
+    },
+    async ({ courseId, search }) => {
+      const { client } = await getClient();
+      const response = await client.get(`/learn/api/public/v1/courses/${courseId}/users`, {
+        // Only the fields we use: the full object also carries avatars and
+        // every classmate's last-access timestamp.
+        params: {
+          expand: 'user',
+          limit: 200,
+          fields: 'courseRoleId,user.name.given,user.name.family,user.contact.email',
+        },
+      });
+      const members = (response.data?.results ?? []) as Array<{
+        courseRoleId?: string;
+        user?: { name?: { given?: string; family?: string }; contact?: { email?: string } };
+      }>;
+      const nameOf = (member: (typeof members)[number]) =>
+        [member.user?.name?.given, member.user?.name?.family].filter(Boolean).join(' ').trim();
+
+      const term = search?.trim().toLowerCase();
+      const data = term
+        ? {
+            query: search,
+            matches: members
+              .filter((member) => nameOf(member).toLowerCase().includes(term))
+              .map((member) => ({
+                name: nameOf(member),
+                role: member.courseRoleId === 'Student' ? 'compañero' : 'docente',
+                email: member.user?.contact?.email ?? null,
+              })),
+          }
+        : {
+            instructors: members
+              .filter((member) => member.courseRoleId !== 'Student')
+              .map((member) => ({
+                name: nameOf(member),
+                role: member.courseRoleId,
+                email: member.user?.contact?.email ?? null,
+              })),
+            classmates: members
+              .filter((member) => member.courseRoleId === 'Student')
+              .map((member) => nameOf(member))
+              .filter(Boolean)
+              .sort((a, b) => a.localeCompare(b, 'es')),
+          };
+      return { content: [{ type: 'text', text: JSON.stringify(data) }] };
+    }
+  );
+
   // ── blackboard_list_assignments ────────────────────────────────────────────────────────
-  server.registerTool(
+  registerTrackedTool(
     'blackboard_list_assignments',
     {
       description: 'List assignments and tasks in a course with due dates, scores and submission status',
@@ -110,7 +197,7 @@ export function registerBlackboardTools(server: McpServer) {
   );
 
   // ── blackboard_list_attempts ───────────────────────────────────────────────────────────
-  server.registerTool(
+  registerTrackedTool(
     'blackboard_list_attempts',
     {
       description: 'List submission attempts for a specific assignment (gradebook column)',
@@ -127,7 +214,7 @@ export function registerBlackboardTools(server: McpServer) {
   );
 
   // ── blackboard_get_grades ──────────────────────────────────────────────────────────────
-  server.registerTool(
+  registerTrackedTool(
     'blackboard_get_grades',
     {
       description: 'Get all grades for the current student in a course',
@@ -151,7 +238,7 @@ export function registerBlackboardTools(server: McpServer) {
   );
 
   // ── blackboard_download_attachment ─────────────────────────────────────────────────────
-  server.registerTool(
+  registerTrackedTool(
     'blackboard_download_attachment',
     {
       description: 'Download a file from a course content item and save it to disk. attachmentId can be a Blackboard attachment ID (for x-bb-file) or a full bbcswebdav URL (for x-bb-document embedded files). Saves to outputDir (default: current working directory).',
@@ -194,7 +281,7 @@ export function registerBlackboardTools(server: McpServer) {
   );
 
   // ── blackboard_list_attachments ────────────────────────────────────────────────────────
-  server.registerTool(
+  registerTrackedTool(
     'blackboard_list_attachments',
     {
       description: 'List file attachments for a course content item. Works for x-bb-file (REST API) and x-bb-document (embedded files in body HTML).',
@@ -255,7 +342,7 @@ export function registerBlackboardTools(server: McpServer) {
   );
 
   // ── blackboard_download_file_url ───────────────────────────────────────────────────────
-  server.registerTool(
+  registerTrackedTool(
     'blackboard_download_file_url',
     {
       description: 'Download a file directly from a Blackboard bbcswebdav URL and save it to disk. Saves to outputDir (default: current working directory).',
@@ -291,7 +378,7 @@ export function registerBlackboardTools(server: McpServer) {
   );
 
   // ── blackboard_upload_attempt_file ─────────────────────────────────────────────────────
-  server.registerTool(
+  registerTrackedTool(
     'blackboard_upload_attempt_file',
     {
       description:
@@ -323,7 +410,7 @@ export function registerBlackboardTools(server: McpServer) {
   );
 
   // ── blackboard_save_attempt_draft ──────────────────────────────────────────────────────
-  server.registerTool(
+  registerTrackedTool(
     'blackboard_save_attempt_draft',
     {
       description:
@@ -354,7 +441,7 @@ export function registerBlackboardTools(server: McpServer) {
   );
 
   // ── blackboard_submit_attempt ──────────────────────────────────────────────────────────
-  server.registerTool(
+  registerTrackedTool(
     'blackboard_submit_attempt',
     {
       description:
@@ -385,7 +472,7 @@ export function registerBlackboardTools(server: McpServer) {
   );
 
   // ── blackboard_get_assignment_feedback ─────────────────────────────────────────────────
-  server.registerTool(
+  registerTrackedTool(
     'blackboard_get_assignment_feedback',
     {
       description:
@@ -452,7 +539,7 @@ export function registerBlackboardTools(server: McpServer) {
   );
 
   // ── blackboard_download_feedback_file ───────────────────────────────────────────────────
-  server.registerTool(
+  registerTrackedTool(
     'blackboard_download_feedback_file',
     {
       description:
@@ -496,7 +583,7 @@ export function registerBlackboardTools(server: McpServer) {
   );
 
   // ── blackboard_raw_api ─────────────────────────────────────────────────────────────────
-  server.registerTool(
+  registerTrackedTool(
     'blackboard_raw_api',
     {
       description: 'Make a raw REST API call to Blackboard Learn. Use for any endpoint not covered by other tools.',

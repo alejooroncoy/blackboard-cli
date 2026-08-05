@@ -1,6 +1,7 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { registerBlackboardTools } from '../providers/blackboard/mcp-tools.js';
+import { track } from '../analytics.js';
 
 const INSTRUCTIONS = `
 campus-cli conecta el campus universitario del estudiante con su agente de IA.
@@ -28,6 +29,7 @@ no implementados todavía.
 `.trim();
 
 export async function startMcpServer() {
+  track('mcp_started');
   const server = new McpServer(
     {
       name: 'campus-cli',

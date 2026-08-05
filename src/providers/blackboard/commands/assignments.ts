@@ -13,6 +13,7 @@ import {
   uploadFile,
   submitAttempt,
 } from '../api/assignments.js';
+import { track } from '../../../analytics.js';
 
 function requireSession() {
   const session = loadSession();
@@ -233,6 +234,7 @@ export function assignmentsCommand(program: Command) {
 
       try {
         const attempts = await listAttempts(client, courseId, columnId);
+        track('attempts_viewed', { success: true, attempts_count: attempts.length }, session.userId);
         spinner.succeed(`${attempts.length} attempt(s)`);
 
         if (opts.json) { console.log(JSON.stringify(attempts, null, 2)); return; }
@@ -267,6 +269,7 @@ export function assignmentsCommand(program: Command) {
           console.log('');
         });
       } catch (err: any) {
+        track('attempts_view_error', { success: false, error_type: err?.name ?? 'AttemptsError' }, session.userId);
         spinner.fail(err.message);
         process.exit(1);
       }
@@ -284,6 +287,9 @@ export function assignmentsCommand(program: Command) {
     .action(async (courseId, columnId, opts) => {
       const session = requireSession();
       const client = createClient(session);
+      const startedAt = Date.now();
+      const mode = opts.draft ? 'draft' : 'submit';
+      track('assignment_submission_started', { mode, has_file: !!opts.file, has_text: !!opts.text, has_comments: !!opts.comments }, session.userId);
 
       if (!opts.file && !opts.text && !opts.comments) {
         console.error(chalk.red('Provide at least --file, --text, or --comments'));
@@ -303,8 +309,10 @@ export function assignmentsCommand(program: Command) {
           try {
             const uploadId = await uploadFile(client, filePath);
             fileUploadIds = [uploadId];
+            track('assignment_file_uploaded', { success: true, mode, duration_ms: Date.now() - startedAt }, session.userId);
             uploadSpinner.succeed(`File uploaded (id: ${uploadId})`);
           } catch (e: any) {
+            track('assignment_file_upload_error', { success: false, mode, error_type: e?.name ?? 'UploadError', status_code: e?.response?.status }, session.userId);
             uploadSpinner.fail(`Upload failed: ${e.message}`);
             process.exit(1);
           }
@@ -321,6 +329,9 @@ export function assignmentsCommand(program: Command) {
         });
 
         submitSpinner.succeed(`Submitted! Attempt ID: ${attempt.id}`);
+        track(opts.draft ? 'assignment_draft_saved' : 'assignment_submitted', {
+          success: true, mode, duration_ms: Date.now() - startedAt, has_file: !!fileUploadIds,
+        }, session.userId);
 
         if (opts.json) { console.log(JSON.stringify(attempt, null, 2)); return; }
 
@@ -330,6 +341,10 @@ export function assignmentsCommand(program: Command) {
         if (attempt.created) console.log(`  ${chalk.bold('Date:')}       ${formatDate(attempt.created)}`);
         console.log('');
       } catch (err: any) {
+        track('assignment_submission_error', {
+          success: false, mode, duration_ms: Date.now() - startedAt,
+          error_type: err?.name ?? 'SubmissionError', status_code: err?.response?.status,
+        }, session.userId);
         const body = err.response?.data;
         console.error(chalk.red(`\n✗ ${err.message}`));
         if (body?.message) console.error(chalk.gray(`  ${body.message}`));

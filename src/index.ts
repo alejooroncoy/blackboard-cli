@@ -13,10 +13,33 @@ import { createClient } from './providers/blackboard/api/client.js';
 import { getMe, getSystemVersion } from './providers/blackboard/api/courses.js';
 import { resolveDisplayName, getSsoExpiry } from './providers/blackboard/auth/login.js';
 import { BANNER, ok, fail, hint, formatSessionLifetime } from './ui/theme.js';
+import { track } from './analytics.js';
 
 const { version } = JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json'), 'utf-8'));
 
 const program = new Command();
+track('cli_started', {
+  command: process.argv.slice(2, 4).filter((arg) => !arg.startsWith('-')).join(' ') || 'help',
+}, loadSession()?.userId);
+
+// Commander hooks give every CLI command the same success/error/latency
+// coverage, including commands that do not call Blackboard directly here.
+program.hook('preAction', (thisCommand, actionCommand) => {
+  (actionCommand as any).__analyticsStartedAt = Date.now();
+  (actionCommand as any).__analyticsName = actionCommand.name();
+  track('cli_command_started', {
+    command: actionCommand.name(),
+    parent_command: thisCommand.name(),
+  }, loadSession()?.userId);
+});
+program.hook('postAction', (thisCommand, actionCommand) => {
+  track('cli_command_completed', {
+    command: actionCommand.name(),
+    parent_command: thisCommand.name(),
+    success: true,
+    duration_ms: Date.now() - ((actionCommand as any).__analyticsStartedAt ?? Date.now()),
+  }, loadSession()?.userId);
+});
 
 program
   .name('campus')
@@ -124,6 +147,7 @@ program
   });
 
 program.parseAsync(process.argv).catch((err) => {
+  track('cli_error', { error_type: err instanceof Error ? err.name : 'CommandError', command: process.argv[2] ?? 'unknown' }, loadSession()?.userId);
   console.error(chalk.red(err.message));
   process.exit(1);
 });

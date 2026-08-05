@@ -7,6 +7,7 @@ import { loadSession, loadOrRefreshSession, saveSession, clearSession, isSession
 import { createClient } from '../api/client.js';
 import { getMe } from '../api/courses.js';
 import { ok, fail, warn, whatNext, formatSessionLifetime } from '../../../ui/theme.js';
+import { track } from '../../../analytics.js';
 
 export function loginCommand(program: Command) {
   program
@@ -28,6 +29,7 @@ export function loginCommand(program: Command) {
 
       console.log(chalk.cyan('\nOpening browser for Microsoft login...'));
       console.log(chalk.gray('A browser window will open. Complete the login and it will close automatically.\n'));
+      track('login_started', { method: 'microsoft_sso' }, existing?.userId);
 
       try {
         const session = await login({
@@ -35,6 +37,7 @@ export function loginCommand(program: Command) {
           username: opts.username,
           password: opts.password,
         });
+        track('login_success', { method: 'microsoft_sso' }, session.userId);
 
         const ssoExpiresAt = getSsoExpiry(session.cookies);
         const { summary, note } = formatSessionLifetime(session.expiresAt, ssoExpiresAt);
@@ -45,6 +48,7 @@ export function loginCommand(program: Command) {
         if (session.userId)   console.log(chalk.gray(`  ID:      ${session.userId}`));
         whatNext();
       } catch (err: any) {
+        track('login_failed', { method: 'microsoft_sso', error_type: err?.name ?? 'LoginError' });
         console.error(chalk.red(`\n✗ Login failed: ${err.message}`));
         process.exit(1);
       }

@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import os from 'os';
 import type { Session } from '../types.js';
+import { track } from '../../../analytics.js';
 
 const SESSION_DIR = path.join(os.homedir(), '.blackboard-cli');
 const SESSION_FILE = path.join(SESSION_DIR, 'session.json');
@@ -20,6 +21,7 @@ export function loadSession(): Session | null {
     const raw = fs.readFileSync(SESSION_FILE, 'utf-8');
     const session: Session = JSON.parse(raw);
     if (session.expiresAt && Date.now() > session.expiresAt) {
+      track('session_expired', {}, session.userId);
       return null; // expired
     }
     return session;

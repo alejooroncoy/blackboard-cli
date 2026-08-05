@@ -328,7 +328,7 @@ IA: Tienes 2 pendientes:
 - Tus credenciales se ingresan directamente en la ventana de Microsoft, no en el CLI.
 - Las cookies se guardan localmente en tu máquina.
 - La sesión local se guarda en `~/.blackboard-cli/session.json` con permisos restrictivos.
-- No se envían cookies, credenciales ni datos del campus a servidores externos del proyecto.
+- No se envían cookies, credenciales ni datos académicos a servidores externos; la analítica opcional de PostHog solo recibe eventos de uso.
 - Úsalo solo con tu propia cuenta y respeta las reglas de tu universidad.
 
 UPC usa SAML SSO con Microsoft Azure AD. El CLI abre Chromium con Playwright, espera a que completes el login, captura las cookies de Blackboard al volver a `/ultra` y las reutiliza para llamar la REST API.
@@ -408,6 +408,19 @@ La arquitectura separa cada LMS en `src/providers/<lms>/`. Blackboard vive en `s
 Si tu universidad usa Canvas o Moodle, abre un issue con el nombre de la universidad, el LMS y qué flujo quieres probar primero: cursos, tareas, notas o materiales.
 
 ## Contribuir
+
+## Analítica de uso con PostHog
+
+El cliente registra de forma anónima el inicio de la CLI, los logins exitosos y la apertura del dashboard en PostHog. Se usa el ID de Blackboard únicamente como identificador estable; no se envían cookies, contraseñas, cursos, tareas ni calificaciones.
+
+La clave pública del proyecto está configurada por defecto. Para cambiar el proyecto o desactivar la analítica:
+
+```bash
+POSTHOG_API_KEY=phc_... POSTHOG_HOST=https://us.i.posthog.com campus status
+POSTHOG_DISABLED=1 campus status
+```
+
+En PostHog puedes consultar `login_started`, `login_success`, `login_failed`, `session_expired`, `cli_started`, `cli_command_started`, `cli_command_completed`, `cli_error`, `mcp_tool_used`, `mcp_tool_error`, `dashboard_opened`, `dashboard_loaded`, `dashboard_error`, `attempts_viewed`, `assignment_submission_started`, `assignment_file_uploaded`, `assignment_file_upload_error`, `assignment_draft_saved`, `assignment_submitted` y `assignment_submission_error`. Las propiedades `tool`, `command`, `mode`, `success`, `duration_ms`, `error_type` y `status_code` permiten analizar usuarios nuevos, retención, abandono del login, sesiones vencidas, errores, tiempos de respuesta, herramientas y comandos más usados, borradores y entregas finales.
 
 Las contribuciones más útiles ahora son:
 
