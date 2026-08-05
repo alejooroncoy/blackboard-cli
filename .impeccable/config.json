@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          "landing/index.html"
+        ],
+        "createdAt": "2026-08-05T16:19:25.497Z",
+        "reason": "Animación intencional del diagrama de red (hub-breathe + paquete viajando por el rail), no un glow decorativo genérico"
+      }
+    ]
+  }
+}
