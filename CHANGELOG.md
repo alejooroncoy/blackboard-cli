@@ -27,10 +27,6 @@ All notable changes to `campus-cli` (formerly `blackboard-upc`) will be document
 ### Added
 - `blackboard_list_people` — lista los docentes y compañeros de un curso, resolviendo el id interno de usuario que traen anuncios y notas a un nombre real. Con `search`, busca a una persona puntual y devuelve su email; sin `search`, separa instructores de compañeros (compañeros solo por nombre, sin contacto, salvo que se pida uno en particular).
 - Analítica de uso opcional vía PostHog: inicio de la CLI, comandos ejecutados, logins, sesiones vencidas, uso de tools MCP, entregas de tareas, etc. No se envían cookies, contraseñas, cursos, tareas ni calificaciones — solo el id de Blackboard como identificador estable. Se puede desactivar con `POSTHOG_DISABLED=1` o apuntar a un proyecto propio con `POSTHOG_API_KEY`/`POSTHOG_HOST` (ver README).
-
-### Notes
-- El backend de trabajo en progreso (dashboard local, relay MCP hospedado, worker de navegador remoto, founders) se movió a un repo privado aparte que consume `campus-cli` como dependencia; nunca estuvo expuesto en una versión publicada, así que no hay cambio visible para quien ya usa el CLI o el MCP.
-
 ---
 
 ## [1.1.2] — 2026-07-29
