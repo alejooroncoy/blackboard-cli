@@ -1078,7 +1078,9 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
     position: static;
     width: auto;
     max-height: none;
-    margin: 0 0 40px;
+    /* Top margin of its own: the call-to-action button above it has none at the
+       bottom, so without this the two boxes share an edge. */
+    margin: 40px 0 44px;
     padding: 18px 20px;
     border: 1px solid #d5e3e7;
     border-radius: 10px;
