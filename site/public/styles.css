@@ -921,3 +921,25 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
     font-size: 19px;
   }
 }
+
+/* ── The fixed contents list must yield to the footer ─────────────────────
+   Fixed means nothing pushes it out of the way, so on a long page the list
+   scrolled straight over the footer. app.js adds the class once the footer is
+   on screen — by then the article has been read. Scoped to the wide
+   breakpoint: below it the list sits in the normal flow and must stay put. */
+@media (min-width: 1180px) {
+  .toc {
+    transition: opacity 160ms ease, visibility 160ms ease;
+  }
+
+  .toc.is-over-footer {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toc {
+    transition: none;
+  }
+}
