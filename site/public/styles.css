@@ -584,7 +584,11 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
 
 .toc__list a:hover {
   color: #17323f;
-  border-left-color: #b7cfd7;
+  /* A quieter version of the active colour, not a different hue. It used to
+     be blue-grey, so pointing at an entry answered in a colour the site does
+     not otherwise use — and right beside the green bar of the entry you are
+     actually reading. */
+  border-left-color: #9dcdba;
 }
 
 .toc__list a.is-active {
