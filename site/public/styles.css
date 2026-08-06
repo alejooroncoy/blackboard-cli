@@ -1065,11 +1065,16 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
 }
 
 /* ── The contents list on the product pages ───────────────────────────────
-   Those pages centre an 880px column, not the article's 760px, so the fixed
-   rail's offsets — tuned to the article — would land it on top of the text.
-   They keep the boxed, in-flow version instead: the same thing every page
-   shows on a narrow screen, and no second set of magic numbers to maintain. */
-@media (min-width: 1180px) {
+   Same side rail as an article, re-measured. The article's offsets assume a
+   760px column; these pages centre 880, so the pair is 210 + 48 + 880 = 1138
+   and both halves shift accordingly. Reusing the article's numbers would drop
+   the rail on top of the text.
+
+   It needs a wider viewport than the article does to earn its place: at 1180px
+   a 1138px pair leaves 21px of air either side, which reads as broken rather
+   than airy. Below 1280 the list stays boxed and in the flow — the same thing
+   every page shows on a narrow screen. */
+@media (min-width: 1180px) and (max-width: 1279.98px) {
   .doc-page .toc {
     /* Back to block, not just unpinned: the list is a <nav>, and the header's
        `nav { display: flex; align-items: center }` takes over the moment this
@@ -1085,5 +1090,23 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
     border: 1px solid #d5e3e7;
     border-radius: 10px;
     background: #fff;
+  }
+
+  /* In the flow it is part of the page, so it must not vanish at the footer
+     the way the fixed rail does. */
+  .doc-page .toc.is-over-footer {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@media (min-width: 1280px) {
+  .doc-page {
+    margin-left: calc(50% - 311px);
+    margin-right: 0;
+  }
+
+  .doc-page .toc {
+    left: calc(50% - 569px);
   }
 }
