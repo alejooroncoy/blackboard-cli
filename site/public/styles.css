@@ -1190,3 +1190,134 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
     background: none;
   }
 }
+
+/* ── The same week, two ways ──────────────────────────────────────────────
+   One artifact split down the middle, not two cards side by side: the point
+   is that these are the same task, so a divider says it better than two
+   frames. The left column lists the places the student has to visit with
+   nothing joining them — that absence is the argument the section makes in
+   three paragraphs. The right column is the exchange itself, in the shape of
+   the chat they already use. */
+.article .compare {
+  margin: 40px 0 46px;
+}
+
+.article .compare figcaption {
+  margin-bottom: 14px;
+  color: #7d97a5;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.article .compare__grid {
+  display: grid;
+  /* The gap is the divider: one hairline showing through, no borders to align. */
+  gap: 1px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #dfe9ec;
+}
+
+@media (min-width: 720px) {
+  .article .compare__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.article .compare__side {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 22px 24px;
+  background: #fbfdfd;
+}
+
+.article .compare__side--after {
+  background: #f1f9f5;
+}
+
+.article .compare__label {
+  margin: 0 0 2px;
+  color: #7d97a5;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.article .compare__side--after .compare__label {
+  color: #0b5c45;
+}
+
+.article .compare__steps {
+  display: grid;
+  gap: 9px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.article .compare__steps li {
+  position: relative;
+  margin: 0;
+  padding-left: 21px;
+  color: #506d7f;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+/* Loose squares, never joined up: four stops, no thread between them. */
+.article .compare__steps li::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 3px;
+  width: 7px;
+  height: 7px;
+  border: 1px solid #b7cfd7;
+  border-radius: 2px;
+}
+
+.article .compare__ask,
+.article .compare__reply {
+  margin: 0;
+  padding: 11px 14px;
+  border-radius: 11px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.article .compare__ask {
+  align-self: flex-end;
+  max-width: 92%;
+  border-bottom-right-radius: 3px;
+  background: #dcefe5;
+  color: #17323f;
+}
+
+.article .compare__reply {
+  align-self: flex-start;
+  max-width: 96%;
+  border-bottom-left-radius: 3px;
+  background: #fff;
+  color: #2f4f60;
+}
+
+.article .compare__cost {
+  /* Pushed down so both halves close on the same line whatever they contain. */
+  margin: 14px 0 0;
+  padding-top: 13px;
+  border-top: 1px solid rgba(23, 50, 63, 0.08);
+  margin-top: auto;
+  color: #7d97a5;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+@media (max-width: 620px) {
+  .article .compare__side {
+    padding: 20px;
+  }
+}

@@ -7,6 +7,20 @@ updated: "2026-08-04"
 tag: "Guía · Estudiantes UPC"
 section: empieza
 readingMinutes: 7
+compare:
+  before:
+    title: "A mano, en Blackboard"
+    items:
+      - "Calendario — solo lo que tiene fecha configurada"
+      - "Contenido de cada curso, carpeta por carpeta"
+      - "Anuncios, uno por curso"
+      - "Calificaciones, para ver qué pesa"
+    cost: "4 vistas · 20 min el domingo + 5 min diarios"
+  after:
+    title: "Preguntándole a Campus"
+    question: "¿Qué tengo esta semana y qué pesa más?"
+    answer: "Tienes 3 entregas antes del domingo. La que más pesa es el informe de Finanzas (25% de la nota final), que vence el viernes."
+    cost: "1 pregunta · la lista ya priorizada"
 howTo:
   name: "Cómo organizar tu semana en Blackboard sin perder fechas"
   totalTime: "PT20M"

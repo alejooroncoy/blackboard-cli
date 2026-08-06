@@ -27,6 +27,30 @@ const blog = defineCollection({
     readingMinutes: z.number().int().positive(),
     summary: z.array(z.string()).min(2).optional(),
     faq: z.array(z.object({ q: z.string(), a: z.string() })).optional(),
+    /**
+     * The before and after of the task the guide is about.
+     *
+     * Data rather than markup inside the body, for the same reason the summary
+     * is: the page draws it as a comparison, the Markdown twin writes it out as
+     * sentences. Written as html it would render once and reach assistants as a
+     * pile of tags.
+     */
+    compare: z
+      .object({
+        before: z.object({
+          title: z.string(),
+          /** Each fragment the student has to visit, in order. */
+          items: z.array(z.string()).min(2),
+          cost: z.string(),
+        }),
+        after: z.object({
+          title: z.string(),
+          question: z.string(),
+          answer: z.string(),
+          cost: z.string(),
+        }),
+      })
+      .optional(),
     howTo: z
       .object({
         name: z.string(),

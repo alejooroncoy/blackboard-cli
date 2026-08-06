@@ -135,6 +135,27 @@ const updated = new Date(`${data.updated}T12:00:00Z`).toLocaleDateString("es-PE"
       </section>
     )}
 
+    {data.compare && (
+      <figure class="compare" aria-labelledby="compare-title">
+        <figcaption id="compare-title">La misma semana, de dos formas</figcaption>
+        <div class="compare__grid">
+          <div class="compare__side">
+            <p class="compare__label">{data.compare.before.title}</p>
+            <ul class="compare__steps">
+              {data.compare.before.items.map((item) => <li>{item}</li>)}
+            </ul>
+            <p class="compare__cost">{data.compare.before.cost}</p>
+          </div>
+          <div class="compare__side compare__side--after">
+            <p class="compare__label">{data.compare.after.title}</p>
+            <p class="compare__ask">{data.compare.after.question}</p>
+            <p class="compare__reply">{data.compare.after.answer}</p>
+            <p class="compare__cost">{data.compare.after.cost}</p>
+          </div>
+        </div>
+      </figure>
+    )}
+
     <Content />
 
     {/* Lives here rather than in each article's body for two reasons: it was

@@ -42,11 +42,29 @@ export const GET: APIRoute = ({ props }) => {
     header.push("");
   }
 
+  // The page draws this as a comparison; here it is written out, because a
+  // model reading the guide should get the contrast, not a description of a
+  // diagram it cannot see.
+  if (data.compare) {
+    const { before, after } = data.compare;
+    header.push(
+      "## La misma semana, de dos formas",
+      "",
+      `**${before.title}:** ${before.items.join("; ")}. (${before.cost}.)`,
+      "",
+      `**${after.title}:** preguntas «${after.question}» y responde: «${after.answer}» (${after.cost}.)`,
+      "",
+    );
+  }
+
   const faq = data.faq?.length
     ? ["", "## Preguntas frecuentes", "", ...data.faq.flatMap((item) => [`### ${item.q}`, "", item.a, ""])]
     : [];
 
-  const markdown = `${header.join("\n")}${post.body?.trim() ?? ""}\n${faq.join("\n")}`.trimEnd();
+  // The blank line matters: without it the first paragraph of the body runs
+  // into the last bullet above it, and a strict parser reads it as part of
+  // that list item instead of as prose.
+  const markdown = `${[...header, ""].join("\n")}${post.body?.trim() ?? ""}\n${faq.join("\n")}`.trimEnd();
 
   return new Response(`${markdown}\n`, {
     headers: {
