@@ -25,8 +25,8 @@ Campus is an independent tool for students using Blackboard UPC in Peru.
 ## Best pages
 
 - Homepage: https://campuscli.com/
-- Blackboard MCP: https://campuscli.com/blackboard-mcp/
-- Blackboard CLI: https://campuscli.com/blackboard-cli/
+- Blackboard MCP: https://campuscli.com/blackboard-mcp/ (Markdown: https://campuscli.com/blackboard-mcp/index.md)
+- Blackboard CLI: https://campuscli.com/blackboard-cli/ (Markdown: https://campuscli.com/blackboard-cli/index.md)
 - Blog: https://campuscli.com/blog/
 - Non-affiliation notice: https://campuscli.com/no-afiliacion/
 - Terms of service: https://campuscli.com/terminos/

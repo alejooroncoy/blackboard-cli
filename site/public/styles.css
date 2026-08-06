@@ -1063,3 +1063,25 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
     border-left: 0;
   }
 }
+
+/* ── The contents list on the product pages ───────────────────────────────
+   Those pages centre an 880px column, not the article's 760px, so the fixed
+   rail's offsets — tuned to the article — would land it on top of the text.
+   They keep the boxed, in-flow version instead: the same thing every page
+   shows on a narrow screen, and no second set of magic numbers to maintain. */
+@media (min-width: 1180px) {
+  .doc-page .toc {
+    /* Back to block, not just unpinned: the list is a <nav>, and the header's
+       `nav { display: flex; align-items: center }` takes over the moment this
+       is flex again, which centres every entry. */
+    display: block;
+    position: static;
+    width: auto;
+    max-height: none;
+    margin: 0 0 40px;
+    padding: 18px 20px;
+    border: 1px solid #d5e3e7;
+    border-radius: 10px;
+    background: #fff;
+  }
+}

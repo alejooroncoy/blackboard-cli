@@ -189,8 +189,11 @@ if (starsSlot) {
  */
 function setUpArticleReading() {
   const main = document.querySelector("main");
-  // Only long-form guides: these markers exist on blog posts, not on the hub.
-  if (!main || !document.querySelector(".byline") || document.querySelector(".blog-main")) return;
+  // An explicit opt-in. This used to sniff for a `.byline`, which meant a page
+  // could only have an index if it also had an author line — fine for a blog
+  // post, wrong for the product and legal pages, which have headings worth
+  // navigating and nobody to credit.
+  if (!main || main.dataset.toc === undefined) return;
 
   const headings = [...main.querySelectorAll("h2[id]")].filter(
     // The summary box and the closing call to action are not places to jump to.
@@ -218,8 +221,13 @@ function setUpArticleReading() {
       .join("") +
     "</ol>";
 
+  // After the summary box where there is one, otherwise immediately above the
+  // first section. Sitting straight under the h1 would cut the title off from
+  // the sentence that introduces it, which is the one thing a reader needs
+  // before deciding whether the index is worth using.
   const summary = main.querySelector(".summary");
-  (summary || main.querySelector("h1")).after(nav);
+  if (summary) summary.after(nav);
+  else headings[0].before(nav);
 
   const links = new Map(
     [...nav.querySelectorAll("a")].map((link) => [link.getAttribute("href").slice(1), link]),
@@ -277,7 +285,7 @@ function setUpArticleReading() {
  */
 function addPageActions() {
   const declared = document.querySelector('link[rel="alternate"][type="text/markdown"]');
-  const heading = document.querySelector("main.article h1");
+  const heading = document.querySelector("main h1");
   if (!declared || !heading) return;
 
   // Resolve against the page being read so this also works on a preview build.
@@ -305,7 +313,7 @@ function addPageActions() {
     </div>`;
   // Same row as the category label, pushed right — sitting above the title
   // shoved the h1 down and read as part of the article.
-  const eyebrow = document.querySelector("main.article .eyebrow");
+  const eyebrow = document.querySelector("main .eyebrow");
   if (eyebrow) {
     const row = document.createElement("div");
     row.className = "article-head";
