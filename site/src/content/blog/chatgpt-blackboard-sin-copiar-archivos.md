@@ -87,4 +87,3 @@ La diferencia entre los dos caminos no es la capacidad de la IA para leer y comp
 
 Hay dos formas de usarlo, según dónde trabajes: desde tu asistente, con [el servidor Blackboard MCP para conectar el Aula Virtual con tu IA](https://campuscli.com/blackboard-mcp/); o desde la terminal, con [Blackboard CLI para consultar cursos, tareas y notas por comandos](https://campuscli.com/blackboard-cli/).
 
-<p><a class="button" href="/#acceso-anticipado">Ver el acceso anticipado</a></p>

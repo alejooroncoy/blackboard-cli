@@ -55,4 +55,3 @@ Quiero ser honesto con esto: no creo que sin Campus no hubiera podido sacar esto
 
 Si estás en una situación parecida (trabajando, estudiando, con poco tiempo de sobra), la herramienta que me ayudó a mí este ciclo es la misma que estamos abriendo a más estudiantes de la UPC. Puedes usarla desde tu asistente de IA, con [el servidor Blackboard MCP para conectar el Aula Virtual con tu IA](https://campuscli.com/blackboard-mcp/); o desde la terminal, con [Blackboard CLI para consultar cursos, tareas y notas por comandos](https://campuscli.com/blackboard-cli/).
 
-<p><a class="button" href="/#acceso-anticipado">Ver el acceso anticipado</a></p>

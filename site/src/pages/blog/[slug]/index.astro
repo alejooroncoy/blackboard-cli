@@ -137,6 +137,13 @@ const updated = new Date(`${data.updated}T12:00:00Z`).toLocaleDateString("es-PE"
 
     <Content />
 
+    {/* Lives here rather than in each article's body for two reasons: it was
+        the same three lines copied three times, and the Markdown twin we serve
+        to assistants should carry the prose, not a dead button. */}
+    <p class="article-cta">
+      <button class="button" type="button" data-open-founder>Quiero acceso anticipado</button>
+    </p>
+
     {data.faq?.length && (
       <section class="article-faq" aria-labelledby="preguntas">
         <h2 id="preguntas">Preguntas frecuentes</h2>

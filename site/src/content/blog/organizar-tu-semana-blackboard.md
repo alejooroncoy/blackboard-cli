@@ -94,4 +94,3 @@ La rutina de arriba funciona sola: es un método, no una herramienta. Pero los 2
 
 Hay dos formas de usarlo, según dónde trabajes: desde tu asistente, con [el servidor Blackboard MCP para conectar el Aula Virtual con tu IA](https://campuscli.com/blackboard-mcp/); o desde la terminal, con [Blackboard CLI para consultar cursos, tareas y notas por comandos](https://campuscli.com/blackboard-cli/).
 
-<p><a class="button" href="/#acceso-anticipado">Ver el acceso anticipado</a></p>

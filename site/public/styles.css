@@ -943,3 +943,16 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
     transition: none;
   }
 }
+
+/* ── The article's closing call to action ─────────────────────────────────
+   `.article .button` was written for an anchor, so a real <button> arrived
+   with the user agent's border, font and cursor. */
+.article button.button {
+  border: 0;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.article .article-cta {
+  margin: 36px 0 0;
+}
