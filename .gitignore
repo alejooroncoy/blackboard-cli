@@ -6,3 +6,5 @@ dist/
 .DS_Store
 .mcp.json
 .gstack/
+.astro/
+.vercel/

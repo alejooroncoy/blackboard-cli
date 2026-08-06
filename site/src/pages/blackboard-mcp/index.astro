@@ -1,0 +1,66 @@
+---
+import Base from "../../layouts/Base.astro";
+// Kept as raw html so the markup that is already indexed ships byte for byte.
+import body from "../../html/blackboard-mcp/index.html?raw";
+
+const schemas = [
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "¿Qué es Blackboard MCP?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Es una conexión basada en Model Context Protocol que permite a un asistente compatible consultar información estructurada de Blackboard."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Qué puede consultar?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Cursos, tareas, fechas, notas, anuncios y materiales disponibles en Blackboard UPC."
+        }
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Inicio",
+        "item": "https://campuscli.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Recursos y guías",
+        "item": "https://campuscli.com/blog/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Blackboard MCP",
+        "item": "https://campuscli.com/blackboard-mcp/"
+      }
+    ]
+  }
+];
+---
+
+<Base
+  title={"Blackboard MCP para UPC | Conecta Blackboard con IA"}
+  description={"Blackboard MCP para consultar cursos, tareas, notas, anuncios y materiales de Blackboard UPC desde asistentes compatibles con Model Context Protocol."}
+  canonical={"https://campuscli.com/blackboard-mcp/"}
+  ogTitle={"Blackboard MCP para UPC | Conecta Blackboard con IA"}
+  ogDescription={"Blackboard MCP para consultar cursos, tareas, notas, anuncios y materiales de Blackboard UPC desde asistentes compatibles con Model Context Protocol."}
+  ogImageAlt={"Blackboard MCP: conecta Blackboard UPC con tu asistente de IA"}
+  schemas={schemas}
+>
+  <Fragment set:html={body} />
+</Base>

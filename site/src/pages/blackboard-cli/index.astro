@@ -1,0 +1,44 @@
+---
+import Base from "../../layouts/Base.astro";
+// Kept as raw html so the markup that is already indexed ships byte for byte.
+import body from "../../html/blackboard-cli/index.html?raw";
+
+const schemas = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Inicio",
+        "item": "https://campuscli.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Recursos y guías",
+        "item": "https://campuscli.com/blog/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Blackboard CLI",
+        "item": "https://campuscli.com/blackboard-cli/"
+      }
+    ]
+  }
+];
+---
+
+<Base
+  title={"Blackboard CLI | Consulta Blackboard desde la terminal"}
+  description={"Blackboard CLI open source para consultar Blackboard UPC desde la terminal: cursos, tareas, notas, anuncios y materiales con comandos simples."}
+  canonical={"https://campuscli.com/blackboard-cli/"}
+  ogTitle={"Blackboard CLI | Consulta Blackboard desde la terminal"}
+  ogDescription={"Blackboard CLI open source para consultar Blackboard UPC desde la terminal: cursos, tareas, notas, anuncios y materiales con comandos simples."}
+  ogImageAlt={"Blackboard CLI: consulta Blackboard UPC desde la terminal"}
+  schemas={schemas}
+>
+  <Fragment set:html={body} />
+</Base>
