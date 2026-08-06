@@ -253,19 +253,10 @@ function setUpArticleReading() {
     setActive(current.id);
   };
 
-  // On wide screens the list is fixed, so nothing ever pushes it aside: on a
-  // long page it scrolled straight over the footer. Retire it once the footer
-  // shows up — by then the reader has finished the article anyway. The class
-  // only does anything inside the wide breakpoint, where the list is fixed.
-  const footer = document.querySelector(".footer");
-
   const onScroll = () => {
     const scrollable = document.documentElement.scrollHeight - window.innerHeight;
     const ratio = scrollable > 0 ? window.scrollY / scrollable : 0;
     progress.style.transform = `scaleX(${Math.min(1, Math.max(0, ratio))})`;
-    if (footer) {
-      nav.classList.toggle("is-over-footer", footer.getBoundingClientRect().top < window.innerHeight);
-    }
     markCurrent();
   };
   onScroll();

@@ -922,27 +922,6 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
   }
 }
 
-/* ── The fixed contents list must yield to the footer ─────────────────────
-   Fixed means nothing pushes it out of the way, so on a long page the list
-   scrolled straight over the footer. app.js adds the class once the footer is
-   on screen — by then the article has been read. Scoped to the wide
-   breakpoint: below it the list sits in the normal flow and must stay put. */
-@media (min-width: 1180px) {
-  .toc {
-    transition: opacity 160ms ease, visibility 160ms ease;
-  }
-
-  .toc.is-over-footer {
-    opacity: 0;
-    visibility: hidden;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .toc {
-    transition: none;
-  }
-}
 
 /* ── The article's closing call to action ─────────────────────────────────
    `.article .button` was written for an anchor, so a real <button> arrived
@@ -1092,12 +1071,6 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
     background: #fff;
   }
 
-  /* In the flow it is part of the page, so it must not vanish at the footer
-     the way the fixed rail does. */
-  .doc-page .toc.is-over-footer {
-    opacity: 1;
-    visibility: visible;
-  }
 }
 
 @media (min-width: 1280px) {
@@ -1123,4 +1096,94 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
 .article .summary {
   border: 0;
   background: linear-gradient(180deg, #eef8f3 0%, #f2faf7 52%, rgba(242, 250, 247, 0) 100%);
+}
+
+/* ── The contents list becomes a real column ──────────────────────────────
+   It used to be `position: fixed`, pinned with offsets measured against the
+   reading column. Fixed means it is glued to the viewport and knows nothing
+   about the document, so the only way to keep it off the footer was to hide
+   it with script — which is why it vanished on arrival instead of leaving.
+
+   As a sticky grid column it holds while the article is on screen and then
+   travels up with its own column when the article ends. Nothing disappears,
+   nothing has to be measured against anything, and the footer stops being a
+   special case. */
+@media (min-width: 1180px) {
+  .article {
+    display: grid;
+    grid-template-columns: 210px minmax(0, 1fr);
+    column-gap: 48px;
+    max-width: 1018px;
+    margin-inline: auto;
+  }
+
+  .article > * {
+    grid-column: 2;
+    /* Grid items refuse to shrink below their content by default, which is how
+       a long code line would widen the whole column. */
+    min-width: 0;
+  }
+
+  .article > .toc {
+    grid-column: 1;
+    /* `1 / -1` would only reach the last *explicit* row, and every row here is
+       implicit. Spanning far past the end is the reliable way to say "all of
+       them". */
+    grid-row: 1 / span 999;
+    position: sticky;
+    /* `left` is a stick threshold too, not just a fixed offset: left over from
+       the pinned version it would glue the list sideways as well. */
+    left: auto;
+    top: 104px;
+    align-self: start;
+    display: block;
+    width: auto;
+    max-height: calc(100vh - 150px);
+    overflow-y: auto;
+    margin: 0;
+    padding: 0 0 0 2px;
+    border: 0;
+    background: none;
+  }
+
+  /* Designed to break out of a column that had empty space on both sides. With
+     a list of contents to its left it just breaks the alignment with every
+     block above it. */
+  .article .related {
+    width: auto;
+    margin-inline: 0;
+  }
+}
+
+@media (min-width: 1280px) {
+  .doc-page {
+    display: grid;
+    grid-template-columns: 210px minmax(0, 1fr);
+    column-gap: 48px;
+    max-width: 1138px;
+    margin-inline: auto;
+  }
+
+  .doc-page > * {
+    grid-column: 2;
+    min-width: 0;
+  }
+
+  .doc-page > .toc {
+    grid-column: 1;
+    grid-row: 1 / span 999;
+    position: sticky;
+    left: auto;
+    top: 104px;
+    align-self: start;
+    display: block;
+    width: auto;
+    max-height: calc(100vh - 150px);
+    overflow-y: auto;
+    margin: 0;
+    padding: 0 0 0 2px;
+    border: 0;
+    border-radius: 0;
+    background: none;
+  }
 }
