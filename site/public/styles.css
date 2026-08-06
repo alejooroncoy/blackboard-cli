@@ -1110,3 +1110,17 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
     left: calc(50% - 569px);
   }
 }
+
+/* ── The "En resumen" panel ───────────────────────────────────────────────
+   The 3px green edge made it read as a documentation callout, and the
+   contents list already carries a green accent bar of its own — two vertical
+   green rules on screen at once, meaning different things. The mint fill and
+   the green label were always what set this block apart.
+
+   It also stops rather than ends: the fill fades out downward instead of
+   closing on a hard bottom edge, so the summary hands off to the article
+   instead of sealing itself away from it. */
+.article .summary {
+  border: 0;
+  background: linear-gradient(180deg, #eef8f3 0%, #f2faf7 52%, rgba(242, 250, 247, 0) 100%);
+}
