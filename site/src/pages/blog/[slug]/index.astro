@@ -1,0 +1,155 @@
+---
+import { getCollection, render } from "astro:content";
+import Base from "../../../layouts/Base.astro";
+
+// Internal linking between the pillar guide and its clusters, kept per article.
+// It is the part of the topical-authority work that tells Google these pages
+// belong together, so it travels with the page rather than the body text.
+const relatedBlocks = import.meta.glob("../../../html/related/*.html", {
+  query: "?raw",
+  import: "default",
+  eager: true,
+}) as Record<string, string>;
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const { data } = post;
+
+/** Summary lines are Markdown in the frontmatter but print as html. */
+const inline = (text: string) =>
+  text
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/`(.+?)`/g, "<code>$1</code>");
+
+const url = `https://campuscli.com/blog/${post.id}/`;
+const related = relatedBlocks[`../../../html/related/${post.id}.html`] ?? "";
+const markdownUrl = `${url}index.md`;
+
+// Every structured-data block a guide can carry, assembled from the same
+// frontmatter that renders the page. Writing them by hand in each article is
+// how two of them ended up out of sync with their own content.
+const schemas: unknown[] = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Inicio", item: "https://campuscli.com/" },
+      { "@type": "ListItem", position: 2, name: "Blog", item: "https://campuscli.com/blog/" },
+      { "@type": "ListItem", position: 3, name: data.title, item: url },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: data.title,
+    description: data.description,
+    datePublished: data.published,
+    dateModified: data.updated,
+    inLanguage: "es-PE",
+    mainEntityOfPage: url,
+    author: { "@type": "Organization", name: "Campus", url: "https://campuscli.com/" },
+    publisher: { "@type": "Organization", name: "Campus", url: "https://campuscli.com/" },
+    image: "https://campuscli.com/assets/og-default.jpg",
+  },
+];
+
+if (data.faq?.length) {
+  schemas.push({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: data.faq.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  });
+}
+
+if (data.howTo) {
+  schemas.push({
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: data.howTo.name,
+    ...(data.howTo.totalTime ? { totalTime: data.howTo.totalTime } : {}),
+    step: data.howTo.steps.map((step, index) => ({
+      "@type": "HowToStep",
+      position: index + 1,
+      name: step.name,
+      text: step.text,
+    })),
+  });
+}
+
+const published = new Date(`${data.published}T12:00:00Z`).toLocaleDateString("es-PE", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+const updated = new Date(`${data.updated}T12:00:00Z`).toLocaleDateString("es-PE", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+---
+
+<Base
+  title={data.seoTitle ?? data.title}
+  description={data.description}
+  ogTitle={data.ogTitle ?? data.title}
+  canonical={url}
+  ogType="article"
+  published={data.published}
+  modified={data.updated}
+  markdownUrl={markdownUrl}
+  schemas={schemas}
+>
+  <main class="article">
+    <nav class="crumbs" aria-label="Ruta de navegación">
+      <ol>
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li aria-current="page">{data.title}</li>
+      </ol>
+    </nav>
+    <p class="eyebrow">{data.tag}</p>
+    <h1>{data.title}</h1>
+    <p class="byline">
+      <span>Por <strong>el equipo de Campus</strong></span>
+      <span aria-hidden="true">·</span>
+      <span>Publicado el <time datetime={data.published}>{published}</time></span>
+      <span aria-hidden="true">·</span>
+      <span class="byline__updated">Actualizado el <time datetime={data.updated}>{updated}</time></span>
+      <span aria-hidden="true">·</span>
+      <span>{data.readingMinutes} min de lectura</span>
+    </p>
+
+    {data.summary?.length && (
+      <section class="summary" aria-labelledby="resumen-title">
+        <h2 id="resumen-title">En resumen</h2>
+        <ul>{data.summary.map((line) => <li set:html={inline(line)} />)}</ul>
+      </section>
+    )}
+
+    <Content />
+
+    {data.faq?.length && (
+      <section class="article-faq" aria-labelledby="preguntas">
+        <h2 id="preguntas">Preguntas frecuentes</h2>
+        <dl>
+          {data.faq.map((item) => (
+            <>
+              <dt>{item.q}</dt>
+              <dd>{item.a}</dd>
+            </>
+          ))}
+        </dl>
+      </section>
+    )}
+    {related && <Fragment set:html={related} />}
+  </main>
+</Base>

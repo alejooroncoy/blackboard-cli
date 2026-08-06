@@ -1,0 +1,262 @@
+---
+import Base from "../../layouts/Base.astro";
+
+/**
+ * Terms of service.
+ *
+ * Written from what the code actually does, not from a template: the session
+ * vault, the ten-minute download tickets and the ninety-day grant ceiling are
+ * all quoted from their constants. A terms page that overstates what we store
+ * is worse than none — it is the document a university administrator reads
+ * first, and the one place where being caught wrong costs the most.
+ *
+ * Uses `.byline` on purpose: it is what makes app.js build the table of
+ * contents, and what makes the wide-screen centring rule line up.
+ */
+
+const url = "https://campuscli.com/terminos/";
+const updated = "2026-08-06";
+const updatedLabel = "6 de agosto de 2026";
+
+const schemas = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Inicio", item: "https://campuscli.com/" },
+      { "@type": "ListItem", position: 2, name: "Términos y condiciones", item: url },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Términos y condiciones de Campus",
+    description:
+      "Condiciones de uso de Campus: cómo accede a tu Aula Virtual, qué datos guarda y cuáles no, integridad académica y límites de responsabilidad.",
+    inLanguage: "es-PE",
+    dateModified: updated,
+    url,
+    publisher: { "@type": "Organization", name: "Campus", url: "https://campuscli.com/" },
+  },
+];
+---
+
+<Base
+  title="Términos y condiciones | Campus"
+  description="Condiciones de uso de Campus: cómo accede a tu Aula Virtual con tus propias credenciales, qué datos guarda y cuáles no, integridad académica y responsabilidades."
+  canonical={url}
+  ogTitle="Términos y condiciones de Campus"
+  ogImageAlt="Términos y condiciones de Campus"
+  modified={updated}
+  schemas={schemas}
+>
+  <main class="article" data-toc-title="En esta página">
+    <nav class="crumbs" aria-label="Ruta de navegación">
+      <ol>
+        <li><a href="/">Inicio</a></li>
+        <li aria-current="page">Términos y condiciones</li>
+      </ol>
+    </nav>
+    <p class="eyebrow">Legal</p>
+    <h1>Términos y condiciones</h1>
+    <p class="byline">
+      <span>Última actualización: <time datetime={updated}>{updatedLabel}</time></span>
+    </p>
+
+    <section class="summary" aria-labelledby="resumen-title">
+      <h2 id="resumen-title">En resumen</h2>
+      <ul>
+        <li>Campus es un <strong>proyecto independiente</strong>. No somos UPC, ni Blackboard, ni ninguna universidad.</li>
+        <li>Entras con <strong>tus propias credenciales</strong>, en la página de tu universidad. Nunca vemos tu contraseña.</li>
+        <li><strong>No guardamos el contenido de tus cursos.</strong> Los archivos se traen en el momento y se descartan.</li>
+        <li>Campus <strong>organiza tu trabajo, no lo entrega por ti</strong>. Cualquier envío lo confirmas tú.</li>
+        <li>Puedes <strong>revocar el acceso</strong> cuando quieras.</li>
+      </ul>
+    </section>
+
+    <p class="lede">
+      Estos términos son el acuerdo entre tú y Campus. Están escritos para que se
+      entiendan a la primera, y describen lo que el software hace de verdad. Al
+      usar Campus aceptas lo que sigue.
+    </p>
+
+    <h2 id="que-es">1. Qué es Campus</h2>
+    <p>
+      Campus es un programa que conecta el Aula Virtual de tu universidad con
+      asistentes de IA compatibles (mediante el protocolo MCP) y con tu terminal
+      (mediante una interfaz de línea de comandos). Hoy funciona con Blackboard
+      Learn en la UPC.
+    </p>
+    <p>
+      Campus es un proyecto independiente, sin relación, patrocinio ni
+      autorización de la UPC, de Anthology/Blackboard, ni de los proveedores de
+      IA. Lo explicamos en detalle en el
+      <a class="prose-link" href="/no-afiliacion/">aviso de no afiliación</a>.
+    </p>
+
+    <h2 id="quien-puede">2. Quién puede usar Campus</h2>
+    <ul>
+      <li>Necesitas ser estudiante con una cuenta activa en una universidad compatible.</li>
+      <li>Solo puedes usar Campus con <strong>tu propia cuenta</strong>. Usar las credenciales de otra persona, con o sin su permiso, está prohibido.</li>
+      <li>Si eres menor de edad, necesitas el consentimiento de tu padre, madre o tutor.</li>
+    </ul>
+
+    <h2 id="acceso">3. Cómo accede Campus a tu Aula Virtual</h2>
+    <p>
+      Esta es la parte que más importa entender, así que va sin rodeos.
+    </p>
+    <ul>
+      <li>
+        <strong>Inicias sesión tú, en la página de tu universidad.</strong> El
+        inicio de sesión ocurre en el proveedor de identidad de la institución
+        (Microsoft). Campus no intermedia ni almacena tu contraseña en ningún
+        momento.
+      </li>
+      <li>
+        <strong>Campus actúa bajo tu sesión.</strong> Hace las mismas llamadas
+        que haría tu navegador cuando entras al Aula Virtual, con tus mismos
+        permisos. No tenemos una cuenta propia en Blackboard, ni un convenio, ni
+        acceso a información que tu cuenta no pueda ver.
+      </li>
+      <li>
+        <strong>El acceso persistente es opcional y explícito.</strong> Solo
+        conservamos material de sesión si tú lo activas. Si no lo haces, no se
+        guarda nada y tendrás que volver a iniciar sesión cada vez.
+      </li>
+      <li>
+        <strong>Si lo activas, se guarda cifrado.</strong> El material de sesión
+        se sella con cifrado autenticado (AES-256-GCM) y queda de forma que el
+        servidor que lo custodia no tiene la clave para abrirlo.
+      </li>
+      <li>
+        <strong>Caduca solo.</strong> Un acceso persistente vive como máximo 90
+        días, y menos si tu universidad lo invalida antes. Puedes revocarlo en
+        cualquier momento cerrando sesión desde Campus.
+      </li>
+    </ul>
+
+    <h2 id="datos">4. Qué guardamos y qué no</h2>
+    <p><strong>Guardamos:</strong></p>
+    <ul>
+      <li>El material de sesión cifrado, solo si activaste el acceso persistente.</li>
+      <li>Un identificador de tu cuenta y de tu universidad, para saber a quién pertenece esa sesión.</li>
+      <li>Métricas de uso seudonimizadas: qué herramienta se usó, si funcionó y cuánto tardó. Tu identificador va convertido en un hash irreversible y estas métricas <em>no</em> incluyen contenido de tus cursos.</li>
+      <li>Si te registras para el acceso anticipado: tu nombre, WhatsApp, carrera, ciclo e interés, cifrados en reposo. Los usamos solo para contactarte sobre Campus.</li>
+    </ul>
+    <p><strong>No guardamos:</strong></p>
+    <ul>
+      <li>Tu contraseña. Nunca pasa por nosotros.</li>
+      <li>El contenido de tus cursos, tareas, notas, anuncios ni archivos. Se consultan en el momento y se descartan.</li>
+      <li>Los archivos que descargas. Se entregan mediante un enlace de un solo uso que caduca a los 10 minutos y no conserva copia.</li>
+      <li>Tus conversaciones con el asistente de IA. Esas viven en Claude, ChatGPT o el cliente que uses, bajo los términos de ese proveedor.</li>
+    </ul>
+    <p>
+      El detalle completo —finalidades, plazos, encargados del tratamiento y
+      cómo ejercer tus derechos— está en la
+      <a class="prose-link" href="/privacidad/">política de privacidad</a>.
+    </p>
+
+    <h2 id="uso-aceptable">5. Uso aceptable</h2>
+    <p>Al usar Campus te comprometes a no:</p>
+    <ul>
+      <li>Usar credenciales que no sean tuyas, ni compartir tu acceso con otras personas.</li>
+      <li>Revender, redistribuir o dar acceso a Campus como servicio a terceros.</li>
+      <li>Generar volumen automatizado que degrade el servicio de tu universidad o el de otros estudiantes.</li>
+      <li>Intentar acceder a información que tu cuenta no tenga permitida, ni eludir los controles de acceso de la institución.</li>
+      <li>Usar Campus para algo que infrinja el reglamento de tu universidad o la ley.</li>
+    </ul>
+    <p>
+      Podemos suspender tu acceso si incumples esto, o si tu uso pone en riesgo
+      el acceso del resto de estudiantes.
+    </p>
+
+    <h2 id="integridad">6. Integridad académica</h2>
+    <p>
+      Campus lee tu campus, te lo organiza y te ayuda a planificar tu trabajo.
+      <strong>No redacta tus tareas ni las entrega por ti.</strong> Cualquier
+      envío a través de Campus requiere tu confirmación explícita antes de salir.
+    </p>
+    <p>
+      Eres el único responsable de que lo que entregues cumpla el reglamento de
+      tu universidad. Si un curso o una evaluación prohíbe el uso de
+      herramientas de IA, no uses Campus ahí. Que una herramienta te permita
+      hacer algo no significa que tu universidad lo permita.
+    </p>
+
+    <h2 id="precio">7. Acceso anticipado, precio y cancelación</h2>
+    <ul>
+      <li>Campus está en piloto, con cupos limitados.</li>
+      <li>El acceso anticipado cuesta S/20 por 2 meses. Podemos cambiar el precio más adelante, avisando antes de que te afecte.</li>
+      <li>No hay permanencia. Puedes cancelar cuando quieras.</li>
+      <li>Al cancelar, borramos el material de sesión que tuviéramos guardado.</li>
+    </ul>
+
+    <h2 id="disponibilidad">8. Disponibilidad y cambios en el servicio</h2>
+    <p>
+      Campus es un producto en desarrollo. Puede haber caídas, cambios y
+      funciones que aparezcan o desaparezcan sin aviso previo.
+    </p>
+    <p>
+      Además, Campus depende de una plataforma que no controlamos. Si tu
+      universidad cambia su Aula Virtual, restringe el acceso automatizado o
+      modifica su forma de autenticación, Campus puede dejar de funcionar total
+      o parcialmente. Eso está fuera de nuestro alcance y no genera derecho a
+      indemnización más allá de lo previsto en el punto 9.
+    </p>
+
+    <h2 id="garantias">9. Garantías y responsabilidad</h2>
+    <p>
+      Campus se ofrece <em>tal cual</em>. No garantizamos que la información que
+      te muestre sea completa, exacta ni esté actualizada.
+    </p>
+    <p>
+      <strong>La fuente de verdad siempre es tu Aula Virtual.</strong> Antes de
+      tomar una decisión que dependa de una fecha de entrega, una nota o el
+      estado de una entrega, verifícala directamente ahí. No respondemos por
+      entregas fuera de plazo, información mal interpretada ni decisiones
+      académicas tomadas a partir de lo que Campus te mostró.
+    </p>
+    <p>
+      En la medida en que la ley lo permita, nuestra responsabilidad total
+      frente a ti se limita al monto que hayas pagado por Campus en los dos
+      meses anteriores al hecho que la origine.
+    </p>
+
+    <h2 id="propiedad">10. Propiedad</h2>
+    <ul>
+      <li>
+        El cliente de Campus es open source (licencia ISC) y está publicado en
+        <a class="prose-link" href="https://github.com/alejooroncoy/campus-cli" target="_blank" rel="noreferrer">GitHub</a>.
+        Puedes leerlo, auditarlo y usarlo según esa licencia.
+      </li>
+      <li>
+        El contenido de tus cursos pertenece a quien corresponda —tu universidad,
+        tus docentes o tú—. Campus no reclama ningún derecho sobre él y no lo
+        reutiliza para ningún fin.
+      </li>
+      <li>
+        Las marcas mencionadas pertenecen a sus titulares. Su uso aquí es
+        únicamente descriptivo, para indicar compatibilidad.
+      </li>
+    </ul>
+
+    <h2 id="cambios">11. Cambios en estos términos</h2>
+    <p>
+      Si cambiamos algo relevante, actualizaremos la fecha del encabezado y te
+      avisaremos por el canal por el que te registraste. Seguir usando Campus
+      después de un cambio significa que lo aceptas.
+    </p>
+
+    <h2 id="contacto">12. Ley aplicable y contacto</h2>
+    <p>
+      Estos términos se rigen por las leyes de la República del Perú, y
+      cualquier controversia se someterá a los jueces y tribunales de Lima.
+    </p>
+    <p>
+      Para cualquier consulta, reclamo o solicitud sobre tus datos, escríbenos a
+      <a class="prose-link" href="mailto:info@campuscli.com">info@campuscli.com</a>.
+      Si eres administrador de una universidad, hay una sección específica para
+      ti en el <a class="prose-link" href="/no-afiliacion/">aviso de no afiliación</a>.
+    </p>
+  </main>
+</Base>

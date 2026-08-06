@@ -1,0 +1,38 @@
+---
+import Base from "../../layouts/Base.astro";
+// Kept as raw html so the markup that is already indexed ships byte for byte.
+import body from "../../html/blog/index.html?raw";
+
+const schemas = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Inicio",
+        "item": "https://campuscli.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Blog",
+        "item": "https://campuscli.com/blog/"
+      }
+    ]
+  }
+];
+---
+
+<Base
+  title={"Blog | Campus para Blackboard UPC"}
+  description={"Blog de Campus: Blackboard UPC, inteligencia artificial, MCP, CLI y herramientas para estudiar mejor."}
+  canonical={"https://campuscli.com/blog/"}
+  ogTitle={"Blog | Campus para Blackboard UPC"}
+  ogDescription={"Blog de Campus: Blackboard UPC, inteligencia artificial, MCP, CLI y herramientas para estudiar mejor."}
+  ogImageAlt={"Blog de Campus: guías de Blackboard UPC con IA"}
+  schemas={schemas}
+>
+  <Fragment set:html={body} />
+</Base>

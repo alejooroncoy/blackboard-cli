@@ -1,0 +1,242 @@
+---
+import Base from "../../layouts/Base.astro";
+
+/**
+ * Non-affiliation notice.
+ *
+ * Two jobs. The obvious one is legal: say plainly that no institution endorses
+ * us. The one that matters more is the last section — an administrator who
+ * finds our traffic in their logs lands here, and what they read decides
+ * whether the next step is an email or a firewall rule. So the page answers
+ * their questions before they have to ask them.
+ *
+ * The FAQ is duplicated into FAQPage schema on purpose: "is Campus official?"
+ * is exactly the question an assistant gets asked, and we would rather it
+ * quote this page than guess.
+ */
+
+const url = "https://campuscli.com/no-afiliacion/";
+const updated = "2026-08-06";
+const updatedLabel = "6 de agosto de 2026";
+
+const faq = [
+  {
+    q: "¿Campus es un producto oficial de la UPC?",
+    a: "No. Campus es un proyecto independiente, creado por un estudiante. La UPC no lo desarrolla, no lo patrocina, no lo distribuye ni lo respalda, y no tiene ninguna relación comercial con Campus.",
+  },
+  {
+    q: "¿Campus es un producto oficial de Blackboard o Anthology?",
+    a: "No. Campus no es una aplicación certificada ni un partner de Anthology, la empresa detrás de Blackboard Learn. No estamos registrados como aplicación en el Developer Portal de Anthology y no usamos su programa de integraciones REST.",
+  },
+  {
+    q: "Entonces, ¿cómo accede Campus a mi Aula Virtual?",
+    a: "Con tus propias credenciales. Inicias sesión en la página de tu universidad, mediante el mismo SSO de Microsoft que usarías en el navegador, y Campus actúa bajo esa sesión con tus mismos permisos. No tenemos una cuenta propia en Blackboard ni acceso a información que tu cuenta no pueda ver.",
+  },
+  {
+    q: "¿Campus tiene relación con Anthropic, OpenAI, Microsoft o Google?",
+    a: "No. Campus es compatible con asistentes como Claude y ChatGPT porque implementa MCP, un protocolo abierto. Esa compatibilidad no implica ninguna relación, revisión ni respaldo por parte de esas empresas.",
+  },
+  {
+    q: "¿Campus hace las tareas por el estudiante?",
+    a: "No. Campus lee el campus, lo organiza y ayuda a planificar el trabajo. No redacta entregas y no envía nada sin la confirmación explícita del estudiante en ese momento.",
+  },
+];
+
+const schemas = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Inicio", item: "https://campuscli.com/" },
+      { "@type": "ListItem", position: 2, name: "Aviso de no afiliación", item: url },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Aviso de no afiliación",
+    description:
+      "Campus es un proyecto independiente. No está afiliado ni respaldado por la UPC, Anthology/Blackboard, Microsoft, Anthropic, OpenAI ni Google.",
+    inLanguage: "es-PE",
+    dateModified: updated,
+    url,
+    publisher: { "@type": "Organization", name: "Campus", url: "https://campuscli.com/" },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  },
+];
+---
+
+<Base
+  title="Aviso de no afiliación | Campus"
+  description="Campus es un proyecto independiente. No está afiliado, patrocinado ni respaldado por la UPC, Anthology/Blackboard, Microsoft, Anthropic, OpenAI ni Google."
+  canonical={url}
+  ogTitle="Campus no es un producto oficial de UPC ni de Blackboard"
+  ogImageAlt="Aviso de no afiliación de Campus"
+  modified={updated}
+  schemas={schemas}
+>
+  <main class="article" data-toc-title="En esta página">
+    <nav class="crumbs" aria-label="Ruta de navegación">
+      <ol>
+        <li><a href="/">Inicio</a></li>
+        <li aria-current="page">Aviso de no afiliación</li>
+      </ol>
+    </nav>
+    <p class="eyebrow">Legal</p>
+    <h1>Aviso de no afiliación</h1>
+    <p class="byline">
+      <span>Última actualización: <time datetime={updated}>{updatedLabel}</time></span>
+    </p>
+
+    <section class="summary" aria-labelledby="resumen-title">
+      <h2 id="resumen-title">En resumen</h2>
+      <ul>
+        <li>Campus es un <strong>proyecto independiente</strong>, creado por un estudiante.</li>
+        <li>Ninguna universidad ni proveedor lo respalda, lo patrocina ni lo distribuye.</li>
+        <li>El acceso ocurre con <strong>las credenciales del propio estudiante</strong>, no con una cuenta nuestra.</li>
+        <li>Si eres administrador de una universidad, <a class="prose-link" href="#universidades">escríbenos</a>: respondemos.</li>
+      </ul>
+    </section>
+
+    <p class="lede">
+      Campus se conecta con plataformas que no son nuestras y menciona marcas que
+      no nos pertenecen. Esta página existe para que no quede ninguna duda sobre
+      qué relación tenemos con cada una: ninguna.
+    </p>
+
+    <h2 id="declaracion">La declaración, sin rodeos</h2>
+    <p>
+      <strong>Campus es un proyecto independiente.</strong> No está afiliado,
+      asociado, autorizado, patrocinado, certificado ni respaldado de ninguna
+      forma por:
+    </p>
+    <ul>
+      <li>la <strong>Universidad Peruana de Ciencias Aplicadas (UPC)</strong>, ni ninguna otra universidad;</li>
+      <li><strong>Anthology Inc.</strong> ni <strong>Blackboard</strong>, propietarios de Blackboard Learn;</li>
+      <li><strong>Microsoft Corporation</strong>, proveedor del inicio de sesión institucional;</li>
+      <li><strong>Anthropic</strong>, <strong>OpenAI</strong> ni <strong>Google</strong>, cuyos asistentes son compatibles con Campus.</li>
+    </ul>
+    <p>
+      Todas las marcas, nombres comerciales y logotipos mencionados pertenecen a
+      sus respectivos titulares. Los usamos únicamente de forma descriptiva,
+      para indicar con qué sistemas funciona Campus. Ese uso no implica
+      titularidad, licencia ni respaldo alguno.
+    </p>
+
+    <h2 id="como-accede">Cómo accede Campus, exactamente</h2>
+    <p>
+      La pregunta de fondo suele ser esta, así que la respondemos con detalle.
+    </p>
+    <p>
+      Campus <strong>no tiene una cuenta propia</strong> en ninguna plataforma
+      universitaria. No hay un usuario nuestro consultando en nombre de nadie.
+      El estudiante inicia sesión con sus propias credenciales, en la página de
+      su institución, mediante el mismo inicio de sesión único de Microsoft que
+      usaría en el navegador. Campus opera bajo esa sesión y con esos mismos
+      permisos: puede ver lo que el estudiante ya puede ver, y nada más.
+    </p>
+    <p>
+      Tampoco almacenamos el contenido de los cursos. El material se consulta en
+      el momento y se descarta; los archivos se entregan mediante enlaces de un
+      solo uso que caducan a los diez minutos. El detalle completo está en los
+      <a class="prose-link" href="/terminos/">términos y condiciones</a>.
+    </p>
+
+    <h2 id="integracion-oficial">Sobre la vía de integración oficial</h2>
+    <p>
+      Anthology ofrece un programa de integraciones REST en el que una
+      aplicación se registra en su Developer Portal y el administrador de cada
+      institución la habilita en su instancia de Blackboard Learn.
+    </p>
+    <p>
+      <strong>Campus no está registrado en ese programa hoy.</strong> Lo decimos
+      abiertamente porque preferimos que se sepa por nosotros. Y es la dirección
+      en la que queremos ir: consideramos que el camino correcto a largo plazo
+      es ser una aplicación registrada y habilitada por la propia universidad.
+      Si eres quien puede abrir esa conversación, la sección siguiente es para
+      ti.
+    </p>
+
+    <h2 id="universidades">Si eres administrador o responsable de TI</h2>
+    <p>
+      Puede que hayas llegado aquí porque viste tráfico de Campus en tus
+      registros. Gracias por buscar antes de decidir. Esto es lo que
+      necesitas saber:
+    </p>
+    <ul>
+      <li>
+        <strong>No accedemos a nada privilegiado.</strong> Cada petición ocurre
+        dentro de la sesión autenticada de un estudiante y está limitada a sus
+        propios permisos.
+      </li>
+      <li>
+        <strong>No almacenamos ni redistribuimos contenido de la institución.</strong>
+        No hay copias de cursos, materiales ni calificaciones en nuestros
+        servidores.
+      </li>
+      <li>
+        <strong>Respondemos.</strong> Si necesitas que ajustemos el
+        comportamiento, que limitemos el uso, que suspendamos el acceso a tu
+        institución o que te expliquemos cualquier detalle técnico, escríbenos y
+        lo atendemos.
+      </li>
+      <li>
+        <strong>Queremos hacerlo por la vía formal.</strong> Si tu institución
+        prefiere que Campus opere como aplicación registrada y habilitada desde
+        el panel de integraciones, es exactamente lo que buscamos.
+      </li>
+    </ul>
+    <p>
+      Escríbenos a
+      <a class="prose-link" href="mailto:info@campuscli.com">info@campuscli.com</a>.
+      El código del cliente es público y auditable en
+      <a class="prose-link" href="https://github.com/alejooroncoy/campus-cli" target="_blank" rel="noreferrer">GitHub</a>.
+    </p>
+
+    <h2 id="preguntas">Preguntas frecuentes</h2>
+    <dl class="plain-faq">
+      {faq.map((item) => (
+        <>
+          <dt>{item.q}</dt>
+          <dd>{item.a}</dd>
+        </>
+      ))}
+    </dl>
+  </main>
+</Base>
+
+<style>
+  .plain-faq {
+    margin: 0;
+  }
+
+  .plain-faq dt {
+    margin-top: 22px;
+    color: #17323f;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  .plain-faq dd {
+    margin: 8px 0 0;
+    color: #506d7f;
+    font-size: 18px;
+    line-height: 1.65;
+  }
+
+  @media (max-width: 620px) {
+    .plain-faq dt,
+    .plain-faq dd {
+      font-size: 17px;
+    }
+  }
+</style>

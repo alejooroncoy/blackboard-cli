@@ -1,0 +1,18 @@
+{
+  "name": "campuscli-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "css": "esbuild public/styles.css --minify --outfile=public/styles.min.css --allow-overwrite",
+    "dev": "npm run css && astro dev",
+    "build": "npm run css && astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "^5.18.2"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.1"
+  }
+}

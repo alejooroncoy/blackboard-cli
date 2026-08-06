@@ -1,0 +1,254 @@
+---
+import Base from "../../layouts/Base.astro";
+
+/**
+ * Privacy notice.
+ *
+ * Every claim here is traceable to code: the vault's AES-256-GCM records, the
+ * ninety-day grant ceiling, the ten-minute download tickets, the sha256
+ * pseudonym in metrics.ts, and the in-memory IP counters in founders.ts. The
+ * two processors named — PostHog (us.i.posthog.com) and Cloudflare Turnstile —
+ * are the only external hosts those files talk to.
+ *
+ * Written against Peru's Ley 29733 because that is the law that applies to the
+ * students using this.
+ */
+
+const url = "https://campuscli.com/privacidad/";
+const updated = "2026-08-06";
+const updatedLabel = "6 de agosto de 2026";
+
+const schemas = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Inicio", item: "https://campuscli.com/" },
+      { "@type": "ListItem", position: 2, name: "Política de privacidad", item: url },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Política de privacidad de Campus",
+    description:
+      "Qué datos personales trata Campus, con qué finalidad, cuánto los conserva, con quién los comparte y cómo ejercer tus derechos ARCO.",
+    inLanguage: "es-PE",
+    dateModified: updated,
+    url,
+    publisher: { "@type": "Organization", name: "Campus", url: "https://campuscli.com/" },
+  },
+];
+---
+
+<Base
+  title="Política de privacidad | Campus"
+  description="Qué datos personales trata Campus, con qué finalidad, cuánto los conserva y con quién los comparte. Incluye cómo ejercer tus derechos ARCO en Perú."
+  canonical={url}
+  ogTitle="Política de privacidad de Campus"
+  ogImageAlt="Política de privacidad de Campus"
+  modified={updated}
+  schemas={schemas}
+>
+  <main class="article" data-toc-title="En esta página">
+    <nav class="crumbs" aria-label="Ruta de navegación">
+      <ol>
+        <li><a href="/">Inicio</a></li>
+        <li aria-current="page">Política de privacidad</li>
+      </ol>
+    </nav>
+    <p class="eyebrow">Legal</p>
+    <h1>Política de privacidad</h1>
+    <p class="byline">
+      <span>Última actualización: <time datetime={updated}>{updatedLabel}</time></span>
+    </p>
+
+    <section class="summary" aria-labelledby="resumen-title">
+      <h2 id="resumen-title">En resumen</h2>
+      <ul>
+        <li><strong>Nunca vemos tu contraseña.</strong> Inicias sesión en la página de tu universidad, no en la nuestra.</li>
+        <li><strong>No guardamos el contenido de tus cursos</strong>, ni tus notas, ni tus archivos.</li>
+        <li>Solo conservamos tu sesión <strong>si tú lo activas</strong>, cifrada y por 90 días como máximo.</li>
+        <li>Las métricas van <strong>seudonimizadas</strong>: un hash irreversible, sin contenido académico.</li>
+        <li>Puedes pedirnos <strong>ver, corregir o borrar</strong> tus datos escribiendo a <a class="prose-link" href="mailto:info@campuscli.com">info@campuscli.com</a>.</li>
+      </ul>
+    </section>
+
+    <p class="lede">
+      Campus toca información sensible: tu identidad universitaria y tu vida
+      académica. Esta política explica exactamente qué hacemos con ella, y está
+      escrita desde lo que el software hace de verdad, no desde una plantilla.
+    </p>
+
+    <h2 id="responsable">1. Quién es el responsable</h2>
+    <p>
+      El responsable del tratamiento es <strong>Alejandro Oroncoy</strong>,
+      titular del proyecto Campus (campuscli.com), en Lima, Perú. Puedes
+      contactarnos en
+      <a class="prose-link" href="mailto:info@campuscli.com">info@campuscli.com</a>.
+    </p>
+    <p>
+      Esta política se rige por la <strong>Ley N.º 29733, Ley de Protección de
+      Datos Personales</strong> del Perú y su reglamento.
+    </p>
+
+    <h2 id="que-tratamos">2. Qué datos tratamos y para qué</h2>
+
+    <h3>Material de sesión de tu universidad</h3>
+    <ul>
+      <li><strong>Qué es:</strong> el material que permite mantener tu sesión abierta sin volver a iniciarla.</li>
+      <li><strong>Para qué:</strong> que Campus pueda consultar tu Aula Virtual sin pedirte login en cada consulta.</li>
+      <li><strong>Base legal:</strong> tu consentimiento explícito. Es una función opcional: si no la activas, no se guarda nada.</li>
+      <li><strong>Cuánto:</strong> 90 días como máximo, y menos si tu universidad lo invalida antes. Puedes revocarlo cuando quieras cerrando sesión.</li>
+      <li><strong>Cómo:</strong> cifrado con AES-256-GCM y sellado de forma que el servidor que lo custodia no tiene la clave para abrirlo.</li>
+    </ul>
+
+    <h3>Identificador de cuenta y universidad</h3>
+    <ul>
+      <li><strong>Para qué:</strong> saber a qué persona pertenece una sesión y en qué institución.</li>
+      <li><strong>Base legal:</strong> ejecución del servicio que nos pediste.</li>
+      <li><strong>Cuánto:</strong> mientras tengas una sesión activa con nosotros.</li>
+    </ul>
+
+    <h3>Métricas de uso</h3>
+    <ul>
+      <li><strong>Qué es:</strong> qué herramienta se usó, si funcionó, cuánto tardó y qué tipo de error ocurrió si falló.</li>
+      <li><strong>Para qué:</strong> detectar fallos y saber qué mejorar. No hacemos perfilado ni publicidad.</li>
+      <li><strong>Base legal:</strong> interés legítimo en mantener el servicio funcionando.</li>
+      <li><strong>Cómo:</strong> tu identificador viaja convertido en un hash SHA-256 irreversible. Estas métricas <em>no</em> incluyen contenido de tus cursos, ni nombres de tareas, ni notas.</li>
+    </ul>
+
+    <h3>Formulario de acceso anticipado</h3>
+    <ul>
+      <li><strong>Qué es:</strong> tu nombre, número de WhatsApp, carrera, ciclo e interés.</li>
+      <li><strong>Para qué:</strong> contactarte sobre tu cupo en Campus. Nada más: no lo cedemos ni lo usamos para otra cosa.</li>
+      <li><strong>Base legal:</strong> tu consentimiento al enviar el formulario.</li>
+      <li><strong>Cómo:</strong> cifrado en reposo.</li>
+      <li><strong>Cuánto:</strong> hasta que nos pidas borrarlo, o hasta que el programa de acceso anticipado termine.</li>
+    </ul>
+
+    <h3>Datos técnicos de la conexión</h3>
+    <ul>
+      <li><strong>Qué es:</strong> tu dirección IP, usada para limitar la frecuencia de peticiones y frenar abusos.</li>
+      <li><strong>Base legal:</strong> interés legítimo en la seguridad del servicio.</li>
+      <li><strong>Cuánto:</strong> se mantiene solo en memoria durante la ventana de control (una hora como máximo) y no se guarda en disco.</li>
+    </ul>
+
+    <h2 id="que-no">3. Qué no tratamos, en ningún caso</h2>
+    <ul>
+      <li>
+        <strong>Tu contraseña.</strong> El inicio de sesión ocurre en el
+        proveedor de identidad de tu universidad (Microsoft). Nunca pasa por
+        nuestros servidores.
+      </li>
+      <li>
+        <strong>El contenido de tus cursos.</strong> Tareas, notas, anuncios y
+        materiales se consultan en el momento y se descartan. No hay copias en
+        nuestros servidores.
+      </li>
+      <li>
+        <strong>Los archivos que descargas.</strong> Se entregan mediante un
+        enlace de un solo uso que caduca a los 10 minutos y no conserva copia.
+      </li>
+      <li>
+        <strong>Tus conversaciones con el asistente.</strong> Viven en Claude,
+        ChatGPT o el cliente que uses, bajo la política de privacidad de ese
+        proveedor, no la nuestra.
+      </li>
+      <li>
+        <strong>Datos sensibles.</strong> No pedimos ni tratamos datos de salud,
+        origen étnico, opiniones políticas, religión, vida sexual ni biometría.
+      </li>
+    </ul>
+
+    <h2 id="terceros">4. Con quién compartimos</h2>
+    <p>
+      <strong>No vendemos tus datos.</strong> No los cedemos a terceros con
+      fines comerciales ni publicitarios. Solo trabajamos con dos proveedores
+      que actúan como encargados del tratamiento:
+    </p>
+    <ul>
+      <li>
+        <strong>PostHog</strong> (Estados Unidos) — recibe las métricas de uso
+        seudonimizadas descritas arriba.
+      </li>
+      <li>
+        <strong>Cloudflare Turnstile</strong> (Estados Unidos) — verifica que
+        quien envía el formulario de acceso anticipado es una persona y no un
+        bot.
+      </li>
+    </ul>
+    <p>
+      Ambos están fuera del Perú, así que existe un flujo transfronterizo de
+      datos. Al aceptar esta política consientes esa transferencia. Ninguno de
+      los dos recibe contenido de tus cursos ni credenciales.
+    </p>
+    <p>
+      También podríamos entregar información si nos lo exige una autoridad
+      competente mediante un requerimiento válido.
+    </p>
+
+    <h2 id="seguridad">5. Cómo protegemos esto</h2>
+    <ul>
+      <li>Todo el tráfico viaja cifrado (HTTPS).</li>
+      <li>El material de sesión se guarda con cifrado autenticado AES-256-GCM y sellado de modo que el servidor que lo custodia no puede abrirlo. Un compromiso total de ese servidor no expone ninguna credencial universitaria.</li>
+      <li>Los datos del formulario se guardan cifrados en reposo.</li>
+      <li>Los enlaces de descarga son de un solo uso y caducan a los 10 minutos.</li>
+      <li>Los identificadores en métricas van convertidos en hash irreversible.</li>
+    </ul>
+    <p>
+      Ningún sistema es infalible. Si detectamos una brecha que afecte tus
+      datos, te lo comunicaremos y lo notificaremos a la autoridad cuando
+      corresponda.
+    </p>
+
+    <h2 id="derechos">6. Tus derechos</h2>
+    <p>
+      La Ley 29733 te reconoce los derechos de <strong>acceso, rectificación,
+      cancelación y oposición</strong> (ARCO), además de revocar tu
+      consentimiento en cualquier momento.
+    </p>
+    <p>En concreto, puedes pedirnos:</p>
+    <ul>
+      <li>Que te digamos qué datos tuyos tenemos.</li>
+      <li>Que corrijamos algo que esté mal.</li>
+      <li>Que borremos tus datos, incluida tu sesión guardada y tu registro en el formulario.</li>
+      <li>Que dejemos de tratarlos para una finalidad concreta.</li>
+    </ul>
+    <p>
+      Escríbenos a
+      <a class="prose-link" href="mailto:info@campuscli.com">info@campuscli.com</a>
+      desde el contacto con el que te registraste. Respondemos en un plazo
+      máximo de 20 días.
+    </p>
+    <p>
+      Si consideras que no atendimos tu solicitud, puedes acudir a la
+      <strong>Autoridad Nacional de Protección de Datos Personales</strong> del
+      Ministerio de Justicia y Derechos Humanos del Perú.
+    </p>
+
+    <h2 id="menores">7. Menores de edad</h2>
+    <p>
+      Campus está dirigido a estudiantes universitarios. Si eres menor de edad,
+      necesitas el consentimiento de tu padre, madre o tutor para usarlo. Si
+      detectamos datos de un menor sin ese consentimiento, los eliminamos.
+    </p>
+
+    <h2 id="cambios">8. Cambios en esta política</h2>
+    <p>
+      Si cambiamos algo relevante, actualizaremos la fecha del encabezado y te
+      avisaremos por el canal por el que te registraste. Si el cambio amplía las
+      finalidades para las que tratamos tus datos, te pediremos consentimiento de
+      nuevo.
+    </p>
+
+    <h2 id="contacto">9. Contacto</h2>
+    <p>
+      Para cualquier duda o solicitud sobre tus datos personales, escríbenos a
+      <a class="prose-link" href="mailto:info@campuscli.com">info@campuscli.com</a>.
+      Puedes leer también los
+      <a class="prose-link" href="/terminos/">términos y condiciones</a> y el
+      <a class="prose-link" href="/no-afiliacion/">aviso de no afiliación</a>.
+    </p>
+  </main>
+</Base>
