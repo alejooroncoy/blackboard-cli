@@ -213,6 +213,11 @@ function setUpArticleReading() {
     // "En esta guía" is right for a blog post and wrong for the terms page, so
     // a page can name its own index.
     `<p class="toc__title">${main.dataset.tocTitle || "En esta guía"}</p><ol class="toc__list">` +
+    // A single bar that travels between entries instead of one accent per
+    // entry blinking on and off. It rides inside the list so it keeps its
+    // place when the list itself scrolls, and it is an <li> because that is
+    // the only element an <ol> may contain.
+    '<li class="toc__marker" aria-hidden="true"></li>' +
     headings
       .map(
         (heading) =>
@@ -233,11 +238,26 @@ function setUpArticleReading() {
     [...nav.querySelectorAll("a")].map((link) => [link.getAttribute("href").slice(1), link]),
   );
 
+  const marker = nav.querySelector(".toc__marker");
+
+  /**
+   * Scaled rather than resized: `height` is a layout property, and animating
+   * it on every section change makes the browser lay the list out again mid
+   * transition. A one-pixel bar stretched by transform costs nothing.
+   */
+  const placeMarker = () => {
+    const current = nav.querySelector(".toc__list a.is-active");
+    if (!current || !marker) return;
+    const item = current.parentElement;
+    marker.style.transform = `translateY(${item.offsetTop}px) scaleY(${item.offsetHeight})`;
+  };
+
   let active;
   const setActive = (id) => {
     if (id === active) return;
     active = id;
     links.forEach((link, key) => link.classList.toggle("is-active", key === id));
+    placeMarker();
   };
 
   // Mark the last heading that has passed the top of the screen — the section
@@ -275,18 +295,28 @@ function setUpArticleReading() {
     markCurrent();
   };
   onScroll();
+  // Placed before the transition is allowed, so the bar starts where it
+  // belongs instead of flying in from the top of the list on load.
+  placeMarker();
+  requestAnimationFrame(() => nav.classList.add("toc--ready"));
+
+  const reposition = () => {
+    onScroll();
+    placeMarker();
+  };
+
   window.addEventListener("scroll", onScroll, { passive: true });
   // Scrolling is not the only thing that moves a heading past the line: a
   // rotated phone reflows every one of them, and a page that arrives already
   // scrolled — a deep link, or coming back through history — settles after
   // this runs and then never fires a scroll event to correct itself.
-  window.addEventListener("resize", onScroll, { passive: true });
-  window.addEventListener("load", onScroll);
+  window.addEventListener("resize", reposition, { passive: true });
+  window.addEventListener("load", reposition);
   // And the page itself can grow after the last scroll event — a lazy image
   // below the fold lands, the document gets taller, and the position computed
   // a moment ago no longer describes where the reader is.
   if (typeof ResizeObserver === "function") {
-    new ResizeObserver(onScroll).observe(document.body);
+    new ResizeObserver(reposition).observe(document.body);
   }
 
   addPageActions();

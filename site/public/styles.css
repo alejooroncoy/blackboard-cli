@@ -1321,3 +1321,48 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
     padding: 20px;
   }
 }
+
+/* ── The travelling marker ────────────────────────────────────────────────
+   One bar that moves between entries, instead of an accent per entry
+   switching on and off. Reading is continuous, so the thing that says where
+   you are should move rather than blink.
+
+   It is scaled, not resized: `height` is a layout property and animating it
+   would relayout the list on every section change. A one-pixel bar stretched
+   by transform costs nothing and stays smooth. */
+.toc__list {
+  position: relative;
+}
+
+.toc__marker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  transform: translateY(0) scaleY(0);
+  transform-origin: 0 0;
+  background: #087f5b;
+  /* Held still until the first placement, so it does not fly in from the top
+     of the list on load. */
+  transition: none;
+}
+
+.toc--ready .toc__marker {
+  transition: transform 300ms cubic-bezier(0.32, 0.72, 0.28, 1);
+}
+
+/* The bar draws the accent now, so the entry underneath stops drawing its
+   own: two greens in the same two pixels, one of them jumping. */
+.toc__list a.is-active,
+.toc__list a.is-active:hover {
+  border-left-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toc--ready .toc__marker {
+    transition: none;
+  }
+}
