@@ -1,9 +1,21 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 import type { Session } from '../types.js';
+import { laneFor, paceFor } from './pace.js';
 
 const BASE_URL = 'https://aulavirtual.upc.edu.pe';
 
-export function createClient(session: Session): AxiosInstance {
+export type ClientOptions = {
+  /**
+   * Identifies whose traffic this is, for processes serving several students.
+   *
+   * The CLI leaves it out: one process is one person. The hosted relay passes
+   * the student's key so that one person's downloads never queue behind
+   * another's, while each person still looks like a single browser.
+   */
+  paceKey?: string;
+};
+
+export function createClient(session: Session, options: ClientOptions = {}): AxiosInstance {
   // Build cookie header string
   const cookieStr = session.cookies
     .filter((c) => {
@@ -23,6 +35,14 @@ export function createClient(session: Session): AxiosInstance {
     },
     withCredentials: true,
   });
+
+  // Pacing goes on the adapter rather than on interceptors because the slot has
+  // to come back however the request ends. An interceptor pair would have to
+  // match each response to its request by hand, and any request that never
+  // settled would hold its slot until the process exited.
+  const pace = paceFor(options.paceKey ?? "local");
+  const base = axios.getAdapter(client.defaults.adapter);
+  client.defaults.adapter = (config) => pace.run(laneFor(config), () => base(config));
 
   // Intercept 401 to give a helpful message
   client.interceptors.response.use(
