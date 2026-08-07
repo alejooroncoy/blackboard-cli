@@ -1,0 +1,48 @@
+---
+import Base from "../../../layouts/Base.astro";
+import clients from "../../../data/mcp-clients.json";
+
+/**
+ * One page per assistant that can talk to Blackboard, plus the comparison.
+ *
+ * These lived as standalone html in the pre-Astro landing directory and stopped
+ * being served when the site moved, so they answered 404 while still being the
+ * pages someone lands on searching "blackboard mcp cursor". The markup is the
+ * one that was written for them; what this route adds is the layout, the
+ * Markdown twin and the sitemap entry every other page already had.
+ *
+ * A single dynamic route rather than seven near-identical files: the pages
+ * differ in prose and metadata, not in structure, and seven copies of the same
+ * wrapper is how two of them end up out of sync.
+ */
+const bodies = import.meta.glob("../../../html/blackboard-mcp/clients/*.html", {
+  query: "?raw",
+  import: "default",
+  eager: true,
+}) as Record<string, string>;
+
+export function getStaticPaths() {
+  return Object.keys(clients).map((client) => ({ params: { client } }));
+}
+
+const { client } = Astro.params;
+const data = clients[client as keyof typeof clients];
+const body = bodies[`../../../html/blackboard-mcp/clients/${client}.html`];
+
+// A missing body would otherwise ship an empty page that still returns 200,
+// which is worse than the 404 this route exists to fix.
+if (!data || !body) throw new Error(`Sin contenido para el cliente "${client}"`);
+---
+
+<Base
+  title={data.title}
+  description={data.description}
+  canonical={data.canonical}
+  ogTitle={data.ogTitle ?? data.title}
+  ogDescription={data.ogDescription ?? data.description}
+  ogImageAlt={data.ogImageAlt}
+  markdownUrl={`${data.canonical}index.md`}
+  schemas={data.schemas}
+>
+  <Fragment set:html={body} />
+</Base>

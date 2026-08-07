@@ -1366,3 +1366,48 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
     transition: none;
   }
 }
+
+/* Tables in a document page.
+ *
+ * The comparison of MCP servers is the only table on the site, and it arrived
+ * with the per-client pages, whose styling used to live in a <style> block on
+ * each page. Scoped to .doc-page so it stays with the pages that have tables
+ * instead of becoming a site-wide default nothing else asked for. */
+.doc-page .table-wrap {
+  /* The table has more columns than a phone is wide; it scrolls inside this
+     box rather than making the whole page scroll sideways. */
+  overflow-x: auto;
+  margin: 26px 0;
+}
+.doc-page table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+}
+.doc-page table th,
+.doc-page table td {
+  padding: 11px 14px;
+  border-bottom: 1px solid #dfeaee;
+  text-align: left;
+  vertical-align: top;
+}
+.doc-page table th {
+  color: #17323f;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.doc-page table td {
+  color: #506d7f;
+  line-height: 1.5;
+}
+.doc-page table code {
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #eef4f6;
+  color: #17323f;
+  font-size: 14px;
+  white-space: nowrap;
+}

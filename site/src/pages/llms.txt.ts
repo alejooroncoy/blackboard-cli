@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
+import clients from "../data/mcp-clients.json";
 
 /**
  * The map we hand to assistants: what this site is, and where the text lives.
@@ -18,6 +19,12 @@ export const GET: APIRoute = async () => {
     return [`- [${post.data.title}](${url}) — ${post.data.description}`, `  Markdown: ${url}index.md`];
   });
 
+  // Listed from the same data the pages render, so adding an assistant never
+  // leaves this file a step behind the way the hand-written version was.
+  const perClient = Object.values(clients).map(
+    (client) => `- [${client.title.split("|")[0].trim()}](${client.canonical}) (Markdown: ${client.canonical}index.md)`,
+  );
+
   const body = `# Campus
 
 Campus is an independent tool for students using Blackboard UPC in Peru.
@@ -32,6 +39,13 @@ Campus is an independent tool for students using Blackboard UPC in Peru.
 - Terms of service: https://campuscli.com/terminos/
 - Privacy policy: https://campuscli.com/privacidad/
 - Source code: https://github.com/alejooroncoy/campus-cli
+
+## Setup per assistant
+
+Step-by-step for connecting Blackboard UPC to each client, plus a comparison of
+the options that exist.
+
+${perClient.join("\n")}
 
 ## Guides (Markdown available)
 

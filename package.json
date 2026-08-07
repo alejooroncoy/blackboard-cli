@@ -33,9 +33,7 @@
     "prepublishOnly": "npm run build",
     "test": "tsx --test tests/**/*.test.ts",
     "dev": "tsx src/index.ts",
-    "start": "node dist/index.js",
-    "landing:css": "esbuild landing/styles.css --minify --outfile=landing/styles.min.css --allow-overwrite",
-    "landing:build": "node landing/tools/build.mjs"
+    "start": "node dist/index.js"
   },
   "keywords": [
     "campus",

@@ -1,0 +1,733 @@
+{
+  "cursor": {
+    "title": "Blackboard MCP en Cursor | Conecta tu Aula Virtual UPC",
+    "description": "Cómo conectar Blackboard UPC con Cursor usando MCP: instalación, archivo de configuración, verificación y qué preguntar. Guía paso a paso de Campus.",
+    "canonical": "https://campuscli.com/blackboard-mcp/cursor/",
+    "ogTitle": "Blackboard MCP en Cursor | Conecta tu Aula Virtual UPC",
+    "ogDescription": "Cómo conectar Blackboard UPC con Cursor usando MCP: instalación, archivo de configuración, verificación y qué preguntar. Guía paso a paso de Campus.",
+    "ogImageAlt": "Blackboard MCP en Cursor",
+    "schemas": [
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "Cómo conectar Blackboard UPC con Cursor usando MCP",
+        "totalTime": "PT5M",
+        "tool": [
+          {
+            "@type": "HowToTool",
+            "name": "Node.js 18 o superior"
+          },
+          {
+            "@type": "HowToTool",
+            "name": "Una cuenta activa de UPC con acceso a Aula Virtual"
+          },
+          {
+            "@type": "HowToTool",
+            "name": "Cursor"
+          }
+        ],
+        "step": [
+          {
+            "@type": "HowToStep",
+            "name": "Inicia sesión en tu campus",
+            "text": "Ejecuta npx campus-cli account login. Se abre el navegador con el SSO de Microsoft de UPC.",
+            "url": "https://campuscli.com/blackboard-mcp/cursor/#pasos"
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Registra el servidor en Cursor",
+            "text": "Agrega la configuración de campus en ~/.cursor/mcp.json.",
+            "url": "https://campuscli.com/blackboard-mcp/cursor/#configuracion"
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Verifica la conexión",
+            "text": "Reinicia el cliente y confirma que las herramientas blackboard_ aparecen disponibles.",
+            "url": "https://campuscli.com/blackboard-mcp/cursor/#verificar"
+          }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Inicio",
+            "item": "https://campuscli.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Blackboard MCP",
+            "item": "https://campuscli.com/blackboard-mcp/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Cursor",
+            "item": "https://campuscli.com/blackboard-mcp/cursor/"
+          }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "¿Dónde va el archivo de configuración MCP de Cursor?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "En ~/.cursor/mcp.json."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Necesito instalar algo además de Cursor?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Solo Node.js 18 o superior. El comando npx descarga campus-cli la primera vez que se ejecuta."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Qué hago si las herramientas no aparecen?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Cierra el cliente por completo y vuelve a abrirlo, verifica que el JSON no tenga comas de más y confirma que npx campus-cli mcp arranca sin error en la terminal."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "claude-code": {
+    "title": "Blackboard MCP en Claude Code | Conecta tu Aula Virtual UPC",
+    "description": "Cómo conectar Blackboard UPC con Claude Code usando MCP: instalación, archivo de configuración, verificación y qué preguntar. Guía paso a paso de Campus.",
+    "canonical": "https://campuscli.com/blackboard-mcp/claude-code/",
+    "ogTitle": "Blackboard MCP en Claude Code | Conecta tu Aula Virtual UPC",
+    "ogDescription": "Cómo conectar Blackboard UPC con Claude Code usando MCP: instalación, archivo de configuración, verificación y qué preguntar. Guía paso a paso de Campus.",
+    "ogImageAlt": "Blackboard MCP en Claude Code",
+    "schemas": [
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "Cómo conectar Blackboard UPC con Claude Code usando MCP",
+        "totalTime": "PT5M",
+        "tool": [
+          {
+            "@type": "HowToTool",
+            "name": "Node.js 18 o superior"
+          },
+          {
+            "@type": "HowToTool",
+            "name": "Una cuenta activa de UPC con acceso a Aula Virtual"
+          },
+          {
+            "@type": "HowToTool",
+            "name": "Claude Code"
+          }
+        ],
+        "step": [
+          {
+            "@type": "HowToStep",
+            "name": "Inicia sesión en tu campus",
+            "text": "Ejecuta npx campus-cli account login. Se abre el navegador con el SSO de Microsoft de UPC.",
+            "url": "https://campuscli.com/blackboard-mcp/claude-code/#pasos"
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Registra el servidor en Claude Code",
+            "text": "Agrega la configuración de campus en .mcp.json (en la raíz de tu proyecto).",
+            "url": "https://campuscli.com/blackboard-mcp/claude-code/#configuracion"
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Verifica la conexión",
+            "text": "Reinicia el cliente y confirma que las herramientas blackboard_ aparecen disponibles.",
+            "url": "https://campuscli.com/blackboard-mcp/claude-code/#verificar"
+          }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Inicio",
+            "item": "https://campuscli.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Blackboard MCP",
+            "item": "https://campuscli.com/blackboard-mcp/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Claude Code",
+            "item": "https://campuscli.com/blackboard-mcp/claude-code/"
+          }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "¿Dónde va el archivo de configuración MCP de Claude Code?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "En .mcp.json (en la raíz de tu proyecto)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Necesito instalar algo además de Claude Code?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Solo Node.js 18 o superior. El comando npx descarga campus-cli la primera vez que se ejecuta."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Qué hago si las herramientas no aparecen?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Cierra el cliente por completo y vuelve a abrirlo, verifica que el JSON no tenga comas de más y confirma que npx campus-cli mcp arranca sin error en la terminal."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "claude-desktop": {
+    "title": "Blackboard MCP en Claude Desktop | Conecta tu Aula Virtual UPC",
+    "description": "Cómo conectar Blackboard UPC con Claude Desktop usando MCP: instalación, archivo de configuración, verificación y qué preguntar. Guía paso a paso de Campus.",
+    "canonical": "https://campuscli.com/blackboard-mcp/claude-desktop/",
+    "ogTitle": "Blackboard MCP en Claude Desktop | Conecta tu Aula Virtual UPC",
+    "ogDescription": "Cómo conectar Blackboard UPC con Claude Desktop usando MCP: instalación, archivo de configuración, verificación y qué preguntar. Guía paso a paso de Campus.",
+    "ogImageAlt": "Blackboard MCP en Claude Desktop",
+    "schemas": [
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "Cómo conectar Blackboard UPC con Claude Desktop usando MCP",
+        "totalTime": "PT5M",
+        "tool": [
+          {
+            "@type": "HowToTool",
+            "name": "Node.js 18 o superior"
+          },
+          {
+            "@type": "HowToTool",
+            "name": "Una cuenta activa de UPC con acceso a Aula Virtual"
+          },
+          {
+            "@type": "HowToTool",
+            "name": "Claude Desktop"
+          }
+        ],
+        "step": [
+          {
+            "@type": "HowToStep",
+            "name": "Inicia sesión en tu campus",
+            "text": "Ejecuta npx campus-cli account login. Se abre el navegador con el SSO de Microsoft de UPC.",
+            "url": "https://campuscli.com/blackboard-mcp/claude-desktop/#pasos"
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Registra el servidor en Claude Desktop",
+            "text": "Agrega la configuración de campus en ~/Library/Application Support/Claude/claude_desktop_config.json.",
+            "url": "https://campuscli.com/blackboard-mcp/claude-desktop/#configuracion"
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Verifica la conexión",
+            "text": "Reinicia el cliente y confirma que las herramientas blackboard_ aparecen disponibles.",
+            "url": "https://campuscli.com/blackboard-mcp/claude-desktop/#verificar"
+          }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Inicio",
+            "item": "https://campuscli.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Blackboard MCP",
+            "item": "https://campuscli.com/blackboard-mcp/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Claude Desktop",
+            "item": "https://campuscli.com/blackboard-mcp/claude-desktop/"
+          }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "¿Dónde va el archivo de configuración MCP de Claude Desktop?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "En ~/Library/Application Support/Claude/claude_desktop_config.json."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Necesito instalar algo además de Claude Desktop?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Solo Node.js 18 o superior. El comando npx descarga campus-cli la primera vez que se ejecuta."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Qué hago si las herramientas no aparecen?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Cierra el cliente por completo y vuelve a abrirlo, verifica que el JSON no tenga comas de más y confirma que npx campus-cli mcp arranca sin error en la terminal."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "codex": {
+    "title": "Blackboard MCP en OpenAI Codex CLI | Conecta tu Aula Virtual UPC",
+    "description": "Cómo conectar Blackboard UPC con OpenAI Codex CLI usando MCP: instalación, archivo de configuración, verificación y qué preguntar. Guía paso a paso de Campus.",
+    "canonical": "https://campuscli.com/blackboard-mcp/codex/",
+    "ogTitle": "Blackboard MCP en OpenAI Codex CLI | Conecta tu Aula Virtual UPC",
+    "ogDescription": "Cómo conectar Blackboard UPC con OpenAI Codex CLI usando MCP: instalación, archivo de configuración, verificación y qué preguntar. Guía paso a paso de Campus.",
+    "ogImageAlt": "Blackboard MCP en OpenAI Codex CLI",
+    "schemas": [
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "Cómo conectar Blackboard UPC con OpenAI Codex CLI usando MCP",
+        "totalTime": "PT5M",
+        "tool": [
+          {
+            "@type": "HowToTool",
+            "name": "Node.js 18 o superior"
+          },
+          {
+            "@type": "HowToTool",
+            "name": "Una cuenta activa de UPC con acceso a Aula Virtual"
+          },
+          {
+            "@type": "HowToTool",
+            "name": "OpenAI Codex CLI"
+          }
+        ],
+        "step": [
+          {
+            "@type": "HowToStep",
+            "name": "Inicia sesión en tu campus",
+            "text": "Ejecuta npx campus-cli account login. Se abre el navegador con el SSO de Microsoft de UPC.",
+            "url": "https://campuscli.com/blackboard-mcp/codex/#pasos"
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Registra el servidor en OpenAI Codex CLI",
+            "text": "Agrega la configuración de campus en ~/.codex/config.toml.",
+            "url": "https://campuscli.com/blackboard-mcp/codex/#configuracion"
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Verifica la conexión",
+            "text": "Reinicia el cliente y confirma que las herramientas blackboard_ aparecen disponibles.",
+            "url": "https://campuscli.com/blackboard-mcp/codex/#verificar"
+          }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Inicio",
+            "item": "https://campuscli.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Blackboard MCP",
+            "item": "https://campuscli.com/blackboard-mcp/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "OpenAI Codex CLI",
+            "item": "https://campuscli.com/blackboard-mcp/codex/"
+          }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "¿Dónde va el archivo de configuración MCP de OpenAI Codex CLI?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "En ~/.codex/config.toml."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Necesito instalar algo además de OpenAI Codex CLI?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Solo Node.js 18 o superior. El comando npx descarga campus-cli la primera vez que se ejecuta."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Qué hago si las herramientas no aparecen?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Cierra el cliente por completo y vuelve a abrirlo, verifica que el JSON no tenga comas de más y confirma que npx campus-cli mcp arranca sin error en la terminal."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "github-copilot": {
+    "title": "Blackboard MCP en GitHub Copilot en VS Code | Conecta tu Aula Virtual UPC",
+    "description": "Cómo conectar Blackboard UPC con GitHub Copilot en VS Code usando MCP: instalación, archivo de configuración, verificación y qué preguntar. Guía paso a paso de Campus.",
+    "canonical": "https://campuscli.com/blackboard-mcp/github-copilot/",
+    "ogTitle": "Blackboard MCP en GitHub Copilot en VS Code | Conecta tu Aula Virtual UPC",
+    "ogDescription": "Cómo conectar Blackboard UPC con GitHub Copilot en VS Code usando MCP: instalación, archivo de configuración, verificación y qué preguntar. Guía paso a paso de Campus.",
+    "ogImageAlt": "Blackboard MCP en GitHub Copilot en VS Code",
+    "schemas": [
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "Cómo conectar Blackboard UPC con GitHub Copilot en VS Code usando MCP",
+        "totalTime": "PT5M",
+        "tool": [
+          {
+            "@type": "HowToTool",
+            "name": "Node.js 18 o superior"
+          },
+          {
+            "@type": "HowToTool",
+            "name": "Una cuenta activa de UPC con acceso a Aula Virtual"
+          },
+          {
+            "@type": "HowToTool",
+            "name": "GitHub Copilot en VS Code"
+          }
+        ],
+        "step": [
+          {
+            "@type": "HowToStep",
+            "name": "Inicia sesión en tu campus",
+            "text": "Ejecuta npx campus-cli account login. Se abre el navegador con el SSO de Microsoft de UPC.",
+            "url": "https://campuscli.com/blackboard-mcp/github-copilot/#pasos"
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Registra el servidor en GitHub Copilot en VS Code",
+            "text": "Agrega la configuración de campus en .vscode/mcp.json.",
+            "url": "https://campuscli.com/blackboard-mcp/github-copilot/#configuracion"
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Verifica la conexión",
+            "text": "Reinicia el cliente y confirma que las herramientas blackboard_ aparecen disponibles.",
+            "url": "https://campuscli.com/blackboard-mcp/github-copilot/#verificar"
+          }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Inicio",
+            "item": "https://campuscli.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Blackboard MCP",
+            "item": "https://campuscli.com/blackboard-mcp/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "GitHub Copilot en VS Code",
+            "item": "https://campuscli.com/blackboard-mcp/github-copilot/"
+          }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "¿Dónde va el archivo de configuración MCP de GitHub Copilot en VS Code?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "En .vscode/mcp.json."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Necesito instalar algo además de GitHub Copilot en VS Code?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Solo Node.js 18 o superior. El comando npx descarga campus-cli la primera vez que se ejecuta."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Qué hago si las herramientas no aparecen?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Cierra el cliente por completo y vuelve a abrirlo, verifica que el JSON no tenga comas de más y confirma que npx campus-cli mcp arranca sin error en la terminal."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "windsurf": {
+    "title": "Blackboard MCP en Windsurf | Conecta tu Aula Virtual UPC",
+    "description": "Cómo conectar Blackboard UPC con Windsurf usando MCP: instalación, archivo de configuración, verificación y qué preguntar. Guía paso a paso de Campus.",
+    "canonical": "https://campuscli.com/blackboard-mcp/windsurf/",
+    "ogTitle": "Blackboard MCP en Windsurf | Conecta tu Aula Virtual UPC",
+    "ogDescription": "Cómo conectar Blackboard UPC con Windsurf usando MCP: instalación, archivo de configuración, verificación y qué preguntar. Guía paso a paso de Campus.",
+    "ogImageAlt": "Blackboard MCP en Windsurf",
+    "schemas": [
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "Cómo conectar Blackboard UPC con Windsurf usando MCP",
+        "totalTime": "PT5M",
+        "tool": [
+          {
+            "@type": "HowToTool",
+            "name": "Node.js 18 o superior"
+          },
+          {
+            "@type": "HowToTool",
+            "name": "Una cuenta activa de UPC con acceso a Aula Virtual"
+          },
+          {
+            "@type": "HowToTool",
+            "name": "Windsurf"
+          }
+        ],
+        "step": [
+          {
+            "@type": "HowToStep",
+            "name": "Inicia sesión en tu campus",
+            "text": "Ejecuta npx campus-cli account login. Se abre el navegador con el SSO de Microsoft de UPC.",
+            "url": "https://campuscli.com/blackboard-mcp/windsurf/#pasos"
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Registra el servidor en Windsurf",
+            "text": "Agrega la configuración de campus en ~/.codeium/windsurf/mcp_config.json.",
+            "url": "https://campuscli.com/blackboard-mcp/windsurf/#configuracion"
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Verifica la conexión",
+            "text": "Reinicia el cliente y confirma que las herramientas blackboard_ aparecen disponibles.",
+            "url": "https://campuscli.com/blackboard-mcp/windsurf/#verificar"
+          }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Inicio",
+            "item": "https://campuscli.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Blackboard MCP",
+            "item": "https://campuscli.com/blackboard-mcp/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Windsurf",
+            "item": "https://campuscli.com/blackboard-mcp/windsurf/"
+          }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "¿Dónde va el archivo de configuración MCP de Windsurf?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "En ~/.codeium/windsurf/mcp_config.json."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Necesito instalar algo además de Windsurf?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Solo Node.js 18 o superior. El comando npx descarga campus-cli la primera vez que se ejecuta."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Qué hago si las herramientas no aparecen?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Cierra el cliente por completo y vuelve a abrirlo, verifica que el JSON no tenga comas de más y confirma que npx campus-cli mcp arranca sin error en la terminal."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "alternativas": {
+    "title": "Servidores MCP para Blackboard: qué opciones existen (2026) | Campus",
+    "description": "Comparación de los servidores MCP que conectan Blackboard Learn con asistentes de IA: institucionales, de estudiante y el patrón blackboard (que no es el LMS). Qué requiere cada uno y para quién sirve.",
+    "canonical": "https://campuscli.com/blackboard-mcp/alternativas/",
+    "ogTitle": "Servidores MCP para Blackboard: qué opciones existen (2026)",
+    "ogDescription": "Comparación de los servidores MCP que conectan Blackboard Learn con asistentes de IA: institucionales, de estudiante y el patrón blackboard (que no es el LMS). Qué requiere cada uno y para quién sirve.",
+    "ogImageAlt": "Comparación de servidores MCP para Blackboard",
+    "schemas": [
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "Servidores MCP para Blackboard: qué opciones existen (2026)",
+        "description": "Comparación de los servidores MCP que conectan Blackboard Learn con asistentes de IA: institucionales, de estudiante y el patrón blackboard (que no es el LMS). Qué requiere cada uno y para quién sirve.",
+        "inLanguage": "es",
+        "datePublished": "2026-08-06",
+        "dateModified": "2026-08-06",
+        "author": {
+          "@type": "Person",
+          "name": "Alejandro Oroncoy"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Campus",
+          "url": "https://campuscli.com/"
+        },
+        "mainEntityOfPage": "https://campuscli.com/blackboard-mcp/alternativas/"
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Inicio",
+            "item": "https://campuscli.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Blackboard MCP",
+            "item": "https://campuscli.com/blackboard-mcp/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Alternativas",
+            "item": "https://campuscli.com/blackboard-mcp/alternativas/"
+          }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "¿Cuántos tipos de servidor MCP de Blackboard existen?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Tres, más un homónimo. Los institucionales envuelven la API oficial y requieren credenciales OAuth2 del administrador del LMS. Los de estudiante usan la sesión del propio alumno. Los proyectos por universidad son conectores personales, normalmente sin mantenimiento. Y aparte está el patrón blackboard, una técnica de memoria compartida entre agentes que no tiene relación con Blackboard Learn."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Puede un estudiante usar un servidor MCP institucional de Blackboard?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "En la práctica no. Requieren una developer key emitida por el administrador del LMS, con rol de docente o de sistema."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Qué es el patrón blackboard en MCP?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Es una arquitectura de coordinación entre varios agentes de IA que comparten una pizarra común de hechos. No tiene ninguna relación con Blackboard Learn, el sistema de gestión de aprendizaje. Comparten el nombre y nada más."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Cuál conviene para consultar mis notas y tareas?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Uno de estudiante, que autentique con tu propia sesión. Campus es la opción implementada para Blackboard UPC."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Qué pasa si mi universidad no está soportada?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Hoy solo Blackboard UPC está implementado. Canvas y Moodle están en el roadmap, y el repositorio acepta issues para coordinar soporte de otras universidades."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Esta comparativa es imparcial?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Campus es nuestro proyecto, así que juzga en consecuencia. Los proyectos que mencionamos están enlazados en la tabla para que compruebes tú mismo lo que decimos de ellos."
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

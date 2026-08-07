@@ -1,0 +1,75 @@
+<main class="doc-page" data-toc data-toc-title="En esta página">
+  <nav class="crumbs" aria-label="Ruta de navegación"><ol><li><a href="/">Inicio</a></li><li><a href="/blackboard-mcp/">Blackboard MCP</a></li><li aria-current="page">Cursor</li></ol></nav>
+  <p class="eyebrow">Blackboard MCP · Cursor</p><h1>Blackboard UPC en Cursor.</h1>
+  <p>Esta guía conecta tu Aula Virtual UPC con Cursor, el editor con IA mediante Model Context Protocol. Al terminar podrás preguntarle por tus cursos, tareas, notas y materiales sin abrir Blackboard.</p>
+  <button class="button" type="button" data-open-founder>Solicitar acceso anticipado</button>
+
+  <h2 id="requisitos">Antes de empezar</h2>
+  <p>Necesitas tres cosas: Node.js 18 o superior instalado, una cuenta activa de UPC con acceso a Aula Virtual y Cursor ya funcionando en tu equipo. El proceso completo toma unos cinco minutos y se hace una sola vez.</p>
+
+  <h2 id="pasos">1. Inicia sesión en tu campus</h2>
+  <p>En una terminal, ejecuta:</p>
+  <pre class="code"><code>npx campus-cli account login</code></pre>
+  <p>Se abre el navegador y encadena el login de Microsoft de UPC, con MFA si tu cuenta lo pide. Si Microsoft muestra <em>«Stay signed in?»</em>, marca la casilla y acepta: así la sesión se mantiene y no tienes que repetir el login cada día. Todo el flujo corre en tu máquina, no pasa por ningún servidor de Campus.</p>
+
+  <h2 id="configuracion">2. Registra el servidor en Cursor</h2>
+  <p>Ve a <strong>Settings → MCP → Add new MCP server</strong>, o edita directamente <code>~/.cursor/mcp.json</code>.</p>
+  
+  <pre class="code"><code>{
+  "mcpServers": {
+    "campus": {
+      "command": "npx",
+      "args": ["campus-cli", "mcp"]
+    }
+  }
+}</code></pre>
+
+  <h2 id="verificar">3. Verifica la conexión</h2>
+  <p>En <strong>Settings → MCP</strong>, la entrada <code>campus</code> debe aparecer con un indicador verde y la lista de herramientas <code>blackboard_*</code>.</p>
+  <p>Luego prueba con una pregunta real:</p>
+  <div class="card"><ul>
+    <li>«¿Qué tareas tengo pendientes esta semana?»</li>
+    <li>«¿Cuál es mi nota actual en cada curso?»</li>
+    <li>«Descarga los PDFs de la última semana de clase y resúmelos.»</li>
+  </ul></div>
+
+  <h2 id="problemas">Si algo no funciona</h2>
+  <p>El fallo más común es un JSON inválido: una coma de más o unas comillas sin cerrar hacen que el cliente ignore el archivo entero sin avisar. Comprueba también que <code>npx campus-cli mcp</code> arranque sin error directamente en la terminal — si ahí falla, el problema no está en Cursor.</p>
+  <p>Si el servidor conecta pero las respuestas dicen que no estás autenticado, tu sesión expiró: vuelve a correr <code>npx campus-cli account login</code>. Y recuerda cerrar el cliente por completo antes de reabrirlo; recargar la ventana no siempre relee la configuración.</p>
+
+  <h2 id="siguiente">Qué puedes hacer después</h2>
+  <p>Las herramientas disponibles, el detalle de seguridad y las limitaciones actuales están en <a class="prose-link" href="/blackboard-mcp/">la página principal de Blackboard MCP</a>. Si prefieres consultar tu campus por comandos en vez de por chat, existe <a class="prose-link" href="/blackboard-cli/">Blackboard CLI</a>. Y para saber qué revisar cada semana antes de automatizarlo, lee <a class="prose-link" href="/blog/organizar-tu-semana-blackboard/">la guía para organizar tu semana en Blackboard sin perder fechas</a>.</p>
+
+  <h2 id="faq">Preguntas frecuentes</h2>
+  <h3>¿Dónde va el archivo de configuración MCP de Cursor?</h3><p>En <code>~/.cursor/mcp.json</code>.</p>
+  <h3>¿Necesito instalar algo además de Cursor?</h3><p>Solo Node.js 18 o superior. El comando <code>npx</code> descarga <code>campus-cli</code> la primera vez que se ejecuta.</p>
+  <h3>¿Qué hago si las herramientas no aparecen?</h3><p>Cierra el cliente por completo y vuelve a abrirlo, verifica que el JSON no tenga comas de más y confirma que <code>npx campus-cli mcp</code> arranca sin error en la terminal.</p>
+
+  <h2 id="otros">Otros clientes</h2>
+  <ul><li><a href="/blackboard-mcp/claude-desktop/">Claude Desktop</a></li><li><a href="/blackboard-mcp/claude-code/">Claude Code</a></li><li><a href="/blackboard-mcp/github-copilot/">GitHub Copilot en VS Code</a></li><li><a href="/blackboard-mcp/codex/">OpenAI Codex CLI</a></li><li><a href="/blackboard-mcp/windsurf/">Windsurf</a></li></ul>
+
+  <aside class="related" aria-labelledby="related-title">
+    <h2 id="related-title">Sigue explorando</h2>
+    <p class="related__intro">Esta guía es una pieza del conector. Estas son las otras.</p>
+    <ul class="related__grid">
+      <li class="related__card">
+        <span class="related__tag">Recurso</span>
+        <h3><a href="/blackboard-mcp/">Blackboard MCP: herramientas, seguridad y límites</a></h3>
+        <p>Qué puede hacer el conector, qué no, y cómo trata tu sesión de UPC.</p>
+        <span class="related__go">Ver Blackboard MCP <span aria-hidden="true">&#8594;</span></span>
+      </li>
+      <li class="related__card">
+        <span class="related__tag">Recurso</span>
+        <h3><a href="/blackboard-cli/">Blackboard CLI: cursos, tareas y notas desde la terminal</a></h3>
+        <p>La misma información, por comandos, sin salir de la consola.</p>
+        <span class="related__go">Ver Blackboard CLI <span aria-hidden="true">&#8594;</span></span>
+      </li>
+      <li class="related__card">
+        <span class="related__tag">Guía base</span>
+        <h3><a href="/blog/chatgpt-blackboard-sin-copiar-archivos/">Cuánto tiempo pierdes copiando archivos a mano</a></h3>
+        <p>El método manual frente a conectar Blackboard directo con tu asistente.</p>
+        <span class="related__go">Leer la guía <span aria-hidden="true">&#8594;</span></span>
+      </li>
+    </ul>
+  </aside>
+</main>
