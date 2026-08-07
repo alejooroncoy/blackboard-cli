@@ -1,6 +1,6 @@
 {
   "cursor": {
-    "title": "Blackboard MCP en Cursor | Conecta tu Aula Virtual UPC",
+    "title": "Conectar Blackboard UPC con Cursor | Campus",
     "description": "Cómo conectar Blackboard UPC con Cursor usando MCP: instalación, archivo de configuración, verificación y qué preguntar. Guía paso a paso de Campus.",
     "canonical": "https://campuscli.com/blackboard-mcp/cursor/",
     "ogTitle": "Blackboard MCP en Cursor | Conecta tu Aula Virtual UPC",
@@ -104,7 +104,7 @@
     ]
   },
   "claude-code": {
-    "title": "Blackboard MCP en Claude Code | Conecta tu Aula Virtual UPC",
+    "title": "Conectar Blackboard UPC con Claude Code | Campus",
     "description": "Cómo conectar Blackboard UPC con Claude Code usando MCP: instalación, archivo de configuración, verificación y qué preguntar. Guía paso a paso de Campus.",
     "canonical": "https://campuscli.com/blackboard-mcp/claude-code/",
     "ogTitle": "Blackboard MCP en Claude Code | Conecta tu Aula Virtual UPC",
@@ -208,10 +208,10 @@
     ]
   },
   "claude-desktop": {
-    "title": "Blackboard MCP en Claude Desktop | Conecta tu Aula Virtual UPC",
+    "title": "Conectar Blackboard UPC con Claude Desktop | Campus",
     "description": "Cómo conectar Blackboard UPC con Claude Desktop usando MCP: instalación, archivo de configuración, verificación y qué preguntar. Guía paso a paso de Campus.",
     "canonical": "https://campuscli.com/blackboard-mcp/claude-desktop/",
-    "ogTitle": "Blackboard MCP en Claude Desktop | Conecta tu Aula Virtual UPC",
+    "ogTitle": "Conectar Blackboard UPC con Claude Desktop | Campus",
     "ogDescription": "Cómo conectar Blackboard UPC con Claude Desktop usando MCP: instalación, archivo de configuración, verificación y qué preguntar. Guía paso a paso de Campus.",
     "ogImageAlt": "Blackboard MCP en Claude Desktop",
     "schemas": [
@@ -312,10 +312,10 @@
     ]
   },
   "codex": {
-    "title": "Blackboard MCP en OpenAI Codex CLI | Conecta tu Aula Virtual UPC",
+    "title": "Conectar Blackboard UPC con OpenAI Codex CLI | Campus",
     "description": "Cómo conectar Blackboard UPC con OpenAI Codex CLI usando MCP: instalación, archivo de configuración, verificación y qué preguntar. Guía paso a paso de Campus.",
     "canonical": "https://campuscli.com/blackboard-mcp/codex/",
-    "ogTitle": "Blackboard MCP en OpenAI Codex CLI | Conecta tu Aula Virtual UPC",
+    "ogTitle": "Conectar Blackboard UPC con OpenAI Codex CLI | Campus",
     "ogDescription": "Cómo conectar Blackboard UPC con OpenAI Codex CLI usando MCP: instalación, archivo de configuración, verificación y qué preguntar. Guía paso a paso de Campus.",
     "ogImageAlt": "Blackboard MCP en OpenAI Codex CLI",
     "schemas": [
@@ -416,11 +416,11 @@
     ]
   },
   "github-copilot": {
-    "title": "Blackboard MCP en GitHub Copilot en VS Code | Conecta tu Aula Virtual UPC",
-    "description": "Cómo conectar Blackboard UPC con GitHub Copilot en VS Code usando MCP: instalación, archivo de configuración, verificación y qué preguntar. Guía paso a paso de Campus.",
+    "title": "Conectar Blackboard UPC con GitHub Copilot | Campus",
+    "description": "Cómo conectar Blackboard UPC con GitHub Copilot en VS Code usando MCP: instalación, configuración, verificación y qué preguntar.",
     "canonical": "https://campuscli.com/blackboard-mcp/github-copilot/",
-    "ogTitle": "Blackboard MCP en GitHub Copilot en VS Code | Conecta tu Aula Virtual UPC",
-    "ogDescription": "Cómo conectar Blackboard UPC con GitHub Copilot en VS Code usando MCP: instalación, archivo de configuración, verificación y qué preguntar. Guía paso a paso de Campus.",
+    "ogTitle": "Conectar Blackboard UPC con GitHub Copilot | Campus",
+    "ogDescription": "Cómo conectar Blackboard UPC con GitHub Copilot en VS Code usando MCP: instalación, configuración, verificación y qué preguntar.",
     "ogImageAlt": "Blackboard MCP en GitHub Copilot en VS Code",
     "schemas": [
       {
@@ -520,7 +520,7 @@
     ]
   },
   "windsurf": {
-    "title": "Blackboard MCP en Windsurf | Conecta tu Aula Virtual UPC",
+    "title": "Conectar Blackboard UPC con Windsurf | Campus",
     "description": "Cómo conectar Blackboard UPC con Windsurf usando MCP: instalación, archivo de configuración, verificación y qué preguntar. Guía paso a paso de Campus.",
     "canonical": "https://campuscli.com/blackboard-mcp/windsurf/",
     "ogTitle": "Blackboard MCP en Windsurf | Conecta tu Aula Virtual UPC",
@@ -624,11 +624,11 @@
     ]
   },
   "alternativas": {
-    "title": "Servidores MCP para Blackboard: qué opciones existen (2026) | Campus",
-    "description": "Comparación de los servidores MCP que conectan Blackboard Learn con asistentes de IA: institucionales, de estudiante y el patrón blackboard (que no es el LMS). Qué requiere cada uno y para quién sirve.",
+    "title": "Servidores MCP para Blackboard: qué opciones hay | Campus",
+    "description": "Comparación de los servidores MCP que conectan Blackboard Learn con asistentes de IA: institucionales, de estudiante y el patrón blackboard, que no es el LMS.",
     "canonical": "https://campuscli.com/blackboard-mcp/alternativas/",
     "ogTitle": "Servidores MCP para Blackboard: qué opciones existen (2026)",
-    "ogDescription": "Comparación de los servidores MCP que conectan Blackboard Learn con asistentes de IA: institucionales, de estudiante y el patrón blackboard (que no es el LMS). Qué requiere cada uno y para quién sirve.",
+    "ogDescription": "Comparación de los servidores MCP que conectan Blackboard Learn con asistentes de IA: institucionales, de estudiante y el patrón blackboard, que no es el LMS.",
     "ogImageAlt": "Comparación de servidores MCP para Blackboard",
     "schemas": [
       {
