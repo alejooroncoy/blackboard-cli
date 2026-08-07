@@ -8,6 +8,7 @@ updated: "2026-08-04"
 tag: "Caso real · Fundador"
 section: fundador
 readingMinutes: 6
+author: "Alejandro Oroncoy"
 faq:
   - q: "¿Se puede trabajar y estudiar en la UPC sin bajar de promedio?"
     a: "Sí, pero deja de funcionar revisar el Aula Virtual a ratos. Lo que cambió el resultado fue construir la lista de la semana una vez y priorizar por peso en la nota, no por fecha de entrega."
