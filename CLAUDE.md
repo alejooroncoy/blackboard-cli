@@ -81,3 +81,19 @@ GET /learn/api/public/v1/courses/{courseId}/contents/{id}/attachments/{id}/downl
 | `blackboard_get_assignment_feedback` | Scores + instructor comments + feedback files for all assignments in a course |
 | `blackboard_download_feedback_file` | **[EXPERIMENTAL]** Download a file the professor attached to a graded attempt |
 | `blackboard_raw_api` | Any other Blackboard endpoint |
+
+## Este repositorio es público
+
+El código de campus-cli es abierto a propósito. El material de negocio no.
+
+**Nunca commitees** estrategia de SEO o distribución, análisis de competidores,
+textos de campaña, precios internos ni listas de contactos. Va en `marketing/`,
+que está en `.gitignore` y se queda en local.
+
+Antes de `git add`, mira la lista de archivos y pregúntate si cada uno debería
+ser público. Ante la duda, pregunta en vez de incluirlo. No uses `git add -A` ni
+`git add <directorio>/` a ciegas: enumera los archivos.
+
+Esto ya pasó una vez — un documento de estrategia entró de paso en un PR de otra
+cosa y estuvo visible 40 minutos. Sacarlo del repo es fácil; sacarlo de la
+historia de un repo público, no.
