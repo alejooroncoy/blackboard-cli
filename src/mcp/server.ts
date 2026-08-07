@@ -3,6 +3,12 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { registerBlackboardTools } from '../providers/blackboard/mcp-tools.js';
 import { track } from '../analytics.js';
 
+// La versión que anunciamos en el handshake sale del package.json. Estaba
+// escrita a mano y se quedó en 1.0.0, así que cada cliente y cada directorio
+// que la leía veía una versión que no existe. Desde dist/mcp/, '../..' es la
+// raíz del paquete, que sí incluye package.json en lo publicado.
+const { version: VERSION } = require('../../package.json') as { version: string };
+
 const INSTRUCTIONS = `
 campus-cli conecta el campus universitario del estudiante con su agente de IA.
 
@@ -33,7 +39,7 @@ export async function startMcpServer() {
   const server = new McpServer(
     {
       name: 'campus-cli',
-      version: '1.0.0',
+      version: VERSION,
     },
     {
       instructions: INSTRUCTIONS,

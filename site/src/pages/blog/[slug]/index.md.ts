@@ -26,6 +26,9 @@ export const GET: APIRoute = ({ props }) => {
     `> ${data.description}`,
     "",
     `Fuente: ${url}`,
+    // Named only when someone signs it: a first-hand account is worth
+    // attributing, and a model quoting it should be able to say who lived it.
+    ...(data.author ? [`Autor: ${data.author}`] : []),
     `Actualizado: ${data.updated}`,
     "",
     "---",
@@ -48,7 +51,7 @@ export const GET: APIRoute = ({ props }) => {
   if (data.compare) {
     const { before, after } = data.compare;
     header.push(
-      "## La misma semana, de dos formas",
+      `## ${data.compare.caption ?? "La misma semana, de dos formas"}`,
       "",
       `**${before.title}:** ${before.items.join("; ")}. (${before.cost}.)`,
       "",

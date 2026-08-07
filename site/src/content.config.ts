@@ -35,8 +35,17 @@ const blog = defineCollection({
      * sentences. Written as html it would render once and reach assistants as a
      * pile of tags.
      */
+    /**
+     * Who signs the piece, when it is not the team.
+     *
+     * A first-person account signed "el equipo de Campus" reads as borrowed,
+     * and the whole value of a case study is that someone lived it.
+     */
+    author: z.string().optional(),
     compare: z
       .object({
+        /** Defaults to the weekly framing the first guide needed. */
+        caption: z.string().optional(),
         before: z.object({
           title: z.string(),
           /** Each fragment the student has to visit, in order. */

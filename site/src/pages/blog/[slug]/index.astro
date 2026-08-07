@@ -52,7 +52,11 @@ const schemas: unknown[] = [
     dateModified: data.updated,
     inLanguage: "es-PE",
     mainEntityOfPage: url,
-    author: { "@type": "Organization", name: "Campus", url: "https://campuscli.com/" },
+    // A named author is a Person, so the first-hand experience in a case study
+    // is attributed to someone rather than to a brand.
+    author: data.author
+      ? { "@type": "Person", name: data.author }
+      : { "@type": "Organization", name: "Campus", url: "https://campuscli.com/" },
     publisher: { "@type": "Organization", name: "Campus", url: "https://campuscli.com/" },
     image: "https://campuscli.com/assets/og-default.jpg",
   },
@@ -119,7 +123,7 @@ const updated = new Date(`${data.updated}T12:00:00Z`).toLocaleDateString("es-PE"
     <p class="eyebrow">{data.tag}</p>
     <h1>{data.title}</h1>
     <p class="byline">
-      <span>Por <strong>el equipo de Campus</strong></span>
+      <span>Por <strong>{data.author ?? "el equipo de Campus"}</strong></span>
       <span aria-hidden="true">·</span>
       <span>Publicado el <time datetime={data.published}>{published}</time></span>
       <span aria-hidden="true">·</span>
@@ -137,7 +141,7 @@ const updated = new Date(`${data.updated}T12:00:00Z`).toLocaleDateString("es-PE"
 
     {data.compare && (
       <figure class="compare" aria-labelledby="compare-title">
-        <figcaption id="compare-title">La misma semana, de dos formas</figcaption>
+        <figcaption id="compare-title">{data.compare.caption ?? "La misma semana, de dos formas"}</figcaption>
         <div class="compare__grid">
           <div class="compare__side">
             <p class="compare__label">{data.compare.before.title}</p>
