@@ -62,7 +62,7 @@
         <div class="shell">
           <h1>Mapa del sitio</h1>
           <p class="lede">
-            Lista de páginas de <a href="https://campuscli.com/">campuscli.com</a>.
+            Mapa de <a href="https://campuscli.com/">campuscli.com</a>.
             Esta vista es solo para leerla; los buscadores consumen el XML directamente.
           </p>
 
