@@ -8,3 +8,14 @@ dist/
 .gstack/
 .astro/
 .vercel/
+
+# Configuración y salidas de agentes de IA (local, por desarrollador)
+.claude/
+.codex/
+.agents/
+skills-lock.json
+.neon
+
+# Directorios de trabajo temporal
+outputs/
+tmp/
