@@ -4,6 +4,16 @@ All notable changes to `campus-cli` (formerly `blackboard-upc`) will be document
 
 ---
 
+## [1.3.2] — 2026-08-06
+
+### Added
+- `mcpName` en `package.json` y `server.json` en la raíz del repo, con el formato del registro oficial de MCP (`io.github.alejooroncoy/campus-cli`). El registro valida la propiedad del servidor leyendo `mcpName` del `package.json` **publicado en npm**, así que este campo solo surte efecto a partir de esta versión; sin él, `mcp-publisher publish` rechaza la publicación.
+
+### Notes
+- Release de metadatos: no cambia código, dependencias ni comportamiento del CLI ni del servidor MCP.
+
+---
+
 ## [1.3.1] — 2026-08-05
 
 ### Changed

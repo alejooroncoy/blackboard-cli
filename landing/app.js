@@ -173,3 +173,130 @@ if (starsSlot) {
     })
     .catch(() => { /* Rate limited or offline: leave the plain icon. */ });
 }
+
+/**
+ * Reading aids for long guides: a progress bar and a table of contents built
+ * from the article's own headings.
+ *
+ * Both exist for the same reason. A student landing from Google on a 7-minute
+ * guide has no idea how long it is or whether the part they need is in it, and
+ * bounces. The contents list answers that before they scroll, and doubles as
+ * SEO: the h2 ids it links are what Google reads to offer jump links straight
+ * to a section in the results page.
+ *
+ * Generated rather than written into each article so the list can never drift
+ * from the headings it describes.
+ */
+function setUpArticleReading() {
+  const main = document.querySelector("main");
+  // Only long-form guides: these markers exist on blog posts, not on the hub.
+  if (!main || !document.querySelector(".byline") || document.querySelector(".blog-main")) return;
+
+  const headings = [...main.querySelectorAll("h2[id]")].filter(
+    // The summary box and the closing call to action are not places to jump to.
+    (heading) => heading.id !== "resumen-title" && !heading.closest(".summary, .cta, .related"),
+  );
+  if (headings.length < 3) return;
+
+  const progress = document.createElement("div");
+  progress.className = "read-progress";
+  progress.setAttribute("aria-hidden", "true");
+  document.body.prepend(progress);
+
+  const nav = document.createElement("nav");
+  nav.className = "toc";
+  nav.setAttribute("aria-label", "Contenido de la guía");
+  nav.innerHTML =
+    '<p class="toc__title">En esta guía</p><ol class="toc__list">' +
+    headings
+      .map(
+        (heading) =>
+          `<li><a href="#${heading.id}">${heading.textContent.trim()}</a></li>`,
+      )
+      .join("") +
+    "</ol>";
+
+  const summary = main.querySelector(".summary");
+  (summary || main.querySelector("h1")).after(nav);
+
+  const links = new Map(
+    [...nav.querySelectorAll("a")].map((link) => [link.getAttribute("href").slice(1), link]),
+  );
+
+  let active;
+  const setActive = (id) => {
+    if (id === active) return;
+    active = id;
+    links.forEach((link, key) => link.classList.toggle("is-active", key === id));
+  };
+
+  // Mark the last heading that has passed the top of the screen — the section
+  // being read — rather than the next one scrolling into view. An observer
+  // reports only headings that cross its band, which leaves nothing marked
+  // while reading a long section, so the position is computed on scroll.
+  const markCurrent = () => {
+    const line = 140;
+    let current = headings[0];
+    for (const heading of headings) {
+      if (heading.getBoundingClientRect().top <= line) current = heading;
+    }
+    setActive(current.id);
+  };
+
+  const onScroll = () => {
+    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+    const ratio = scrollable > 0 ? window.scrollY / scrollable : 0;
+    progress.style.transform = `scaleX(${Math.min(1, Math.max(0, ratio))})`;
+    markCurrent();
+  };
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
+
+  addCopyAsMarkdown(nav);
+}
+
+/**
+ * Hands the whole guide over as Markdown, in one click.
+ *
+ * A student who wants a second opinion pastes the article into an assistant.
+ * Pasting rendered HTML drags in navigation, buttons and the pricing block, and
+ * the model has to guess what the article actually said. Giving it the same
+ * Markdown file the crawlers read means the answer it produces is built from
+ * our text, attributed to our url.
+ */
+function addCopyAsMarkdown(nav) {
+  const declared = document.querySelector('link[rel="alternate"][type="text/markdown"]');
+  if (!declared || !navigator.clipboard) return;
+  // The link carries the canonical absolute url, which is what a crawler
+  // should see. Fetching it verbatim would only work on the live domain, so
+  // resolve the same file against the page being read: that works on a
+  // preview deploy and on localhost too.
+  const source = new URL(declared.href.split("/").pop(), location.href);
+
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "toc__copy";
+  const label = "Copiar como Markdown";
+  button.textContent = label;
+  nav.append(button);
+
+  let resetAt;
+  button.addEventListener("click", async () => {
+    try {
+      const response = await fetch(source);
+      if (!response.ok) throw new Error(String(response.status));
+      await navigator.clipboard.writeText(await response.text());
+      button.textContent = "Copiado";
+    } catch {
+      // Clipboard denied or the file is unreachable: say so instead of
+      // pretending it worked, which would leave the student pasting nothing.
+      button.textContent = "No se pudo copiar";
+    }
+    clearTimeout(resetAt);
+    resetAt = setTimeout(() => {
+      button.textContent = label;
+    }, 2200);
+  });
+}
+
+setUpArticleReading();

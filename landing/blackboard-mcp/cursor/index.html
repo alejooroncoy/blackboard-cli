@@ -1,38 +1,39 @@
 <!doctype html>
+<!-- Generado por landing/tools/build.mjs — no edites este archivo a mano.
+     El contenido compartido sale de blackboard-mcp/index.html. -->
 <html lang="es"><head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="preconnect" href="https://api.github.com" crossorigin />
-  <title>Blackboard CLI | Consulta Blackboard desde la terminal</title>
-  <meta name="description" content="Blackboard CLI open source para consultar Blackboard UPC desde la terminal: cursos, tareas, notas, anuncios y materiales con comandos simples." />
+  <title>Blackboard MCP en Cursor | Conecta tu Aula Virtual UPC</title>
+  <meta name="description" content="Cómo conectar Blackboard UPC con Cursor usando MCP: instalación, archivo de configuración, verificación y qué preguntar. Guía paso a paso de Campus." />
   <meta name="robots" content="index,follow,max-image-preview:large" />
   <meta name="theme-color" content="#112633" />
   <meta name="campus-founder-api" content="https://mcp.campuscli.com/v1/founders" /><meta name="campus-turnstile-site-key" content="0x4AAAAAAEDTvI0vNf8mWxAL" />
-  <link rel="canonical" href="https://campuscli.com/blackboard-cli/" />
+  <link rel="canonical" href="https://campuscli.com/blackboard-mcp/cursor/" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+  <link rel="icon" href="/favicon.ico" sizes="32x32" />
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
-  <meta property="og:type" content="website" />
+  <meta property="og:type" content="article" />
   <meta property="og:locale" content="es_PE" />
   <meta property="og:site_name" content="Campus" />
-  <meta property="og:title" content="Blackboard CLI | Consulta Blackboard desde la terminal" />
-  <meta property="og:description" content="Blackboard CLI open source para consultar Blackboard UPC desde la terminal: cursos, tareas, notas, anuncios y materiales con comandos simples." />
-  <meta property="og:url" content="https://campuscli.com/blackboard-cli/" />
+  <meta property="og:title" content="Blackboard MCP en Cursor | Conecta tu Aula Virtual UPC" />
+  <meta property="og:description" content="Cómo conectar Blackboard UPC con Cursor usando MCP: instalación, archivo de configuración, verificación y qué preguntar. Guía paso a paso de Campus." />
+  <meta property="og:url" content="https://campuscli.com/blackboard-mcp/cursor/" />
   <meta property="og:image" content="https://campuscli.com/assets/og-default.jpg" />
   <meta property="og:image:type" content="image/jpeg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="Blackboard CLI: consulta Blackboard UPC desde la terminal" />
+  <meta property="og:image:alt" content="Blackboard MCP en Cursor" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Blackboard CLI | Consulta Blackboard desde la terminal" />
-  <meta name="twitter:description" content="Blackboard CLI open source para consultar Blackboard UPC desde la terminal: cursos, tareas, notas, anuncios y materiales con comandos simples." />
+  <meta name="twitter:title" content="Blackboard MCP en Cursor | Conecta tu Aula Virtual UPC" />
+  <meta name="twitter:description" content="Cómo conectar Blackboard UPC con Cursor usando MCP: instalación, archivo de configuración, verificación y qué preguntar. Guía paso a paso de Campus." />
   <meta name="twitter:image" content="https://campuscli.com/assets/og-default.jpg" />
   <link rel="stylesheet" href="/styles.min.css" />
   <style>main{max-width:880px;margin:auto;padding:72px 24px}main .eyebrow{color:#087f5b;font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:13px}main h1{font-size:clamp(42px,7vw,72px);line-height:1.02;margin:16px 0}main h2{margin-top:58px;font-size:32px}main p,main li{color:#506d7f;font-size:18px;line-height:1.6}main .card{margin:30px 0;padding:28px;border:1px solid #c8dfd8;border-radius:10px;background:#eef9f4}main .code{padding:20px;border-radius:8px;background:#17262c;color:#dff5f3;overflow:auto;font-size:15px;line-height:1.7}main .button{display:inline-block;margin-top:20px;padding:13px 18px;border-radius:7px;background:#112633;color:white;font-weight:700}main a{color:inherit}main .crumbs{display:block;margin:0 0 22px}main .crumbs ol{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0;padding:0;list-style:none}main .crumbs li{margin:0;color:#5c7684;font-size:14px;line-height:1.4}main .crumbs li+li::before{content:"\203a";margin-right:8px;color:#a7bcc6}main .crumbs a{color:#5c7684;border-bottom:1px solid transparent}main .crumbs a:hover{color:#17323f;border-bottom-color:#c2d4dc}main .crumbs [aria-current="page"]{color:#17323f;font-weight:600}main .prose-link{color:#087f5b;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}main .prose-link:hover{color:#0b5c45}main .related{margin-top:70px;padding-top:38px;border-top:1px solid #d5e3e7}main .related h2{margin:0 0 8px;font-size:24px;line-height:1.2}main .related__intro{max-width:560px;margin:0 0 26px;color:#5c7684;font-size:16px}main .related__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:0;padding:0;list-style:none}main .related__card{position:relative;display:flex;flex-direction:column;margin:0;padding:20px;border:1px solid #d5e3e7;border-radius:8px;background:#fff;transition:border-color 160ms ease,transform 160ms ease,box-shadow 160ms ease}main .related__card:hover{border-color:#b7cfd7;transform:translateY(-2px);box-shadow:0 12px 28px #102a3a12}main .related__tag{color:#087f5b;font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase}main .related__card h3{margin:13px 0 9px;color:#17323f;font-size:18px;line-height:1.25}main .related__card h3 a{color:inherit}main .related__card h3 a::after{content:"";position:absolute;inset:0;border-radius:8px}main .related__card h3 a:focus-visible{outline:none}main .related__card h3 a:focus-visible::after{outline:2px solid #087f5b;outline-offset:3px}main .related__card p{margin:0 0 18px;font-size:15px;line-height:1.5}main .related__go{margin-top:auto;color:#087f5b;font-size:14px;font-weight:700}@media(max-width:700px){main .related{margin-top:52px}main .related__grid{grid-template-columns:1fr}}main h3{margin:34px 0 6px;color:#17323f;font-size:20px;line-height:1.3}main .table-wrap{overflow-x:auto;margin:26px 0}main table{width:100%;border-collapse:collapse;font-size:16px}main table th,main table td{padding:11px 14px;border-bottom:1px solid #dfeaee;text-align:left;vertical-align:top}main table th{color:#17323f;font-size:14px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;white-space:nowrap}main table td{color:#506d7f;line-height:1.5}main table code{padding:2px 6px;border-radius:4px;background:#eef4f6;color:#17323f;font-size:14px;white-space:nowrap}main .steps{margin:26px 0;padding:0;list-style:none;counter-reset:step}main .steps li{position:relative;margin:0 0 20px;padding-left:44px;counter-increment:step}main .steps li::before{content:counter(step);position:absolute;top:2px;left:0;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#087f5b;color:#fff;font-size:14px;font-weight:700}main .steps strong{color:#17323f}main .clients{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:26px 0;padding:0;list-style:none}main .clients li{margin:0}main .clients a{display:block;padding:16px 18px;border:1px solid #d5e3e7;border-radius:8px;background:#fff;color:#17323f;font-weight:700;font-size:16px;transition:border-color 160ms ease,transform 160ms ease}main .clients a:hover{border-color:#b7cfd7;transform:translateY(-2px)}main .clients small{display:block;margin-top:4px;color:#5c7684;font-weight:400;font-size:14px}main .note{margin:26px 0;padding:18px 20px;border:1px solid #dfeaee;background:#f6fafb;border-radius:8px}main .note p{margin:0;font-size:16px}@media(max-width:700px){main .clients{grid-template-columns:1fr}}</style>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://campuscli.com/"},{"@type":"ListItem","position":2,"name":"Recursos y guías","item":"https://campuscli.com/blog/"},{"@type":"ListItem","position":3,"name":"Blackboard CLI","item":"https://campuscli.com/blackboard-cli/"}]}</script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Blackboard CLI","alternateName":["campus-cli","Campus CLI"],"applicationCategory":"DeveloperApplication","operatingSystem":"macOS, Linux, Windows","url":"https://campuscli.com/blackboard-cli/","downloadUrl":"https://www.npmjs.com/package/campus-cli","codeRepository":"https://github.com/alejooroncoy/campus-cli","softwareRequirements":"Node.js 18 o superior","description":"Cliente de línea de comandos no oficial para consultar Blackboard UPC (Aula Virtual): cursos, tareas, notas, anuncios y descarga de materiales.","offers":{"@type":"Offer","price":"0","priceCurrency":"PEN"},"author":{"@type":"Person","name":"Alejandro Oroncoy"}}</script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Necesito instalarlo para probarlo?","acceptedAnswer":{"@type":"Answer","text":"No. npx campus-cli account login lo descarga y ejecuta sin instalación global."}},{"@type":"Question","name":"¿Guarda mi contraseña de UPC?","acceptedAnswer":{"@type":"Answer","text":"No. El login usa el flujo estándar de Microsoft SSO en tu navegador. Queda guardada una sesión local, revocable con campus logout."}},{"@type":"Question","name":"¿Puedo usarlo en scripts?","acceptedAnswer":{"@type":"Answer","text":"Sí. Todos los comandos aceptan --json y los mensajes de progreso van a stderr, así que --json 2>/dev/null devuelve JSON limpio."}},{"@type":"Question","name":"¿Funciona en Windows?","acceptedAnswer":{"@type":"Answer","text":"Sí, en macOS, Linux y Windows, siempre que el entorno permita a Playwright abrir Chromium para el login."}},{"@type":"Question","name":"¿Está afiliado a Blackboard o UPC?","acceptedAnswer":{"@type":"Answer","text":"No. Campus es un proyecto independiente y no oficial. La compatibilidad actual está enfocada en Blackboard UPC; Canvas y Moodle están en el roadmap."}}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"HowTo","name":"Cómo conectar Blackboard UPC con Cursor usando MCP","totalTime":"PT5M","tool":[{"@type":"HowToTool","name":"Node.js 18 o superior"},{"@type":"HowToTool","name":"Una cuenta activa de UPC con acceso a Aula Virtual"},{"@type":"HowToTool","name":"Cursor"}],"step":[{"@type":"HowToStep","name":"Inicia sesión en tu campus","text":"Ejecuta npx campus-cli account login. Se abre el navegador con el SSO de Microsoft de UPC.","url":"https://campuscli.com/blackboard-mcp/cursor/#pasos"},{"@type":"HowToStep","name":"Registra el servidor en Cursor","text":"Agrega la configuración de campus en ~/.cursor/mcp.json.","url":"https://campuscli.com/blackboard-mcp/cursor/#configuracion"},{"@type":"HowToStep","name":"Verifica la conexión","text":"Reinicia el cliente y confirma que las herramientas blackboard_ aparecen disponibles.","url":"https://campuscli.com/blackboard-mcp/cursor/#verificar"}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://campuscli.com/"},{"@type":"ListItem","position":2,"name":"Blackboard MCP","item":"https://campuscli.com/blackboard-mcp/"},{"@type":"ListItem","position":3,"name":"Cursor","item":"https://campuscli.com/blackboard-mcp/cursor/"}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Dónde va el archivo de configuración MCP de Cursor?","acceptedAnswer":{"@type":"Answer","text":"En ~/.cursor/mcp.json."}},{"@type":"Question","name":"¿Necesito instalar algo además de Cursor?","acceptedAnswer":{"@type":"Answer","text":"Solo Node.js 18 o superior. El comando npx descarga campus-cli la primera vez que se ejecuta."}},{"@type":"Question","name":"¿Qué hago si las herramientas no aparecen?","acceptedAnswer":{"@type":"Answer","text":"Cierra el cliente por completo y vuelve a abrirlo, verifica que el JSON no tenga comas de más y confirma que npx campus-cli mcp arranca sin error en la terminal."}}]}</script>
 </head><body><div class="announcement" role="status"><div class="shell announcement__inner"><span>Acceso anticipado para estudiantes UPC</span><a href="/#acceso-anticipado">S/20 por 2 meses <span aria-hidden="true">→</span></a></div></div>
     <header class="shell site-header">
       <a class="brand" href="/" aria-label="Campus, inicio"><img src="/assets/campus-logo.webp" width="160" height="160" alt="" /><span>Campus</span></a>
@@ -42,86 +43,76 @@
         <a class="button button--small" href="/#acceso-anticipado">Ver cupos <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
       </div>
     </header><main>
-  <nav class="crumbs" aria-label="Ruta de navegación"><ol><li><a href="/">Inicio</a></li><li><a href="/blog/">Recursos y guías</a></li><li aria-current="page">Blackboard CLI</li></ol></nav>
-  <p class="eyebrow">Blackboard CLI · Open source</p><h1>Blackboard, directo en tu terminal.</h1>
-  <p>Blackboard CLI te permite iniciar sesión y consultar tu Blackboard UPC con comandos simples. Úsalo cuando quieras trabajar rápido, automatizar consultas o conectar tu flujo con herramientas de IA.</p>
-  <pre class="code"><code>npm install -g campus-cli
-campus account login
-campus courses list
-campus assignments list --pending
-campus courses grades &lt;courseId&gt;</code></pre>
-  <a class="button" href="https://github.com/alejooroncoy/campus-cli">Ver el repositorio</a> <button class="button" type="button" data-open-founder>Quiero acceso anticipado</button>
-  <h2 id="resumen">En resumen</h2>
+  <nav class="crumbs" aria-label="Ruta de navegación"><ol><li><a href="/">Inicio</a></li><li><a href="/blackboard-mcp/">Blackboard MCP</a></li><li aria-current="page">Cursor</li></ol></nav>
+  <p class="eyebrow">Blackboard MCP · Cursor</p><h1>Blackboard UPC en Cursor.</h1>
+  <p>Esta guía conecta tu Aula Virtual UPC con Cursor, el editor con IA mediante Model Context Protocol. Al terminar podrás preguntarle por tus cursos, tareas, notas y materiales sin abrir Blackboard.</p>
+  <button class="button" type="button" data-open-founder>Solicitar acceso anticipado</button>
+
+  <h2 id="requisitos">Antes de empezar</h2>
+  <p>Necesitas tres cosas: Node.js 18 o superior instalado, una cuenta activa de UPC con acceso a Aula Virtual y Cursor ya funcionando en tu equipo. El proceso completo toma unos cinco minutos y se hace una sola vez.</p>
+
+  <h2 id="pasos">1. Inicia sesión en tu campus</h2>
+  <p>En una terminal, ejecuta:</p>
+  <pre class="code"><code>npx campus-cli account login</code></pre>
+  <p>Se abre el navegador y encadena el login de Microsoft de UPC, con MFA si tu cuenta lo pide. Si Microsoft muestra <em>«Stay signed in?»</em>, marca la casilla y acepta: así la sesión se mantiene y no tienes que repetir el login cada día. Todo el flujo corre en tu máquina, no pasa por ningún servidor de Campus.</p>
+
+  <h2 id="configuracion">2. Registra el servidor en Cursor</h2>
+  <p>Ve a <strong>Settings → MCP → Add new MCP server</strong>, o edita directamente <code>~/.cursor/mcp.json</code>.</p>
+  
+  <pre class="code"><code>{
+  "mcpServers": {
+    "campus": {
+      "command": "npx",
+      "args": ["campus-cli", "mcp"]
+    }
+  }
+}</code></pre>
+
+  <h2 id="verificar">3. Verifica la conexión</h2>
+  <p>En <strong>Settings → MCP</strong>, la entrada <code>campus</code> debe aparecer con un indicador verde y la lista de herramientas <code>blackboard_*</code>.</p>
+  <p>Luego prueba con una pregunta real:</p>
   <div class="card"><ul>
-    <li><strong>Qué es:</strong> el mismo motor que <a class="prose-link" href="/blackboard-mcp/">Blackboard MCP</a>, pero por comandos en vez de por chat. Un solo login sirve para los dos modos.</li>
-    <li><strong>Instalación:</strong> <code>npm install -g campus-cli</code>, o sin instalar nada con <code>npx campus-cli</code>.</li>
-    <li><strong>Requisitos:</strong> Node.js 18 o superior y una cuenta activa de UPC con acceso a Aula Virtual.</li>
-    <li><strong>Para quién:</strong> quien prefiere la consola, quiere automatizar con <code>--json</code> o va a encadenar Campus con otras herramientas.</li>
-    <li><strong>Licencia:</strong> código abierto, publicado en npm como <code>campus-cli</code>.</li>
+    <li>«¿Qué tareas tengo pendientes esta semana?»</li>
+    <li>«¿Cuál es mi nota actual en cada curso?»</li>
+    <li>«Descarga los PDFs de la última semana de clase y resúmelos.»</li>
   </ul></div>
 
-  <h2 id="instalacion">Instalación y primer uso</h2>
-  <p>El login abre el navegador y encadena el SSO de Microsoft de UPC, con MFA si tu cuenta lo pide. Todo corre en tu máquina: no pasa por ningún servidor de Campus, y lo que queda guardado es una sesión, no tu contraseña.</p>
-  <p>Si Microsoft muestra <em>«Stay signed in?»</em>, marca la casilla y acepta — así la sesión se mantiene y no repites el login cada día.</p>
+  <h2 id="problemas">Si algo no funciona</h2>
+  <p>El fallo más común es un JSON inválido: una coma de más o unas comillas sin cerrar hacen que el cliente ignore el archivo entero sin avisar. Comprueba también que <code>npx campus-cli mcp</code> arranque sin error directamente en la terminal — si ahí falla, el problema no está en Cursor.</p>
+  <p>Si el servidor conecta pero las respuestas dicen que no estás autenticado, tu sesión expiró: vuelve a correr <code>npx campus-cli account login</code>. Y recuerda cerrar el cliente por completo antes de reabrirlo; recargar la ventana no siempre relee la configuración.</p>
 
-  <h2 id="comandos">Comandos disponibles</h2>
-  <div class="table-wrap"><table>
-    <thead><tr><th scope="col">Comando</th><th scope="col">Qué hace</th></tr></thead>
-    <tbody>
-      <tr><td><code>campus account login</code></td><td>Inicia sesión y encadena el login de Blackboard.</td></tr>
-      <tr><td><code>campus whoami</code></td><td>Usuario activo y tiempo restante de sesión.</td></tr>
-      <tr><td><code>campus status</code></td><td>Sesión y versión del servidor Blackboard.</td></tr>
-      <tr><td><code>campus courses list</code></td><td>Lista tus cursos del ciclo.</td></tr>
-      <tr><td><code>campus courses contents &lt;courseId&gt;</code></td><td>Materiales y carpetas del curso.</td></tr>
-      <tr><td><code>campus courses announcements &lt;courseId&gt;</code></td><td>Anuncios publicados por el profesor.</td></tr>
-      <tr><td><code>campus courses grades &lt;courseId&gt;</code></td><td>Reporte de calificaciones del curso.</td></tr>
-      <tr><td><code>campus assignments list --pending</code></td><td>Tareas pendientes de todos tus cursos.</td></tr>
-      <tr><td><code>campus assignments submit &lt;courseId&gt; &lt;id&gt; -f tarea.pdf</code></td><td>Entrega una tarea; <code>--draft</code> guarda sin enviar.</td></tr>
-      <tr><td><code>campus download-folder &lt;courseId&gt; &lt;folderId&gt; -o ./materiales/</code></td><td>Descarga una carpeta completa.</td></tr>
-      <tr><td><code>campus api GET /learn/api/public/v1/users/me</code></td><td>Llamada directa a cualquier endpoint de Blackboard.</td></tr>
-      <tr><td><code>campus mcp</code></td><td>Arranca el servidor MCP por stdio.</td></tr>
-    </tbody>
-  </table></div>
-  <p>Los IDs de curso tienen la forma <code>_100001_1</code>. Todos los comandos aceptan <code>--json</code>, y los spinners van a <code>stderr</code>, así que <code>--json 2&gt;/dev/null</code> te da JSON limpio para scripts.</p>
-
-  <h2 id="cli-o-mcp">¿CLI o MCP?</h2>
-  <div class="table-wrap"><table>
-    <thead><tr><th scope="col">Modo</th><th scope="col">Cuándo conviene</th></tr></thead>
-    <tbody>
-      <tr><td><strong>CLI</strong></td><td>Consultas rápidas, scripts, automatización, no salir de la terminal.</td></tr>
-      <tr><td><strong>MCP</strong></td><td>Darle a un asistente de IA acceso al campus: «¿qué tengo pendiente esta semana?»</td></tr>
-    </tbody>
-  </table></div>
-  <p>No hay que elegir: los dos modos comparten la misma sesión. Primero <code>campus account login</code>, después el CLI a mano o <a class="prose-link" href="/blackboard-mcp/">el servidor MCP conectado a tu cliente de IA</a>. Para saber qué revisar cada semana antes de automatizarlo, lee <a class="prose-link" href="/blog/organizar-tu-semana-blackboard/">la guía para organizar tu semana en Blackboard sin perder fechas</a>.</p>
+  <h2 id="siguiente">Qué puedes hacer después</h2>
+  <p>Las herramientas disponibles, el detalle de seguridad y las limitaciones actuales están en <a class="prose-link" href="/blackboard-mcp/">la página principal de Blackboard MCP</a>. Si prefieres consultar tu campus por comandos en vez de por chat, existe <a class="prose-link" href="/blackboard-cli/">Blackboard CLI</a>. Y para saber qué revisar cada semana antes de automatizarlo, lee <a class="prose-link" href="/blog/organizar-tu-semana-blackboard/">la guía para organizar tu semana en Blackboard sin perder fechas</a>.</p>
 
   <h2 id="faq">Preguntas frecuentes</h2>
-  <h3>¿Necesito instalarlo para probarlo?</h3><p>No. <code>npx campus-cli account login</code> lo descarga y ejecuta sin instalación global.</p>
-  <h3>¿Guarda mi contraseña de UPC?</h3><p>No. El login usa el flujo estándar de Microsoft SSO en tu navegador. Queda guardada una sesión local, revocable con <code>campus logout</code>.</p>
-  <h3>¿Puedo usarlo en scripts?</h3><p>Sí. Todos los comandos aceptan <code>--json</code> y los mensajes de progreso van a <code>stderr</code>.</p>
-  <h3>¿Funciona en Windows?</h3><p>Sí, en macOS, Linux y Windows, siempre que el entorno permita a Playwright abrir Chromium para el login.</p>
-  <h3>¿Está afiliado a Blackboard o UPC?</h3><p>No. Campus es un proyecto independiente y no oficial. La compatibilidad actual está enfocada en Blackboard UPC; Canvas y Moodle están en el roadmap. El repositorio tiene la documentación y los cambios más recientes.</p>
+  <h3>¿Dónde va el archivo de configuración MCP de Cursor?</h3><p>En <code>~/.cursor/mcp.json</code>.</p>
+  <h3>¿Necesito instalar algo además de Cursor?</h3><p>Solo Node.js 18 o superior. El comando <code>npx</code> descarga <code>campus-cli</code> la primera vez que se ejecuta.</p>
+  <h3>¿Qué hago si las herramientas no aparecen?</h3><p>Cierra el cliente por completo y vuelve a abrirlo, verifica que el JSON no tenga comas de más y confirma que <code>npx campus-cli mcp</code> arranca sin error en la terminal.</p>
+
+  <h2 id="otros">Otros clientes</h2>
+  <ul><li><a href="/blackboard-mcp/claude-desktop/">Claude Desktop</a></li><li><a href="/blackboard-mcp/claude-code/">Claude Code</a></li><li><a href="/blackboard-mcp/github-copilot/">GitHub Copilot en VS Code</a></li><li><a href="/blackboard-mcp/codex/">OpenAI Codex CLI</a></li><li><a href="/blackboard-mcp/windsurf/">Windsurf</a></li></ul>
 
   <aside class="related" aria-labelledby="related-title">
     <h2 id="related-title">Sigue explorando</h2>
-    <p class="related__intro">El CLI es la interfaz de terminal. Estas son las otras piezas del mismo tema.</p>
+    <p class="related__intro">Esta guía es una pieza del conector. Estas son las otras.</p>
     <ul class="related__grid">
       <li class="related__card">
         <span class="related__tag">Recurso</span>
-        <h3><a href="/blackboard-mcp/">Blackboard MCP: tu Aula Virtual dentro de tu asistente de IA</a></h3>
-        <p>La misma información, pero disponible para ChatGPT, Claude u otro cliente compatible.</p>
+        <h3><a href="/blackboard-mcp/">Blackboard MCP: herramientas, seguridad y límites</a></h3>
+        <p>Qué puede hacer el conector, qué no, y cómo trata tu sesión de UPC.</p>
         <span class="related__go">Ver Blackboard MCP <span aria-hidden="true">&#8594;</span></span>
       </li>
       <li class="related__card">
-        <span class="related__tag">Guía base</span>
-        <h3><a href="/blog/organizar-tu-semana-blackboard/">Cómo organizar tu semana usando Blackboard sin perder fechas</a></h3>
-        <p>Qué revisar cada semana en el Aula Virtual y en qué orden, antes de automatizarlo.</p>
-        <span class="related__go">Leer la guía <span aria-hidden="true">&#8594;</span></span>
+        <span class="related__tag">Recurso</span>
+        <h3><a href="/blackboard-cli/">Blackboard CLI: cursos, tareas y notas desde la terminal</a></h3>
+        <p>La misma información, por comandos, sin salir de la consola.</p>
+        <span class="related__go">Ver Blackboard CLI <span aria-hidden="true">&#8594;</span></span>
       </li>
       <li class="related__card">
-        <span class="related__tag">Índice</span>
-        <h3><a href="/blog/">Todas las guías de Blackboard UPC</a></h3>
-        <p>El hub con las guías publicadas y las que están en preparación.</p>
-        <span class="related__go">Ir al blog <span aria-hidden="true">&#8594;</span></span>
+        <span class="related__tag">Guía base</span>
+        <h3><a href="/blog/chatgpt-blackboard-sin-copiar-archivos/">Cuánto tiempo pierdes copiando archivos a mano</a></h3>
+        <p>El método manual frente a conectar Blackboard directo con tu asistente.</p>
+        <span class="related__go">Leer la guía <span aria-hidden="true">&#8594;</span></span>
       </li>
     </ul>
   </aside>

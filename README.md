@@ -15,6 +15,8 @@ campus courses list
 campus assignments list --pending
 ```
 
+**English summary** — `campus-cli` is an unofficial **Blackboard MCP server** and CLI for students. It exposes Blackboard Learn (currently UPC Aula Virtual, Peru) to any Model Context Protocol client — Claude Desktop, Claude Code, Cursor, GitHub Copilot, Codex CLI, Windsurf — so an AI assistant can read your courses, assignments, due dates, grades, instructor feedback, announcements and course materials, and download files, without you copying anything by hand. Unlike institutional Blackboard integrations, it needs **no OAuth developer key from your university**: it uses the student's own SSO session, locally. Run it with `npx campus-cli mcp` (stdio). Canvas and Moodle are on the roadmap.
+
 ## Qué puedes hacer
 
 - Ver tus cursos del ciclo.
@@ -291,6 +293,17 @@ Todos los clientes MCP terminan usando la misma idea:
 
 El formato exacto cambia por cliente, pero el comando y los argumentos son los mismos.
 
+### Guías paso a paso
+
+Cada cliente tiene su guía con la ruta exacta del archivo, cómo verificar la conexión y qué hacer si falla:
+
+- [Claude Desktop](https://campuscli.com/blackboard-mcp/claude-desktop/)
+- [Claude Code](https://campuscli.com/blackboard-mcp/claude-code/)
+- [Cursor](https://campuscli.com/blackboard-mcp/cursor/)
+- [GitHub Copilot en VS Code](https://campuscli.com/blackboard-mcp/github-copilot/)
+- [OpenAI Codex CLI](https://campuscli.com/blackboard-mcp/codex/)
+- [Windsurf](https://campuscli.com/blackboard-mcp/windsurf/)
+
 ## Herramientas MCP
 
 Todas las herramientas actuales usan el prefijo `blackboard_` para evitar colisiones cuando se agreguen `canvas_*` o `moodle_*`.
@@ -311,6 +324,10 @@ Todas las herramientas actuales usan el prefijo `blackboard_` para evitar colisi
 | `blackboard_save_attempt_draft` | Guardar texto/archivos en un intento SIN enviarlo (queda abierto para seguir editando) |
 | `blackboard_submit_attempt` | Entregar tarea; confirma antes de enviar |
 | `blackboard_get_assignment_feedback` | Comentarios y feedback del profesor |
+| `blackboard_system_version` | Versión del servidor Blackboard |
+| `blackboard_list_people` | Docentes y compañeros del curso; resuelve un id interno a un nombre |
+| `blackboard_download_file_url` | Descargar un archivo desde una URL bbcswebdav |
+| `blackboard_download_feedback_file` | [EXPERIMENTAL] Descargar un archivo de feedback adjunto a una nota |
 | `blackboard_raw_api` | Cualquier endpoint de Blackboard |
 
 Ejemplos de uso con un asistente:
