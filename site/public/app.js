@@ -246,6 +246,21 @@ function setUpArticleReading() {
   // while reading a long section, so the position is computed on scroll.
   const markCurrent = () => {
     const line = 140;
+
+    // Once the page bottoms out there is nothing left to scroll, so the last
+    // headings can never cross the line and the closing sections would never
+    // light up — you finish reading "Contacto" while the list still points at
+    // whatever crossed the line last. At the end, the last heading on screen
+    // is the one being read.
+    const scrolled = window.scrollY + window.innerHeight;
+    if (scrolled >= document.documentElement.scrollHeight - 4) {
+      const reached = headings.filter(
+        (heading) => heading.getBoundingClientRect().top < window.innerHeight,
+      );
+      setActive((reached[reached.length - 1] ?? headings[0]).id);
+      return;
+    }
+
     let current = headings[0];
     for (const heading of headings) {
       if (heading.getBoundingClientRect().top <= line) current = heading;
@@ -261,6 +276,18 @@ function setUpArticleReading() {
   };
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
+  // Scrolling is not the only thing that moves a heading past the line: a
+  // rotated phone reflows every one of them, and a page that arrives already
+  // scrolled — a deep link, or coming back through history — settles after
+  // this runs and then never fires a scroll event to correct itself.
+  window.addEventListener("resize", onScroll, { passive: true });
+  window.addEventListener("load", onScroll);
+  // And the page itself can grow after the last scroll event — a lazy image
+  // below the fold lands, the document gets taller, and the position computed
+  // a moment ago no longer describes where the reader is.
+  if (typeof ResizeObserver === "function") {
+    new ResizeObserver(onScroll).observe(document.body);
+  }
 
   addPageActions();
 }
