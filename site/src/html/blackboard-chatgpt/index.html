@@ -1,0 +1,86 @@
+<main class="doc-page" data-toc data-toc-title="En esta página">
+  <nav class="crumbs" aria-label="Ruta de navegación"><ol><li><a href="/">Inicio</a></li><li><a href="/blackboard-mcp/">Blackboard MCP</a></li><li aria-current="page">Blackboard en ChatGPT</li></ol></nav>
+  <p class="eyebrow">Campus · Sin instalar nada</p>
+  <h1>Tu Aula Virtual UPC dentro de ChatGPT, sin instalar nada.</h1>
+  <p>Campus conecta tu Blackboard de la UPC con ChatGPT o Claude, incluido el móvil. Preguntas «¿qué entrego esta semana?» y responde con tus cursos, tus fechas y tus notas reales. No copias archivos, no abres el Aula Virtual, no instalas nada en tu computadora.</p>
+  <p><button class="button" type="button" data-open-founder>Ver cupos del acceso anticipado</button></p>
+
+  <h2 id="para-quien">Para quién es esto</h2>
+  <p>Campus tiene dos formas de usarse, y la diferencia no es cuánto pagas sino <strong>dónde preguntas</strong>.</p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th></th><th>Campus (esta página)</th><th>Blackboard CLI</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Dónde preguntas</strong></td>
+          <td>ChatGPT o Claude, en el navegador y en el móvil</td>
+          <td>Tu editor de código, en tu computadora</td>
+        </tr>
+        <tr>
+          <td><strong>Qué instalas</strong></td>
+          <td>Nada</td>
+          <td>Node.js y el paquete <code>campus-cli</code></td>
+        </tr>
+        <tr>
+          <td><strong>Tu sesión</strong></td>
+          <td>Se mantiene sola, cifrada</td>
+          <td>Vive en tu máquina; la renuevas tú</td>
+        </tr>
+        <tr>
+          <td><strong>Precio</strong></td>
+          <td>S/20 por dos meses, luego S/15 al mes</td>
+          <td>Gratis y de código abierto</td>
+        </tr>
+        <tr>
+          <td><strong>Para quién</strong></td>
+          <td>Cualquier estudiante</td>
+          <td>Si ya usas una terminal</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Si programas y trabajas desde Cursor, Claude Code o VS Code, <a class="prose-link" href="/blackboard-cli/">usa el CLI y no pagues nada</a>: hace lo mismo y es abierto. Esta página es para todos los demás, que son casi todos.</p>
+
+  <h2 id="por-que-no-basta-el-gratis">Por qué el CLI no sirve en ChatGPT</h2>
+  <p>No es una limitación comercial, es técnica. El CLI se ejecuta como un programa en tu computadora, y solo pueden hablar con él las aplicaciones que abren programas: editores de código y apps de escritorio.</p>
+  <p>ChatGPT en el navegador y Claude en el móvil no abren programas en tu máquina. Necesitan conectarse a un servidor por internet. Ese servidor es lo que Campus opera y mantiene, y es lo que estás pagando: no una función extra, sino que exista algo encendido al otro lado cuando abres el chat en el colectivo.</p>
+
+  <h2 id="seguridad">Qué pasa con tu contraseña</h2>
+  <p>No la tocamos. El inicio de sesión ocurre en la página de la propia universidad, con el mismo formulario de Microsoft de siempre, y tu contraseña nunca pasa por Campus ni por ChatGPT.</p>
+  <p>Lo que viaja después son consultas concretas y ya autorizadas: tus cursos, tus tareas, tus notas. ChatGPT recibe permiso para preguntar, nunca tus credenciales. Puedes desconectar cuando quieras y Campus deja de poder consultar tu campus.</p>
+  <p>El motor que hace las consultas es <a class="prose-link" href="https://github.com/alejooroncoy/campus-cli" target="_blank" rel="noreferrer">código abierto y auditable</a>. Es el mismo que puedes correr tú en tu máquina si prefieres.</p>
+
+  <h2 id="que-puedes-preguntar">Qué puedes preguntar</h2>
+  <ul>
+    <li>¿Qué tengo que entregar esta semana y qué pesa más en la nota?</li>
+    <li>¿Cuál es mi promedio en este curso y qué me falta para subirlo?</li>
+    <li>¿Qué dice el enunciado del trabajo final? Compáralo con lo que llevo escrito.</li>
+    <li>¿Hay anuncios nuevos que cambien alguna fecha?</li>
+    <li>Resume el material de la semana 8 de este curso.</li>
+  </ul>
+  <p>Esa penúltima es la que más cambia las cosas: <a class="prose-link" href="/blog/revisar-tu-entrega-contra-el-enunciado/">revisar tu avance contra el enunciado y la rúbrica antes de entregar</a>.</p>
+
+  <h2 id="como-empezar">Cómo empezar</h2>
+  <p>El acceso anticipado está limitado a 100 cupos y la activación es manual durante el piloto, para acompañar a cada persona en su primera conexión.</p>
+  <ol>
+    <li>Dejas tus datos en el formulario de acceso anticipado.</li>
+    <li>Coordinamos el pago de S/20 por Yape o Plin, que cubre los dos primeros meses.</li>
+    <li>Te acompañamos en la conexión: inicias sesión en la UPC como siempre y listo.</li>
+    <li>Si a los dos meses te sirve, continúas por S/15 al mes. Si no, no continúas.</li>
+  </ol>
+  <p><button class="button" type="button" data-open-founder>Quiero un cupo</button></p>
+
+  <h2 id="faq">Preguntas frecuentes</h2>
+  <h3>¿Funciona con ChatGPT gratis?</h3>
+  <p>Los conectores requieren una cuenta de pago de ChatGPT. Con Claude también funciona, y ahí hay más margen en el plan gratuito. Si no tienes ninguna de las dos, el CLI es gratis y funciona con clientes de escritorio.</p>
+  <h3>¿Por qué pago si el código es abierto?</h3>
+  <p>Pagas por no operarlo tú. El código que consulta Blackboard es abierto y puedes ejecutarlo gratis en tu computadora; lo que cobramos es mantener el servidor encendido, la sesión viva y la conexión funcionando desde el móvil sin que tengas que saber nada de esto.</p>
+  <h3>¿Campus puede entregar tareas por mí?</h3>
+  <p>Puede preparar y enviar una entrega, pero solo si tú lo confirmas explícitamente en ese momento. Nunca envía nada por su cuenta.</p>
+  <h3>¿Y si no me sirve?</h3>
+  <p>Los S/20 cubren dos meses y puedes pedir devolución durante el piloto. No hay permanencia ni renovación automática sin avisar.</p>
+  <h3>¿Esto está afiliado a la UPC?</h3>
+  <p>No. Campus es un proyecto independiente, sin relación con la UPC ni con Blackboard. Puedes leer el <a class="prose-link" href="/no-afiliacion/">aviso de no afiliación</a> completo.</p>
+</main>

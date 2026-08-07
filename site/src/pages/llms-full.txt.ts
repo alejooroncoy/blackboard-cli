@@ -2,6 +2,7 @@ import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
 import clients from "../data/mcp-clients.json";
 import { htmlToMarkdown } from "../lib/html-to-markdown";
+import chatgptBody from "../html/blackboard-chatgpt/index.html?raw";
 import mcpBody from "../html/blackboard-mcp/index.html?raw";
 import cliBody from "../html/blackboard-cli/index.html?raw";
 
@@ -32,6 +33,13 @@ const section = (title: string, description: string, url: string, text: string) 
 
 export const GET: APIRoute = async () => {
   const products = [
+    {
+      title: "Blackboard UPC en ChatGPT, sin instalar nada",
+      description:
+        "El servicio de pago: un servidor que mantiene la conexión viva para ChatGPT y Claude en el navegador y en el móvil.",
+      url: "https://campuscli.com/blackboard-chatgpt/",
+      body: chatgptBody,
+    },
     {
       title: "Blackboard MCP: el Aula Virtual UPC dentro de tu asistente de IA",
       description:
@@ -88,14 +96,15 @@ export const GET: APIRoute = async () => {
     "y con la terminal por CLI. Proyecto independiente, sin relación con UPC ni",
     "con Blackboard.",
     "",
-    "Este archivo contiene el texto de todas las páginas publicadas: los dos",
+    "Este archivo contiene el texto de todas las páginas publicadas: los tres",
     "productos, la guía de conexión para cada asistente, y las guías del blog.",
     "Índice y enlaces: https://campuscli.com/llms.txt",
     "Aviso de no afiliación: https://campuscli.com/no-afiliacion/",
     "",
     "## Qué contiene",
     "",
-    "1. Productos: Blackboard MCP y Blackboard CLI.",
+    "1. Productos: Campus en ChatGPT (de pago, nada que instalar), Blackboard MCP",
+    "   y Blackboard CLI (gratis y de código abierto).",
     "2. Conexión por asistente: Cursor, Claude Code, Claude Desktop, Codex,",
     "   GitHub Copilot, Windsurf, y la comparativa de servidores MCP.",
     "3. Guías del blog.",

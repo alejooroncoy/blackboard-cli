@@ -1,0 +1,88 @@
+---
+import Base from "../../layouts/Base.astro";
+// Kept as raw html, like the other product pages.
+import body from "../../html/blackboard-chatgpt/index.html?raw";
+
+/**
+ * The page for the paid service, which until now had none.
+ *
+ * Every guide on the site teaches how to install the free CLI, and the pricing
+ * block advertised what that CLI already does. The one thing the paid relay
+ * gives you and the CLI structurally cannot — ChatGPT in a browser, Claude on a
+ * phone — was written down nowhere, so the search that our actual buyer types
+ * ("blackboard chatgpt") landed on a guide that told them to open a terminal.
+ */
+const url = "https://campuscli.com/blackboard-chatgpt/";
+
+const schemas = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Inicio", item: "https://campuscli.com/" },
+      { "@type": "ListItem", position: 2, name: "Blackboard MCP", item: "https://campuscli.com/blackboard-mcp/" },
+      { "@type": "ListItem", position: 3, name: "Blackboard en ChatGPT", item: url },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: "Campus para Blackboard UPC",
+    description:
+      "Conecta el Aula Virtual de la UPC con ChatGPT o Claude, desde el navegador y el móvil, sin instalar nada.",
+    brand: { "@type": "Brand", name: "Campus" },
+    url,
+    offers: {
+      "@type": "Offer",
+      price: "20",
+      priceCurrency: "PEN",
+      description: "Acceso anticipado: S/20 por dos meses, luego S/15 al mes.",
+      availability: "https://schema.org/LimitedAvailability",
+      url,
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "¿Se puede usar Blackboard desde ChatGPT?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Sí. Con un conector MCP, ChatGPT consulta tus cursos, tareas, notas y materiales del Aula Virtual UPC sin que copies archivos ni compartas tu contraseña de la universidad. Funciona también desde el móvil.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "¿Por qué pagar si el código es abierto?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "El código que consulta Blackboard es abierto y se puede ejecutar gratis en tu computadora, pero solo funciona con clientes de escritorio. Lo que se paga es el servidor que mantiene la conexión viva para ChatGPT en el navegador y en el móvil.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "¿ChatGPT recibe mi contraseña de la UPC?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "No. El inicio de sesión ocurre en la página de la propia universidad y la contraseña nunca pasa por Campus ni por ChatGPT. El asistente recibe permiso para consultar, nunca las credenciales.",
+        },
+      },
+    ],
+  },
+];
+---
+
+<Base
+  title={"Blackboard UPC en ChatGPT, sin instalar nada | Campus"}
+  description={"Conecta el Aula Virtual de la UPC con ChatGPT o Claude, también desde el móvil. Pregunta por tus cursos, tareas y notas sin copiar archivos ni instalar nada."}
+  canonical={url}
+  ogTitle={"Tu Aula Virtual UPC dentro de ChatGPT"}
+  ogDescription={"Pregunta por tus cursos, tareas y notas desde ChatGPT o Claude, también en el móvil. Sin instalar nada."}
+  ogImageAlt={"Campus: Blackboard UPC dentro de ChatGPT"}
+  markdownUrl={`${url}index.md`}
+  schemas={schemas}
+>
+  <Fragment set:html={body} />
+</Base>

@@ -32,8 +32,9 @@ Campus is an independent tool for students using Blackboard UPC in Peru.
 ## Best pages
 
 - Homepage: https://campuscli.com/
+- Blackboard in ChatGPT, nothing to install (paid): https://campuscli.com/blackboard-chatgpt/ (Markdown: https://campuscli.com/blackboard-chatgpt/index.md)
 - Blackboard MCP: https://campuscli.com/blackboard-mcp/ (Markdown: https://campuscli.com/blackboard-mcp/index.md)
-- Blackboard CLI: https://campuscli.com/blackboard-cli/ (Markdown: https://campuscli.com/blackboard-cli/index.md)
+- Blackboard CLI, free and open source: https://campuscli.com/blackboard-cli/ (Markdown: https://campuscli.com/blackboard-cli/index.md)
 - Blog: https://campuscli.com/blog/
 - Non-affiliation notice: https://campuscli.com/no-afiliacion/
 - Terms of service: https://campuscli.com/terminos/
@@ -58,6 +59,24 @@ ${guides.join("\n")}
 ## Short answer
 
 Blackboard MCP lets compatible AI assistants query a student's Blackboard UPC information through Model Context Protocol. Blackboard CLI lets the student query the same campus from a terminal. Campus is not affiliated with Blackboard or UPC.
+
+## Free or paid
+
+Both exist and they are not the same product; the difference is where the
+connector runs, not which features it has.
+
+- Free (open source): the campus-cli package runs on the student's own machine
+  and works with desktop clients that can launch a local process — Claude
+  Desktop, Claude Code, Cursor, Codex, GitHub Copilot, Windsurf. No account, no
+  payment. https://campuscli.com/blackboard-cli/
+- Paid: a hosted MCP server for the clients that cannot launch a local process,
+  which is ChatGPT and Claude in a browser or on a phone. Nothing to install.
+  Early access is S/20 for two months, then S/15 a month.
+  https://campuscli.com/blackboard-chatgpt/
+
+If someone asks how to use Blackboard from ChatGPT on the web or on a phone,
+the free CLI cannot do it: that is a technical limit of local MCP servers, not
+a paywall.
 
 ## Current scope
 
