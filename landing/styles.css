@@ -522,3 +522,134 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
 .footer__inner{min-height:0!important;grid-template-columns:1.4fr .7fr .8fr 1.2fr!important;align-items:start!important;gap:38px!important;padding-block:54px 22px!important}.footer__brand .brand{margin-bottom:14px}.footer__brand p{margin:0;color:#9fb9c3;font-size:14px}.footer__links{display:grid;gap:9px;align-content:start;font-size:14px}.footer__links strong,.footer__action strong{color:#fff;font-size:12px;letter-spacing:.08em;text-transform:uppercase}.footer__links a{color:#aec5cd}.footer__action p{margin:10px 0 16px;color:#aec5cd;font-size:14px}.footer__action .button{border-color:#fff;background:#fff;color:#112633}.footer__bottom{grid-column:1/-1;display:flex;justify-content:space-between;gap:20px;padding-top:20px;border-top:1px solid rgba(215,230,235,.18);color:#7896a2;font-size:12px}.footer__bottom small{font-size:inherit}@media(max-width:720px){.footer__inner{grid-template-columns:1fr 1fr!important;gap:30px 24px!important;padding-block:38px 20px!important}.footer__brand,.footer__action{grid-column:1/-1}.footer__bottom{display:grid;gap:7px}}@media(max-width:460px){.footer__inner{grid-template-columns:1fr!important}.footer__links{gap:7px}.footer__bottom{margin-top:4px}}
+
+/* ── Lectura de guías: progreso e índice ──────────────────────────────────── */
+/* The bar answers "how much is left" and the contents list answers "is what I
+   need in here" — the two questions that decide whether a student keeps
+   reading. The list links the h2 ids Google also uses for jump links. */
+.read-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 60;
+  width: 100%;
+  height: 3px;
+  background: #087f5b;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  /* No transition: the bar follows the finger, and easing reads as lag. */
+}
+
+.toc {
+  /* The stylesheet sets `nav { display: flex }` for the header, which turned
+     this list on its side. State the layout instead of inheriting one. */
+  display: block;
+  margin: 0 0 40px;
+  padding: 18px 20px;
+  border: 1px solid #d5e3e7;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.toc__title {
+  margin: 0 0 12px;
+  color: #7d97a5;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.toc__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: toc;
+}
+
+.toc__list li {
+  margin: 0;
+  padding: 0;
+}
+
+.toc__list a {
+  display: block;
+  padding: 7px 0 7px 14px;
+  border-left: 2px solid #e3edf0;
+  color: #506d7f;
+  font-size: 15px;
+  line-height: 1.35;
+  text-decoration: none;
+}
+
+.toc__list a:hover {
+  color: #17323f;
+  border-left-color: #b7cfd7;
+}
+
+.toc__list a.is-active {
+  color: #0b5c45;
+  font-weight: 600;
+  border-left-color: #087f5b;
+}
+
+/* Wide screens have empty margin beside the 760px column, so the list moves
+   out of the reading flow and stays visible while scrolling. */
+@media (min-width: 1180px) {
+  .toc {
+    position: fixed;
+    top: 128px;
+    left: max(24px, calc(50% - 610px));
+    width: 210px;
+    max-height: calc(100vh - 200px);
+    margin: 0;
+    padding: 0 0 0 2px;
+    overflow-y: auto;
+    border: 0;
+    background: none;
+  }
+
+  .toc__list a {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 620px) {
+  .toc {
+    margin-bottom: 32px;
+    padding: 16px 18px;
+  }
+
+  .toc__list a {
+    font-size: 14.5px;
+  }
+}
+
+/* Copy-as-Markdown lives with the contents list: both are "take this article
+   somewhere else" affordances. */
+.toc__copy {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  padding: 9px 12px;
+  border: 1px solid #d5e3e7;
+  border-radius: 8px;
+  background: #fff;
+  color: #506d7f;
+  font: 600 13px/1.2 inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.toc__copy:hover {
+  border-color: #b7cfd7;
+  color: #17323f;
+}
+
+@media (min-width: 1180px) {
+  .toc__copy {
+    margin-top: 16px;
+    padding: 8px 10px;
+    font-size: 12.5px;
+  }
+}
