@@ -1,0 +1,41 @@
+# Compila y corre los tests en cada PR y en cada push a main.
+#
+# El repo es público y acepta PRs de fuera, pero hasta ahora nadie comprobaba
+# nada antes de mergear: el PR #15 entró con 773 líneas y sus tests los corrió
+# una persona a mano. Basta con que una vez se olvide para que main quede roto
+# sin que salte ninguna alarma.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# Un push nuevo sobre la misma rama cancela la ejecución anterior: revisar un
+# commit que ya quedó obsoleto no dice nada y ocupa la cola.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    # Playwright descarga Chromium en el postinstall y aquí no hay navegador que
+    # abrir: el login contra el SSO ocurre en la máquina del estudiante. Bajarlo
+    # costaría minutos por ejecución sin comprobar nada.
+    env:
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+      POSTHOG_DISABLED: 1
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # La misma mayor que usa el Dockerfile de los directorios MCP, para
+          # que un fallo aquí signifique lo mismo que un fallo allí.
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+      - run: npm test
