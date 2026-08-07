@@ -1,0 +1,526 @@
+{
+  "author": "Alejandro Oroncoy",
+  "authorUrl": "https://github.com/alejooroncoy",
+  "category": "productivity",
+  "cloudEndpoint": "https://mcp.campuscli.com/mcp",
+  "description": "Connects university systems to AI assistants from the student's own account: courses, assignments, due dates, grades, instructor feedback, announcements and course materials. Uses the student's own SSO session, so no institutional API key is needed. Blackboard Learn today (UPC, Peru); more LMS connectors on the way.",
+  "homepage": "https://github.com/alejooroncoy/campus-cli",
+  "icon": "🎓",
+  "identifier": "alejooroncoy-campus-cli",
+  "localizations": [
+    {
+      "description": "Conecta los sistemas de tu universidad con tu asistente de IA desde tu propia cuenta: cursos, tareas, fechas de entrega, notas, feedback del profesor, anuncios y materiales. Usa tu sesión SSO, así que no hace falta ninguna clave de API de la institución. Hoy Blackboard Learn (UPC, Perú); vienen más conectores.",
+      "locale": "es-ES",
+      "name": "Campus",
+      "tags": [
+        "blackboard",
+        "aula virtual",
+        "lms",
+        "educación",
+        "universidad",
+        "estudiantes",
+        "notas",
+        "tareas",
+        "upc"
+      ]
+    }
+  ],
+  "name": "Campus",
+  "prompts": [],
+  "resources": [],
+  "tags": [
+    "blackboard",
+    "blackboard-learn",
+    "lms",
+    "education",
+    "university",
+    "students",
+    "grades",
+    "assignments",
+    "canvas",
+    "moodle"
+  ],
+  "tools": [
+    {
+      "description": "Get the currently authenticated UPC student info",
+      "execution": {
+        "taskSupport": "forbidden"
+      },
+      "inputSchema": {
+        "properties": {},
+        "type": "object"
+      },
+      "name": "blackboard_whoami"
+    },
+    {
+      "description": "Get Blackboard Learn server version",
+      "execution": {
+        "taskSupport": "forbidden"
+      },
+      "inputSchema": {
+        "properties": {},
+        "type": "object"
+      },
+      "name": "blackboard_system_version"
+    },
+    {
+      "description": "List all enrolled courses for the current student",
+      "execution": {
+        "taskSupport": "forbidden"
+      },
+      "inputSchema": {
+        "properties": {},
+        "type": "object"
+      },
+      "name": "blackboard_list_courses"
+    },
+    {
+      "description": "Get details of a specific course by its Blackboard ID (e.g. _529580_1)",
+      "execution": {
+        "taskSupport": "forbidden"
+      },
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "properties": {
+          "courseId": {
+            "description": "Blackboard course ID like _529580_1",
+            "type": "string"
+          }
+        },
+        "required": [
+          "courseId"
+        ],
+        "type": "object"
+      },
+      "name": "blackboard_get_course"
+    },
+    {
+      "description": "List content items inside a course or folder. Use parentId to navigate into subfolders.",
+      "execution": {
+        "taskSupport": "forbidden"
+      },
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "properties": {
+          "courseId": {
+            "description": "Blackboard course ID",
+            "type": "string"
+          },
+          "parentId": {
+            "description": "Parent folder content ID (omit for root level)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "courseId"
+        ],
+        "type": "object"
+      },
+      "name": "blackboard_list_contents"
+    },
+    {
+      "description": "List recent announcements for a course",
+      "execution": {
+        "taskSupport": "forbidden"
+      },
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "properties": {
+          "courseId": {
+            "description": "Blackboard course ID",
+            "type": "string"
+          }
+        },
+        "required": [
+          "courseId"
+        ],
+        "type": "object"
+      },
+      "name": "blackboard_list_announcements"
+    },
+    {
+      "description": "Instructors and classmates of a course. Use it to resolve an internal user id into a person's name. Pass search to look up one person and get their contact details.",
+      "execution": {
+        "taskSupport": "forbidden"
+      },
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "properties": {
+          "courseId": {
+            "description": "Blackboard course ID",
+            "type": "string"
+          },
+          "search": {
+            "description": "Name of one person in the course",
+            "type": "string"
+          }
+        },
+        "required": [
+          "courseId"
+        ],
+        "type": "object"
+      },
+      "name": "blackboard_list_people"
+    },
+    {
+      "description": "List assignments and tasks in a course with due dates, scores and submission status",
+      "execution": {
+        "taskSupport": "forbidden"
+      },
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "properties": {
+          "courseId": {
+            "description": "Blackboard course ID",
+            "type": "string"
+          }
+        },
+        "required": [
+          "courseId"
+        ],
+        "type": "object"
+      },
+      "name": "blackboard_list_assignments"
+    },
+    {
+      "description": "List submission attempts for a specific assignment (gradebook column)",
+      "execution": {
+        "taskSupport": "forbidden"
+      },
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "properties": {
+          "columnId": {
+            "description": "Gradebook column ID (assignment ID)",
+            "type": "string"
+          },
+          "courseId": {
+            "description": "Blackboard course ID",
+            "type": "string"
+          }
+        },
+        "required": [
+          "courseId",
+          "columnId"
+        ],
+        "type": "object"
+      },
+      "name": "blackboard_list_attempts"
+    },
+    {
+      "description": "Get all grades for the current student in a course",
+      "execution": {
+        "taskSupport": "forbidden"
+      },
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "properties": {
+          "courseId": {
+            "description": "Blackboard course ID",
+            "type": "string"
+          }
+        },
+        "required": [
+          "courseId"
+        ],
+        "type": "object"
+      },
+      "name": "blackboard_get_grades"
+    },
+    {
+      "description": "Download a file from a course content item and save it to disk. attachmentId can be a Blackboard attachment ID (for x-bb-file) or a full bbcswebdav URL (for x-bb-document embedded files). Saves to outputDir (default: current working directory).",
+      "execution": {
+        "taskSupport": "forbidden"
+      },
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "properties": {
+          "attachmentId": {
+            "description": "Attachment ID from blackboard_list_attachments, or a full bbcswebdav URL for embedded files",
+            "type": "string"
+          },
+          "contentId": {
+            "description": "Content item ID",
+            "type": "string"
+          },
+          "courseId": {
+            "description": "Blackboard course ID",
+            "type": "string"
+          },
+          "filename": {
+            "description": "Filename to save as (e.g. displayName from blackboard_list_attachments). Falls back to Content-Disposition header.",
+            "type": "string"
+          },
+          "outputDir": {
+            "description": "Directory to save the file (default: current working directory)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "courseId",
+          "contentId",
+          "attachmentId"
+        ],
+        "type": "object"
+      },
+      "name": "blackboard_download_attachment"
+    },
+    {
+      "description": "List file attachments for a course content item. Works for x-bb-file (REST API) and x-bb-document (embedded files in body HTML).",
+      "execution": {
+        "taskSupport": "forbidden"
+      },
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "properties": {
+          "contentId": {
+            "description": "Content item ID",
+            "type": "string"
+          },
+          "courseId": {
+            "description": "Blackboard course ID",
+            "type": "string"
+          }
+        },
+        "required": [
+          "courseId",
+          "contentId"
+        ],
+        "type": "object"
+      },
+      "name": "blackboard_list_attachments"
+    },
+    {
+      "description": "Download a file directly from a Blackboard bbcswebdav URL and save it to disk. Saves to outputDir (default: current working directory).",
+      "execution": {
+        "taskSupport": "forbidden"
+      },
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "properties": {
+          "filename": {
+            "description": "Filename to save as (e.g. displayName from blackboard_list_attachments)",
+            "type": "string"
+          },
+          "outputDir": {
+            "description": "Directory to save the file (default: current working directory)",
+            "type": "string"
+          },
+          "url": {
+            "description": "Direct file URL from bbcswebdav (downloadUrl from blackboard_list_attachments)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "type": "object"
+      },
+      "name": "blackboard_download_file_url"
+    },
+    {
+      "description": "Upload a local file (image, PDF, doc, etc.) to Blackboard and get back a fileUploadId. This only uploads the file — it does NOT attach it to an attempt yet. Pass the returned fileUploadId(s) into blackboard_save_attempt_draft or blackboard_submit_attempt via fileUploadIds.",
+      "execution": {
+        "taskSupport": "forbidden"
+      },
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "properties": {
+          "filePath": {
+            "description": "Absolute path to the local file to upload",
+            "type": "string"
+          }
+        },
+        "required": [
+          "filePath"
+        ],
+        "type": "object"
+      },
+      "name": "blackboard_upload_attempt_file"
+    },
+    {
+      "description": "Save progress on an assignment attempt WITHOUT submitting it — text, attached files, or both. The attempt stays open (status InProgress) so the student can keep editing it later. This does NOT send it to the instructor for grading — use blackboard_submit_attempt for that, and always confirm with the user before calling that one.",
+      "execution": {
+        "taskSupport": "forbidden"
+      },
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "properties": {
+          "columnId": {
+            "description": "Assignment (gradebook column) ID",
+            "type": "string"
+          },
+          "courseId": {
+            "description": "Blackboard course ID",
+            "type": "string"
+          },
+          "fileUploadIds": {
+            "description": "fileUploadId(s) from blackboard_upload_attempt_file to attach to this draft",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "studentComments": {
+            "description": "Comment to the instructor",
+            "type": "string"
+          },
+          "studentSubmission": {
+            "description": "Text body of the submission",
+            "type": "string"
+          }
+        },
+        "required": [
+          "courseId",
+          "columnId"
+        ],
+        "type": "object"
+      },
+      "name": "blackboard_save_attempt_draft"
+    },
+    {
+      "description": "Submit (finalize) an assignment attempt for grading — text, attached files, or both. ALWAYS confirm with the user before submitting, showing exactly what will be sent. Once submitted the instructor can grade it; use blackboard_save_attempt_draft instead if the student just wants to save progress without sending it yet.",
+      "execution": {
+        "taskSupport": "forbidden"
+      },
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "properties": {
+          "columnId": {
+            "description": "Assignment (gradebook column) ID",
+            "type": "string"
+          },
+          "courseId": {
+            "description": "Blackboard course ID",
+            "type": "string"
+          },
+          "fileUploadIds": {
+            "description": "fileUploadId(s) from blackboard_upload_attempt_file to attach to this submission",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "studentComments": {
+            "description": "Comment to the instructor",
+            "type": "string"
+          },
+          "studentSubmission": {
+            "description": "Text body of the submission",
+            "type": "string"
+          }
+        },
+        "required": [
+          "courseId",
+          "columnId"
+        ],
+        "type": "object"
+      },
+      "name": "blackboard_submit_attempt"
+    },
+    {
+      "description": "Get professor feedback and scores for all assignments in a course. For each graded submission, shows score, instructor comments, and any feedback files attached by the professor.",
+      "execution": {
+        "taskSupport": "forbidden"
+      },
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "properties": {
+          "courseId": {
+            "description": "Blackboard course ID",
+            "type": "string"
+          }
+        },
+        "required": [
+          "courseId"
+        ],
+        "type": "object"
+      },
+      "name": "blackboard_get_assignment_feedback"
+    },
+    {
+      "description": "[EXPERIMENTAL] Download a feedback file that a professor attached to a graded attempt. Use the fileId from blackboard_get_assignment_feedback → attempt.feedbackFiles. The download endpoint may not be available on all Blackboard versions.",
+      "execution": {
+        "taskSupport": "forbidden"
+      },
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "properties": {
+          "attemptId": {
+            "description": "Attempt ID from blackboard_get_assignment_feedback",
+            "type": "string"
+          },
+          "columnId": {
+            "description": "Gradebook column (assignment) ID",
+            "type": "string"
+          },
+          "courseId": {
+            "description": "Blackboard course ID",
+            "type": "string"
+          },
+          "fileId": {
+            "description": "File ID from blackboard_get_assignment_feedback → attempt.feedbackFiles",
+            "type": "string"
+          },
+          "filename": {
+            "description": "Filename to save as (defaults to the name from feedbackFiles)",
+            "type": "string"
+          },
+          "outputDir": {
+            "description": "Directory to save the file (default: current working directory)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "courseId",
+          "columnId",
+          "attemptId",
+          "fileId"
+        ],
+        "type": "object"
+      },
+      "name": "blackboard_download_feedback_file"
+    },
+    {
+      "description": "Make a raw REST API call to Blackboard Learn. Use for any endpoint not covered by other tools.",
+      "execution": {
+        "taskSupport": "forbidden"
+      },
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "properties": {
+          "body": {
+            "description": "JSON body string for POST/PUT/PATCH",
+            "type": "string"
+          },
+          "method": {
+            "description": "HTTP method",
+            "enum": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH",
+              "DELETE"
+            ],
+            "type": "string"
+          },
+          "path": {
+            "description": "API path, e.g. /learn/api/public/v1/users/me",
+            "type": "string"
+          },
+          "query": {
+            "description": "Query string, e.g. limit=10&offset=0",
+            "type": "string"
+          }
+        },
+        "required": [
+          "method",
+          "path"
+        ],
+        "type": "object"
+      },
+      "name": "blackboard_raw_api"
+    }
+  ],
+  "version": "1.3.2"
+}
