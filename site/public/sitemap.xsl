@@ -65,29 +65,72 @@
             Lista de páginas de <a href="https://campuscli.com/">campuscli.com</a>.
             Esta vista es solo para leerla; los buscadores consumen el XML directamente.
           </p>
-          <span class="count">
-            <xsl:value-of select="count(s:urlset/s:url)" /> páginas
-          </span>
-          <div class="wrap">
-            <table>
-              <tr>
-                <th>Dirección</th>
-                <th>Última modificación</th>
-              </tr>
-              <xsl:for-each select="s:urlset/s:url">
-                <tr>
-                  <td>
-                    <a href="{s:loc}"><xsl:value-of select="s:loc" /></a>
-                  </td>
-                  <td class="date">
-                    <xsl:value-of select="substring(s:lastmod, 1, 10)" />
-                  </td>
-                </tr>
-              </xsl:for-each>
-            </table>
-          </div>
+
+          <!--
+            Two documents share this stylesheet. The index (<sitemapindex>)
+            lists the numbered sitemaps; each of those (<urlset>) lists the
+            pages. Handling only one of them renders the other as an empty
+            table that reads as a broken sitemap.
+          -->
+          <xsl:apply-templates select="s:sitemapindex" />
+          <xsl:apply-templates select="s:urlset" />
         </div>
       </body>
     </html>
+  </xsl:template>
+
+  <!-- The index: one row per sitemap file. -->
+  <xsl:template match="s:sitemapindex">
+    <span class="count">
+      <xsl:value-of select="count(s:sitemap)" />
+      <xsl:text> </xsl:text>
+      <xsl:choose>
+        <xsl:when test="count(s:sitemap) = 1">mapa</xsl:when>
+        <xsl:otherwise>mapas</xsl:otherwise>
+      </xsl:choose>
+    </span>
+    <p class="lede">
+      Este es el índice. Cada entrada es un mapa con la lista real de páginas.
+    </p>
+    <div class="wrap">
+      <table>
+        <tr>
+          <th>Mapa</th>
+          <th>Última modificación</th>
+        </tr>
+        <xsl:for-each select="s:sitemap">
+          <tr>
+            <td><a href="{s:loc}"><xsl:value-of select="s:loc" /></a></td>
+            <td class="date"><xsl:value-of select="substring(s:lastmod, 1, 10)" /></td>
+          </tr>
+        </xsl:for-each>
+      </table>
+    </div>
+  </xsl:template>
+
+  <!-- A sitemap: one row per page. -->
+  <xsl:template match="s:urlset">
+    <span class="count">
+      <xsl:value-of select="count(s:url)" />
+      <xsl:text> </xsl:text>
+      <xsl:choose>
+        <xsl:when test="count(s:url) = 1">página</xsl:when>
+        <xsl:otherwise>páginas</xsl:otherwise>
+      </xsl:choose>
+    </span>
+    <div class="wrap">
+      <table>
+        <tr>
+          <th>Dirección</th>
+          <th>Última modificación</th>
+        </tr>
+        <xsl:for-each select="s:url">
+          <tr>
+            <td><a href="{s:loc}"><xsl:value-of select="s:loc" /></a></td>
+            <td class="date"><xsl:value-of select="substring(s:lastmod, 1, 10)" /></td>
+          </tr>
+        </xsl:for-each>
+      </table>
+    </div>
   </xsl:template>
 </xsl:stylesheet>
