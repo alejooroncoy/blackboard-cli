@@ -4,6 +4,16 @@ All notable changes to `campus-cli` (formerly `blackboard-upc`) will be document
 
 ---
 
+## [Sin publicar]
+
+### Added
+- `Dockerfile` para los verificadores de directorios MCP. Glama y similares arrancan el servidor y le piden `tools/list`; la imagen no descarga el navegador de Playwright porque el login real ocurre en la máquina del estudiante, no en un contenedor.
+
+### Fixed
+- El servidor MCP anunciaba `version: 1.0.0` en el handshake, escrita a mano y congelada desde entonces. Ahora sale del `package.json`, así que cada cliente y cada directorio ve la versión real.
+
+---
+
 ## [1.3.2] — 2026-08-06
 
 ### Added
