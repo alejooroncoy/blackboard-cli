@@ -1,20 +1,63 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
+import clients from "../data/mcp-clients.json";
+import { htmlToMarkdown } from "../lib/html-to-markdown";
+import mcpBody from "../html/blackboard-mcp/index.html?raw";
+import cliBody from "../html/blackboard-cli/index.html?raw";
 
 /**
- * Every guide, end to end, in one plain-text file.
+ * Every page of the site, end to end, in one plain-text file.
  *
- * An assistant answering "how do I stop missing deadlines in Blackboard UPC"
- * can read this in one request instead of crawling three pages and hoping it
- * found them all. Cheap for us to serve, and it is the difference between
- * being summarised from a snippet and being quoted from the source.
+ * An assistant answering "how do I connect Blackboard UPC to Cursor" can read
+ * this in one request instead of crawling eighteen pages and hoping it found
+ * them all. Cheap for us to serve, and it is the difference between being
+ * summarised from a snippet and being quoted from the source.
+ *
+ * It used to carry only the blog, which left out both product pages, the seven
+ * per-client setup guides and everything legal: more than half the site, and
+ * the half that answers the question people actually ask.
  */
+
+/** Read from the same html the pages render, so the two cannot drift. */
+const bodies = import.meta.glob("../html/blackboard-mcp/clients/*.html", {
+  query: "?raw",
+  import: "default",
+  eager: true,
+}) as Record<string, string>;
+
+const RULE = "=".repeat(72);
+
+const section = (title: string, description: string, url: string, text: string) =>
+  [RULE, `# ${title}`, "", `> ${description}`, "", `Fuente: ${url}`, "", text.trim()].join("\n");
+
 export const GET: APIRoute = async () => {
+  const products = [
+    {
+      title: "Blackboard MCP: el Aula Virtual UPC dentro de tu asistente de IA",
+      description:
+        "Qué puede consultar el conector, cómo trata la sesión de la universidad y qué límites tiene.",
+      url: "https://campuscli.com/blackboard-mcp/",
+      body: mcpBody,
+    },
+    {
+      title: "Blackboard CLI: cursos, tareas y notas desde la terminal",
+      description: "El mismo campus consultado por comandos, sin abrir el navegador.",
+      url: "https://campuscli.com/blackboard-cli/",
+      body: cliBody,
+    },
+  ].map((page) => section(page.title, page.description, page.url, htmlToMarkdown(page.body)));
+
+  const perClient = Object.entries(clients).flatMap(([slug, data]) => {
+    const body = bodies[`../html/blackboard-mcp/clients/${slug}.html`];
+    if (!body) return [];
+    return [section(data.title.split("|")[0].trim(), data.description, data.canonical, htmlToMarkdown(body))];
+  });
+
   const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort((a, b) =>
     b.data.published.localeCompare(a.data.published),
   );
 
-  const sections = posts.map((post) => {
+  const guides = posts.map((post) => {
     const url = `https://campuscli.com/blog/${post.id}/`;
     const summary = post.data.summary?.length
       ? ["## En resumen", "", ...post.data.summary.map((line) => `- ${line.replace(/<[^>]+>/g, "")}`), ""]
@@ -23,13 +66,14 @@ export const GET: APIRoute = async () => {
       ? ["", "## Preguntas frecuentes", "", ...post.data.faq.flatMap((item) => [`### ${item.q}`, "", item.a, ""])]
       : [];
     return [
-      "=".repeat(72),
+      RULE,
       `# ${post.data.title}`,
       "",
       `> ${post.data.description}`,
       "",
       `Fuente: ${url}`,
       `Actualizado: ${post.data.updated}`,
+      ...(post.data.author ? [`Autor: ${post.data.author}`] : []),
       "",
       ...summary,
       post.body?.trim() ?? "",
@@ -38,16 +82,45 @@ export const GET: APIRoute = async () => {
   });
 
   const body = [
-    "# Campus — guías completas sobre Blackboard UPC",
+    "# Campus — el sitio completo en texto plano",
     "",
     "Campus conecta el Aula Virtual (Blackboard UPC) con asistentes de IA por MCP,",
     "y con la terminal por CLI. Proyecto independiente, sin relación con UPC ni",
     "con Blackboard.",
     "",
-    "Este archivo contiene el texto completo de todas las guías publicadas.",
+    "Este archivo contiene el texto de todas las páginas publicadas: los dos",
+    "productos, la guía de conexión para cada asistente, y las guías del blog.",
     "Índice y enlaces: https://campuscli.com/llms.txt",
+    "Aviso de no afiliación: https://campuscli.com/no-afiliacion/",
     "",
-    ...sections,
+    "## Qué contiene",
+    "",
+    "1. Productos: Blackboard MCP y Blackboard CLI.",
+    "2. Conexión por asistente: Cursor, Claude Code, Claude Desktop, Codex,",
+    "   GitHub Copilot, Windsurf, y la comparativa de servidores MCP.",
+    "3. Guías del blog.",
+    "",
+    ...products,
+    ...perClient,
+    ...guides,
+    // Listed rather than inlined. Their bodies live inside .astro files with
+    // template expressions, so there is no raw html to convert, and a legal
+    // text half-transcribed by a converter is worse than a link to the real
+    // one. The URLs are here so a model knows they exist and where to look.
+    RULE,
+    "# Páginas legales",
+    "",
+    "El texto completo vive en cada página. Se enlazan aquí para que quede",
+    "constancia de que existen y de qué cubre cada una.",
+    "",
+    "- Términos y condiciones: https://campuscli.com/terminos/",
+    "  Qué es el servicio, cómo accede al campus, qué se guarda y por cuánto tiempo.",
+    "- Política de privacidad: https://campuscli.com/privacidad/",
+    "  Datos tratados y finalidad, bajo la Ley N.º 29733 de protección de datos personales (Perú).",
+    "- Aviso de no afiliación: https://campuscli.com/no-afiliacion/",
+    "  Campus es un proyecto independiente, sin relación con UPC, Anthology/Blackboard,",
+    "  Microsoft, Anthropic, OpenAI ni Google, y no está registrado en el programa de",
+    "  integraciones REST de Anthology.",
   ].join("\n");
 
   return new Response(`${body}\n`, {
