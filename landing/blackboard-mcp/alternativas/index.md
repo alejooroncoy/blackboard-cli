@@ -20,10 +20,10 @@ Aviso: Campus, uno de los proyectos comparados, es nuestro.
 
 | Tipo | Ejemplos | Qué exige | Para quién |
 |---|---|---|---|
-| Institucional | Composio, `nitsuah/bb-mcp`, Blackboard Learn MCP | Credenciales OAuth2 y rol de docente o de sistema en el LMS | Equipos de TI, universidades, docentes con permisos |
+| Institucional | [Composio](https://composio.dev/toolkits/blackboard), [nitsuah/bb-mcp](https://github.com/nitsuah/bb-mcp) | Credenciales OAuth2 y rol de docente o de sistema en el LMS | Equipos de TI, universidades, docentes con permisos |
 | De estudiante | Campus | La sesión SSO del propio alumno | Estudiantes |
-| Por universidad | `pku-blackboard-mcp`, `uoh-blackboard-mcp` y similares | Clonar el repo y adaptarlo a mano | El autor y poco más |
-| Patrón blackboard | `parallax`, `agent-blackboard-mcp` | Nada relacionado con un LMS | Quien coordina varios agentes de IA |
+| Por universidad | [pku-blackboard-mcp](https://github.com/Pkuzc12/pku-blackboard-mcp), [uoh-blackboard-mcp](https://github.com/sal2049/uoh-blackboard-mcp) y similares | Clonar el repo y adaptarlo a mano | El autor y poco más |
+| Patrón blackboard | [parallax](https://github.com/Vaskrokodile/parallax), [agent-blackboard-mcp](https://github.com/samcsta/agent-blackboard-mcp) | Nada relacionado con un LMS | Quien coordina varios agentes de IA |
 
 ## Servidores institucionales
 
@@ -41,7 +41,7 @@ Límite honesto de este enfoque: depende de que la universidad concreta esté im
 
 ## Proyectos por universidad
 
-Cada pocos meses aparece en GitHub un repositorio del estilo `<universidad>-blackboard-mcp`. Revisamos varios en agosto de 2026 y el patrón es constante: historial de dos o tres días, ninguna publicación en un registro de paquetes, sin documentación de instalación y sin actividad posterior.
+Cada pocos meses aparece en GitHub un repositorio del estilo `<universidad>-blackboard-mcp`. Revisamos los enlazados arriba en agosto de 2026 y el patrón era constante: historial de dos o tres días, ninguna publicación en un registro de paquetes, sin documentación de instalación y sin actividad posterior.
 
 Útiles como referencia si vas a escribir el tuyo; no como herramienta que siga funcionando el ciclo que viene.
 
@@ -54,6 +54,32 @@ No tienen ninguna relación con Blackboard Learn, el LMS que usan las universida
 ## Cómo elegir
 
 La pregunta útil no es cuál es mejor sino qué credenciales tienes. Si administras el LMS o eres docente con permisos, un servidor institucional da más cobertura. Si eres estudiante, la única vía practicable es uno que autentique con tu sesión, y entonces la pregunta pasa a ser si tu universidad está implementada. Si lo que quieres es coordinar agentes de IA entre sí, ninguno de los dos: busca el patrón blackboard.
+
+## Preguntas frecuentes
+
+**¿Cuántos tipos de servidor MCP de Blackboard existen?**
+
+Tres, más un homónimo. Los institucionales envuelven la API oficial y requieren credenciales OAuth2 del administrador del LMS. Los de estudiante usan la sesión del propio alumno. Los proyectos por universidad son conectores personales, normalmente sin mantenimiento. Y aparte está el patrón blackboard, una técnica de memoria compartida entre agentes que no tiene relación con Blackboard Learn.
+
+**¿Puede un estudiante usar un servidor MCP institucional de Blackboard?**
+
+En la práctica no. Requieren una developer key emitida por el administrador del LMS, con rol de docente o de sistema.
+
+**¿Qué es el patrón blackboard en MCP?**
+
+Es una arquitectura de coordinación entre varios agentes de IA que comparten una pizarra común de hechos. No tiene ninguna relación con Blackboard Learn, el sistema de gestión de aprendizaje. Comparten el nombre y nada más.
+
+**¿Cuál conviene para consultar mis notas y tareas?**
+
+Uno de estudiante, que autentique con tu propia sesión. Campus es la opción implementada para Blackboard UPC.
+
+**¿Qué pasa si mi universidad no está soportada?**
+
+Hoy solo Blackboard UPC está implementado. Canvas y Moodle están en el roadmap, y el repositorio acepta issues para coordinar soporte de otras universidades.
+
+**¿Esta comparativa es imparcial?**
+
+Campus es nuestro proyecto, así que juzga en consecuencia. Los proyectos que mencionamos están enlazados en la tabla para que compruebes tú mismo lo que decimos de ellos.
 
 ## Enlaces
 

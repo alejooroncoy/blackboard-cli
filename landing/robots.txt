@@ -5,6 +5,19 @@ Allow: /
 # Cada guía está publicada también en Markdown, en la misma URL + index.md.
 # Ver https://campuscli.com/llms.txt y https://campuscli.com/llms-full.txt
 
+User-agent: Googlebot
+Allow: /
+Disallow: /*.md$
+
+User-agent: Bingbot
+Allow: /
+Disallow: /*.md$
+
+# Los .md son el mismo texto que su HTML, en la misma URL + index.md. Para los
+# buscadores tradicionales eso es contenido duplicado y el canónico es el HTML,
+# así que quedan fuera. Los asistentes de IA de abajo sí los prefieren: es el
+# mismo contenido sin navegación ni markup.
+
 User-agent: GPTBot
 Allow: /
 

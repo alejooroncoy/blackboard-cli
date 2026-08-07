@@ -1,17 +1,31 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 // Raíz del sitio, relativa a este archivo (landing/tools/ -> landing/)
-const ROOT = path.resolve(new URL('..', import.meta.url).pathname)
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const base = fs.readFileSync(path.join(ROOT, 'blackboard-mcp/index.html'), 'utf8')
 
 // Reutilizamos el shell de la página madre: head (hasta </head>), header y footer.
-const headStart = base.indexOf('<link rel="stylesheet"')
-const styleEnd = base.indexOf('</style>') + '</style>'.length
-const styleBlock = base.slice(headStart, styleEnd)
-const bodyStart = base.indexOf('</head>')
-const headerBlock = base.slice(bodyStart + '</head>'.length, base.indexOf('<main>') + '<main>'.length)
-const footerBlock = base.slice(base.indexOf('</main>'))
+
+// La cabecera, los estilos y el footer se copian de la página madre buscando
+// marcadores literales. Si alguien la reestructura, indexOf devuelve -1 y las
+// páginas hijas saldrían truncadas sin que nada falle: por eso esto grita.
+const at = (marker, from = 0) => {
+  const i = base.indexOf(marker, from)
+  if (i === -1) {
+    throw new Error(
+      `No encuentro ${marker} en blackboard-mcp/index.html.\n` +
+        'La página madre cambió de estructura: ajusta los marcadores de este generador ' +
+        'antes de volver a publicar, o las 7 páginas hijas saldrán rotas.',
+    )
+  }
+  return i
+}
+
+const styleBlock = base.slice(at('<link rel="stylesheet"'), at('</style>') + '</style>'.length)
+const headerBlock = base.slice(at('</head>') + '</head>'.length, at('<main>') + '<main>'.length)
+const footerBlock = base.slice(at('</main>'))
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
@@ -132,6 +146,35 @@ args = ["campus-cli", "mcp"]`,
   },
 ]
 
+
+// Una sola fuente para el FAQ de cada guía: de aquí salen el JSON-LD, el HTML
+// visible y el Markdown. Declarar en el schema preguntas que no están en la
+// página incumple la política de datos estructurados de Google y expone el
+// sitio a una acción manual, así que no pueden vivir separados.
+const stripTags = (t) => t.replace(/<[^>]+>/g, '')
+
+const faqFor = (c) => {
+  const faqs = [
+    [`¿Dónde va el archivo de configuración MCP de ${c.name}?`, `En <code>${esc(c.file)}</code>.`],
+    [`¿Necesito instalar algo además de ${c.name}?`, 'Solo Node.js 18 o superior. El comando <code>npx</code> descarga <code>campus-cli</code> la primera vez que se ejecuta.'],
+    ['¿Qué hago si las herramientas no aparecen?', 'Cierra el cliente por completo y vuelve a abrirlo, verifica que el JSON no tenga comas de más y confirma que <code>npx campus-cli mcp</code> arranca sin error en la terminal.'],
+  ]
+  return {
+    faqs,
+    faqLd: {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqs.map(([q, a]) => ({
+        '@type': 'Question',
+        name: q,
+        acceptedAnswer: { '@type': 'Answer', text: stripTags(a) },
+      })),
+    },
+    faqHtml: faqs.map(([q, a]) => `  <h3>${q}</h3><p>${a}</p>`).join('\n'),
+    faqMd: faqs.map(([q, a]) => `**${q}**\n\n${stripTags(a)}`).join('\n\n'),
+  }
+}
+
 const page = (c, others) => {
   const title = `Blackboard MCP en ${c.name} | Conecta tu Aula Virtual UPC`
   const desc = `Cómo conectar Blackboard UPC con ${c.name} usando MCP: instalación, archivo de configuración, verificación y qué preguntar. Guía paso a paso de Campus.`
@@ -164,15 +207,7 @@ const page = (c, others) => {
     ],
   }
 
-  const faqLd = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: [
-      { '@type': 'Question', name: `¿Dónde va el archivo de configuración MCP de ${c.name}?`, acceptedAnswer: { '@type': 'Answer', text: `En ${c.file}.` } },
-      { '@type': 'Question', name: `¿Necesito instalar algo además de ${c.name}?`, acceptedAnswer: { '@type': 'Answer', text: 'Solo Node.js 18 o superior. El comando npx descarga campus-cli la primera vez que se ejecuta.' } },
-      { '@type': 'Question', name: '¿Qué hago si las herramientas no aparecen?', acceptedAnswer: { '@type': 'Answer', text: 'Cierra el cliente por completo y vuelve a abrirlo, verifica que el JSON no tenga comas de más y confirma que npx campus-cli mcp arranca sin error en la terminal.' } },
-    ],
-  }
+  const { faqLd, faqHtml, faqMd } = faqFor(c)
 
   const otherLinks = others
     .map((o) => `<li><a href="/blackboard-mcp/${o.slug}/">${o.name}</a></li>`)
@@ -187,6 +222,8 @@ const page = (c, others) => {
     : ''
 
   return `<!doctype html>
+<!-- Generado por landing/tools/build.mjs — no edites este archivo a mano.
+     El contenido compartido sale de blackboard-mcp/index.html. -->
 <html lang="es"><head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>${title}</title>
@@ -254,6 +291,9 @@ const page = (c, others) => {
   <h2 id="siguiente">Qué puedes hacer después</h2>
   <p>Las herramientas disponibles, el detalle de seguridad y las limitaciones actuales están en <a class="prose-link" href="/blackboard-mcp/">la página principal de Blackboard MCP</a>. Si prefieres consultar tu campus por comandos en vez de por chat, existe <a class="prose-link" href="/blackboard-cli/">Blackboard CLI</a>. Y para saber qué revisar cada semana antes de automatizarlo, lee <a class="prose-link" href="/blog/organizar-tu-semana-blackboard/">la guía para organizar tu semana en Blackboard sin perder fechas</a>.</p>
 
+  <h2 id="faq">Preguntas frecuentes</h2>
+${faqHtml}
+
   <h2 id="otros">Otros clientes</h2>
   <ul>${otherLinks}</ul>
 
@@ -300,7 +340,9 @@ const toMd = (s) =>
     .replace(/<code>(.*?)<\/code>/g, '`$1`')
     .replace(/<[^>]+>/g, '')
 
-const mdPage = (c, others) => `# Blackboard MCP en ${c.name}: conecta tu Aula Virtual UPC
+const mdPage = (c, others) => {
+  const { faqMd } = faqFor(c)
+  return `# Blackboard MCP en ${c.name}: conecta tu Aula Virtual UPC
 
 > Cómo conectar Blackboard UPC con ${c.name} usando Model Context Protocol: login, archivo de configuración, verificación y solución de problemas.
 
@@ -351,6 +393,10 @@ El fallo más común es un JSON inválido: una coma de más o unas comillas sin 
 
 Si el servidor conecta pero las respuestas dicen que no estás autenticado, la sesión expiró: vuelve a correr \`npx campus-cli account login\`. Y cierra el cliente por completo antes de reabrirlo; recargar la ventana no siempre relee la configuración.
 
+## Preguntas frecuentes
+
+${faqMd}
+
 ## Enlaces
 
 - Herramientas, seguridad y límites: https://campuscli.com/blackboard-mcp/
@@ -358,6 +404,7 @@ Si el servidor conecta pero las respuestas dicen que no estás autenticado, la s
 ${others.map((o) => `- ${o.name}: https://campuscli.com/blackboard-mcp/${o.slug}/`).join('\n')}
 - Código fuente: https://github.com/alejooroncoy/campus-cli
 `
+}
 
 for (const c of CLIENTS) {
   const others = CLIENTS.filter((o) => o.slug !== c.slug)

@@ -1,30 +1,64 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 // Raíz del sitio, relativa a este archivo (landing/tools/ -> landing/)
-const ROOT = path.resolve(new URL('..', import.meta.url).pathname)
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const base = fs.readFileSync(path.join(ROOT, 'blackboard-mcp/index.html'), 'utf8')
 
-const headStart = base.indexOf('<link rel="stylesheet"')
-const styleEnd = base.indexOf('</style>') + '</style>'.length
-const styleBlock = base.slice(headStart, styleEnd)
-const headerBlock = base.slice(base.indexOf('</head>') + '</head>'.length, base.indexOf('<main>') + '<main>'.length)
-const footerBlock = base.slice(base.indexOf('</main>'))
+
+// La cabecera, los estilos y el footer se copian de la página madre buscando
+// marcadores literales. Si alguien la reestructura, indexOf devuelve -1 y las
+// páginas hijas saldrían truncadas sin que nada falle: por eso esto grita.
+const at = (marker, from = 0) => {
+  const i = base.indexOf(marker, from)
+  if (i === -1) {
+    throw new Error(
+      `No encuentro ${marker} en blackboard-mcp/index.html.\n` +
+        'La página madre cambió de estructura: ajusta los marcadores de este generador ' +
+        'antes de volver a publicar, o las 7 páginas hijas saldrán rotas.',
+    )
+  }
+  return i
+}
+
+const styleBlock = base.slice(at('<link rel="stylesheet"'), at('</style>') + '</style>'.length)
+const headerBlock = base.slice(at('</head>') + '</head>'.length, at('<main>') + '<main>'.length)
+const footerBlock = base.slice(at('</main>'))
 
 const url = 'https://campuscli.com/blackboard-mcp/alternativas/'
 const title = 'Servidores MCP para Blackboard: qué opciones existen (2026)'
 const desc = 'Comparación de los servidores MCP que conectan Blackboard Learn con asistentes de IA: institucionales, de estudiante y el patrón blackboard (que no es el LMS). Qué requiere cada uno y para quién sirve.'
 
+// Una sola fuente: de aquí salen el JSON-LD, el HTML visible y el Markdown.
+// El schema no puede declarar preguntas que no estén en la página.
+const stripTags = (t) => t.replace(/<[^>]+>/g, '')
+const FAQS = [
+  ['¿Cuántos tipos de servidor MCP de Blackboard existen?',
+   'Tres, más un homónimo. Los institucionales envuelven la API oficial y requieren credenciales OAuth2 del administrador del LMS. Los de estudiante usan la sesión del propio alumno. Los proyectos por universidad son conectores personales, normalmente sin mantenimiento. Y aparte está el <em>patrón blackboard</em>, una técnica de memoria compartida entre agentes que no tiene relación con Blackboard Learn.'],
+  ['¿Puede un estudiante usar un servidor MCP institucional de Blackboard?',
+   'En la práctica no. Requieren una <em>developer key</em> emitida por el administrador del LMS, con rol de docente o de sistema.'],
+  ['¿Qué es el patrón blackboard en MCP?',
+   'Es una arquitectura de coordinación entre varios agentes de IA que comparten una pizarra común de hechos. No tiene ninguna relación con Blackboard Learn, el sistema de gestión de aprendizaje. Comparten el nombre y nada más.'],
+  ['¿Cuál conviene para consultar mis notas y tareas?',
+   'Uno de estudiante, que autentique con tu propia sesión. Campus es la opción implementada para Blackboard UPC.'],
+  ['¿Qué pasa si mi universidad no está soportada?',
+   'Hoy solo Blackboard UPC está implementado. Canvas y Moodle están en el roadmap, y el repositorio acepta issues para coordinar soporte de otras universidades.'],
+  ['¿Esta comparativa es imparcial?',
+   'Campus es nuestro proyecto, así que juzga en consecuencia. Los proyectos que mencionamos están enlazados en la tabla para que compruebes tú mismo lo que decimos de ellos.'],
+]
+
 const faqLd = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: [
-    { '@type': 'Question', name: '¿Cuántos tipos de servidor MCP de Blackboard existen?', acceptedAnswer: { '@type': 'Answer', text: 'Tres, más un homónimo. Los institucionales envuelven la API oficial y requieren credenciales OAuth2 del administrador del LMS. Los de estudiante usan la sesión del propio alumno. Los proyectos por universidad son forks personales, normalmente sin mantenimiento. Y aparte está el patrón blackboard, una técnica de memoria compartida entre agentes que no tiene relación con Blackboard Learn.' } },
-    { '@type': 'Question', name: '¿Puede un estudiante usar un servidor MCP institucional de Blackboard?', acceptedAnswer: { '@type': 'Answer', text: 'En la práctica no. Requieren una developer key de Blackboard emitida por el administrador del LMS, con rol de docente o de sistema. Un estudiante no recibe esas credenciales.' } },
-    { '@type': 'Question', name: '¿Qué es el patrón blackboard en MCP?', acceptedAnswer: { '@type': 'Answer', text: 'Es una arquitectura de coordinación entre varios agentes de IA que comparten una pizarra común de hechos. No tiene ninguna relación con Blackboard Learn, el sistema de gestión de aprendizaje. Comparten el nombre y nada más.' } },
-    { '@type': 'Question', name: '¿Cuál conviene para consultar mis notas y tareas?', acceptedAnswer: { '@type': 'Answer', text: 'Uno de estudiante, que autentique con la sesión del propio alumno. Campus es la opción implementada para Blackboard UPC, publicada en npm y con guías por cliente.' } },
-  ],
+  mainEntity: FAQS.map(([q, a]) => ({
+    '@type': 'Question',
+    name: q,
+    acceptedAnswer: { '@type': 'Answer', text: stripTags(a) },
+  })),
 }
+const faqHtml = FAQS.map(([q, a]) => `  <h3>${q}</h3><p>${a}</p>`).join('\n')
+const faqMd = FAQS.map(([q, a]) => `**${q}**\n\n${stripTags(a)}`).join('\n\n')
 
 const crumbLd = {
   '@context': 'https://schema.org',
@@ -50,6 +84,8 @@ const articleLd = {
 }
 
 const html = `<!doctype html>
+<!-- Generado por landing/tools/build.mjs — no edites este archivo a mano.
+     El contenido compartido sale de blackboard-mcp/index.html. -->
 <html lang="es"><head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>${title} | Campus</title>
@@ -84,7 +120,7 @@ const html = `<!doctype html>
   <script type="application/ld+json">${JSON.stringify(faqLd)}</script>
 </head>${headerBlock}
   <nav class="crumbs" aria-label="Ruta de navegación"><ol><li><a href="/">Inicio</a></li><li><a href="/blackboard-mcp/">Blackboard MCP</a></li><li aria-current="page">Alternativas</li></ol></nav>
-  <p class="eyebrow">Comparativa · Actualizado en agosto de 2026</p><h1>Servidores MCP para Blackboard: qué opciones existen.</h1>
+  <p class="eyebrow">Comparativa</p><h1>Servidores MCP para Blackboard: qué opciones existen.</h1>
   <p>«Blackboard MCP» devuelve resultados de cosas muy distintas, y varias no sirven para lo que la mayoría busca. Esta página ordena el panorama: qué tipos hay, qué exige cada uno y para quién sirve. Incluye a Campus, que es nuestro proyecto — lo decimos por delante.</p>
 
   <h2 id="resumen">En resumen</h2>
@@ -98,12 +134,12 @@ const html = `<!doctype html>
 
   <h2 id="tipos">Los cuatro grupos</h2>
   <div class="table-wrap"><table>
-    <thead><tr><th>Tipo</th><th>Ejemplos</th><th>Qué exige</th><th>Para quién</th></tr></thead>
+    <thead><tr><th scope="col">Tipo</th><th scope="col">Ejemplos</th><th scope="col">Qué exige</th><th scope="col">Para quién</th></tr></thead>
     <tbody>
-      <tr><td><strong>Institucional</strong></td><td>Composio, <code>nitsuah/bb-mcp</code>, Blackboard Learn MCP</td><td>Credenciales OAuth2 y rol de docente o de sistema en el LMS</td><td>Equipos de TI, universidades, docentes con permisos</td></tr>
+      <tr><td><strong>Institucional</strong></td><td><a class="prose-link" href="https://composio.dev/toolkits/blackboard" rel="noreferrer nofollow">Composio</a>, <a class="prose-link" href="https://github.com/nitsuah/bb-mcp" rel="noreferrer nofollow"><code>nitsuah/bb-mcp</code></a></td><td>Credenciales OAuth2 y rol de docente o de sistema en el LMS</td><td>Equipos de TI, universidades, docentes con permisos</td></tr>
       <tr><td><strong>De estudiante</strong></td><td>Campus (este proyecto)</td><td>La sesión SSO del propio alumno</td><td>Estudiantes</td></tr>
-      <tr><td><strong>Por universidad</strong></td><td><code>pku-blackboard-mcp</code>, <code>uoh-blackboard-mcp</code> y similares</td><td>Clonar el repo y adaptarlo a mano</td><td>El autor y poco más</td></tr>
-      <tr><td><strong>Patrón blackboard</strong></td><td><code>parallax</code>, <code>agent-blackboard-mcp</code></td><td>Nada relacionado con un LMS</td><td>Quien coordina varios agentes de IA</td></tr>
+      <tr><td><strong>Por universidad</strong></td><td><a class="prose-link" href="https://github.com/Pkuzc12/pku-blackboard-mcp" rel="noreferrer nofollow"><code>pku-blackboard-mcp</code></a>, <a class="prose-link" href="https://github.com/sal2049/uoh-blackboard-mcp" rel="noreferrer nofollow"><code>uoh-blackboard-mcp</code></a> y similares</td><td>Clonar el repo y adaptarlo a mano</td><td>El autor y poco más</td></tr>
+      <tr><td><strong>Patrón blackboard</strong></td><td><a class="prose-link" href="https://github.com/Vaskrokodile/parallax" rel="noreferrer nofollow"><code>parallax</code></a>, <a class="prose-link" href="https://github.com/samcsta/agent-blackboard-mcp" rel="noreferrer nofollow"><code>agent-blackboard-mcp</code></a></td><td>Nada relacionado con un LMS</td><td>Quien coordina varios agentes de IA</td></tr>
     </tbody>
   </table></div>
 
@@ -117,7 +153,7 @@ const html = `<!doctype html>
   <p>Este enfoque tiene un límite honesto: depende de que la universidad concreta esté implementada. Un servidor institucional funciona contra cualquier instancia de Blackboard con las llaves correctas; uno de estudiante tiene que resolver el SSO de cada universidad por separado, y esa es la parte laboriosa.</p>
 
   <h2 id="por-universidad">Proyectos por universidad</h2>
-  <p>Cada pocos meses aparece en GitHub un repositorio nuevo del estilo <code>&lt;universidad&gt;-blackboard-mcp</code>: alguien se cansa de su Aula Virtual y construye su propio conector. Revisamos varios en agosto de 2026 y el patrón es constante — historial de dos o tres días, ninguna publicación en un registro de paquetes, sin documentación de instalación y sin actividad posterior.</p>
+  <p>Cada pocos meses aparece en GitHub un repositorio nuevo del estilo <code>&lt;universidad&gt;-blackboard-mcp</code>: alguien se cansa de su Aula Virtual y construye su propio conector. Revisamos los enlazados arriba en agosto de 2026 y el patrón era constante — historial de dos o tres días, ninguna publicación en un registro de paquetes, sin documentación de instalación y sin actividad posterior.</p>
   <p>Son útiles como referencia si vas a escribir el tuyo. No lo son como herramienta que puedas instalar y esperar que siga funcionando el ciclo que viene, porque cuando la universidad cambia algo del login, nadie lo arregla.</p>
 
   <h2 id="patron">El patrón blackboard no es Blackboard Learn</h2>
@@ -129,10 +165,7 @@ const html = `<!doctype html>
   <p>Y si lo que quieres es coordinar agentes de IA entre sí, ninguno de los dos: busca el patrón blackboard.</p>
 
   <h2 id="faq">Preguntas frecuentes</h2>
-  <h3>¿Puede un estudiante usar un servidor MCP institucional de Blackboard?</h3><p>En la práctica no. Requieren una <em>developer key</em> emitida por el administrador del LMS, con rol de docente o de sistema.</p>
-  <h3>¿Cuál conviene para consultar mis notas y tareas?</h3><p>Uno de estudiante, que autentique con tu propia sesión. Campus es la opción implementada para Blackboard UPC.</p>
-  <h3>¿Qué pasa si mi universidad no está soportada?</h3><p>Hoy solo Blackboard UPC está implementado. Canvas y Moodle están en el roadmap, y el repositorio acepta issues para coordinar soporte de otras universidades.</p>
-  <h3>¿Esta comparativa es imparcial?</h3><p>Campus es nuestro proyecto, así que juzga en consecuencia. Los datos verificables — qué credenciales exige cada tipo, qué actividad tienen los repositorios — están enlazados para que los compruebes tú.</p>
+${faqHtml}
 
   <aside class="related" aria-labelledby="related-title">
     <h2 id="related-title">Sigue explorando</h2>
@@ -182,10 +215,10 @@ Aviso: Campus, uno de los proyectos comparados, es nuestro.
 
 | Tipo | Ejemplos | Qué exige | Para quién |
 |---|---|---|---|
-| Institucional | Composio, \`nitsuah/bb-mcp\`, Blackboard Learn MCP | Credenciales OAuth2 y rol de docente o de sistema en el LMS | Equipos de TI, universidades, docentes con permisos |
+| Institucional | [Composio](https://composio.dev/toolkits/blackboard), [nitsuah/bb-mcp](https://github.com/nitsuah/bb-mcp) | Credenciales OAuth2 y rol de docente o de sistema en el LMS | Equipos de TI, universidades, docentes con permisos |
 | De estudiante | Campus | La sesión SSO del propio alumno | Estudiantes |
-| Por universidad | \`pku-blackboard-mcp\`, \`uoh-blackboard-mcp\` y similares | Clonar el repo y adaptarlo a mano | El autor y poco más |
-| Patrón blackboard | \`parallax\`, \`agent-blackboard-mcp\` | Nada relacionado con un LMS | Quien coordina varios agentes de IA |
+| Por universidad | [pku-blackboard-mcp](https://github.com/Pkuzc12/pku-blackboard-mcp), [uoh-blackboard-mcp](https://github.com/sal2049/uoh-blackboard-mcp) y similares | Clonar el repo y adaptarlo a mano | El autor y poco más |
+| Patrón blackboard | [parallax](https://github.com/Vaskrokodile/parallax), [agent-blackboard-mcp](https://github.com/samcsta/agent-blackboard-mcp) | Nada relacionado con un LMS | Quien coordina varios agentes de IA |
 
 ## Servidores institucionales
 
@@ -203,7 +236,7 @@ Límite honesto de este enfoque: depende de que la universidad concreta esté im
 
 ## Proyectos por universidad
 
-Cada pocos meses aparece en GitHub un repositorio del estilo \`<universidad>-blackboard-mcp\`. Revisamos varios en agosto de 2026 y el patrón es constante: historial de dos o tres días, ninguna publicación en un registro de paquetes, sin documentación de instalación y sin actividad posterior.
+Cada pocos meses aparece en GitHub un repositorio del estilo \`<universidad>-blackboard-mcp\`. Revisamos los enlazados arriba en agosto de 2026 y el patrón era constante: historial de dos o tres días, ninguna publicación en un registro de paquetes, sin documentación de instalación y sin actividad posterior.
 
 Útiles como referencia si vas a escribir el tuyo; no como herramienta que siga funcionando el ciclo que viene.
 
@@ -216,6 +249,10 @@ No tienen ninguna relación con Blackboard Learn, el LMS que usan las universida
 ## Cómo elegir
 
 La pregunta útil no es cuál es mejor sino qué credenciales tienes. Si administras el LMS o eres docente con permisos, un servidor institucional da más cobertura. Si eres estudiante, la única vía practicable es uno que autentique con tu sesión, y entonces la pregunta pasa a ser si tu universidad está implementada. Si lo que quieres es coordinar agentes de IA entre sí, ninguno de los dos: busca el patrón blackboard.
+
+## Preguntas frecuentes
+
+${faqMd}
 
 ## Enlaces
 

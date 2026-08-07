@@ -56,6 +56,20 @@ El fallo más común es un JSON inválido: una coma de más o unas comillas sin 
 
 Si el servidor conecta pero las respuestas dicen que no estás autenticado, la sesión expiró: vuelve a correr `npx campus-cli account login`. Y cierra el cliente por completo antes de reabrirlo; recargar la ventana no siempre relee la configuración.
 
+## Preguntas frecuentes
+
+**¿Dónde va el archivo de configuración MCP de Windsurf?**
+
+En ~/.codeium/windsurf/mcp_config.json.
+
+**¿Necesito instalar algo además de Windsurf?**
+
+Solo Node.js 18 o superior. El comando npx descarga campus-cli la primera vez que se ejecuta.
+
+**¿Qué hago si las herramientas no aparecen?**
+
+Cierra el cliente por completo y vuelve a abrirlo, verifica que el JSON no tenga comas de más y confirma que npx campus-cli mcp arranca sin error en la terminal.
+
 ## Enlaces
 
 - Herramientas, seguridad y límites: https://campuscli.com/blackboard-mcp/
