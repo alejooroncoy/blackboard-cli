@@ -50,7 +50,7 @@ faq:
 summary:
   - "Entregué un avance de proyecto a la **01:16 de la madrugada**: 166 MB, cuatro archivos y un enunciado de 55 páginas con **60 subsecciones obligatorias**. Saqué **16.5 de 20**."
   - "No fue por correr. El plazo cerraba a las 10 de la mañana. Es que **verificar 60 secciones a mano no se puede**, tengas ocho horas o dos."
-  - "Mi profesor dejó **cuatro observaciones**. Fui a buscarlas: tres estaban escritas en el enunciado y la cuarta, palabra por palabra, en la rúbrica. **Ninguna era una sorpresa.**"
+  - "Mi profesor dejó **cuatro observaciones**. Fui a buscarlas: tres estaban en el enunciado y la cuarta era, casi literal, un criterio de la rúbrica. **Ninguna era una sorpresa.**"
   - "El problema no es que la información falte. Es que **vive repartida entre un PDF y una pantalla de Blackboard** que casi nadie abre, y nadie cruza las dos a las once de la noche."
 ---
 Este es un caso mío, con la nota y el feedback reales. No lo cuento porque salió bien: saqué 16.5 de 20 y me interesa la parte que perdí.
@@ -98,15 +98,11 @@ Ese tipo de requisito es el más traicionero, porque no se te olvida por difíci
 
 Estaba en la rúbrica. Y esto es lo que más me sorprendió al reconstruirlo.
 
-El enunciado solo lista la sección `5.2.7 RESTful API documentation`, sin decir qué tiene que contener. Pero la rúbrica del curso, que vive dentro de Blackboard y es otra pantalla, tiene un criterio de **3 puntos, el 15 % de la nota**, cuyo nivel satisfactorio dice:
+El enunciado solo lista la sección `5.2.7 RESTful API documentation`, sin decir qué tiene que contener. La rúbrica del curso, que vive dentro de Blackboard y es otra pantalla, sí lo dice: hay un criterio que vale **3 puntos, el 15 % de la nota**, y para el puntaje completo pide que la documentación del API incluya descripción y ejemplo **para todos los tipos de request** del Sprint.
 
-> «…Se encuentra disponible la documentación del RESTful API, ésta incluye la descripción y ejemplo para todos los tipos de request que ofrece el API para el Sprint…»
+El comentario de mi profesor decía, en esencia, eso mismo: que faltaban la descripción y el ejemplo para todos los tipos de request.
 
-Y el comentario del profesor decía:
-
-> «Documentación del RESTful API, ésta incluye la descripción y ejemplo para todos los tipos de request…»
-
-Es la misma frase. Mi profesor no estaba aplicando un criterio personal ni más exigente: estaba citando la rúbrica que llevaba publicada todo el ciclo.
+No es una coincidencia de tema. Es el mismo criterio, redactado casi igual, y llevaba publicado todo el ciclo. Mi profesor no estaba aplicando una exigencia personal: estaba leyendo la rúbrica.
 
 ## El hallazgo real
 
