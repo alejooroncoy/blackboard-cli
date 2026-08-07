@@ -1,4 +1,9 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://campuscli.com/sitemap.xml
+# Astro emits an index that points at the numbered sitemaps. The old site
+# published a single sitemap.xml, and that URL kept being advertised here long
+# after it stopped existing, so crawlers followed robots.txt straight into a
+# 404. /sitemap.xml now redirects here as well, for anything that still asks
+# for it by that name.
+Sitemap: https://campuscli.com/sitemap-index.xml

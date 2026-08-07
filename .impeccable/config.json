@@ -20,6 +20,16 @@
         ],
         "createdAt": "2026-08-05T16:36:58.224Z",
         "reason": "Confirmado por el usuario: jerarquía lograda por tamaño/peso (Campus Sans regular/semibold), se evaluó un pareo con Fraunces/Instrument Serif y se prefirió mantener el original"
+      },
+      {
+        "rule": "layout-transition",
+        "value": "*",
+        "files": [
+          "public/styles.css",
+          "site/public/styles.css"
+        ],
+        "createdAt": "2026-08-07T13:11:19.180Z",
+        "reason": "Cabecera que se encoge al hacer scroll y punto del carrusel que se estira a barra: animar width/padding ES el efecto, transform deformaria el contenido y el border-radius. Un solo elemento en cada caso."
       }
     ]
   }
