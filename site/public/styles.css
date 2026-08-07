@@ -983,6 +983,10 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
 .blog-main .feature__meta dd{margin:6px 0 16px;color:#2f4f60;font-size:15px;line-height:1.45}
 .blog-main .feature__meta dd:last-of-type{margin-bottom:0}
 .blog-main .hub-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:0;padding:0;list-style:none}
+/* A section can hold more than one case. Matches the grid gap so stacked
+   features keep the same rhythm as cards sitting side by side. */
+.blog-main .feature + .feature,
+.blog-main .feature + .hub-grid{margin-top:16px}
 .blog-main .hub-card{position:relative;display:flex;flex-direction:column;min-height:216px;padding:22px;border:1px solid #d5e3e7;border-radius:8px;background:#fff;box-shadow:0 12px 28px #102a3a0d;transition:border-color 160ms ease,transform 160ms ease,box-shadow 160ms ease}
 .blog-main .hub-card:hover{border-color:#b7cfd7;transform:translateY(-2px);box-shadow:0 16px 32px #102a3a14}
 .blog-main .hub-card__tag{color:var(--green);font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase}
