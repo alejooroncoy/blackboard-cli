@@ -920,6 +920,24 @@ Hay dos formas de usarlo, según dónde trabajes: desde tu asistente, con [el se
 
 [Ver el acceso anticipado](https://campuscli.com/#acceso-anticipado)
 
+## Preguntas frecuentes
+
+**¿Por qué no veo todas mis tareas juntas en Blackboard?**
+
+Porque Blackboard Ultra reparte tu semana en cuatro vistas que no se hablan entre sí: actividad reciente, calendario, anuncios y calificaciones. Ninguna de ellas es «la lista de la semana», así que hay que construirla una vez y luego mantenerla.
+
+**¿Cuánto tiempo toma organizar la semana en Blackboard?**
+
+Unos 20 minutos el domingo para construir la lista (calendario 5 min, contenido de cada curso 8 min, anuncios 4 min y calificaciones 3 min) y 5 minutos diarios para mantenerla revisando solo lo nuevo.
+
+**¿Debo priorizar por fecha de entrega o por nota?**
+
+Por peso en la nota final. Una tarea que vale 25% y vence el viernes pesa más que una de 5% que vence el miércoles; el libro de calificaciones te dice ese peso antes de que decidas en qué trabajar.
+
+**¿Por qué una tarea no aparece en el calendario de Blackboard?**
+
+El calendario solo junta las actividades cuyo docente configuró una fecha de entrega como tal. Si no la configuró, la tarea existe dentro del curso pero no aparece en ninguna vista global: por eso hay que recorrer el contenido de cada curso.
+
 
 ==============================================================================
 
@@ -996,6 +1014,16 @@ Hay dos formas de usarlo, según dónde trabajes: desde tu asistente, con [el se
 
 [Ver el acceso anticipado](https://campuscli.com/#acceso-anticipado)
 
+## Preguntas frecuentes
+
+**¿Puedo conectar ChatGPT con Blackboard?**
+
+Sí. Con un conector MCP, ChatGPT consulta tus cursos, tareas, notas y materiales del Aula Virtual directamente, sin que copies y pegues archivos ni compartas tu contraseña de la universidad.
+
+**¿Es seguro conectar mi Aula Virtual a una IA?**
+
+El inicio de sesión ocurre en la página de la propia universidad, no en Campus, así que tu contraseña nunca pasa por el conector. La sesión queda cifrada y puedes revocarla cuando quieras.
+
 
 ==============================================================================
 
@@ -1054,3 +1082,9 @@ Quiero ser honesto con esto: no creo que sin Campus no hubiera podido sacar esto
 Si estás en una situación parecida (trabajando, estudiando, con poco tiempo de sobra), la herramienta que me ayudó a mí este ciclo es la misma que estamos abriendo a más estudiantes de la UPC. Puedes usarla desde tu asistente de IA, con [el servidor Blackboard MCP para conectar el Aula Virtual con tu IA](https://campuscli.com/blackboard-mcp/); o desde la terminal, con [Blackboard CLI para consultar cursos, tareas y notas por comandos](https://campuscli.com/blackboard-cli/).
 
 [Ver el acceso anticipado](https://campuscli.com/#acceso-anticipado)
+
+## Preguntas frecuentes
+
+**¿Se puede trabajar y estudiar en la UPC sin bajar de promedio?**
+
+Sí, pero deja de funcionar revisar el Aula Virtual a ratos. Lo que cambió el resultado fue construir la lista de la semana una vez y priorizar por peso en la nota, no por fecha de entrega.
