@@ -62,6 +62,10 @@ export default defineConfig({
   build: { format: "directory" },
   integrations: [
     sitemap({
+      // A sitemap has no line breaks, so a browser shows one unreadable run of
+      // text and the file looks broken even when it validates. Crawlers ignore
+      // the stylesheet; it is there so a person can check the list.
+      xslURL: "/sitemap.xsl",
       serialize(item) {
         const route = item.url.replace("https://campuscli.com", "");
         const date = lastmod.get(route);
