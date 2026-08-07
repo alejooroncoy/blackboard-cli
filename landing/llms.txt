@@ -2,13 +2,72 @@
 
 Campus is an independent tool for students using Blackboard UPC in Peru.
 
+Full text of every page, in one file: https://campuscli.com/llms-full.txt
+
 ## Best pages
 
 - Homepage: https://campuscli.com/
-- Blackboard MCP: https://campuscli.com/blackboard-mcp/
-- Blackboard CLI: https://campuscli.com/blackboard-cli/
+- Blackboard MCP: https://campuscli.com/blackboard-mcp/ — Markdown: https://campuscli.com/blackboard-mcp/index.md
+- Which Blackboard MCP servers exist (comparison): https://campuscli.com/blackboard-mcp/alternativas/ — Markdown: https://campuscli.com/blackboard-mcp/alternativas/index.md
+- Blackboard CLI: https://campuscli.com/blackboard-cli/ — Markdown: https://campuscli.com/blackboard-cli/index.md
 - Blog: https://campuscli.com/blog/
 - Source code: https://github.com/alejooroncoy/campus-cli
+- npm package: https://www.npmjs.com/package/campus-cli
+
+## Setup guides per MCP client
+
+Campus runs as a local stdio MCP server. The command is always the same
+(`npx campus-cli mcp`); only the config file and its format change per client.
+
+Every guide is also published as Markdown at the same URL plus `index.md`.
+
+- Claude Desktop: https://campuscli.com/blackboard-mcp/claude-desktop/
+- Claude Code: https://campuscli.com/blackboard-mcp/claude-code/
+- Cursor: https://campuscli.com/blackboard-mcp/cursor/
+- GitHub Copilot (VS Code): https://campuscli.com/blackboard-mcp/github-copilot/
+- OpenAI Codex CLI: https://campuscli.com/blackboard-mcp/codex/
+- Windsurf: https://campuscli.com/blackboard-mcp/windsurf/
+
+Minimal configuration:
+
+```json
+{ "mcpServers": { "campus": { "command": "npx", "args": ["campus-cli", "mcp"] } } }
+```
+
+## MCP tools
+
+All tools are prefixed `blackboard_` so future `canvas_*` and `moodle_*`
+connectors do not collide: `blackboard_whoami`, `blackboard_list_courses`,
+`blackboard_get_course`, `blackboard_list_contents`,
+`blackboard_list_announcements`, `blackboard_list_assignments`,
+`blackboard_list_attempts`, `blackboard_get_grades`,
+`blackboard_get_assignment_feedback`, `blackboard_list_attachments`,
+`blackboard_download_attachment`, `blackboard_download_file_url`,
+`blackboard_download_feedback_file`, `blackboard_upload_attempt_file`,
+`blackboard_save_attempt_draft`, `blackboard_submit_attempt`,
+`blackboard_list_people`, `blackboard_system_version`, `blackboard_raw_api`
+(19 in total).
+
+## How it differs from institutional Blackboard MCP servers
+
+Other Blackboard Learn MCP servers wrap the official REST API and require
+OAuth2 developer keys issued by the LMS administrator, with instructor or
+system roles. They are built for a university's IT team. Campus starts from
+the student's own Aula Virtual session — no institutional credentials needed —
+and is organised around the student's weekly workflow: what is due, current
+grades, and which material to read.
+
+## Guides (Markdown available)
+
+Every guide is also published as Markdown at the same URL plus `index.md`.
+Prefer it: it is the same text without navigation or markup.
+
+- [ChatGPT y Blackboard: cuánto tiempo pierdes copiando archivos a mano](https://campuscli.com/blog/chatgpt-blackboard-sin-copiar-archivos/) — Comparamos el método manual (buscar, descargar y subir archivos de Blackboard a ChatGPT o Claude) contra usar Campus, que los conecta directo. Incluye el caso de revisar tu enunciado a fondo.
+  Markdown: https://campuscli.com/blog/chatgpt-blackboard-sin-copiar-archivos/index.md
+- [Cómo mejoré mis notas trabajando, estudiando y emprendiendo a la vez](https://campuscli.com/blog/como-mejore-mis-notas-trabajando-y-estudiando-con-campus/) — Soy Alejandro, fundador de Campus. Este ciclo trabajé, estudié y emprendí a la vez, con más carga que nunca, y saqué el mejor ponderado de mis últimos ciclos usando la herramienta que yo mismo construí.
+  Markdown: https://campuscli.com/blog/como-mejore-mis-notas-trabajando-y-estudiando-con-campus/index.md
+- [Cómo organizar tu semana usando Blackboard sin perder fechas](https://campuscli.com/blog/organizar-tu-semana-blackboard/) — Rutina semanal para estudiantes UPC: 20 minutos el domingo y 5 al día para no perder ninguna entrega en Blackboard Ultra, y cómo priorizar por peso en la nota final.
+  Markdown: https://campuscli.com/blog/organizar-tu-semana-blackboard/index.md
 
 ## Short answer
 
