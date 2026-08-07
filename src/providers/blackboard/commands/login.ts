@@ -30,7 +30,7 @@ export async function runBlackboardLogin(opts: BlackboardLoginOptions = {}): Pro
 
   console.log(chalk.cyan('\nOpening browser for Microsoft login...'));
   console.log(chalk.gray('A browser window will open. Complete the login and it will close automatically.\n'));
-  track('login_started', { method: 'microsoft_sso' }, existing?.userId);
+  track('login_started', { method: 'microsoft_sso' });
 
   try {
     const session = await login({
@@ -38,7 +38,7 @@ export async function runBlackboardLogin(opts: BlackboardLoginOptions = {}): Pro
       username: opts.username,
       password: opts.password,
     });
-    track('login_success', { method: 'microsoft_sso' }, session.userId);
+    track('login_success', { method: 'microsoft_sso' });
 
     const ssoExpiresAt = getSsoExpiry(session.cookies);
     const { summary, note } = formatSessionLifetime(session.expiresAt, ssoExpiresAt);

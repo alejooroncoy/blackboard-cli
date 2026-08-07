@@ -440,7 +440,13 @@ Si tu universidad usa Canvas o Moodle, abre un issue con el nombre de la univers
 
 ## Analítica de uso con PostHog
 
-El cliente registra de forma anónima el inicio de la CLI, los logins exitosos y la apertura del dashboard en PostHog. Se usa el ID de Blackboard únicamente como identificador estable; no se envían cookies, contraseñas, cursos, tareas ni calificaciones.
+El cliente registra en PostHog el inicio de la CLI, los logins exitosos y la apertura del dashboard. No se envían cookies, contraseñas, cursos, tareas ni calificaciones.
+
+Como identificador estable se usa el **ID de tu cuenta Campus**, la que creas con `campus account login`. Si no tienes cuenta Campus, se usa un UUID aleatorio generado en tu máquina que no identifica a nadie. En ningún caso se envía tu identificador de Blackboard: es una credencial de la universidad y no sale de tu equipo.
+
+Esto es seudónimo, no anónimo: quien tenga acceso a nuestro PostHog puede distinguir a un usuario de otro y, cruzando con nuestra base de cuentas, saber de quién se trata. Lo decimos así de claro a propósito.
+
+Solo viajan las propiedades de esta lista blanca: `app`, `attempts_count`, `command`, `duration_ms`, `error_type`, `has_comments`, `has_file`, `has_text`, `method`, `mode`, `parent_command`, `status_code`, `success`, `tool` y `version`. Cualquier otra clave se descarta antes de enviar, así que un evento nuevo no puede filtrar el nombre de un curso por descuido. El código está en [`src/analytics.ts`](src/analytics.ts) y son cuarenta líneas: léelas.
 
 La clave pública del proyecto está configurada por defecto. Para cambiar el proyecto o desactivar la analítica:
 

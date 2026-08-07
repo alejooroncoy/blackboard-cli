@@ -38,7 +38,7 @@ export function registerBlackboardTools(server: McpServer) {
       try {
         session = await loadOrRefreshSession();
         const result = await handler(...input);
-        track('mcp_tool_used', { tool: name, success: true, duration_ms: Date.now() - startedAt }, session?.userId);
+        track('mcp_tool_used', { tool: name, success: true, duration_ms: Date.now() - startedAt });
         return result;
       } catch (error) {
         track('mcp_tool_error', {
@@ -46,7 +46,7 @@ export function registerBlackboardTools(server: McpServer) {
           success: false,
           duration_ms: Date.now() - startedAt,
           error_type: error instanceof Error ? error.name : 'UnknownError',
-        }, session?.userId);
+        });
         throw error;
       }
     });

@@ -21,6 +21,11 @@ export function accountCommand(program: Command) {
         const session = await loginWithCampusAccount();
         saveAccountSession(session);
         console.log(ok(`Sesión iniciada como ${chalk.bold(session.account.name)} (${session.account.email})`));
+        // El registro es el momento de decirlo: es cuando el usuario nos da
+        // una cuenta y cuando esa cuenta pasa a identificar sus métricas de
+        // uso. Enterrarlo solo en el README no cuenta como avisar.
+        console.log(chalk.gray('\n  Campus registra qué comandos y herramientas usas para mejorar el producto.'));
+        console.log(chalk.gray('  Nunca tus cursos, tareas ni calificaciones. Para desactivarlo: POSTHOG_DISABLED=1'));
       } catch (err: any) {
         console.error(fail(`No se pudo iniciar sesión: ${err.message}`));
         process.exit(1);
