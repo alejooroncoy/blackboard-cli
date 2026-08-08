@@ -6,6 +6,17 @@ import path from 'path';
 import { loadSession, isSessionValid } from '../auth/session.js';
 import { createClient } from '../api/client.js';
 
+// Blackboard-reported fileNames are untrusted — strip path segments so a
+// crafted name can't write outside outDir (CWE-22).
+function safeDestPath(dir: string, name: string): string {
+  const base = path.basename(name) || 'download';
+  const dest = path.join(dir, base);
+  if (path.relative(dir, dest).startsWith('..')) {
+    throw new Error(`Refusing to write outside output directory: ${name}`);
+  }
+  return dest;
+}
+
 function requireSession() {
   const session = loadSession();
   if (!isSessionValid(session)) {
@@ -91,7 +102,7 @@ export function downloadCommand(program: Command) {
 
         for (const att of attachments) {
           spinner.text = `Downloading ${att.fileName}...`;
-          const dest = path.join(outDir, att.fileName);
+          const dest = safeDestPath(outDir, att.fileName);
           await downloadAttachment(client, courseId, contentId, att.id, dest);
           spinner.succeed(`Saved: ${dest}`);
         }
@@ -131,7 +142,7 @@ export function downloadCommand(program: Command) {
           try {
             const attachments = await getAttachments(client, courseId, file.id);
             for (const att of attachments) {
-              const dest = path.join(outDir, att.fileName);
+              const dest = safeDestPath(outDir, att.fileName);
               await downloadAttachment(client, courseId, file.id, att.id, dest);
             }
             spin.succeed(`${file.title}`);

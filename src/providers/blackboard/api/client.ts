@@ -4,6 +4,30 @@ import { laneFor, paceFor } from './pace.js';
 import { Reuse, isReusable, keyFor, reuseFor } from './reuse.js';
 
 const BASE_URL = 'https://aulavirtual.upc.edu.pe';
+const ALLOWED_HOST = 'aulavirtual.upc.edu.pe';
+
+// Axios attaches the instance's default headers — including the session Cookie
+// and X-Blackboard-XSRF token — even when a request URL is absolute and points
+// at a different host entirely, bypassing baseURL. A caller-controlled URL
+// (bbcswebdav links, blackboard_raw_api's path) must never be allowed to be
+// absolute unless it targets this exact host, or the student's session leaks
+// to whatever host was supplied.
+const ABSOLUTE_URL_RE = /^([a-z][a-z\d+\-.]*:)?\/\//i;
+
+export function assertSameOrigin(url: string): void {
+  if (!ABSOLUTE_URL_RE.test(url)) return; // relative — always resolved against baseURL
+  let parsed: URL;
+  try {
+    parsed = new URL(url, BASE_URL);
+  } catch {
+    throw new Error(`Invalid URL: ${url}`);
+  }
+  if (parsed.protocol !== 'https:' || parsed.hostname !== ALLOWED_HOST) {
+    throw new Error(
+      `Refusing to send the Blackboard session to a non-Blackboard host: ${parsed.hostname}`
+    );
+  }
+}
 
 export type ClientOptions = {
   /**
