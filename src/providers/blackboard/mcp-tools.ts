@@ -19,6 +19,14 @@ import { track } from '../../analytics.js';
 
 const MAX_UPLOAD_BYTES = 50 * 1024 * 1024; // 50MB
 
+// Blackboard's own IDs (course, content, column, attempt, file) always look like
+// `_529580_1`. These get interpolated straight into REST path templates below —
+// without this shape check, a crafted ID containing `/` or `..` could redirect
+// the request to a different endpoint entirely (path injection within the same
+// host), e.g. from a prompt-injected value the agent didn't scrutinize.
+const blackboardId = (label: string) =>
+  z.string().regex(/^_\d+_\d+$/, `${label} must look like a Blackboard ID, e.g. _529580_1`);
+
 async function getClient() {
   const session = await loadOrRefreshSession();
   if (!isSessionValid(session)) {
@@ -79,7 +87,7 @@ export function registerBlackboardTools(server: McpServer) {
     'blackboard_get_course',
     {
       description: 'Get details of a specific course by its Blackboard ID (e.g. _529580_1)',
-      inputSchema: { courseId: z.string().describe('Blackboard course ID like _529580_1') },
+      inputSchema: { courseId: blackboardId('courseId').describe('Blackboard course ID like _529580_1') },
     },
     async ({ courseId }) => {
       const { client } = await getClient();
@@ -94,8 +102,8 @@ export function registerBlackboardTools(server: McpServer) {
     {
       description: 'List content items inside a course or folder. Use parentId to navigate into subfolders.',
       inputSchema: {
-        courseId: z.string().describe('Blackboard course ID'),
-        parentId: z.string().optional().describe('Parent folder content ID (omit for root level)'),
+        courseId: blackboardId('courseId').describe('Blackboard course ID'),
+        parentId: blackboardId('parentId').optional().describe('Parent folder content ID (omit for root level)'),
       },
     },
     async ({ courseId, parentId }) => {
@@ -110,7 +118,7 @@ export function registerBlackboardTools(server: McpServer) {
     'blackboard_list_announcements',
     {
       description: 'List recent announcements for a course',
-      inputSchema: { courseId: z.string().describe('Blackboard course ID') },
+      inputSchema: { courseId: blackboardId('courseId').describe('Blackboard course ID') },
     },
     async ({ courseId }) => {
       const { client } = await getClient();
@@ -132,7 +140,7 @@ export function registerBlackboardTools(server: McpServer) {
         'Pass search to look up one person by name. Contact email is only included for instructors — ' +
         "classmates' emails are never returned, even with search, to avoid leaking one student's contact info to another.",
       inputSchema: {
-        courseId: z.string().describe('Blackboard course ID'),
+        courseId: blackboardId('courseId').describe('Blackboard course ID'),
         search: z.string().optional().describe('Name of one person in the course'),
       },
     },
@@ -191,7 +199,7 @@ export function registerBlackboardTools(server: McpServer) {
     'blackboard_list_assignments',
     {
       description: 'List assignments and tasks in a course with due dates, scores and submission status',
-      inputSchema: { courseId: z.string().describe('Blackboard course ID') },
+      inputSchema: { courseId: blackboardId('courseId').describe('Blackboard course ID') },
     },
     async ({ courseId }) => {
       const { client } = await getClient();
@@ -206,8 +214,8 @@ export function registerBlackboardTools(server: McpServer) {
     {
       description: 'List submission attempts for a specific assignment (gradebook column)',
       inputSchema: {
-        courseId: z.string().describe('Blackboard course ID'),
-        columnId: z.string().describe('Gradebook column ID (assignment ID)'),
+        courseId: blackboardId('courseId').describe('Blackboard course ID'),
+        columnId: blackboardId('columnId').describe('Gradebook column ID (assignment ID)'),
       },
     },
     async ({ courseId, columnId }) => {
@@ -222,7 +230,7 @@ export function registerBlackboardTools(server: McpServer) {
     'blackboard_get_grades',
     {
       description: 'Get all grades for the current student in a course',
-      inputSchema: { courseId: z.string().describe('Blackboard course ID') },
+      inputSchema: { courseId: blackboardId('courseId').describe('Blackboard course ID') },
     },
     async ({ courseId }) => {
       const { client, session } = await getClient();
@@ -247,8 +255,8 @@ export function registerBlackboardTools(server: McpServer) {
     {
       description: 'Download a file from a course content item and save it to disk. attachmentId can be a Blackboard attachment ID (for x-bb-file) or a full bbcswebdav URL (for x-bb-document embedded files). Saves to outputDir (default: current working directory).',
       inputSchema: {
-        courseId: z.string().describe('Blackboard course ID'),
-        contentId: z.string().describe('Content item ID'),
+        courseId: blackboardId('courseId').describe('Blackboard course ID'),
+        contentId: blackboardId('contentId').describe('Content item ID'),
         attachmentId: z.string().describe('Attachment ID from blackboard_list_attachments, or a full bbcswebdav URL for embedded files'),
         filename: z.string().optional().describe('Filename to save as (e.g. displayName from blackboard_list_attachments). Falls back to Content-Disposition header.'),
         outputDir: z.string().optional().describe('Directory to save the file (default: current working directory)'),
@@ -291,8 +299,8 @@ export function registerBlackboardTools(server: McpServer) {
     {
       description: 'List file attachments for a course content item. Works for x-bb-file (REST API) and x-bb-document (embedded files in body HTML).',
       inputSchema: {
-        courseId: z.string().describe('Blackboard course ID'),
-        contentId: z.string().describe('Content item ID'),
+        courseId: blackboardId('courseId').describe('Blackboard course ID'),
+        contentId: blackboardId('contentId').describe('Content item ID'),
       },
     },
     async ({ courseId, contentId }) => {
@@ -432,8 +440,8 @@ export function registerBlackboardTools(server: McpServer) {
         'This does NOT send it to the instructor for grading — use blackboard_submit_attempt for that, ' +
         'and always confirm with the user before calling that one.',
       inputSchema: {
-        courseId: z.string().describe('Blackboard course ID'),
-        columnId: z.string().describe('Assignment (gradebook column) ID'),
+        courseId: blackboardId('courseId').describe('Blackboard course ID'),
+        columnId: blackboardId('columnId').describe('Assignment (gradebook column) ID'),
         studentComments: z.string().optional().describe('Comment to the instructor'),
         studentSubmission: z.string().optional().describe('Text body of the submission'),
         fileUploadIds: z.array(z.string()).optional().describe(
@@ -464,8 +472,8 @@ export function registerBlackboardTools(server: McpServer) {
         'Once submitted the instructor can grade it; use blackboard_save_attempt_draft instead ' +
         'if the student just wants to save progress without sending it yet.',
       inputSchema: {
-        courseId: z.string().describe('Blackboard course ID'),
-        columnId: z.string().describe('Assignment (gradebook column) ID'),
+        courseId: blackboardId('courseId').describe('Blackboard course ID'),
+        columnId: blackboardId('columnId').describe('Assignment (gradebook column) ID'),
         studentComments: z.string().optional().describe('Comment to the instructor'),
         studentSubmission: z.string().optional().describe('Text body of the submission'),
         fileUploadIds: z.array(z.string()).optional().describe(
@@ -495,7 +503,7 @@ export function registerBlackboardTools(server: McpServer) {
       description:
         'Get professor feedback and scores for all assignments in a course. ' +
         'For each graded submission, shows score, instructor comments, and any feedback files attached by the professor.',
-      inputSchema: { courseId: z.string().describe('Blackboard course ID') },
+      inputSchema: { courseId: blackboardId('courseId').describe('Blackboard course ID') },
     },
     async ({ courseId }) => {
       const { client, session } = await getClient();
@@ -564,10 +572,10 @@ export function registerBlackboardTools(server: McpServer) {
         'Use the fileId from blackboard_get_assignment_feedback → attempt.feedbackFiles. ' +
         'The download endpoint may not be available on all Blackboard versions.',
       inputSchema: {
-        courseId: z.string().describe('Blackboard course ID'),
-        columnId: z.string().describe('Gradebook column (assignment) ID'),
-        attemptId: z.string().describe('Attempt ID from blackboard_get_assignment_feedback'),
-        fileId: z.string().describe('File ID from blackboard_get_assignment_feedback → attempt.feedbackFiles'),
+        courseId: blackboardId('courseId').describe('Blackboard course ID'),
+        columnId: blackboardId('columnId').describe('Gradebook column (assignment) ID'),
+        attemptId: blackboardId('attemptId').describe('Attempt ID from blackboard_get_assignment_feedback'),
+        fileId: blackboardId('fileId').describe('File ID from blackboard_get_assignment_feedback → attempt.feedbackFiles'),
         filename: z.string().optional().describe('Filename to save as (defaults to the name from feedbackFiles)'),
         outputDir: z.string().optional().describe('Directory to save the file (default: current working directory)'),
       },
