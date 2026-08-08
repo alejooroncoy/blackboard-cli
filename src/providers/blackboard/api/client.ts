@@ -1,9 +1,51 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
+import path from 'path';
 import type { Session } from '../types.js';
 import { laneFor, paceFor } from './pace.js';
 import { Reuse, isReusable, keyFor, reuseFor } from './reuse.js';
 
 const BASE_URL = 'https://aulavirtual.upc.edu.pe';
+const ALLOWED_HOST = 'aulavirtual.upc.edu.pe';
+
+// Axios attaches the instance's default headers — including the session Cookie
+// and X-Blackboard-XSRF token — even when a request URL is absolute and points
+// at a different host entirely, bypassing baseURL. A caller-controlled URL
+// (bbcswebdav links, blackboard_raw_api's path) must never be allowed to be
+// absolute unless it targets this exact host, or the student's session leaks
+// to whatever host was supplied.
+const ABSOLUTE_URL_RE = /^([a-z][a-z\d+\-.]*:)?\/\//i;
+
+export function assertSameOrigin(url: string): void {
+  if (!ABSOLUTE_URL_RE.test(url)) return; // relative — always resolved against baseURL
+  let parsed: URL;
+  try {
+    parsed = new URL(url, BASE_URL);
+  } catch {
+    throw new Error(`Invalid URL: ${url}`);
+  }
+  if (parsed.protocol !== 'https:' || parsed.hostname !== ALLOWED_HOST) {
+    throw new Error(
+      `Refusing to send the Blackboard session to a non-Blackboard host: ${parsed.hostname}`
+    );
+  }
+}
+
+// Server-reported filenames (Content-Disposition, Blackboard fileName) are untrusted —
+// strip to a plain basename so a crafted name can't write outside `dir` (CWE-22).
+// `.`/`..`/empty are rejected outright: path.basename('.') is '.', which would make
+// dest === dir and crash writeFileSync with EISDIR instead of failing safely.
+export function safeDestPath(dir: string, name: string): string {
+  const base = path.basename(name);
+  if (!base || base === '.' || base === '..') {
+    throw new Error(`Refusing to write an unsafe filename: ${name}`);
+  }
+  const dest = path.join(dir, base);
+  const rel = path.relative(dir, dest);
+  if (rel === '..' || rel.startsWith(`..${path.sep}`) || path.isAbsolute(rel)) {
+    throw new Error(`Refusing to write outside output directory: ${name}`);
+  }
+  return dest;
+}
 
 export type ClientOptions = {
   /**
@@ -53,6 +95,11 @@ export function createClient(session: Session, options: ClientOptions = {}): Axi
   const reuse = options.reuse ?? reuseFor(key);
   const base = axios.getAdapter(client.defaults.adapter);
   client.defaults.adapter = (config) => {
+    // Central choke point: every request this client ever sends passes through
+    // here, so this is where the session leaks if a URL slips through unchecked
+    // — enforcing it at each call site instead has already missed one (the `campus
+    // api` CLI command shipped without the guard that blackboard_raw_api got).
+    assertSameOrigin(config.url ?? '');
     const send = () => pace.run(laneFor(config), () => base(config));
     if (!isReusable(config)) {
       // A write invalidates everything we remember before it runs, so a reader

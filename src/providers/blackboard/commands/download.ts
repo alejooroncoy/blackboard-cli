@@ -4,7 +4,7 @@ import ora from 'ora';
 import fs from 'fs';
 import path from 'path';
 import { loadSession, isSessionValid } from '../auth/session.js';
-import { createClient } from '../api/client.js';
+import { createClient, safeDestPath } from '../api/client.js';
 
 function requireSession() {
   const session = loadSession();
@@ -91,7 +91,7 @@ export function downloadCommand(program: Command) {
 
         for (const att of attachments) {
           spinner.text = `Downloading ${att.fileName}...`;
-          const dest = path.join(outDir, att.fileName);
+          const dest = safeDestPath(outDir, att.fileName);
           await downloadAttachment(client, courseId, contentId, att.id, dest);
           spinner.succeed(`Saved: ${dest}`);
         }
@@ -131,7 +131,7 @@ export function downloadCommand(program: Command) {
           try {
             const attachments = await getAttachments(client, courseId, file.id);
             for (const att of attachments) {
-              const dest = path.join(outDir, att.fileName);
+              const dest = safeDestPath(outDir, att.fileName);
               await downloadAttachment(client, courseId, file.id, att.id, dest);
             }
             spin.succeed(`${file.title}`);
