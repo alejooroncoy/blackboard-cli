@@ -4,7 +4,15 @@ All notable changes to `campus-cli` (formerly `blackboard-upc`) will be document
 
 ---
 
-## [Sin publicar]
+## [1.4.1] — 2026-08-08
+
+### Security
+- Un listado de terceros (mcp-marketplace.io) marcó el paquete con "Use Caution" señalando path traversal en descargas y falta de confirmación al enviar. A partir de ahí, una auditoría propia encontró y cerró además una fuga de sesión más seria:
+- El cliente HTTP mandaba la cookie de sesión y el token XSRF del estudiante como headers por defecto, y los seguía enviando aunque la URL de la petición fuera absoluta y apuntara a otro host. `blackboard_raw_api`, `blackboard_download_file_url`, `blackboard_download_attachment` y el comando `campus api` podían ser inducidos (por ejemplo, contenido de un curso con instrucciones ocultas para el agente) a mandar la sesión completa a un servidor externo. Ahora cualquier URL absoluta se valida contra el host real de Blackboard antes de salir — la comprobación vive en un solo lugar central, no repetida por cada tool.
+- Path traversal (CWE-22) en las descargas: un nombre de archivo con `../` que Blackboard reportara ya no puede escribir fuera de la carpeta de destino.
+- `blackboard_submit_attempt` y `blackboard_upload_attempt_file` ahora exigen una confirmación explícita (`confirmed: true`) que el propio protocolo MCP valida, en vez de depender solo de que el agente obedezca la instrucción del prompt — cierra la puerta a que contenido malicioso de un curso empuje una entrega o una subida de archivo local sin que el estudiante la vea antes.
+- `blackboard_list_people` ya no devuelve el email de un compañero de curso al buscarlo por nombre; solo lo hacía en la vista general, así que la búsqueda quedaba como excepción.
+- 8 vulnerabilidades de dependencias resueltas (`npm audit fix`, sin romper compatibilidad).
 
 ### Added
 - `Dockerfile` para los verificadores de directorios MCP. Glama y similares arrancan el servidor y le piden `tools/list`; la imagen no descarga el navegador de Playwright porque el login real ocurre en la máquina del estudiante, no en un contenedor.
