@@ -4,6 +4,19 @@ All notable changes to `campus-cli` (formerly `blackboard-upc`) will be document
 
 ---
 
+## [1.4.2] — 2026-08-08
+
+### Security
+- Los IDs de Blackboard (`courseId`, `contentId`, `parentId`, `columnId`, `attemptId`, `fileId`) se interpolaban sin validar en las URLs de la API REST. Un valor con `/` o `..` — por ejemplo, sugerido a un agente por contenido malicioso de un curso — podía redirigir la petición a un endpoint distinto dentro del mismo host. Ahora las 21 tools MCP que reciben alguno de estos campos exigen el formato real de Blackboard (`_529580_1`) antes de armar la petición.
+
+### Fixed
+- 10 vulnerabilidades de dependencias resueltas, sin saltar a la última versión mayor de nada:
+  - `inquirer` 10 → 12 (no 14): el mínimo salto donde `@inquirer/editor` deja de arrastrar el paquete `tmp` vulnerable (escritura arbitraria de archivos vía symlink, path traversal por prefix/postfix sin sanear).
+  - Se eliminaron `google-auth-library`, `@modelcontextprotocol/node`, `@modelcontextprotocol/server` y `@modelcontextprotocol/client`: ninguno se importa en el código — dependencias muertas que arrastraban las vulnerabilidades de `gaxios`/`uuid` y una versión vieja de `@hono/node-server`.
+  - `tsx` refrescado dentro de su propio rango ya declarado, trayendo el `esbuild` con el fix de lectura arbitraria de archivos en Windows.
+
+---
+
 ## [1.4.1] — 2026-08-08
 
 ### Security
