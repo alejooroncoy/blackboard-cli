@@ -4,18 +4,7 @@ import ora from 'ora';
 import fs from 'fs';
 import path from 'path';
 import { loadSession, isSessionValid } from '../auth/session.js';
-import { createClient } from '../api/client.js';
-
-// Blackboard-reported fileNames are untrusted — strip path segments so a
-// crafted name can't write outside outDir (CWE-22).
-function safeDestPath(dir: string, name: string): string {
-  const base = path.basename(name) || 'download';
-  const dest = path.join(dir, base);
-  if (path.relative(dir, dest).startsWith('..')) {
-    throw new Error(`Refusing to write outside output directory: ${name}`);
-  }
-  return dest;
-}
+import { createClient, safeDestPath } from '../api/client.js';
 
 function requireSession() {
   const session = loadSession();

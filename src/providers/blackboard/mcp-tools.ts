@@ -3,7 +3,7 @@ import { z } from 'zod';
 import fs from 'fs';
 import path from 'path';
 import { loadOrRefreshSession, isSessionValid } from './auth/session.js';
-import { createClient, assertSameOrigin } from './api/client.js';
+import { createClient, assertSameOrigin, safeDestPath } from './api/client.js';
 import {
   getMe,
   getMyCourses,
@@ -18,17 +18,6 @@ import { listAssignments, listAttempts, submitAttempt, uploadFile, getAttemptFil
 import { track } from '../../analytics.js';
 
 const MAX_UPLOAD_BYTES = 50 * 1024 * 1024; // 50MB
-
-// Server-reported filenames (Content-Disposition, Blackboard fileName) are untrusted —
-// strip any path segments so a malicious name can't write outside `dir` (CWE-22).
-function safeDestPath(dir: string, name: string): string {
-  const base = path.basename(name) || 'download';
-  const dest = path.join(dir, base);
-  if (path.relative(dir, dest).startsWith('..')) {
-    throw new Error(`Refusing to write outside output directory: ${name}`);
-  }
-  return dest;
-}
 
 async function getClient() {
   const session = await loadOrRefreshSession();
@@ -139,7 +128,9 @@ export function registerBlackboardTools(server: McpServer) {
     'blackboard_list_people',
     {
       description:
-        "Instructors and classmates of a course. Use it to resolve an internal user id into a person's name. Pass search to look up one person and get their contact details.",
+        "Instructors and classmates of a course. Use it to resolve an internal user id into a person's name. " +
+        'Pass search to look up one person by name. Contact email is only included for instructors — ' +
+        "classmates' emails are never returned, even with search, to avoid leaking one student's contact info to another.",
       inputSchema: {
         courseId: z.string().describe('Blackboard course ID'),
         search: z.string().optional().describe('Name of one person in the course'),

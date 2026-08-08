@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
+import path from 'path';
 import type { Session } from '../types.js';
 import { laneFor, paceFor } from './pace.js';
 import { Reuse, isReusable, keyFor, reuseFor } from './reuse.js';
@@ -27,6 +28,23 @@ export function assertSameOrigin(url: string): void {
       `Refusing to send the Blackboard session to a non-Blackboard host: ${parsed.hostname}`
     );
   }
+}
+
+// Server-reported filenames (Content-Disposition, Blackboard fileName) are untrusted —
+// strip to a plain basename so a crafted name can't write outside `dir` (CWE-22).
+// `.`/`..`/empty are rejected outright: path.basename('.') is '.', which would make
+// dest === dir and crash writeFileSync with EISDIR instead of failing safely.
+export function safeDestPath(dir: string, name: string): string {
+  const base = path.basename(name);
+  if (!base || base === '.' || base === '..') {
+    throw new Error(`Refusing to write an unsafe filename: ${name}`);
+  }
+  const dest = path.join(dir, base);
+  const rel = path.relative(dir, dest);
+  if (rel === '..' || rel.startsWith(`..${path.sep}`) || path.isAbsolute(rel)) {
+    throw new Error(`Refusing to write outside output directory: ${name}`);
+  }
+  return dest;
 }
 
 export type ClientOptions = {
@@ -77,6 +95,11 @@ export function createClient(session: Session, options: ClientOptions = {}): Axi
   const reuse = options.reuse ?? reuseFor(key);
   const base = axios.getAdapter(client.defaults.adapter);
   client.defaults.adapter = (config) => {
+    // Central choke point: every request this client ever sends passes through
+    // here, so this is where the session leaks if a URL slips through unchecked
+    // — enforcing it at each call site instead has already missed one (the `campus
+    // api` CLI command shipped without the guard that blackboard_raw_api got).
+    assertSameOrigin(config.url ?? '');
     const send = () => pace.run(laneFor(config), () => base(config));
     if (!isReusable(config)) {
       // A write invalidates everything we remember before it runs, so a reader
