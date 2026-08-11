@@ -6,6 +6,30 @@ import body from "../../html/profes/index.html?raw";
 const schemas = [
   {
     "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": "https://campuscli.com/profes/#webpage",
+    "url": "https://campuscli.com/profes/",
+    "name": "Campus Profes | Elige profesores universitarios por WhatsApp",
+    "description": "Campus Profes ayuda a estudiantes en Perú a comparar calificaciones, comentarios y horarios de profesores universitarios antes de matricularse, por WhatsApp.",
+    "inLanguage": "es-PE",
+    "isPartOf": {
+      "@type": "WebSite",
+      "@id": "https://campuscli.com/#website",
+      "url": "https://campuscli.com/",
+      "name": "Campus"
+    },
+    "mainEntity": {
+      "@id": "https://campuscli.com/profes/#service"
+    },
+    "about": [
+      "profesores universitarios",
+      "matrícula universitaria",
+      "horarios de cursos",
+      "reseñas de estudiantes"
+    ]
+  },
+  {
+    "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
       {
@@ -25,15 +49,22 @@ const schemas = [
   {
     "@context": "https://schema.org",
     "@type": "Service",
+    "@id": "https://campuscli.com/profes/#service",
     "name": "Campus Profes",
     "serviceType": "Comparación de profesores universitarios",
     "areaServed": "PE",
+    "url": "https://campuscli.com/profes/",
+    "inLanguage": "es-PE",
     "provider": {
       "@type": "Organization",
       "name": "Campus",
       "url": "https://campuscli.com/"
     },
-    "description": "Bot de WhatsApp que muestra calificaciones, comentarios de otros alumnos y el horario de cada profesor, para elegir sección antes de matricularse.",
+    "description": "Servicio por WhatsApp para estudiantes en Perú: compara calificaciones, comentarios de otros alumnos y horarios de profesores universitarios antes de elegir sección o matricularse.",
+    "audience": {
+      "@type": "EducationalAudience",
+      "educationalRole": "student"
+    },
     "offers": {
       "@type": "Offer",
       "price": "0",
@@ -92,11 +123,11 @@ const schemas = [
 ---
 
 <Base
-  title={"Campus Profes | Elige a tu profesor por WhatsApp"}
-  description={"Campus Profes es un bot de WhatsApp que muestra calificaciones, comentarios de otros alumnos y el horario de cada profesor, para elegir sección antes de matricularte."}
+  title={"Campus Profes | Elige profesores universitarios por WhatsApp"}
+  description={"Compara calificaciones, comentarios y horarios de profesores universitarios antes de matricularte. Campus Profes funciona por WhatsApp y está gratis en beta."}
   canonical={"https://campuscli.com/profes/"}
-  ogTitle={"Campus Profes | Elige a tu profesor por WhatsApp"}
-  ogDescription={"Calificaciones, comentarios de otros alumnos y horarios de profesores, directo desde WhatsApp."}
+  ogTitle={"Campus Profes | Compara profesores antes de matricularte"}
+  ogDescription={"Calificaciones, comentarios y horarios de profesores universitarios por WhatsApp."}
   markdownUrl={"https://campuscli.com/profes/index.md"}
   ogImageAlt={"Campus Profes: calificaciones y horarios de profesores por WhatsApp"}
   schemas={schemas}

@@ -5,6 +5,7 @@ import { htmlToMarkdown } from "../lib/html-to-markdown";
 import chatgptBody from "../html/blackboard-chatgpt/index.html?raw";
 import mcpBody from "../html/blackboard-mcp/index.html?raw";
 import cliBody from "../html/blackboard-cli/index.html?raw";
+import profesBody from "../html/profes/index.html?raw";
 
 /**
  * Every page of the site, end to end, in one plain-text file.
@@ -33,6 +34,13 @@ const section = (title: string, description: string, url: string, text: string) 
 
 export const GET: APIRoute = async () => {
   const products = [
+    {
+      title: "Campus Profes: compara profesores universitarios por WhatsApp",
+      description:
+        "Producto separado, gratis durante la beta, para consultar calificaciones, comentarios y horarios antes de matricularse.",
+      url: "https://campuscli.com/profes/",
+      body: profesBody,
+    },
     {
       title: "Blackboard UPC en ChatGPT, sin instalar nada",
       description:

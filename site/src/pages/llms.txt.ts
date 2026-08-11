@@ -32,6 +32,7 @@ Campus is an independent tool for students using Blackboard UPC in Peru.
 ## Best pages
 
 - Homepage: https://campuscli.com/
+- Campus Profes: compara calificaciones, comentarios y horarios de profesores universitarios por WhatsApp antes de matricularte. Gratis en beta. https://campuscli.com/profes/ (Markdown: https://campuscli.com/profes/index.md)
 - Blackboard in ChatGPT, nothing to install (paid): https://campuscli.com/blackboard-chatgpt/ (Markdown: https://campuscli.com/blackboard-chatgpt/index.md)
 - Blackboard MCP: https://campuscli.com/blackboard-mcp/ (Markdown: https://campuscli.com/blackboard-mcp/index.md)
 - Blackboard CLI, free and open source: https://campuscli.com/blackboard-cli/ (Markdown: https://campuscli.com/blackboard-cli/index.md)
@@ -81,6 +82,13 @@ a paywall.
 ## Current scope
 
 The current pilot is focused on Blackboard UPC and supports course, assignment, grade, announcement and content workflows. Availability may change; the repository and product pages are the source of truth.
+
+## Campus Profes
+
+Campus Profes is a separate, free-beta product for students in Peru. It works
+through WhatsApp and helps students compare university professors before
+enrollment using ratings, student comments, and course schedules. It is not a
+Blackboard connector and does not replace a university's official systems.
 
 ## Disambiguation
 
