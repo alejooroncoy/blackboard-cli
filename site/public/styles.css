@@ -902,6 +902,8 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
 .wa-window__bar { display: flex; align-items: center; gap: 11px; min-height: 58px; padding: 0 16px; background: var(--night); color: #fff; }
 .wa-avatar { display: grid; place-items: center; width: 34px; height: 34px; flex: 0 0 auto; border-radius: 50%; background: rgba(255, 255, 255, .14); }
 .wa-avatar svg { width: 18px; height: 18px; }
+.wa-window__bar .wa-avatar { overflow: hidden; background: #fff; box-shadow: 0 0 0 2px rgba(255, 255, 255, .12); }
+.wa-window__bar .wa-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .wa-avatar--light { background: var(--sky-pale); color: #0a6a86; }
 .wa-window__bar div { display: grid; gap: 2px; min-width: 0; }
 .wa-window__bar strong { font-size: 14px; }
