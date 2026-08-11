@@ -907,8 +907,7 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
 .wa-avatar--light { background: var(--sky-pale); color: #0a6a86; }
 .wa-window__bar div { display: grid; gap: 2px; min-width: 0; }
 .wa-window__bar strong { font-size: 14px; }
-.wa-window__bar span { display: flex; align-items: center; gap: 5px; color: #b9d3dc; font-size: 11px; }
-.wa-window__bar span::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: wa-presence 2.8s ease-in-out infinite; }
+.wa-window__bar span { color: #b9d3dc; font-size: 11px; }
 .wa-window__body { position: relative; flex: 1; display: grid; align-content: start; gap: 12px; padding: 22px; overflow: hidden; background: var(--canvas); }
 .wa-window__body::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .45; background-image: radial-gradient(circle at 1px 1px, rgba(52, 99, 112, .14) 1px, transparent 0); background-size: 18px 18px; }
 .wa-bubble { max-width: 84%; padding: 12px 15px; border-radius: 10px; font-size: 14px; line-height: 1.45; }
@@ -927,7 +926,6 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
 .wa-window__composer i { display: grid; width: 32px; height: 32px; place-items: center; border-radius: 50%; background: var(--night); color: #fff; }
 .wa-window__composer svg { width: 16px; height: 16px; }
 @keyframes wa-message-in { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
-@keyframes wa-presence { 0%, 100% { box-shadow: 0 0 0 0 rgba(8, 127, 91, .3); } 50% { box-shadow: 0 0 0 4px rgba(8, 127, 91, 0); } }
 
 .schedule-mock { width: 100%; max-width: 440px; display: grid; gap: 10px; }
 .schedule-mock__head { display: flex; align-items: center; justify-content: space-between; color: #587383; font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
@@ -956,7 +954,7 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .wa-window, .wa-window__bar span::before, .wa-bubble--out, .wa-bubble--in { animation: none; }
+  .wa-window, .wa-bubble--out, .wa-bubble--in { animation: none; }
 }
 
 /* ── Legal links in the footer bar ────────────────────────────────────────
