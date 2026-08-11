@@ -899,13 +899,14 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
    rather than WhatsApp's brand green, so it reads as Campus, not as an
    impersonation of WhatsApp's UI. */
 .wa-window { position: relative; z-index: 2; width: 100%; min-height: 365px; display: flex; flex-direction: column; overflow: hidden; border: 1px solid #c8d9df; border-radius: 8px; background: var(--paper); box-shadow: 0 14px 34px rgba(16, 42, 58, .11); animation: product-enter 880ms 160ms ease-out both; }
-.wa-window__bar { display: flex; align-items: center; justify-content: center; min-height: 68px; padding: 0 18px; background: linear-gradient(135deg, #102a3a, #1a4050); color: #fff; }
+.wa-window__bar { display: flex; align-items: center; gap: 11px; min-height: 58px; padding: 0 16px; background: var(--night); color: #fff; }
 .wa-avatar { display: grid; place-items: center; width: 34px; height: 34px; flex: 0 0 auto; border-radius: 50%; background: rgba(255, 255, 255, .14); }
 .wa-avatar svg { width: 18px; height: 18px; }
-.wa-window__brand { width: 48px; height: 48px; object-fit: contain; filter: drop-shadow(0 5px 10px rgba(0, 0, 0, .18)); }
+.wa-window__bar .wa-avatar { overflow: hidden; background: #fff; box-shadow: 0 0 0 2px rgba(255, 255, 255, .12); }
+.wa-window__bar .wa-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .wa-avatar--light { background: var(--sky-pale); color: #0a6a86; }
 .wa-window__bar div { display: grid; gap: 2px; min-width: 0; }
-.wa-window__bar strong { font-size: 15px; letter-spacing: -.01em; }
+.wa-window__bar strong { font-size: 14px; }
 .wa-window__bar span { display: flex; align-items: center; gap: 5px; color: #b9d3dc; font-size: 11px; }
 .wa-window__bar span::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: wa-presence 2.8s ease-in-out infinite; }
 .wa-window__body { position: relative; flex: 1; display: grid; align-content: start; gap: 12px; padding: 22px; overflow: hidden; background: var(--canvas); }
