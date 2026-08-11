@@ -1,0 +1,105 @@
+---
+import Base from "../../layouts/Base.astro";
+// Kept as raw html so the markup that is already indexed ships byte for byte.
+import body from "../../html/profes/index.html?raw";
+
+const schemas = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Inicio",
+        "item": "https://campuscli.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Campus Profes",
+        "item": "https://campuscli.com/profes/"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Campus Profes",
+    "serviceType": "Comparación de profesores universitarios",
+    "areaServed": "PE",
+    "provider": {
+      "@type": "Organization",
+      "name": "Campus",
+      "url": "https://campuscli.com/"
+    },
+    "description": "Bot de WhatsApp que muestra calificaciones, comentarios de otros alumnos y el horario de cada profesor, para elegir sección antes de matricularse.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "PEN",
+      "description": "Acceso gratuito mientras dura la beta.",
+      "availability": "https://schema.org/InStock"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "¿Es lo mismo que Campus para Blackboard?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Campus para Blackboard conecta tu Aula Virtual con ChatGPT o Claude. Campus Profes es un producto aparte, enfocado en elegir profesores, y funciona por WhatsApp."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿De dónde salen las calificaciones y comentarios?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "De alumnos que usan Campus Profes: califican después de llevar un curso con ese profesor, y esa información queda disponible para quien pregunte después."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Cuesta algo?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Por ahora es gratis, mientras dura la beta. Si eso cambia más adelante, se avisa antes de cobrar nada."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Cómo evitan reseñas falsas?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Cada calificación queda asociada a quien la escribió y se moderan activamente los reportes de abuso. No se muestran reseñas de cuentas sin actividad real."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Qué universidades o profesores tiene?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "El piloto está abierto a estudiantes en Perú y crece con cada alumno que califica a su profesor."
+        }
+      }
+    ]
+  }
+];
+---
+
+<Base
+  title={"Campus Profes | Elige a tu profesor por WhatsApp"}
+  description={"Campus Profes es un bot de WhatsApp que muestra calificaciones, comentarios de otros alumnos y el horario de cada profesor, para elegir sección antes de matricularte."}
+  canonical={"https://campuscli.com/profes/"}
+  ogTitle={"Campus Profes | Elige a tu profesor por WhatsApp"}
+  ogDescription={"Calificaciones, comentarios de otros alumnos y horarios de profesores, directo desde WhatsApp."}
+  markdownUrl={"https://campuscli.com/profes/index.md"}
+  ogImageAlt={"Campus Profes: calificaciones y horarios de profesores por WhatsApp"}
+  schemas={schemas}
+>
+  <Fragment set:html={body} />
+</Base>

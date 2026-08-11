@@ -38,6 +38,7 @@ const fromFile = (route, path) => {
 };
 
 fromFile("/", "./src/html/index.html");
+fromFile("/profes/", "./src/html/profes/index.html");
 fromFile("/blackboard-chatgpt/", "./src/html/blackboard-chatgpt/index.html");
 fromFile("/blackboard-mcp/", "./src/html/blackboard-mcp/index.html");
 fromFile("/blackboard-cli/", "./src/html/blackboard-cli/index.html");
