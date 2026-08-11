@@ -2,6 +2,9 @@ import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
 import clients from "../data/mcp-clients.json";
 import { htmlToMarkdown } from "../lib/html-to-markdown";
+import homeBody from "../html/index.html?raw";
+import campusCliBody from "../html/campus-cli/index.html?raw";
+import profesBody from "../html/profes/index.html?raw";
 import chatgptBody from "../html/blackboard-chatgpt/index.html?raw";
 import mcpBody from "../html/blackboard-mcp/index.html?raw";
 import cliBody from "../html/blackboard-cli/index.html?raw";
@@ -33,6 +36,24 @@ const section = (title: string, description: string, url: string, text: string) 
 
 export const GET: APIRoute = async () => {
   const products = [
+    {
+      title: "Campus: dos productos independientes",
+      description: "Por qué existen dos productos separados y cuál usar según lo que necesitas resolver.",
+      url: "https://campuscli.com/",
+      body: homeBody,
+    },
+    {
+      title: "Campus CLI: Blackboard UPC en tu asistente de IA o en la terminal",
+      description: "El producto que conecta el Aula Virtual con ChatGPT, Claude o la terminal.",
+      url: "https://campuscli.com/campus-cli/",
+      body: campusCliBody,
+    },
+    {
+      title: "Campus Profes: elige a tu profesor por WhatsApp",
+      description: "Bot de WhatsApp con calificaciones, comentarios y horarios de profesores, para elegir sección antes de matricularse.",
+      url: "https://campuscli.com/profes/",
+      body: profesBody,
+    },
     {
       title: "Blackboard UPC en ChatGPT, sin instalar nada",
       description:
@@ -92,19 +113,24 @@ export const GET: APIRoute = async () => {
   const body = [
     "# Campus — el sitio completo en texto plano",
     "",
-    "Campus conecta el Aula Virtual (Blackboard UPC) con asistentes de IA por MCP,",
-    "y con la terminal por CLI. Proyecto independiente, sin relación con UPC ni",
-    "con Blackboard.",
+    "Campus es una empresa independiente que construye herramientas para",
+    "estudiantes universitarios en Perú. Tiene dos productos separados: Campus",
+    "CLI conecta el Aula Virtual (Blackboard UPC) con asistentes de IA por MCP",
+    "y con la terminal; Campus Profes es un bot de WhatsApp para elegir",
+    "profesor antes de matricularse. Ninguno está afiliado a UPC, Blackboard",
+    "ni a los profesores que se califican.",
     "",
-    "Este archivo contiene el texto de todas las páginas publicadas: los tres",
-    "productos, la guía de conexión para cada asistente, y las guías del blog.",
+    "Este archivo contiene el texto de todas las páginas publicadas: los dos",
+    "productos, sus sub-páginas, la guía de conexión para cada asistente, y",
+    "las guías del blog.",
     "Índice y enlaces: https://campuscli.com/llms.txt",
     "Aviso de no afiliación: https://campuscli.com/no-afiliacion/",
     "",
     "## Qué contiene",
     "",
-    "1. Productos: Campus en ChatGPT (de pago, nada que instalar), Blackboard MCP",
-    "   y Blackboard CLI (gratis y de código abierto).",
+    "1. Productos: Campus CLI (Blackboard en ChatGPT de pago, Blackboard MCP y",
+    "   Blackboard CLI gratis y de código abierto) y Campus Profes (WhatsApp,",
+    "   gratis en beta).",
     "2. Conexión por asistente: Cursor, Claude Code, Claude Desktop, Codex,",
     "   GitHub Copilot, Windsurf, y la comparativa de servidores MCP.",
     "3. Guías del blog.",

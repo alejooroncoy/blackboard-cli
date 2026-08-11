@@ -932,6 +932,42 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
 .schedule-row--clash .schedule-row__day { background: #fbe3d1; color: #93551c; }
 .schedule-row--clash svg { color: var(--warm); }
 
+/* ── Brand homepage: hero without a product mockup, and the product picker ──
+   The root page's job is routing to the right product, not pitching one, so
+   the hero drops the two-column product-stage layout and the two cards below
+   get equal visual weight — neither product outranks the other. */
+.hero--text { grid-template-columns: 1fr; min-height: auto; padding-block: 68px 28px; }
+.hero--text .hero__copy { max-width: 640px; }
+
+.product-picks { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 68px; }
+.product-pick { display: flex; flex-direction: column; padding: 40px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); box-shadow: 0 14px 34px rgba(16, 42, 58, .06); transition: transform 180ms ease, box-shadow 180ms ease; }
+.product-pick:hover { transform: translateY(-3px); box-shadow: 0 20px 44px rgba(16, 42, 58, .11); }
+.product-pick__topline { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 22px; }
+.product-pick__icon { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 12px; }
+.product-pick--cli .product-pick__icon { background: var(--sky-pale); color: #0a6a86; }
+.product-pick--profes .product-pick__icon { background: var(--mint); color: #0b5c45; }
+.product-pick__icon svg { width: 24px; height: 24px; }
+.product-pick__badge { flex: 0 0 auto; padding: 6px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+.product-pick--cli .product-pick__badge { background: var(--sky-pale); color: #0a6a86; }
+.product-pick--profes .product-pick__badge { background: var(--mint); color: #0b5c45; }
+.product-pick__eyebrow { margin: 0 0 6px; color: #60798a; font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+.product-pick h3 { margin: 0 0 10px; font-size: 26px; }
+.product-pick > p { margin: 0 0 22px; color: var(--muted); font-size: 15px; line-height: 1.55; }
+.product-pick ul { display: grid; gap: 10px; margin: 0 0 26px; padding: 0; list-style: none; }
+.product-pick li { display: flex; gap: 9px; align-items: flex-start; color: #4b6675; font-size: 14px; }
+.product-pick li svg { width: 16px; height: 16px; flex: 0 0 auto; margin-top: 1px; color: var(--green); }
+.product-pick .button { margin-top: auto; }
+.product-pick--profes .button { background: var(--night); border-color: var(--night); }
+
+@media (max-width: 1050px) {
+  .product-picks { grid-template-columns: 1fr; }
+}
+@media (max-width: 620px) {
+  .hero--text { padding-block: 40px 18px; }
+  .product-picks { gap: 14px; margin-top: 28px; }
+  .product-pick { padding: 26px 22px; }
+}
+
 /* A single free-tier price card (Campus Profes has one plan, not a
    founder/regular pair), centred instead of stretched across the two-column
    grid the homepage's pricing pair was built for. */

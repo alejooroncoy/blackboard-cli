@@ -1,0 +1,112 @@
+---
+import Base from "../../layouts/Base.astro";
+// Kept as raw html so the markup that is already indexed ships byte for byte.
+import body from "../../html/campus-cli/index.html?raw";
+
+const schemas = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://campuscli.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Campus CLI", "item": "https://campuscli.com/campus-cli/" }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Campus CLI",
+    "alternateName": [
+      "Campus",
+      "campus-cli",
+      "blackboard-cli"
+    ],
+    "url": "https://campuscli.com/campus-cli/",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Web, macOS, Linux, Windows",
+    "inLanguage": "es-PE",
+    "downloadUrl": "https://www.npmjs.com/package/campus-cli",
+    "softwareHelp": "https://github.com/alejooroncoy/campus-cli",
+    "description": "Campus CLI permite consultar cursos, tareas, notas y anuncios de Blackboard UPC desde ChatGPT, Claude o la terminal.",
+    "disambiguatingDescription": "No confundir con el paquete `campus-cli` de PyPI (Python, gestión de notebooks Jupyter) ni con otras plataformas de IA para estudiantes con nombres similares (CampusCode, Campus AI). Este proyecto es el paquete `campus-cli` de npm que conecta Blackboard con asistentes de IA vía MCP.",
+    "featureList": [
+      "Consulta de cursos",
+      "Consulta de tareas y fechas",
+      "Consulta de notas",
+      "Consulta de anuncios",
+      "Acceso revocable"
+    ],
+    "offers": {
+      "@type": "Offer",
+      "price": "20",
+      "priceCurrency": "PEN",
+      "description": "Acceso anticipado por dos meses para los primeros 100 estudiantes.",
+      "availability": "https://schema.org/LimitedAvailability"
+    },
+    "provider": {
+      "@type": "Organization",
+      "name": "Campus",
+      "url": "https://campuscli.com/"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "¿Campus reemplaza el campus virtual de mi institución?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Campus es una capa personal para consultar información académica desde herramientas que ya usas. El campus virtual de tu institución sigue siendo la fuente de los datos."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Qué instituciones funcionan hoy?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "El piloto empieza con Blackboard de UPC. Campus está diseñado para sumar institutos, universidades y otros campus virtuales; cada compatibilidad se anunciará antes de ofrecerse."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Puedo dejar de usar Campus cuando quiera?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sí. Puedes desconectar Blackboard y revocar el acceso desde Campus."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Es lo mismo que Campus Profes?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Campus Profes es un producto aparte: un bot de WhatsApp para consultar calificaciones y horarios de profesores antes de matricularte. Campus CLI conecta el Aula Virtual con ChatGPT, Claude o la terminal."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Es lo mismo que el paquete \"campus-cli\" de PyPI u otras apps de IA para estudiantes?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. El paquete campus-cli de PyPI es un proyecto de Python no relacionado (gestión de archivos de notebooks Jupyter), y tampoco somos otras plataformas de \"IA para resolver tareas\" con nombres parecidos. Este Campus es el paquete campus-cli de npm que conecta Blackboard UPC con ChatGPT y Claude vía MCP; el código fuente está en github.com/alejooroncoy/campus-cli."
+        }
+      }
+    ]
+  }
+];
+---
+
+<Base
+  title={"Campus CLI | Blackboard UPC en ChatGPT y Claude"}
+  description={"Campus CLI conecta Blackboard UPC con ChatGPT y Claude para consultar cursos, tareas, notas y anuncios desde el chat que ya usas."}
+  canonical={"https://campuscli.com/campus-cli/"}
+  markdownUrl={"https://campuscli.com/campus-cli/index.md"}
+  ogTitle={"Campus CLI | Tu campus, en el chat que ya usas"}
+  ogDescription={"Consulta cursos, tareas, notas y anuncios de Blackboard UPC desde ChatGPT o Claude."}
+  ogImageAlt={"Campus CLI: Blackboard UPC conectado a ChatGPT y Claude"}
+  schemas={schemas}
+>
+  <Fragment set:html={body} />
+</Base>

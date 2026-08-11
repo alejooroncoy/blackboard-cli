@@ -7,125 +7,90 @@ const schemas = [
   {
     "@context": "https://schema.org",
     "@type": "Organization",
+    "@id": "https://campuscli.com/#organization",
     "name": "Campus",
     "alternateName": [
       "Campus CLI",
       "campus-cli",
-      "blackboard-cli"
+      "blackboard-cli",
+      "Campus Profes"
     ],
     "url": "https://campuscli.com/",
-    "logo": "https://campuscli.com/assets/icon-512.png",
+    "logo": "https://campuscli.com/assets/campus-logo.webp",
+    "description": "Campus construye herramientas independientes para estudiantes universitarios en Perú: Campus CLI conecta Blackboard UPC con asistentes de IA, y Campus Profes ayuda a elegir profesor por WhatsApp.",
+    "disambiguatingDescription": "No confundir con el paquete `campus-cli` de PyPI (Python, gestión de notebooks Jupyter) ni con otras plataformas de IA para estudiantes con nombres similares (CampusCode, Campus AI).",
     "sameAs": [
       "https://github.com/alejooroncoy/campus-cli"
-    ]
+    ],
+    "areaServed": "PE"
   },
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": "https://campuscli.com/#website",
     "name": "Campus",
     "url": "https://campuscli.com/",
-    "inLanguage": "es"
+    "inLanguage": "es-PE",
+    "publisher": {
+      "@id": "https://campuscli.com/#organization"
+    }
   },
   {
     "@context": "https://schema.org",
-    "@graph": [
+    "@type": "ItemList",
+    "name": "Productos de Campus",
+    "itemListElement": [
       {
-        "@type": "Organization",
-        "@id": "https://campuscli.com/#organization",
-        "name": "Campus",
-        "alternateName": [
-          "Campus CLI",
-          "campus-cli",
-          "blackboard-cli"
-        ],
-        "url": "https://campuscli.com/",
-        "logo": "https://campuscli.com/assets/campus-logo.webp",
-        "description": "Proyecto independiente que conecta información académica con asistentes compatibles.",
-        "disambiguatingDescription": "No confundir con el paquete `campus-cli` de PyPI (Python, gestión de notebooks Jupyter) ni con otras plataformas de IA para estudiantes con nombres similares (CampusCode, Campus AI). Este proyecto es el paquete `campus-cli` de npm que conecta Blackboard con asistentes de IA vía MCP.",
-        "sameAs": [
-          "https://github.com/alejooroncoy/campus-cli",
-          "https://www.npmjs.com/package/campus-cli"
-        ],
-        "areaServed": "PE"
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Campus CLI",
+        "description": "Conecta Blackboard UPC con ChatGPT, Claude o la terminal.",
+        "url": "https://campuscli.com/campus-cli/"
       },
       {
-        "@type": "WebSite",
-        "@id": "https://campuscli.com/#website",
-        "url": "https://campuscli.com/",
-        "name": "Campus",
-        "inLanguage": "es-PE",
-        "publisher": {
-          "@id": "https://campuscli.com/#organization"
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Campus Profes",
+        "description": "Calificaciones, comentarios y horarios de profesores por WhatsApp.",
+        "url": "https://campuscli.com/profes/"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "¿Campus CLI y Campus Profes son el mismo producto?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Son dos productos independientes de Campus. Campus CLI conecta tu Aula Virtual (Blackboard UPC) con ChatGPT, Claude o la terminal. Campus Profes es un bot de WhatsApp para elegir profesor antes de matricularte. Puedes usar uno, el otro, o ambos."
         }
       },
       {
-        "@type": "SoftwareApplication",
-        "name": "Campus",
-        "alternateName": [
-          "Campus CLI",
-          "campus-cli"
-        ],
-        "url": "https://campuscli.com/",
-        "applicationCategory": "EducationalApplication",
-        "operatingSystem": "Web, macOS, Linux, Windows",
-        "inLanguage": "es-PE",
-        "downloadUrl": "https://www.npmjs.com/package/campus-cli",
-        "softwareHelp": "https://github.com/alejooroncoy/campus-cli",
-        "description": "Campus permite consultar cursos, tareas, notas y anuncios de Blackboard UPC desde ChatGPT o Claude.",
-        "featureList": [
-          "Consulta de cursos",
-          "Consulta de tareas y fechas",
-          "Consulta de notas",
-          "Consulta de anuncios",
-          "Acceso revocable"
-        ],
-        "offers": {
-          "@type": "Offer",
-          "price": "20",
-          "priceCurrency": "PEN",
-          "description": "Acceso anticipado por dos meses para los primeros 100 estudiantes.",
-          "availability": "https://schema.org/LimitedAvailability"
-        },
-        "provider": {
-          "@id": "https://campuscli.com/#organization"
+        "@type": "Question",
+        "name": "¿Cuál debería usar?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Si quieres consultar tus cursos, tareas y notas de Blackboard, usa Campus CLI. Si estás por matricularte y quieres saber cómo califican a un profesor, usa Campus Profes."
         }
       },
       {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "¿Campus reemplaza el campus virtual de mi institución?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. Campus es una capa personal para consultar información académica desde herramientas que ya usas. El campus virtual de tu institución sigue siendo la fuente de los datos."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "¿Qué instituciones funcionan hoy?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "El piloto empieza con Blackboard de UPC. Campus está diseñado para sumar institutos, universidades y otros campus virtuales; cada compatibilidad se anunciará antes de ofrecerse."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "¿Puedo dejar de usar Campus cuando quiera?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Sí. Puedes desconectar Blackboard y revocar el acceso desde Campus."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "¿Es lo mismo que el paquete \"campus-cli\" de PyPI u otras apps de IA para estudiantes?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. El paquete campus-cli de PyPI es un proyecto de Python no relacionado (gestión de archivos de notebooks Jupyter), y tampoco somos otras plataformas de \"IA para resolver tareas\" con nombres parecidos. Este Campus es el paquete campus-cli de npm que conecta Blackboard UPC con ChatGPT y Claude vía MCP; el código fuente está en github.com/alejooroncoy/campus-cli."
-            }
-          }
-        ]
+        "@type": "Question",
+        "name": "¿Quién está detrás de Campus?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Campus lo construye Alejandro Oroncoy, estudiante de Ingeniería de Software en la UPC."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Es lo mismo que el paquete \"campus-cli\" de PyPI u otras apps de IA para estudiantes?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. El paquete campus-cli de PyPI es un proyecto de Python no relacionado (gestión de archivos de notebooks Jupyter), y tampoco somos otras plataformas de \"IA para resolver tareas\" con nombres parecidos. Este Campus es el paquete campus-cli de npm; el código fuente está en github.com/alejooroncoy/campus-cli."
+        }
       }
     ]
   }
@@ -133,13 +98,13 @@ const schemas = [
 ---
 
 <Base
-  title={"Campus | Blackboard UPC en ChatGPT y Claude"}
-  description={"Campus conecta Blackboard UPC con ChatGPT y Claude para consultar cursos, tareas, notas y anuncios desde el chat que ya usas."}
+  title={"Campus | Herramientas independientes para tu vida universitaria"}
+  description={"Campus construye herramientas independientes para estudiantes: Campus CLI conecta tu Aula Virtual con ChatGPT y Claude, y Campus Profes te ayuda a elegir profesor por WhatsApp."}
   canonical={"https://campuscli.com/"}
   markdownUrl={"https://campuscli.com/index.md"}
-  ogTitle={"Campus | Tu campus, en el chat que ya usas"}
-  ogDescription={"Consulta cursos, tareas, notas y anuncios de Blackboard UPC desde ChatGPT o Claude."}
-  ogImageAlt={"Campus: Blackboard UPC conectado a ChatGPT y Claude"}
+  ogTitle={"Campus | Campus CLI y Campus Profes"}
+  ogDescription={"Dos productos independientes para estudiantes: Blackboard UPC en tu asistente de IA, y calificaciones de profesores por WhatsApp."}
+  ogImageAlt={"Campus: Campus CLI y Campus Profes"}
   schemas={schemas}
 >
   <Fragment set:html={body} />
