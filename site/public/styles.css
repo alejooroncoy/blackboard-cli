@@ -1005,6 +1005,8 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
 .plus-access__action p { display: flex; align-items: baseline; gap: 5px; margin: 0; color: #58717d; }
 .plus-access__action strong { color: var(--ink); font-size: 36px; line-height: 1; }
 .plus-access__action span { font-size: 13px; }
+.plus-access__price { display: grid !important; gap: 6px !important; }
+.plus-access__price span { width: max-content; padding: 4px 8px; border-radius: 999px; background: rgba(255,255,255,.72); color: #376573; font-size: 12px; font-weight: 750; line-height: 1; white-space: nowrap; }
 
 @media (max-width: 1050px) {
   .hero--text { grid-template-columns: minmax(0, 1fr) minmax(330px, .72fr); gap: 42px; }
@@ -1021,7 +1023,8 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
   .product-pick { padding: 26px 22px; }
   .plus-access { display: grid; gap: 18px; margin-top: 14px; padding: 24px 22px; }
   .plus-access h3 { font-size: 22px; }
-  .plus-access__action { justify-content: space-between; gap: 14px; }
+  .plus-access__action { justify-content: space-between; gap: 14px; align-items: center; }
+  .plus-access__price { min-width: 108px; }
   .plus-access__action .button { min-height: 44px; padding-inline: 15px; }
 }
 
