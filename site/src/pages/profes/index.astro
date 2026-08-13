@@ -6,6 +6,18 @@ import body from "../../html/profes/index.html?raw";
 const schemas = [
   {
     "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": "https://campuscli.com/profes/#webpage",
+    "url": "https://campuscli.com/profes/",
+    "name": "Campus Profes | Elige profesores universitarios antes de matricularte",
+    "description": "Campus Profes, parte de Campus Plus, ayuda a estudiantes en Perú a comparar calificaciones, comentarios y horarios de profesores universitarios antes de matricularse.",
+    "inLanguage": "es-PE",
+    "isPartOf": { "@id": "https://campuscli.com/#website" },
+    "mainEntity": { "@id": "https://campuscli.com/profes/#service" },
+    "about": ["profesores universitarios", "matrícula universitaria", "horarios de cursos", "reseñas de estudiantes"]
+  },
+  {
+    "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
       {
@@ -25,15 +37,19 @@ const schemas = [
   {
     "@context": "https://schema.org",
     "@type": "Service",
+    "@id": "https://campuscli.com/profes/#service",
     "name": "Campus Profes",
     "serviceType": "Comparación de profesores universitarios",
     "areaServed": "PE",
+    "url": "https://campuscli.com/profes/",
+    "inLanguage": "es-PE",
     "provider": {
       "@type": "Organization",
       "name": "Campus",
       "url": "https://campuscli.com/"
     },
     "description": "Campus Profes es parte de Campus Plus y ayuda a estudiantes en Perú a comparar calificaciones, comentarios y horarios de profesores antes de matricularse.",
+    "audience": { "@type": "EducationalAudience", "educationalRole": "student" },
     "offers": {
       "@type": "Offer",
       "price": "5",

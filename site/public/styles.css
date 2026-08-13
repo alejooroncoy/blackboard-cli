@@ -899,19 +899,21 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
    sitting behind it. Reuses the site's own tokens (--night, --green, --mint)
    rather than WhatsApp's brand green, so it reads as Campus, not as an
    impersonation of WhatsApp's UI. */
-.wa-window { position: relative; z-index: 2; width: 100%; min-height: 365px; overflow: hidden; border: 1px solid #c8d9df; border-radius: 8px; background: var(--paper); box-shadow: 0 14px 34px rgba(16, 42, 58, .11); animation: product-enter 880ms 160ms ease-out both; }
+.wa-window { position: relative; z-index: 2; width: 100%; min-height: 365px; display: flex; flex-direction: column; overflow: hidden; border: 1px solid #c8d9df; border-radius: 8px; background: var(--paper); box-shadow: 0 14px 34px rgba(16, 42, 58, .11); animation: product-enter 880ms 160ms ease-out both; }
 .wa-window__bar { display: flex; align-items: center; gap: 11px; min-height: 58px; padding: 0 16px; background: var(--night); color: #fff; }
 .wa-avatar { display: grid; place-items: center; width: 34px; height: 34px; flex: 0 0 auto; border-radius: 50%; background: rgba(255, 255, 255, .14); }
 .wa-avatar svg { width: 18px; height: 18px; }
+.wa-window__bar .wa-avatar { overflow: hidden; background: #fff; box-shadow: 0 0 0 2px rgba(255, 255, 255, .12); }
+.wa-window__bar .wa-avatar img { display: block; width: 28px; height: 28px; object-fit: contain; object-position: center; }
 .wa-avatar--light { background: var(--sky-pale); color: #0a6a86; }
 .wa-window__bar div { display: grid; gap: 2px; min-width: 0; }
 .wa-window__bar strong { font-size: 14px; }
-.wa-window__bar span { display: flex; align-items: center; gap: 5px; color: #b9d3dc; font-size: 11px; }
-.wa-window__bar span::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
-.wa-window__body { display: grid; gap: 12px; padding: 22px; background: var(--canvas); }
+.wa-window__bar span { color: #b9d3dc; font-size: 11px; }
+.wa-window__body { position: relative; flex: 1; display: grid; align-content: start; gap: 12px; padding: 22px; overflow: hidden; background: var(--canvas); }
+.wa-window__body::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .45; background-image: radial-gradient(circle at 1px 1px, rgba(52, 99, 112, .14) 1px, transparent 0); background-size: 18px 18px; }
 .wa-bubble { max-width: 84%; padding: 12px 15px; border-radius: 10px; font-size: 14px; line-height: 1.45; }
-.wa-bubble--out { justify-self: end; border-bottom-right-radius: 3px; background: var(--mint); color: var(--ink); }
-.wa-bubble--in { justify-self: start; border-bottom-left-radius: 3px; border: 1px solid var(--line); background: var(--paper); box-shadow: 0 10px 24px rgba(16, 42, 58, .06); }
+.wa-bubble--out { position: relative; justify-self: end; border-bottom-right-radius: 3px; background: var(--mint); color: var(--ink); animation: wa-message-in 560ms 240ms cubic-bezier(.2, .8, .2, 1) both; }
+.wa-bubble--in { position: relative; justify-self: start; border-bottom-left-radius: 3px; border: 1px solid var(--line); background: var(--paper); box-shadow: 0 10px 24px rgba(16, 42, 58, .06); animation: wa-message-in 620ms 720ms cubic-bezier(.2, .8, .2, 1) both; }
 .wa-answer { display: grid; gap: 10px; max-width: 300px; }
 .wa-answer__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 10px; }
 .wa-answer__head strong { font-size: 15px; }
@@ -920,6 +922,11 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
 .wa-answer p { margin: 0; color: var(--muted); font-size: 13px; }
 .wa-chip { display: inline-flex; align-items: center; gap: 6px; width: fit-content; padding: 6px 10px; border-radius: 999px; background: var(--sky-pale); color: #0a6a86; font-size: 12px; font-weight: 600; }
 .wa-chip svg { width: 13px; height: 13px; }
+.wa-window__composer { display: flex; align-items: center; gap: 10px; min-height: 54px; padding: 9px 13px; border-top: 1px solid #dce7eb; background: #fff; }
+.wa-window__composer span { flex: 1; padding: 8px 11px; border-radius: 999px; background: #f0f5f6; color: #7a919d; font-size: 12px; }
+.wa-window__composer i { display: grid; width: 32px; height: 32px; place-items: center; border-radius: 50%; background: var(--night); color: #fff; }
+.wa-window__composer svg { width: 16px; height: 16px; }
+@keyframes wa-message-in { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
 .schedule-mock { width: 100%; max-width: 440px; display: grid; gap: 10px; }
 .schedule-mock__head { display: flex; align-items: center; justify-content: space-between; color: #587383; font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
@@ -967,6 +974,10 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
   .hero--text { padding-block: 40px 28px; }
   .product-picks { gap: 14px; margin-top: 32px; }
   .product-pick { padding: 26px 22px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wa-window, .wa-bubble--out, .wa-bubble--in { animation: none; }
 }
 
 /* A single free-tier price card (Campus Profes has one plan, not a
