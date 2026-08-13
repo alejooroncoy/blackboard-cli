@@ -474,6 +474,7 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
   .signal-map { opacity: .5; }
   .proof { display: none; }
   .section { padding-block: 64px; }
+  #incluye.section { padding-block: 40px 48px; }
   .desktop-copy { display: none; }
   .mobile-copy { display: inline; }
   .section h2 { font-size: 34px; }
