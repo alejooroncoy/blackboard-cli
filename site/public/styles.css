@@ -411,6 +411,17 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
   .footer__legal { grid-column: 1 / -1; padding-top: 18px; border-top: 1px solid rgba(215, 230, 235, .18); text-align: left; }
 }
 
+/* Tablets still have room for the brand and the primary action, but not for
+   four navigation labels and the GitHub control. Collapse the nav before it
+   starts clipping, and let the proof points use a deliberate second row. */
+@media (max-width: 900px) {
+  .site-header { grid-template-columns: 1fr auto; }
+  .site-header nav { display: none; }
+  .site-header__actions { margin-left: auto; padding-left: 0; border-left: 0; }
+  .proof { flex-wrap: wrap; }
+  .proof div { justify-content: flex-start; }
+}
+
 @media (max-width: 720px) {
   .site-header { min-height: 70px; }
   nav { display: none; }
