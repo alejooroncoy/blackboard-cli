@@ -14,6 +14,7 @@
   --night: #112633;
   --warm: #f3ae55;
   --blue-stage: #cfe7f2;
+  --section-space: 96px;
 }
 
 * { box-sizing: border-box; }
@@ -210,14 +211,14 @@ h1 { max-width: 570px; margin-bottom: 20px; font-size: clamp(48px, 4.4vw, 62px);
 .proof span { display: inline-flex; align-items: center; gap: 7px; color: #5e7887; font-size: 14px; }
 .proof svg { width: 16px; height: 16px; color: #0b9fcb; }
 
-.section { padding-block: 128px; }
+.section { padding-block: var(--section-space); }
 :target { scroll-margin-top: 96px; }
 .js .reveal:target { opacity: 1; transform: none; }
 .section-heading { display: grid; grid-template-columns: 1.06fr .94fr; column-gap: 100px; align-items: end; }
 .section-heading .eyebrow { grid-column: 1 / -1; }
 .section h2 { margin-bottom: 0; font-size: clamp(38px, 4.2vw, 56px); font-weight: 600; letter-spacing: 0; line-height: 1.02; }
 .section-heading > p:last-child { max-width: 460px; margin: 0; color: var(--muted); font-size: 18px; }
-.story-panels { display: grid; gap: 28px; margin-top: 68px; }
+.story-panels { display: grid; gap: 28px; margin-top: 48px; }
 .story-panel { min-height: 520px; display: grid; grid-template-columns: 1.05fr .95fr; gap: 0; overflow: hidden; border: 1px solid #cfdde2; border-radius: 8px; background: #f8fbfb; }
 .story-panel--reverse { grid-template-columns: .95fr 1.05fr; }
 .story-copy { display: flex; flex-direction: column; justify-content: center; padding: clamp(40px, 6vw, 76px); }
@@ -287,7 +288,7 @@ h1 { max-width: 570px; margin-bottom: 20px; font-size: clamp(48px, 4.4vw, 62px);
 .pricing-includes span { display: inline-flex; align-items: center; gap: 7px; }
 .pricing-includes svg { width: 15px; height: 15px; color: var(--green); }
 
-.faq { display: grid; grid-template-columns: .72fr 1.28fr; gap: 72px; margin-bottom: 120px; padding: 70px; border: 1px solid #c5dbe1; border-radius: 8px; background: #dceef3; }
+.faq { display: grid; grid-template-columns: .72fr 1.28fr; gap: 72px; margin-bottom: 96px; padding: 70px; border: 1px solid #c5dbe1; border-radius: 8px; background: #dceef3; }
 .faq::before { content: ""; position: absolute; z-index: -1; inset: 0 52% 0 0; background: #d7f0ea; }
 .faq h2 { margin-bottom: 18px; font-size: clamp(40px, 4vw, 56px); line-height: 1.02; }
 .faq__intro > p:last-child { max-width: 310px; color: #587383; }
@@ -936,10 +937,10 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
    The root page's job is routing to the right product, not pitching one, so
    the hero drops the two-column product-stage layout and the two cards below
    get equal visual weight — neither product outranks the other. */
-.hero--text { grid-template-columns: 1fr; min-height: auto; padding-block: 68px 28px; }
+.hero--text { grid-template-columns: 1fr; min-height: auto; padding-block: 56px 40px; }
 .hero--text .hero__copy { max-width: 640px; }
 
-.product-picks { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 68px; }
+.product-picks { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 48px; }
 .product-pick { display: flex; flex-direction: column; padding: 40px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); box-shadow: 0 14px 34px rgba(16, 42, 58, .06); transition: transform 180ms ease, box-shadow 180ms ease; }
 .product-pick:hover { transform: translateY(-3px); box-shadow: 0 20px 44px rgba(16, 42, 58, .11); }
 .product-pick__topline { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 22px; }
@@ -963,8 +964,8 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
   .product-picks { grid-template-columns: 1fr; }
 }
 @media (max-width: 620px) {
-  .hero--text { padding-block: 40px 18px; }
-  .product-picks { gap: 14px; margin-top: 28px; }
+  .hero--text { padding-block: 40px 28px; }
+  .product-picks { gap: 14px; margin-top: 32px; }
   .product-pick { padding: 26px 22px; }
 }
 
