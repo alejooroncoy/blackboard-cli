@@ -14,6 +14,7 @@
   --night: #112633;
   --warm: #f3ae55;
   --blue-stage: #cfe7f2;
+  --section-space: 96px;
 }
 
 * { box-sizing: border-box; }
@@ -210,14 +211,14 @@ h1 { max-width: 570px; margin-bottom: 20px; font-size: clamp(48px, 4.4vw, 62px);
 .proof span { display: inline-flex; align-items: center; gap: 7px; color: #5e7887; font-size: 14px; }
 .proof svg { width: 16px; height: 16px; color: #0b9fcb; }
 
-.section { padding-block: 128px; }
+.section { padding-block: var(--section-space); }
 :target { scroll-margin-top: 96px; }
 .js .reveal:target { opacity: 1; transform: none; }
 .section-heading { display: grid; grid-template-columns: 1.06fr .94fr; column-gap: 100px; align-items: end; }
 .section-heading .eyebrow { grid-column: 1 / -1; }
 .section h2 { margin-bottom: 0; font-size: clamp(38px, 4.2vw, 56px); font-weight: 600; letter-spacing: 0; line-height: 1.02; }
 .section-heading > p:last-child { max-width: 460px; margin: 0; color: var(--muted); font-size: 18px; }
-.story-panels { display: grid; gap: 28px; margin-top: 68px; }
+.story-panels { display: grid; gap: 28px; margin-top: 48px; }
 .story-panel { min-height: 520px; display: grid; grid-template-columns: 1.05fr .95fr; gap: 0; overflow: hidden; border: 1px solid #cfdde2; border-radius: 8px; background: #f8fbfb; }
 .story-panel--reverse { grid-template-columns: .95fr 1.05fr; }
 .story-copy { display: flex; flex-direction: column; justify-content: center; padding: clamp(40px, 6vw, 76px); }
@@ -287,7 +288,7 @@ h1 { max-width: 570px; margin-bottom: 20px; font-size: clamp(48px, 4.4vw, 62px);
 .pricing-includes span { display: inline-flex; align-items: center; gap: 7px; }
 .pricing-includes svg { width: 15px; height: 15px; color: var(--green); }
 
-.faq { display: grid; grid-template-columns: .72fr 1.28fr; gap: 72px; margin-bottom: 120px; padding: 70px; border: 1px solid #c5dbe1; border-radius: 8px; background: #dceef3; }
+.faq { display: grid; grid-template-columns: .72fr 1.28fr; gap: 72px; margin: var(--section-space) auto 96px; padding: 70px; border: 1px solid #c5dbe1; border-radius: 8px; background: #dceef3; }
 .faq::before { content: ""; position: absolute; z-index: -1; inset: 0 52% 0 0; background: #d7f0ea; }
 .faq h2 { margin-bottom: 18px; font-size: clamp(40px, 4vw, 56px); line-height: 1.02; }
 .faq__intro > p:last-child { max-width: 310px; color: #587383; }
@@ -410,6 +411,17 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
   .footer__legal { grid-column: 1 / -1; padding-top: 18px; border-top: 1px solid rgba(215, 230, 235, .18); text-align: left; }
 }
 
+/* Tablets still have room for the brand and the primary action, but not for
+   four navigation labels and the GitHub control. Collapse the nav before it
+   starts clipping, and let the proof points use a deliberate second row. */
+@media (max-width: 900px) {
+  .site-header { grid-template-columns: 1fr auto; }
+  .site-header nav { display: none; }
+  .site-header__actions { margin-left: auto; padding-left: 0; border-left: 0; }
+  .proof { flex-wrap: wrap; }
+  .proof div { justify-content: flex-start; }
+}
+
 @media (max-width: 720px) {
   .site-header { min-height: 70px; }
   nav { display: none; }
@@ -462,6 +474,7 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
   .signal-map { opacity: .5; }
   .proof { display: none; }
   .section { padding-block: 64px; }
+  #incluye.section { padding-block: 40px 48px; }
   .desktop-copy { display: none; }
   .mobile-copy { display: inline; }
   .section h2 { font-size: 34px; }
@@ -490,7 +503,7 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
   .price { margin: 22px 0 16px; font-size: 56px; }
   .price-card ul { gap: 10px; margin: 0 0 22px; }
   .price-card li:nth-child(n + 3) { display: none; }
-  .faq { width: min(100% - 24px, 1180px); margin-bottom: 64px; padding: 34px 18px; }
+  .faq { width: min(100% - 24px, 1180px); margin: 64px auto; padding: 34px 18px; }
   .faq .eyebrow, .faq__intro > p:last-child { display: none; }
   .faq h2 { margin-bottom: 0; font-size: 34px; }
   .faq__items { gap: 8px; }
@@ -898,19 +911,21 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
    sitting behind it. Reuses the site's own tokens (--night, --green, --mint)
    rather than WhatsApp's brand green, so it reads as Campus, not as an
    impersonation of WhatsApp's UI. */
-.wa-window { position: relative; z-index: 2; width: 100%; min-height: 365px; overflow: hidden; border: 1px solid #c8d9df; border-radius: 8px; background: var(--paper); box-shadow: 0 14px 34px rgba(16, 42, 58, .11); animation: product-enter 880ms 160ms ease-out both; }
+.wa-window { position: relative; z-index: 2; width: 100%; min-height: 365px; display: flex; flex-direction: column; overflow: hidden; border: 1px solid #c8d9df; border-radius: 8px; background: var(--paper); box-shadow: 0 14px 34px rgba(16, 42, 58, .11); animation: product-enter 880ms 160ms ease-out both; }
 .wa-window__bar { display: flex; align-items: center; gap: 11px; min-height: 58px; padding: 0 16px; background: var(--night); color: #fff; }
 .wa-avatar { display: grid; place-items: center; width: 34px; height: 34px; flex: 0 0 auto; border-radius: 50%; background: rgba(255, 255, 255, .14); }
 .wa-avatar svg { width: 18px; height: 18px; }
+.wa-window__bar .wa-avatar { overflow: hidden; background: #fff; box-shadow: 0 0 0 2px rgba(255, 255, 255, .12); }
+.wa-window__bar .wa-avatar img { display: block; width: 28px; height: 28px; object-fit: contain; object-position: center; }
 .wa-avatar--light { background: var(--sky-pale); color: #0a6a86; }
 .wa-window__bar div { display: grid; gap: 2px; min-width: 0; }
 .wa-window__bar strong { font-size: 14px; }
-.wa-window__bar span { display: flex; align-items: center; gap: 5px; color: #b9d3dc; font-size: 11px; }
-.wa-window__bar span::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
-.wa-window__body { display: grid; gap: 12px; padding: 22px; background: var(--canvas); }
+.wa-window__bar span { color: #b9d3dc; font-size: 11px; }
+.wa-window__body { position: relative; flex: 1; display: grid; align-content: start; gap: 12px; padding: 22px; overflow: hidden; background: var(--canvas); }
+.wa-window__body::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .45; background-image: radial-gradient(circle at 1px 1px, rgba(52, 99, 112, .14) 1px, transparent 0); background-size: 18px 18px; }
 .wa-bubble { max-width: 84%; padding: 12px 15px; border-radius: 10px; font-size: 14px; line-height: 1.45; }
-.wa-bubble--out { justify-self: end; border-bottom-right-radius: 3px; background: var(--mint); color: var(--ink); }
-.wa-bubble--in { justify-self: start; border-bottom-left-radius: 3px; border: 1px solid var(--line); background: var(--paper); box-shadow: 0 10px 24px rgba(16, 42, 58, .06); }
+.wa-bubble--out { position: relative; justify-self: end; border-bottom-right-radius: 3px; background: var(--mint); color: var(--ink); animation: wa-message-in 560ms 240ms cubic-bezier(.2, .8, .2, 1) both; }
+.wa-bubble--in { position: relative; justify-self: start; border-bottom-left-radius: 3px; border: 1px solid var(--line); background: var(--paper); box-shadow: 0 10px 24px rgba(16, 42, 58, .06); animation: wa-message-in 620ms 720ms cubic-bezier(.2, .8, .2, 1) both; }
 .wa-answer { display: grid; gap: 10px; max-width: 300px; }
 .wa-answer__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 10px; }
 .wa-answer__head strong { font-size: 15px; }
@@ -919,6 +934,11 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
 .wa-answer p { margin: 0; color: var(--muted); font-size: 13px; }
 .wa-chip { display: inline-flex; align-items: center; gap: 6px; width: fit-content; padding: 6px 10px; border-radius: 999px; background: var(--sky-pale); color: #0a6a86; font-size: 12px; font-weight: 600; }
 .wa-chip svg { width: 13px; height: 13px; }
+.wa-window__composer { display: flex; align-items: center; gap: 10px; min-height: 54px; padding: 9px 13px; border-top: 1px solid #dce7eb; background: #fff; }
+.wa-window__composer span { flex: 1; padding: 8px 11px; border-radius: 999px; background: #f0f5f6; color: #7a919d; font-size: 12px; }
+.wa-window__composer i { display: grid; width: 32px; height: 32px; place-items: center; border-radius: 50%; background: var(--night); color: #fff; }
+.wa-window__composer svg { width: 16px; height: 16px; }
+@keyframes wa-message-in { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
 .schedule-mock { width: 100%; max-width: 440px; display: grid; gap: 10px; }
 .schedule-mock__head { display: flex; align-items: center; justify-content: space-between; color: #587383; font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
@@ -931,6 +951,58 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
 .schedule-row--clash { border-color: #e8c3a8; background: #fdf3ea; }
 .schedule-row--clash .schedule-row__day { background: #fbe3d1; color: #93551c; }
 .schedule-row--clash svg { color: var(--warm); }
+
+/* ── Brand homepage: hero without a product mockup, and the product picker ──
+   The root page's job is routing to the right product, not pitching one, so
+   the hero drops the two-column product-stage layout and the two cards below
+   get equal visual weight — neither product outranks the other. */
+.hero--text { grid-template-columns: 1fr; min-height: auto; padding-block: 56px 40px; }
+.hero--text .hero__copy { max-width: 640px; }
+
+.product-picks { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 48px; }
+.product-pick { display: flex; flex-direction: column; padding: 40px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); box-shadow: 0 14px 34px rgba(16, 42, 58, .06); transition: transform 180ms ease, box-shadow 180ms ease; }
+.product-pick:hover { transform: translateY(-3px); box-shadow: 0 20px 44px rgba(16, 42, 58, .11); }
+.product-pick__topline { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 22px; }
+.product-pick__icon { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 12px; }
+.product-pick--cli .product-pick__icon { background: var(--sky-pale); color: #0a6a86; }
+.product-pick--profes .product-pick__icon { background: var(--mint); color: #0b5c45; }
+.product-pick__icon svg { width: 24px; height: 24px; }
+.product-pick__badge { flex: 0 0 auto; padding: 6px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+.product-pick--cli .product-pick__badge { background: var(--sky-pale); color: #0a6a86; }
+.product-pick--profes .product-pick__badge { background: var(--mint); color: #0b5c45; }
+.product-pick__eyebrow { margin: 0 0 6px; color: #60798a; font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+.product-pick h3 { margin: 0 0 10px; font-size: 26px; }
+.product-pick > p { margin: 0 0 22px; color: var(--muted); font-size: 15px; line-height: 1.55; }
+.product-pick ul { display: grid; gap: 10px; margin: 0 0 26px; padding: 0; list-style: none; }
+.product-pick li { display: flex; gap: 9px; align-items: flex-start; color: #4b6675; font-size: 14px; }
+.product-pick li svg { width: 16px; height: 16px; flex: 0 0 auto; margin-top: 1px; color: var(--green); }
+.product-pick .button { margin-top: auto; }
+.product-pick--profes .button { background: var(--night); border-color: var(--night); }
+.plus-access { display: flex; align-items: center; justify-content: space-between; gap: 28px; margin-top: 24px; padding: 28px 32px; border: 1px solid #c7dce2; border-radius: 8px; background: #e5f3ee; }
+.plus-access .eyebrow { margin-bottom: 8px; }
+.plus-access h3 { margin: 0 0 7px; font-size: 24px; }
+.plus-access > div:first-child > p:last-child { margin: 0; color: var(--muted); }
+.plus-access__action { display: flex; align-items: center; gap: 22px; flex: 0 0 auto; }
+.plus-access__action p { display: flex; align-items: baseline; gap: 5px; margin: 0; color: #58717d; }
+.plus-access__action strong { color: var(--ink); font-size: 36px; line-height: 1; }
+.plus-access__action span { font-size: 13px; }
+
+@media (max-width: 1050px) {
+  .product-picks { grid-template-columns: 1fr; }
+}
+@media (max-width: 620px) {
+  .hero--text { padding-block: 40px 28px; }
+  .product-picks { gap: 14px; margin-top: 32px; }
+  .product-pick { padding: 26px 22px; }
+  .plus-access { display: grid; gap: 18px; margin-top: 14px; padding: 24px 22px; }
+  .plus-access h3 { font-size: 22px; }
+  .plus-access__action { justify-content: space-between; gap: 14px; }
+  .plus-access__action .button { min-height: 44px; padding-inline: 15px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wa-window, .wa-bubble--out, .wa-bubble--in { animation: none; }
+}
 
 /* A single free-tier price card (Campus Profes has one plan, not a
    founder/regular pair), centred instead of stretched across the two-column

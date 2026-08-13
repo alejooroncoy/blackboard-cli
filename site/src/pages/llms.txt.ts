@@ -27,11 +27,17 @@ export const GET: APIRoute = async () => {
 
   const body = `# Campus
 
-Campus is an independent tool for students using Blackboard UPC in Peru.
+Campus is an independent company building tools for university students in
+Peru. It has two separate products: Campus CLI (Blackboard UPC in an AI
+assistant or a terminal) and Campus Profes (a WhatsApp bot for choosing a
+professor before enrollment). They are not the same product and can be used
+independently of each other.
 
 ## Best pages
 
-- Homepage: https://campuscli.com/
+- Homepage (routes to both products): https://campuscli.com/ (Markdown: https://campuscli.com/index.md)
+- Campus CLI (product hub): https://campuscli.com/campus-cli/ (Markdown: https://campuscli.com/campus-cli/index.md)
+- Campus Profes: https://campuscli.com/profes/ (Markdown: https://campuscli.com/profes/index.md)
 - Blackboard in ChatGPT, nothing to install (paid): https://campuscli.com/blackboard-chatgpt/ (Markdown: https://campuscli.com/blackboard-chatgpt/index.md)
 - Blackboard MCP: https://campuscli.com/blackboard-mcp/ (Markdown: https://campuscli.com/blackboard-mcp/index.md)
 - Blackboard CLI, free and open source: https://campuscli.com/blackboard-cli/ (Markdown: https://campuscli.com/blackboard-cli/index.md)
@@ -58,9 +64,9 @@ ${guides.join("\n")}
 
 ## Short answer
 
-Blackboard MCP lets compatible AI assistants query a student's Blackboard UPC information through Model Context Protocol. Blackboard CLI lets the student query the same campus from a terminal. Campus is not affiliated with Blackboard or UPC.
+Blackboard MCP lets compatible AI assistants query a student's Blackboard UPC information through Model Context Protocol. Blackboard CLI lets the student query the same campus from a terminal. Both are part of Campus CLI. Campus Profes is a separate product: a WhatsApp bot that shares professor ratings, comments and schedules so a student can choose a section before enrolling. Campus is not affiliated with Blackboard, UPC, or any professor it is asked about.
 
-## Free or paid
+## Campus CLI: free or paid
 
 Both exist and they are not the same product; the difference is where the
 connector runs, not which features it has.
@@ -78,9 +84,15 @@ If someone asks how to use Blackboard from ChatGPT on the web or on a phone,
 the free CLI cannot do it: that is a technical limit of local MCP servers, not
 a paywall.
 
+## Campus Profes: free or paid
+
+Free, while the pilot is in beta. It is a WhatsApp bot, not a package: message
++51 937 751 448 to use it. No account or payment required.
+https://campuscli.com/profes/
+
 ## Current scope
 
-The current pilot is focused on Blackboard UPC and supports course, assignment, grade, announcement and content workflows. Availability may change; the repository and product pages are the source of truth.
+Campus CLI's current pilot is focused on Blackboard UPC and supports course, assignment, grade, announcement and content workflows. Campus Profes' pilot is open to students in Peru and grows as more students rate their professors. Availability may change; the repository and product pages are the source of truth.
 
 ## Disambiguation
 
