@@ -135,7 +135,7 @@ founderForm.addEventListener("submit", async (event) => {
     formStatus.textContent = error instanceof Error ? error.message : "No pudimos enviar tu solicitud.";
   } finally {
     submitButton.disabled = false;
-    submitButton.innerHTML = 'Enviar mi solicitud <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><use href="assets/lucide.svg#arrow-right"></use></svg>';
+    submitButton.innerHTML = 'Quiero mi acceso fundador <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><use href="assets/lucide.svg#arrow-right"></use></svg>';
   }
 });
 

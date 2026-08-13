@@ -13,11 +13,12 @@ const schemas = [
       "Campus CLI",
       "campus-cli",
       "blackboard-cli",
-      "Campus Profes"
+      "Campus Profes",
+      "Campus Plus"
     ],
     "url": "https://campuscli.com/",
     "logo": "https://campuscli.com/assets/campus-logo.webp",
-    "description": "Campus construye herramientas independientes para estudiantes universitarios en Perú: Campus CLI conecta Blackboard UPC con asistentes de IA, y Campus Profes ayuda a elegir profesor por WhatsApp.",
+    "description": "Campus Plus reúne herramientas para estudiantes universitarios en Perú: profesores y horarios para la matrícula, y conexión directa de Blackboard UPC con asistentes de IA.",
     "disambiguatingDescription": "No confundir con el paquete `campus-cli` de PyPI (Python, gestión de notebooks Jupyter) ni con otras plataformas de IA para estudiantes con nombres similares (CampusCode, Campus AI).",
     "sameAs": [
       "https://github.com/alejooroncoy/campus-cli"
@@ -38,21 +39,21 @@ const schemas = [
   {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "name": "Productos de Campus",
+    "name": "Campus Plus",
     "itemListElement": [
       {
         "@type": "ListItem",
         "position": 1,
-        "name": "Campus CLI",
-        "description": "Conecta Blackboard UPC con ChatGPT, Claude o la terminal.",
+        "name": "Matrícula con Campus Profes",
+        "description": "Compara profesores, horarios, NRC, sedes y cupos antes de matricularte.",
         "url": "https://campuscli.com/campus-cli/"
       },
       {
         "@type": "ListItem",
         "position": 2,
-        "name": "Campus Profes",
-        "description": "Calificaciones, comentarios y horarios de profesores por WhatsApp.",
-        "url": "https://campuscli.com/profes/"
+        "name": "Blackboard conectado",
+        "description": "Consulta cursos, tareas, notas y anuncios de Blackboard UPC desde asistentes compatibles.",
+        "url": "https://campuscli.com/campus-cli/"
       }
     ]
   },
@@ -62,26 +63,26 @@ const schemas = [
     "mainEntity": [
       {
         "@type": "Question",
-        "name": "¿Campus CLI y Campus Profes son el mismo producto?",
+        "name": "¿Qué incluye Campus Plus?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "No. Son dos productos independientes de Campus. Campus CLI conecta tu Aula Virtual (Blackboard UPC) con ChatGPT, Claude o la terminal. Campus Profes es un bot de WhatsApp para elegir profesor antes de matricularte. Puedes usar uno, el otro, o ambos."
+          "text": "Campus Plus reúne Campus Profes y horarios para la matrícula, junto con la conexión de Campus CLI a Blackboard UPC para cursos, tareas, notas y anuncios."
         }
       },
       {
         "@type": "Question",
-        "name": "¿Cuál debería usar?",
+        "name": "¿Blackboard está conectado de verdad?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Si quieres consultar tus cursos, tareas y notas de Blackboard, usa Campus CLI. Si estás por matricularte y quieres saber cómo califican a un profesor, usa Campus Profes."
+          "text": "Sí. Campus ya conecta directamente Blackboard UPC con ChatGPT, Claude o la terminal. Tu Aula Virtual sigue siendo la fuente de tus datos y puedes revocar el acceso cuando quieras."
         }
       },
       {
         "@type": "Question",
-        "name": "¿Quién está detrás de Campus?",
+        "name": "¿Cuánto cuesta Campus Plus?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Campus lo construye Alejandro Oroncoy, estudiante de Ingeniería de Software en la UPC."
+          "text": "El acceso fundador a Campus Plus cuesta S/5 al mes para los primeros estudiantes que se unan al relanzamiento."
         }
       },
       {
@@ -98,13 +99,13 @@ const schemas = [
 ---
 
 <Base
-  title={"Campus | Herramientas independientes para tu vida universitaria"}
-  description={"Campus construye herramientas independientes para estudiantes: Campus CLI conecta tu Aula Virtual con ChatGPT y Claude, y Campus Profes te ayuda a elegir profesor por WhatsApp."}
+  title={"Campus Plus | Todo tu ciclo, en un solo lugar"}
+  description={"Campus Plus reúne profesores, horarios y la conexión directa de Blackboard UPC para tener cursos, tareas, notas y anuncios a la mano."}
   canonical={"https://campuscli.com/"}
   markdownUrl={"https://campuscli.com/index.md"}
-  ogTitle={"Campus | Campus CLI y Campus Profes"}
-  ogDescription={"Dos productos independientes para estudiantes: Blackboard UPC en tu asistente de IA, y calificaciones de profesores por WhatsApp."}
-  ogImageAlt={"Campus: Campus CLI y Campus Profes"}
+  ogTitle={"Campus Plus | Tu matrícula y tu ciclo, con Campus"}
+  ogDescription={"Profes, horarios y Blackboard UPC conectado: todo tu ciclo en un solo lugar."}
+  ogImageAlt={"Campus Plus: matrícula, horarios y Blackboard UPC"}
   schemas={schemas}
 >
   <Fragment set:html={body} />
