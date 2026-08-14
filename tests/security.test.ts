@@ -206,7 +206,7 @@ test('a replaced quota lock fences the old writer before final publication', asy
     await new Promise((resolve) => setTimeout(resolve, 10));
   }
   assert.equal(fs.existsSync(lockPath), true);
-  fs.rmdirSync(lockPath);
+  fs.rmSync(lockPath, { recursive: true });
   fs.mkdirSync(lockPath);
   input.end('complete');
 

@@ -9,6 +9,21 @@ import lockfile from 'proper-lockfile';
 export const MAX_DOWNLOAD_BYTES = 100 * 1024 * 1024;
 export const MAX_DOWNLOAD_ROOT_BYTES = 500 * 1024 * 1024;
 export const DOWNLOAD_QUOTA_LOCK = '.campus-download-quota.lock';
+const DOWNLOAD_QUOTA_OWNER = 'owner';
+
+// proper-lockfile uses an atomic mkdir. Keeping the owner token inside that
+// directory makes stale-lock deletion generation-safe: a delayed rmdir cannot
+// remove a newly acquired lock because the new owner's token makes it nonempty.
+const quotaLockFs: any = Object.create(fs);
+quotaLockFs.rmdir = (target: string, callback: (error?: NodeJS.ErrnoException | null) => void) => {
+  fs.unlink(path.join(target, DOWNLOAD_QUOTA_OWNER), (unlinkError) => {
+    if (unlinkError && unlinkError.code !== 'ENOENT') {
+      callback(unlinkError);
+      return;
+    }
+    fs.rmdir(target, callback);
+  });
+};
 
 export function downloadRoot(): string {
   return path.resolve(
@@ -99,24 +114,35 @@ async function acquireQuotaLock(root: string): Promise<{
   release: () => Promise<void>;
 }> {
   const lockPath = path.join(root, DOWNLOAD_QUOTA_LOCK);
+  const ownerPath = path.join(lockPath, DOWNLOAD_QUOTA_OWNER);
+  const token = randomUUID();
   let compromised: Error | undefined;
   const release = await lockfile.lock(root, {
     lockfilePath: lockPath,
     realpath: true,
+    fs: quotaLockFs,
     stale: 5_000,
     update: 1_000,
     retries: { forever: true, minTimeout: 50, maxTimeout: 250, randomize: true },
     onCompromised: (error) => { compromised = error; },
   });
-  const acquiredStat = fs.lstatSync(lockPath);
+  try {
+    const lockStat = fs.statSync(lockPath);
+    fs.writeFileSync(ownerPath, token, { flag: 'wx', mode: 0o600 });
+    // Creating the token changes the directory mtime. Restore the exact mtime
+    // proper-lockfile recorded so its heartbeat does not report compromise.
+    fs.utimesSync(lockPath, lockStat.atime, lockStat.mtime);
+  } catch (error) {
+    await release();
+    throw error;
+  }
   const ownershipError = () => Object.assign(
     new Error('Campus download quota lock was replaced'),
     { code: 'ECOMPROMISED' },
   );
   const stillOwnsLock = () => {
     try {
-      const currentStat = fs.lstatSync(lockPath);
-      return currentStat.dev === acquiredStat.dev && currentStat.ino === acquiredStat.ino;
+      return fs.readFileSync(ownerPath, 'utf8') === token;
     } catch {
       return false;
     }
