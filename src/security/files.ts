@@ -1,12 +1,13 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { randomUUID } from 'node:crypto';
 import { pipeline } from 'node:stream/promises';
 import { Transform, type Readable } from 'node:stream';
 
 export const MAX_DOWNLOAD_BYTES = 100 * 1024 * 1024;
 export const MAX_DOWNLOAD_ROOT_BYTES = 500 * 1024 * 1024;
-let reservedDownloadBytes = 0;
+export const DOWNLOAD_QUOTA_LOCK = '.campus-download-quota.lock';
 
 export function downloadRoot(): string {
   return path.resolve(
@@ -40,16 +41,34 @@ export function resolveDownloadDir(subdirectory?: string): string {
   if (!isInside(root, requested)) {
     throw new Error(`Refusing to write outside the Campus download directory: ${root}`);
   }
-  fs.mkdirSync(requested, { recursive: true, mode: 0o700 });
-
-  // A lexical containment check is not enough when an intermediate directory
-  // is a symlink. Compare canonical paths after mkdir to close that escape.
   const realRoot = fs.realpathSync(root);
-  const realRequested = fs.realpathSync(requested);
-  if (!isInside(realRoot, realRequested)) {
-    throw new Error(`Refusing to follow an output directory symlink outside: ${realRoot}`);
+  let current = realRoot;
+  const relativeParts = path.relative(root, requested).split(path.sep).filter(Boolean);
+  if (relativeParts[0] === DOWNLOAD_QUOTA_LOCK) {
+    throw new Error(`outputDir uses the reserved Campus quota lock name: ${DOWNLOAD_QUOTA_LOCK}`);
   }
-  return realRequested;
+  for (const part of relativeParts) {
+    const next = path.join(current, part);
+    try {
+      fs.mkdirSync(next, { mode: 0o700 });
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error;
+    }
+
+    const stat = fs.lstatSync(next);
+    if (stat.isSymbolicLink()) {
+      throw new Error(`Refusing to follow an output directory symlink: ${next}`);
+    }
+    if (!stat.isDirectory()) {
+      throw new Error(`Download output path is not a directory: ${next}`);
+    }
+    current = fs.realpathSync(next);
+    if (!isInside(realRoot, current)) {
+      throw new Error(`Refusing to follow an output directory outside: ${realRoot}`);
+    }
+    fs.chmodSync(current, 0o700);
+  }
+  return current;
 }
 
 export function safeNewFilePath(dir: string, name: string): string {
@@ -63,6 +82,7 @@ export function safeNewFilePath(dir: string, name: string): string {
 function treeBytes(directory: string): number {
   let total = 0;
   for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+    if (entry.name === DOWNLOAD_QUOTA_LOCK) continue;
     const item = path.join(directory, entry.name);
     if (entry.isSymbolicLink()) continue;
     if (entry.isDirectory()) total += treeBytes(item);
@@ -72,6 +92,59 @@ function treeBytes(directory: string): number {
   return total;
 }
 
+function lockOwnerIsAlive(lockPath: string): boolean {
+  try {
+    const owner = JSON.parse(fs.readFileSync(lockPath, 'utf8')) as { pid?: number };
+    if (!Number.isSafeInteger(owner.pid) || owner.pid! <= 0) return false;
+    try {
+      process.kill(owner.pid!, 0);
+      return true;
+    } catch (error) {
+      return (error as NodeJS.ErrnoException).code !== 'ESRCH';
+    }
+  } catch {
+    try {
+      return Date.now() - fs.statSync(lockPath).mtimeMs < 5_000;
+    } catch {
+      return false;
+    }
+  }
+}
+
+async function acquireQuotaLock(root: string): Promise<() => void> {
+  const lockPath = path.join(root, DOWNLOAD_QUOTA_LOCK);
+  const token = randomUUID();
+
+  while (true) {
+    try {
+      const fd = fs.openSync(lockPath, 'wx', 0o600);
+      try {
+        fs.writeFileSync(fd, JSON.stringify({ pid: process.pid, token }));
+        fs.fsyncSync(fd);
+      } finally {
+        fs.closeSync(fd);
+      }
+      return () => {
+        try {
+          const owner = JSON.parse(fs.readFileSync(lockPath, 'utf8')) as { token?: string };
+          if (owner.token === token) fs.unlinkSync(lockPath);
+        } catch {}
+      };
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error;
+      if (!lockOwnerIsAlive(lockPath)) {
+        try {
+          fs.unlinkSync(lockPath);
+        } catch (unlinkError) {
+          if ((unlinkError as NodeJS.ErrnoException).code !== 'ENOENT') throw unlinkError;
+        }
+        continue;
+      }
+      await new Promise((resolve) => setTimeout(resolve, 50));
+    }
+  }
+}
+
 /** Write a response stream once, without following symlinks or overwriting. */
 export async function writeLimitedDownload(
   input: Readable,
@@ -79,7 +152,7 @@ export async function writeLimitedDownload(
   maxBytes = MAX_DOWNLOAD_BYTES,
   quota?: { root: string; maxBytes?: number },
 ): Promise<number> {
-  let reservation = 0;
+  let releaseQuotaLock: (() => void) | undefined;
   let fd: number;
   try {
     if (quota) {
@@ -92,20 +165,20 @@ export async function writeLimitedDownload(
       if (!isInside(quotaRoot, canonicalDestination)) {
         throw new Error(`Download destination is outside its quota root: ${quotaRoot}`);
       }
-      const available = quotaLimit - treeBytes(quotaRoot) - reservedDownloadBytes;
-      reservation = Math.min(maxBytes, Math.max(0, available));
-      if (reservation <= 0) {
+      releaseQuotaLock = await acquireQuotaLock(quotaRoot);
+      const available = quotaLimit - treeBytes(quotaRoot);
+      const allowedBytes = Math.min(maxBytes, Math.max(0, available));
+      if (allowedBytes <= 0) {
         throw new Error(`Campus download directory reached its ${quotaLimit}-byte quota`);
       }
-      reservedDownloadBytes += reservation;
-      maxBytes = reservation;
+      maxBytes = allowedBytes;
     }
 
     // Opening first with wx makes the destination exclusive and gives pipeline a
     // descriptor that cannot be swapped for a symlink between checks and write.
     fd = fs.openSync(destination, 'wx', 0o600);
   } catch (error) {
-    reservedDownloadBytes -= reservation;
+    releaseQuotaLock?.();
     input.destroy();
     throw error;
   }
@@ -130,7 +203,7 @@ export async function writeLimitedDownload(
     try { fs.unlinkSync(destination); } catch {}
     throw error;
   } finally {
-    reservedDownloadBytes -= reservation;
+    releaseQuotaLock?.();
   }
 }
 

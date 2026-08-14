@@ -11,6 +11,7 @@ import {
 } from '../src/providers/blackboard/api/client.js';
 import { blackboardCookies } from '../src/providers/blackboard/auth/session.js';
 import {
+  DOWNLOAD_QUOTA_LOCK,
   resolveDownloadDir,
   safeNewFilePath,
   writeLimitedDownload,
@@ -62,6 +63,7 @@ test('MCP downloads stay under their configured root and never overwrite', async
 
   assert.throws(() => resolveDownloadDir('/tmp/outside'), /must be relative/);
   assert.throws(() => resolveDownloadDir('../outside'), /outside/);
+  assert.throws(() => resolveDownloadDir(`${DOWNLOAD_QUOTA_LOCK}/child`), /reserved/);
 
   const dir = resolveDownloadDir('course');
   const destination = safeNewFilePath(dir, '../material.pdf');
@@ -124,6 +126,23 @@ test('the configured download root itself cannot be a symlink', (t) => {
   assert.throws(() => resolveDownloadDir(), /symbolic link/);
 });
 
+test('missing directories beneath symlinks are rejected before creation', (t) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'campus-parent-link-test-'));
+  const outside = fs.mkdtempSync(path.join(os.tmpdir(), 'campus-parent-target-'));
+  fs.symlinkSync(outside, path.join(root, 'linked-outside'));
+  const previous = process.env.CAMPUS_DOWNLOAD_DIR;
+  process.env.CAMPUS_DOWNLOAD_DIR = root;
+  t.after(() => {
+    if (previous === undefined) delete process.env.CAMPUS_DOWNLOAD_DIR;
+    else process.env.CAMPUS_DOWNLOAD_DIR = previous;
+    fs.rmSync(root, { recursive: true, force: true });
+    fs.rmSync(outside, { recursive: true, force: true });
+  });
+
+  assert.throws(() => resolveDownloadDir('linked-outside/new'), /symlink/);
+  assert.equal(fs.existsSync(path.join(outside, 'new')), false);
+});
+
 test('the download directory quota includes files already on disk', async (t) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'campus-quota-test-'));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
@@ -134,4 +153,25 @@ test('the download directory quota includes files already on disk', async (t) =>
     /safety limit/,
   );
   assert.equal(fs.existsSync(destination), false);
+});
+
+test('download quota waits for a filesystem lock shared with other processes', async (t) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'campus-quota-lock-test-'));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const lockPath = path.join(root, DOWNLOAD_QUOTA_LOCK);
+  fs.writeFileSync(lockPath, JSON.stringify({ pid: process.pid, token: 'other-process' }));
+  const destination = path.join(root, 'new.bin');
+  let settled = false;
+  const download = writeLimitedDownload(
+    Readable.from(['hello']),
+    destination,
+    10,
+    { root, maxBytes: 20 },
+  ).finally(() => { settled = true; });
+
+  await new Promise((resolve) => setTimeout(resolve, 100));
+  assert.equal(settled, false);
+  fs.unlinkSync(lockPath);
+  assert.equal(await download, 5);
+  assert.equal(fs.readFileSync(destination, 'utf8'), 'hello');
 });
