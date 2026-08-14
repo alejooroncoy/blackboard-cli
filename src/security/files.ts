@@ -80,32 +80,33 @@ export async function writeLimitedDownload(
   quota?: { root: string; maxBytes?: number },
 ): Promise<number> {
   let reservation = 0;
-  if (quota) {
-    const quotaRoot = fs.realpathSync(quota.root);
-    const quotaLimit = quota.maxBytes ?? MAX_DOWNLOAD_ROOT_BYTES;
-    const canonicalDestination = path.join(
-      fs.realpathSync(path.dirname(destination)),
-      path.basename(destination),
-    );
-    if (!isInside(quotaRoot, canonicalDestination)) {
-      throw new Error(`Download destination is outside its quota root: ${quotaRoot}`);
-    }
-    const available = quotaLimit - treeBytes(quotaRoot) - reservedDownloadBytes;
-    reservation = Math.min(maxBytes, Math.max(0, available));
-    if (reservation <= 0) {
-      throw new Error(`Campus download directory reached its ${quotaLimit}-byte quota`);
-    }
-    reservedDownloadBytes += reservation;
-    maxBytes = reservation;
-  }
-
-  // Opening first with wx makes the destination exclusive and gives pipeline a
-  // descriptor that cannot be swapped for a symlink between checks and write.
   let fd: number;
   try {
+    if (quota) {
+      const quotaRoot = fs.realpathSync(quota.root);
+      const quotaLimit = quota.maxBytes ?? MAX_DOWNLOAD_ROOT_BYTES;
+      const canonicalDestination = path.join(
+        fs.realpathSync(path.dirname(destination)),
+        path.basename(destination),
+      );
+      if (!isInside(quotaRoot, canonicalDestination)) {
+        throw new Error(`Download destination is outside its quota root: ${quotaRoot}`);
+      }
+      const available = quotaLimit - treeBytes(quotaRoot) - reservedDownloadBytes;
+      reservation = Math.min(maxBytes, Math.max(0, available));
+      if (reservation <= 0) {
+        throw new Error(`Campus download directory reached its ${quotaLimit}-byte quota`);
+      }
+      reservedDownloadBytes += reservation;
+      maxBytes = reservation;
+    }
+
+    // Opening first with wx makes the destination exclusive and gives pipeline a
+    // descriptor that cannot be swapped for a symlink between checks and write.
     fd = fs.openSync(destination, 'wx', 0o600);
   } catch (error) {
     reservedDownloadBytes -= reservation;
+    input.destroy();
     throw error;
   }
   let bytes = 0;

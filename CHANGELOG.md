@@ -4,7 +4,7 @@ All notable changes to `campus-cli` (formerly `blackboard-upc`) will be document
 
 ---
 
-## [1.5.0] — 2026-08-14
+## [2.0.0] — 2026-08-14
 
 ### Security
 - Las descargas MCP ahora quedan confinadas a `~/Downloads/campus-cli` (configurable por la persona que inicia el proceso mediante `CAMPUS_DOWNLOAD_DIR`). `outputDir` solo acepta subdirectorios relativos, se rechazan escapes por symlink, nunca se sobrescribe un archivo, cada descarga tiene un límite de 100 MB y la raíz completa una cuota de 500 MB, con limpieza de parciales.
@@ -15,12 +15,14 @@ All notable changes to `campus-cli` (formerly `blackboard-upc`) will be document
 - El sitio añade CSP, HSTS y protección contra framing.
 
 ### Changed
+- **Breaking**: Node.js 22 o superior pasa a ser requisito mínimo. Esto alinea el runtime soportado con Playwright 1.62 y evita anunciar versiones de Node fuera de soporte.
 - Astro 5 → 7.2.2 y dependencias transitivas actualizadas hasta dejar `npm audit` en cero tanto para el CLI como para el sitio.
 - Playwright y Zod actualizados; dependencias de compilación movidas a `devDependencies`; eliminados `@browserbasehq/sdk`, `playwright-core` y `@types/inquirer` porque no se usaban directamente.
-- Las instrucciones con `npx` fijan `campus-cli@1.5.0` para que un cliente MCP no ejecute silenciosamente una versión distinta en el siguiente arranque.
+- Las instrucciones con `npx` fijan `campus-cli@2.0.0` para que un cliente MCP no ejecute silenciosamente una versión distinta en el siguiente arranque.
 
 ### Added
 - Pruebas de regresión para aislamiento de origen, endpoints raw/descarga, filtrado de cookies, URLs TLS, confinamiento de descargas, no sobrescritura y límites de tamaño.
+- Prueba de regresión que verifica el cierre del stream HTTP cuando una descarga no puede crear el archivo de destino.
 
 ## [1.4.2] — 2026-08-08
 

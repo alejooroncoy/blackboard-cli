@@ -15,7 +15,7 @@
         "tool": [
           {
             "@type": "HowToTool",
-            "name": "Node.js 18 o superior"
+            "name": "Node.js 22 o superior"
           },
           {
             "@type": "HowToTool",
@@ -88,7 +88,7 @@
             "name": "¿Necesito instalar algo además de Cursor?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Solo Node.js 18 o superior. El comando npx descarga campus-cli la primera vez que se ejecuta."
+              "text": "Solo Node.js 22 o superior. El comando npx descarga campus-cli la primera vez que se ejecuta."
             }
           },
           {
@@ -119,7 +119,7 @@
         "tool": [
           {
             "@type": "HowToTool",
-            "name": "Node.js 18 o superior"
+            "name": "Node.js 22 o superior"
           },
           {
             "@type": "HowToTool",
@@ -192,7 +192,7 @@
             "name": "¿Necesito instalar algo además de Claude Code?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Solo Node.js 18 o superior. El comando npx descarga campus-cli la primera vez que se ejecuta."
+              "text": "Solo Node.js 22 o superior. El comando npx descarga campus-cli la primera vez que se ejecuta."
             }
           },
           {
@@ -223,7 +223,7 @@
         "tool": [
           {
             "@type": "HowToTool",
-            "name": "Node.js 18 o superior"
+            "name": "Node.js 22 o superior"
           },
           {
             "@type": "HowToTool",
@@ -296,7 +296,7 @@
             "name": "¿Necesito instalar algo además de Claude Desktop?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Solo Node.js 18 o superior. El comando npx descarga campus-cli la primera vez que se ejecuta."
+              "text": "Solo Node.js 22 o superior. El comando npx descarga campus-cli la primera vez que se ejecuta."
             }
           },
           {
@@ -327,7 +327,7 @@
         "tool": [
           {
             "@type": "HowToTool",
-            "name": "Node.js 18 o superior"
+            "name": "Node.js 22 o superior"
           },
           {
             "@type": "HowToTool",
@@ -400,7 +400,7 @@
             "name": "¿Necesito instalar algo además de OpenAI Codex CLI?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Solo Node.js 18 o superior. El comando npx descarga campus-cli la primera vez que se ejecuta."
+              "text": "Solo Node.js 22 o superior. El comando npx descarga campus-cli la primera vez que se ejecuta."
             }
           },
           {
@@ -431,7 +431,7 @@
         "tool": [
           {
             "@type": "HowToTool",
-            "name": "Node.js 18 o superior"
+            "name": "Node.js 22 o superior"
           },
           {
             "@type": "HowToTool",
@@ -504,7 +504,7 @@
             "name": "¿Necesito instalar algo además de GitHub Copilot en VS Code?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Solo Node.js 18 o superior. El comando npx descarga campus-cli la primera vez que se ejecuta."
+              "text": "Solo Node.js 22 o superior. El comando npx descarga campus-cli la primera vez que se ejecuta."
             }
           },
           {
@@ -535,7 +535,7 @@
         "tool": [
           {
             "@type": "HowToTool",
-            "name": "Node.js 18 o superior"
+            "name": "Node.js 22 o superior"
           },
           {
             "@type": "HowToTool",
@@ -608,7 +608,7 @@
             "name": "¿Necesito instalar algo además de Windsurf?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Solo Node.js 18 o superior. El comando npx descarga campus-cli la primera vez que se ejecuta."
+              "text": "Solo Node.js 22 o superior. El comando npx descarga campus-cli la primera vez que se ejecuta."
             }
           },
           {

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { Readable } from 'node:stream';
+import { PassThrough, Readable } from 'node:stream';
 import test from 'node:test';
 import {
   assertBlackboardFileUrl,
@@ -82,6 +82,20 @@ test('oversized downloads are deleted instead of leaving partial files', async (
     /safety limit/,
   );
   assert.equal(fs.existsSync(destination), false);
+});
+
+test('download streams are destroyed when exclusive destination creation fails', async (t) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'campus-stream-test-'));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const destination = path.join(root, 'existing.bin');
+  fs.writeFileSync(destination, 'existing');
+  const input = new PassThrough();
+
+  await assert.rejects(
+    writeLimitedDownload(input, destination),
+    (error: NodeJS.ErrnoException) => error.code === 'EEXIST',
+  );
+  assert.equal(input.destroyed, true);
 });
 
 test('the configured download root itself cannot be a symlink', (t) => {

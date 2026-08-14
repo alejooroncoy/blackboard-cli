@@ -31,7 +31,7 @@ Add this to the MCP configuration file of the client you are setting up:
   "mcpServers": {
     "campus": {
       "command": "npx",
-      "args": ["campus-cli@1.5.0", "mcp"]
+      "args": ["campus-cli@2.0.0", "mcp"]
     }
   }
 }
@@ -41,19 +41,19 @@ Add this to the MCP configuration file of the client you are setting up:
 If you prefer it resident:
 
 ```bash
-npm install -g campus-cli@1.5.0
+npm install -g campus-cli@2.0.0
 ```
 
 and then use `"command": "campus", "args": ["mcp"]`.
 
-Node.js 18 or newer is required.
+Node.js 22 or newer is required.
 
 ## After installing
 
 Tell the user to run this in their own terminal:
 
 ```bash
-campus account login    # or: npx campus-cli@1.5.0 account login
+campus account login    # or: npx campus-cli@2.0.0 account login
 ```
 
 A browser window opens. They sign in with their Campus account and then with
