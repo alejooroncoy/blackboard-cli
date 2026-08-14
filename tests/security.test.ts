@@ -101,6 +101,24 @@ test('download streams are destroyed when exclusive destination creation fails',
   assert.equal(input.destroyed, true);
 });
 
+test('the final download name is published only after the stream completes', async (t) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'campus-publish-test-'));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const destination = path.join(root, 'material.pdf');
+  const input = new PassThrough();
+  const download = writeLimitedDownload(input, destination, 20);
+
+  input.write('partial');
+  await new Promise((resolve) => setTimeout(resolve, 25));
+  assert.equal(fs.existsSync(destination), false);
+  assert.equal(fs.readdirSync(root).some((name) => name.endsWith('.part')), true);
+
+  input.end('-complete');
+  assert.equal(await download, 16);
+  assert.equal(fs.readFileSync(destination, 'utf8'), 'partial-complete');
+  assert.equal(fs.readdirSync(root).some((name) => name.endsWith('.part')), false);
+});
+
 test('download streams are destroyed when response-derived filenames are unsafe', async (t) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'campus-name-test-'));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
@@ -159,7 +177,7 @@ test('download quota waits for a filesystem lock shared with other processes', a
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'campus-quota-lock-test-'));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const lockPath = path.join(root, DOWNLOAD_QUOTA_LOCK);
-  fs.writeFileSync(lockPath, JSON.stringify({ pid: process.pid, token: 'other-process' }));
+  fs.mkdirSync(lockPath);
   const destination = path.join(root, 'new.bin');
   let settled = false;
   const download = writeLimitedDownload(
@@ -171,7 +189,27 @@ test('download quota waits for a filesystem lock shared with other processes', a
 
   await new Promise((resolve) => setTimeout(resolve, 100));
   assert.equal(settled, false);
-  fs.unlinkSync(lockPath);
+  fs.rmdirSync(lockPath);
   assert.equal(await download, 5);
   assert.equal(fs.readFileSync(destination, 'utf8'), 'hello');
+});
+
+test('a replaced quota lock fences the old writer before final publication', async (t) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'campus-quota-fence-test-'));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const destination = path.join(root, 'new.bin');
+  const input = new PassThrough();
+  const download = writeLimitedDownload(input, destination, 20, { root, maxBytes: 20 });
+  const lockPath = path.join(root, DOWNLOAD_QUOTA_LOCK);
+
+  for (let attempt = 0; attempt < 20 && !fs.existsSync(lockPath); attempt += 1) {
+    await new Promise((resolve) => setTimeout(resolve, 10));
+  }
+  assert.equal(fs.existsSync(lockPath), true);
+  fs.rmdirSync(lockPath);
+  fs.mkdirSync(lockPath);
+  input.end('complete');
+
+  await assert.rejects(download, /quota lock was replaced/);
+  assert.equal(fs.existsSync(destination), false);
 });

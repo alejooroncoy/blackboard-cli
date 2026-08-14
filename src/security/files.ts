@@ -4,6 +4,7 @@ import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { pipeline } from 'node:stream/promises';
 import { Transform, type Readable } from 'node:stream';
+import lockfile from 'proper-lockfile';
 
 export const MAX_DOWNLOAD_BYTES = 100 * 1024 * 1024;
 export const MAX_DOWNLOAD_ROOT_BYTES = 500 * 1024 * 1024;
@@ -79,68 +80,91 @@ export function safeNewFilePath(dir: string, name: string): string {
   return path.join(dir, base);
 }
 
-function treeBytes(directory: string): number {
+function treeBytes(directory: string, ignoredPath?: string): number {
   let total = 0;
   for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
     if (entry.name === DOWNLOAD_QUOTA_LOCK) continue;
     const item = path.join(directory, entry.name);
+    if (item === ignoredPath) continue;
     if (entry.isSymbolicLink()) continue;
-    if (entry.isDirectory()) total += treeBytes(item);
+    if (entry.isDirectory()) total += treeBytes(item, ignoredPath);
     else if (entry.isFile()) total += fs.statSync(item).size;
     if (total > MAX_DOWNLOAD_ROOT_BYTES) break;
   }
   return total;
 }
 
-function lockOwnerIsAlive(lockPath: string): boolean {
-  try {
-    const owner = JSON.parse(fs.readFileSync(lockPath, 'utf8')) as { pid?: number };
-    if (!Number.isSafeInteger(owner.pid) || owner.pid! <= 0) return false;
+async function acquireQuotaLock(root: string): Promise<{
+  assertOwned: () => void;
+  release: () => Promise<void>;
+}> {
+  const lockPath = path.join(root, DOWNLOAD_QUOTA_LOCK);
+  let compromised: Error | undefined;
+  const release = await lockfile.lock(root, {
+    lockfilePath: lockPath,
+    realpath: true,
+    stale: 5_000,
+    update: 1_000,
+    retries: { forever: true, minTimeout: 50, maxTimeout: 250, randomize: true },
+    onCompromised: (error) => { compromised = error; },
+  });
+  const acquiredStat = fs.lstatSync(lockPath);
+  const ownershipError = () => Object.assign(
+    new Error('Campus download quota lock was replaced'),
+    { code: 'ECOMPROMISED' },
+  );
+  const stillOwnsLock = () => {
     try {
-      process.kill(owner.pid!, 0);
-      return true;
-    } catch (error) {
-      return (error as NodeJS.ErrnoException).code !== 'ESRCH';
-    }
-  } catch {
-    try {
-      return Date.now() - fs.statSync(lockPath).mtimeMs < 5_000;
+      const currentStat = fs.lstatSync(lockPath);
+      return currentStat.dev === acquiredStat.dev && currentStat.ino === acquiredStat.ino;
     } catch {
       return false;
     }
-  }
+  };
+  return {
+    assertOwned: () => {
+      if (compromised) throw compromised;
+      if (!stillOwnsLock()) {
+        compromised = ownershipError();
+        throw compromised;
+      }
+    },
+    release: async () => {
+      if (compromised || !stillOwnsLock()) {
+        compromised ??= ownershipError();
+        return;
+      }
+      try {
+        await release();
+      } catch (error) {
+        if ((error as NodeJS.ErrnoException).code !== 'ERELEASED') throw error;
+      }
+    },
+  };
 }
 
-async function acquireQuotaLock(root: string): Promise<() => void> {
-  const lockPath = path.join(root, DOWNLOAD_QUOTA_LOCK);
-  const token = randomUUID();
+function assertDestinationAbsent(destination: string): void {
+  try {
+    fs.lstatSync(destination);
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') return;
+    throw error;
+  }
+  throw Object.assign(new Error(`Download destination already exists: ${destination}`), {
+    code: 'EEXIST',
+  });
+}
 
+function createPrivateTemporaryFile(destination: string): { path: string; fd: number } {
+  const directory = path.dirname(destination);
+  const basename = path.basename(destination);
   while (true) {
+    const candidate = path.join(directory, `.${basename}.${process.pid}.${randomUUID()}.part`);
     try {
-      const fd = fs.openSync(lockPath, 'wx', 0o600);
-      try {
-        fs.writeFileSync(fd, JSON.stringify({ pid: process.pid, token }));
-        fs.fsyncSync(fd);
-      } finally {
-        fs.closeSync(fd);
-      }
-      return () => {
-        try {
-          const owner = JSON.parse(fs.readFileSync(lockPath, 'utf8')) as { token?: string };
-          if (owner.token === token) fs.unlinkSync(lockPath);
-        } catch {}
-      };
+      const fd = fs.openSync(candidate, 'wx', 0o600);
+      return { path: candidate, fd };
     } catch (error) {
       if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error;
-      if (!lockOwnerIsAlive(lockPath)) {
-        try {
-          fs.unlinkSync(lockPath);
-        } catch (unlinkError) {
-          if ((unlinkError as NodeJS.ErrnoException).code !== 'ENOENT') throw unlinkError;
-        }
-        continue;
-      }
-      await new Promise((resolve) => setTimeout(resolve, 50));
     }
   }
 }
@@ -152,12 +176,15 @@ export async function writeLimitedDownload(
   maxBytes = MAX_DOWNLOAD_BYTES,
   quota?: { root: string; maxBytes?: number },
 ): Promise<number> {
-  let releaseQuotaLock: (() => void) | undefined;
+  let quotaLock: Awaited<ReturnType<typeof acquireQuotaLock>> | undefined;
+  let quotaRoot: string | undefined;
+  let quotaLimit: number | undefined;
+  let temporary: string | undefined;
   let fd: number;
   try {
     if (quota) {
-      const quotaRoot = fs.realpathSync(quota.root);
-      const quotaLimit = quota.maxBytes ?? MAX_DOWNLOAD_ROOT_BYTES;
+      quotaRoot = fs.realpathSync(quota.root);
+      quotaLimit = quota.maxBytes ?? MAX_DOWNLOAD_ROOT_BYTES;
       const canonicalDestination = path.join(
         fs.realpathSync(path.dirname(destination)),
         path.basename(destination),
@@ -165,7 +192,7 @@ export async function writeLimitedDownload(
       if (!isInside(quotaRoot, canonicalDestination)) {
         throw new Error(`Download destination is outside its quota root: ${quotaRoot}`);
       }
-      releaseQuotaLock = await acquireQuotaLock(quotaRoot);
+      quotaLock = await acquireQuotaLock(quotaRoot);
       const available = quotaLimit - treeBytes(quotaRoot);
       const allowedBytes = Math.min(maxBytes, Math.max(0, available));
       if (allowedBytes <= 0) {
@@ -174,11 +201,13 @@ export async function writeLimitedDownload(
       maxBytes = allowedBytes;
     }
 
-    // Opening first with wx makes the destination exclusive and gives pipeline a
-    // descriptor that cannot be swapped for a symlink between checks and write.
-    fd = fs.openSync(destination, 'wx', 0o600);
+    assertDestinationAbsent(destination);
+    const temporaryFile = createPrivateTemporaryFile(destination);
+    temporary = temporaryFile.path;
+    fd = temporaryFile.fd;
   } catch (error) {
-    releaseQuotaLock?.();
+    if (temporary) try { fs.unlinkSync(temporary); } catch {}
+    try { await quotaLock?.release(); } catch {}
     input.destroy();
     throw error;
   }
@@ -196,14 +225,30 @@ export async function writeLimitedDownload(
   });
 
   try {
-    await pipeline(input, limiter, fs.createWriteStream(destination, { fd, autoClose: true }));
+    await pipeline(input, limiter, fs.createWriteStream(temporary, { fd, autoClose: true }));
+    quotaLock?.assertOwned();
+    if (quotaRoot !== undefined && quotaLimit !== undefined) {
+      const committedBytes = treeBytes(quotaRoot, temporary);
+      if (committedBytes + bytes > quotaLimit) {
+        throw new Error(`Campus download directory reached its ${quotaLimit}-byte quota`);
+      }
+    }
+    quotaLock?.assertOwned();
+
+    // Hard-linking is an atomic, exclusive publish on the same filesystem. A
+    // crash before this point leaves only the private .part file, never a
+    // truncated file under the requested final name.
+    const publishedTemporary = temporary;
+    fs.linkSync(publishedTemporary, destination);
+    temporary = undefined;
+    try { fs.unlinkSync(publishedTemporary); } catch {}
     return bytes;
   } catch (error) {
     try { fs.closeSync(fd); } catch {}
-    try { fs.unlinkSync(destination); } catch {}
+    if (temporary) try { fs.unlinkSync(temporary); } catch {}
     throw error;
   } finally {
-    releaseQuotaLock?.();
+    await quotaLock?.release();
   }
 }
 
