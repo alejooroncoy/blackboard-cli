@@ -64,12 +64,17 @@ test('MCP downloads stay under their configured root and never overwrite', async
   assert.throws(() => resolveDownloadDir('/tmp/outside'), /must be relative/);
   assert.throws(() => resolveDownloadDir('../outside'), /outside/);
   assert.throws(() => resolveDownloadDir(`${DOWNLOAD_QUOTA_LOCK}/child`), /reserved/);
+  assert.throws(() => resolveDownloadDir('.CAMPUS-DOWNLOAD-QUOTA.LOCK/child'), /reserved/);
   assert.throws(
     () => safeNewFilePath(root, '.file.123.12345678-1234-1234-1234-123456789abc.part'),
     /unsafe filename/,
   );
   assert.throws(
     () => safeNewFilePath(root, `${DOWNLOAD_QUOTA_LOCK}.reap-user-file`),
+    /unsafe filename/,
+  );
+  assert.throws(
+    () => safeNewFilePath(root, '.CAMPUS-DOWNLOAD-QUOTA.LOCK.REAP-user-file'),
     /unsafe filename/,
   );
 

@@ -70,9 +70,10 @@ export function resolveDownloadDir(subdirectory?: string): string {
   const realRoot = fs.realpathSync(root);
   let current = realRoot;
   const relativeParts = path.relative(root, requested).split(path.sep).filter(Boolean);
+  const firstPart = relativeParts[0]?.toLowerCase();
   if (
-    relativeParts[0] === DOWNLOAD_QUOTA_LOCK
-    || relativeParts[0]?.startsWith(DOWNLOAD_QUOTA_REAP_PREFIX)
+    firstPart === DOWNLOAD_QUOTA_LOCK
+    || firstPart?.startsWith(DOWNLOAD_QUOTA_REAP_PREFIX)
   ) {
     throw new Error(`outputDir uses the reserved Campus quota lock name: ${DOWNLOAD_QUOTA_LOCK}`);
   }
@@ -102,12 +103,13 @@ export function resolveDownloadDir(subdirectory?: string): string {
 
 export function safeNewFilePath(dir: string, name: string): string {
   const base = path.basename(name);
+  const normalizedBase = base.toLowerCase();
   if (
     !base
     || base === '.'
     || base === '..'
-    || base === DOWNLOAD_QUOTA_LOCK
-    || base.startsWith(DOWNLOAD_QUOTA_REAP_PREFIX)
+    || normalizedBase === DOWNLOAD_QUOTA_LOCK
+    || normalizedBase.startsWith(DOWNLOAD_QUOTA_REAP_PREFIX)
     || PRIVATE_PART_PATTERN.test(base)
   ) {
     throw new Error(`Refusing to write an unsafe filename: ${name}`);
@@ -118,9 +120,13 @@ export function safeNewFilePath(dir: string, name: string): string {
 function treeBytes(directory: string, ignoredPath?: string, isRoot = true): number {
   let total = 0;
   for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+    const normalizedName = entry.name.toLowerCase();
     if (
       isRoot
-      && (entry.name === DOWNLOAD_QUOTA_LOCK || entry.name.startsWith(DOWNLOAD_QUOTA_REAP_PREFIX))
+      && (
+        normalizedName === DOWNLOAD_QUOTA_LOCK
+        || normalizedName.startsWith(DOWNLOAD_QUOTA_REAP_PREFIX)
+      )
     ) {
       continue;
     }
@@ -136,11 +142,12 @@ function treeBytes(directory: string, ignoredPath?: string, isRoot = true): numb
 
 function cleanupAbandonedDownloadFiles(directory: string, isRoot = true): void {
   for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
-    if (isRoot && entry.name === DOWNLOAD_QUOTA_LOCK) continue;
+    const normalizedName = entry.name.toLowerCase();
+    if (isRoot && normalizedName === DOWNLOAD_QUOTA_LOCK) continue;
     const item = path.join(directory, entry.name);
     if (entry.isSymbolicLink()) continue;
     if (entry.isDirectory()) {
-      if (isRoot && entry.name.startsWith(DOWNLOAD_QUOTA_REAP_PREFIX)) {
+      if (isRoot && normalizedName.startsWith(DOWNLOAD_QUOTA_REAP_PREFIX)) {
         fs.rmSync(item, { recursive: true });
       } else {
         cleanupAbandonedDownloadFiles(item, false);
