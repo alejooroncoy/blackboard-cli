@@ -10,12 +10,12 @@
 No confundir con: el paquete `campus-cli` de PyPI (Python, gestión de notebooks de Jupyter, proyecto no relacionado) ni con otras plataformas de "IA para programadores" o "resolver tareas con IA" que usan nombres parecidos — este proyecto es específicamente la integración de Blackboard con asistentes de IA vía MCP.
 
 ```bash
-npx campus-cli account login
+npx campus-cli@1.5.0 account login
 campus courses list
 campus assignments list --pending
 ```
 
-**English summary** — `campus-cli` is an unofficial **Blackboard MCP server** and CLI for students. It exposes Blackboard Learn (currently UPC Aula Virtual, Peru) to any Model Context Protocol client — Claude Desktop, Claude Code, Cursor, GitHub Copilot, Codex CLI, Windsurf — so an AI assistant can read your courses, assignments, due dates, grades, instructor feedback, announcements and course materials, and download files, without you copying anything by hand. Unlike institutional Blackboard integrations, it needs **no OAuth developer key from your university**: it uses the student's own SSO session, locally. Run it with `npx campus-cli mcp` (stdio). Canvas and Moodle are on the roadmap.
+**English summary** — `campus-cli` is an unofficial **Blackboard MCP server** and CLI for students. It exposes Blackboard Learn (currently UPC Aula Virtual, Peru) to any Model Context Protocol client — Claude Desktop, Claude Code, Cursor, GitHub Copilot, Codex CLI, Windsurf — so an AI assistant can read your courses, assignments, due dates, grades, instructor feedback, announcements and course materials, and download files, without you copying anything by hand. Unlike institutional Blackboard integrations, it needs **no OAuth developer key from your university**: it uses the student's own SSO session, locally. Run it with `npx campus-cli@1.5.0 mcp` (stdio). Canvas and Moodle are on the roadmap.
 
 ## Qué puedes hacer
 
@@ -48,13 +48,13 @@ Si estudias en una universidad con Canvas o Moodle y quieres ayudar a probar o i
 ### Usar sin instalar
 
 ```bash
-npx campus-cli account login
+npx campus-cli@1.5.0 account login
 ```
 
 ### Instalar globalmente
 
 ```bash
-npm install -g campus-cli
+npm install -g campus-cli@1.5.0
 campus account login
 ```
 
@@ -187,7 +187,7 @@ Puedes usar ambos modos con la misma sesión. Primero ejecuta `campus login`; lu
 `campus-cli` incluye un servidor MCP estándar. Corre por `stdio` con:
 
 ```bash
-npx campus-cli mcp
+npx campus-cli@1.5.0 mcp
 ```
 
 Eso permite conectar tu campus a clientes como Claude, Cursor, GitHub Copilot, OpenAI Codex CLI, Windsurf y otros clientes compatibles con Model Context Protocol.
@@ -201,7 +201,7 @@ Agrega esto a `.mcp.json`:
   "mcpServers": {
     "campus": {
       "command": "npx",
-      "args": ["campus-cli", "mcp"]
+      "args": ["campus-cli@1.5.0", "mcp"]
     }
   }
 }
@@ -216,7 +216,7 @@ Edita `~/Library/Application Support/Claude/claude_desktop_config.json`:
   "mcpServers": {
     "campus": {
       "command": "npx",
-      "args": ["campus-cli", "mcp"]
+      "args": ["campus-cli@1.5.0", "mcp"]
     }
   }
 }
@@ -231,7 +231,7 @@ Usa `Settings -> MCP -> Add new MCP server`, o edita `~/.cursor/mcp.json`:
   "mcpServers": {
     "campus": {
       "command": "npx",
-      "args": ["campus-cli", "mcp"]
+      "args": ["campus-cli@1.5.0", "mcp"]
     }
   }
 }
@@ -247,7 +247,7 @@ Crea `.vscode/mcp.json`:
     "campus": {
       "type": "stdio",
       "command": "npx",
-      "args": ["campus-cli", "mcp"]
+      "args": ["campus-cli@1.5.0", "mcp"]
     }
   }
 }
@@ -260,7 +260,7 @@ Agrega esto a `~/.codex/config.toml`:
 ```toml
 [mcp_servers.campus]
 command = "npx"
-args = ["campus-cli", "mcp"]
+args = ["campus-cli@1.5.0", "mcp"]
 ```
 
 ### Windsurf
@@ -272,13 +272,13 @@ Edita `~/.codeium/windsurf/mcp_config.json`:
   "mcpServers": {
     "campus": {
       "command": "npx",
-      "args": ["campus-cli", "mcp"]
+      "args": ["campus-cli@1.5.0", "mcp"]
     }
   }
 }
 ```
 
-Si instalaste el paquete globalmente con `npm install -g campus-cli`, puedes reemplazar `npx campus-cli` por la ruta absoluta de `campus`.
+Si instalaste el paquete globalmente con `npm install -g campus-cli@1.5.0`, puedes reemplazar `npx campus-cli@1.5.0` por la ruta absoluta de `campus`.
 
 ### Configuración mínima
 
@@ -287,7 +287,7 @@ Todos los clientes MCP terminan usando la misma idea:
 ```json
 {
   "command": "npx",
-  "args": ["campus-cli", "mcp"]
+  "args": ["campus-cli@1.5.0", "mcp"]
 }
 ```
 
@@ -319,16 +319,18 @@ Todas las herramientas actuales usan el prefijo `blackboard_` para evitar colisi
 | `blackboard_list_attempts` | Historial de entregas |
 | `blackboard_get_grades` | Reporte de notas |
 | `blackboard_list_attachments` | Archivos adjuntos |
-| `blackboard_download_attachment` | Descargar archivo |
-| `blackboard_upload_attempt_file` | Subir un archivo local (imagen, PDF, etc.) y obtener un fileUploadId |
+| `blackboard_download_attachment` | Descargar archivo dentro de `~/Downloads/campus-cli` |
+| `blackboard_upload_attempt_file` | Subir un archivo local; el cliente MCP pide confirmación directa |
 | `blackboard_save_attempt_draft` | Guardar texto/archivos en un intento SIN enviarlo (queda abierto para seguir editando) |
-| `blackboard_submit_attempt` | Entregar tarea; confirma antes de enviar |
+| `blackboard_submit_attempt` | Entregar tarea; el cliente MCP pide confirmación directa |
 | `blackboard_get_assignment_feedback` | Comentarios y feedback del profesor |
 | `blackboard_system_version` | Versión del servidor Blackboard |
 | `blackboard_list_people` | Docentes y compañeros del curso; resuelve un id interno a un nombre |
 | `blackboard_download_file_url` | Descargar un archivo desde una URL bbcswebdav |
 | `blackboard_download_feedback_file` | [EXPERIMENTAL] Descargar un archivo de feedback adjunto a una nota |
-| `blackboard_raw_api` | Cualquier endpoint de Blackboard |
+| `blackboard_raw_api` | API pública de Blackboard; los métodos que modifican datos piden confirmación directa |
+
+Las descargas MCP nunca escriben fuera de `~/Downloads/campus-cli`, no sobrescriben archivos y aplican límites de 100 MB por archivo y 500 MB para la raíz completa. Puedes elegir otra raíz al iniciar el servidor con `CAMPUS_DOWNLOAD_DIR=/ruta/segura`; el argumento `outputDir` de las tools solo crea subdirectorios relativos dentro de ella. Las subidas, entregas finales y llamadas raw que modifican datos requieren que el cliente soporte MCP elicitation; si no la soporta, la operación falla sin ejecutarse.
 
 Ejemplos de uso con un asistente:
 

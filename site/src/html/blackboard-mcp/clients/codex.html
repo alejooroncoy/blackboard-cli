@@ -13,7 +13,7 @@
 
   <h2 id="pasos">1. Inicia sesión en tu campus</h2>
   <p>En una terminal, ejecuta:</p>
-  <pre class="code"><code>npx campus-cli account login</code></pre>
+  <pre class="code"><code>npx campus-cli@1.5.0 account login</code></pre>
   <p>Se abre el navegador y encadena el login de Microsoft de UPC, con MFA si tu cuenta lo pide. Si Microsoft muestra <em>«Stay signed in?»</em>, marca la casilla y acepta: así la sesión se mantiene y no tienes que repetir el login cada día. Todo el flujo corre en tu máquina, no pasa por ningún servidor de Campus.</p>
 
   <h2 id="configuracion">2. Registra el servidor en OpenAI Codex CLI</h2>
@@ -21,7 +21,7 @@
   
   <pre class="code"><code>[mcp_servers.campus]
 command = "npx"
-args = ["campus-cli", "mcp"]</code></pre>
+args = ["campus-cli@1.5.0", "mcp"]</code></pre>
 
   <h2 id="verificar">3. Verifica la conexión</h2>
   <p>Inicia <code>codex</code> y pide la lista de herramientas disponibles: deben figurar las <code>blackboard_*</code>.</p>
@@ -33,8 +33,8 @@ args = ["campus-cli", "mcp"]</code></pre>
   </ul></div>
 
   <h2 id="problemas">Si algo no funciona</h2>
-  <p>El fallo más común es un JSON inválido: una coma de más o unas comillas sin cerrar hacen que el cliente ignore el archivo entero sin avisar. Comprueba también que <code>npx campus-cli mcp</code> arranque sin error directamente en la terminal — si ahí falla, el problema no está en OpenAI Codex CLI.</p>
-  <p>Si el servidor conecta pero las respuestas dicen que no estás autenticado, tu sesión expiró: vuelve a correr <code>npx campus-cli account login</code>. Y recuerda cerrar el cliente por completo antes de reabrirlo; recargar la ventana no siempre relee la configuración.</p>
+  <p>El fallo más común es un JSON inválido: una coma de más o unas comillas sin cerrar hacen que el cliente ignore el archivo entero sin avisar. Comprueba también que <code>npx campus-cli@1.5.0 mcp</code> arranque sin error directamente en la terminal — si ahí falla, el problema no está en OpenAI Codex CLI.</p>
+  <p>Si el servidor conecta pero las respuestas dicen que no estás autenticado, tu sesión expiró: vuelve a correr <code>npx campus-cli@1.5.0 account login</code>. Y recuerda cerrar el cliente por completo antes de reabrirlo; recargar la ventana no siempre relee la configuración.</p>
 
   <h2 id="siguiente">Qué puedes hacer después</h2>
   <p>Las herramientas disponibles, el detalle de seguridad y las limitaciones actuales están en <a class="prose-link" href="/blackboard-mcp/">la página principal de Blackboard MCP</a>. Si prefieres consultar tu campus por comandos en vez de por chat, existe <a class="prose-link" href="/blackboard-cli/">Blackboard CLI</a>. Y para saber qué revisar cada semana antes de automatizarlo, lee <a class="prose-link" href="/blog/organizar-tu-semana-blackboard/">la guía para organizar tu semana en Blackboard sin perder fechas</a>.</p>
@@ -42,7 +42,7 @@ args = ["campus-cli", "mcp"]</code></pre>
   <h2 id="faq">Preguntas frecuentes</h2>
   <h3>¿Dónde va el archivo de configuración MCP de OpenAI Codex CLI?</h3><p>En <code>~/.codex/config.toml</code>.</p>
   <h3>¿Necesito instalar algo además de OpenAI Codex CLI?</h3><p>Solo Node.js 18 o superior. El comando <code>npx</code> descarga <code>campus-cli</code> la primera vez que se ejecuta.</p>
-  <h3>¿Qué hago si las herramientas no aparecen?</h3><p>Cierra el cliente por completo y vuelve a abrirlo, verifica que el JSON no tenga comas de más y confirma que <code>npx campus-cli mcp</code> arranca sin error en la terminal.</p>
+  <h3>¿Qué hago si las herramientas no aparecen?</h3><p>Cierra el cliente por completo y vuelve a abrirlo, verifica que el JSON no tenga comas de más y confirma que <code>npx campus-cli@1.5.0 mcp</code> arranca sin error en la terminal.</p>
 
   <h2 id="otros">Otros clientes</h2>
   <ul><li><a href="/blackboard-mcp/claude-desktop/">Claude Desktop</a></li><li><a href="/blackboard-mcp/claude-code/">Claude Code</a></li><li><a href="/blackboard-mcp/cursor/">Cursor</a></li><li><a href="/blackboard-mcp/github-copilot/">GitHub Copilot en VS Code</a></li><li><a href="/blackboard-mcp/windsurf/">Windsurf</a></li></ul>

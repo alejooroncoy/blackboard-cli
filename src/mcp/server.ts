@@ -25,10 +25,13 @@ devuelve un fileUploadId; blackboard_save_attempt_draft guarda texto y/o
 esos fileUploadIds sin enviar (el intento queda abierto para seguir
 editando, no requiere confirmación); blackboard_submit_attempt finaliza
 y envía — siempre confirma con el usuario qué se va a enviar antes de
-llamarla.
+llamarla. El servidor pide una segunda confirmación directa vía elicitation.
 
-blackboard_raw_api cubre cualquier endpoint no expuesto por una tool
-dedicada.
+Las descargas quedan dentro de ~/Downloads/campus-cli (o la raíz configurada
+por el usuario) y nunca sobrescriben archivos existentes.
+
+blackboard_raw_api cubre endpoints públicos no expuestos por una tool
+dedicada; cualquier método que modifique datos exige elicitation.
 
 Futuro: canvas_* y moodle_* para otras universidades (Canvas, Moodle) —
 no implementados todavía.

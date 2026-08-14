@@ -10,7 +10,7 @@ import { downloadCommand } from './providers/blackboard/commands/download.js';
 import { assignmentsCommand } from './providers/blackboard/commands/assignments.js';
 import { accountCommand } from './account/command.js';
 import { loadSession, loadOrRefreshSession, saveSession, isSessionValid } from './providers/blackboard/auth/session.js';
-import { createClient } from './providers/blackboard/api/client.js';
+import { assertPublicApiUrl, createClient } from './providers/blackboard/api/client.js';
 import { getMe, getSystemVersion } from './providers/blackboard/api/courses.js';
 import { resolveDisplayName, getSsoExpiry } from './providers/blackboard/auth/login.js';
 import { BANNER, ok, fail, hint, formatSessionLifetime } from './ui/theme.js';
@@ -78,7 +78,7 @@ program
       } catch {}
     }
 
-    const ssoExpiresAt = valid ? getSsoExpiry(session!.cookies) : undefined;
+    const ssoExpiresAt = valid ? (session!.ssoExpiresAt ?? getSsoExpiry(session!.cookies)) : undefined;
 
     const result = {
       loggedIn: valid,
@@ -122,6 +122,11 @@ program
   .option('-b, --body <json>', 'Cuerpo JSON para POST/PUT')
   .option('-q, --query <params>', 'Query params (ej: "limit=10&offset=0")')
   .action(async (method: string, apiPath: string, opts) => {
+    const normalizedMethod = method.toUpperCase();
+    if (!['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].includes(normalizedMethod)) {
+      throw new Error('Method must be GET, POST, PUT, PATCH, or DELETE');
+    }
+    assertPublicApiUrl(apiPath);
     const session = await loadOrRefreshSession();
     if (!isSessionValid(session)) {
       console.error(JSON.stringify({ error: 'Not authenticated. Run: campus login' }));
@@ -133,7 +138,7 @@ program
     const data = opts.body ? JSON.parse(opts.body) : undefined;
 
     try {
-      const r = await client.request({ method: method.toLowerCase() as any, url: apiPath, params, data });
+      const r = await client.request({ method: normalizedMethod.toLowerCase() as any, url: apiPath, params, data });
       console.log(JSON.stringify(r.data, null, 2));
     } catch (err: any) {
       console.error(JSON.stringify({ error: err.message, status: err.response?.status, body: err.response?.data }, null, 2));

@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
+import crypto from 'node:crypto';
 import type { Session } from '../types.js';
 import { track } from '../../../analytics.js';
 
@@ -8,18 +9,41 @@ const SESSION_DIR = path.join(os.homedir(), '.blackboard-cli');
 const SESSION_FILE = path.join(SESSION_DIR, 'session.json');
 const PROFILE_DIR = path.join(SESSION_DIR, 'browser-profile');
 
+export function blackboardCookies(cookies: Session['cookies']): Session['cookies'] {
+  const host = 'aulavirtual.upc.edu.pe';
+  return cookies.filter((cookie) => {
+    const domain = cookie.domain.replace(/^\./, '').toLowerCase();
+    return host === domain || host.endsWith(`.${domain}`);
+  });
+}
+
 export function saveSession(session: Session): void {
-  if (!fs.existsSync(SESSION_DIR)) {
-    fs.mkdirSync(SESSION_DIR, { recursive: true, mode: 0o700 });
+  if (fs.existsSync(SESSION_DIR) && fs.lstatSync(SESSION_DIR).isSymbolicLink()) {
+    throw new Error(`Refusing to store credentials through a symbolic link: ${SESSION_DIR}`);
   }
-  fs.writeFileSync(SESSION_FILE, JSON.stringify(session, null, 2), { mode: 0o600 });
+  fs.mkdirSync(SESSION_DIR, { recursive: true, mode: 0o700 });
+  fs.chmodSync(SESSION_DIR, 0o700);
+
+  const sanitized = { ...session, cookies: blackboardCookies(session.cookies) };
+  const temporary = `${SESSION_FILE}.${process.pid}.${crypto.randomUUID()}.tmp`;
+  fs.writeFileSync(temporary, JSON.stringify(sanitized, null, 2), { mode: 0o600, flag: 'wx' });
+  fs.renameSync(temporary, SESSION_FILE);
+  fs.chmodSync(SESSION_FILE, 0o600);
 }
 
 export function loadSession(): Session | null {
   try {
     if (!fs.existsSync(SESSION_FILE)) return null;
+    if (fs.lstatSync(SESSION_FILE).isSymbolicLink()) return null;
+    fs.chmodSync(SESSION_FILE, 0o600);
     const raw = fs.readFileSync(SESSION_FILE, 'utf-8');
     const session: Session = JSON.parse(raw);
+    const filtered = blackboardCookies(session.cookies ?? []);
+    if (filtered.length !== (session.cookies ?? []).length) {
+      session.ssoExpiresAt ??= getLegacySsoExpiry(session.cookies ?? []);
+      session.cookies = filtered;
+      saveSession(session); // one-time migration from sessions that stored Microsoft cookies
+    }
     if (session.expiresAt && Date.now() > session.expiresAt) {
       track('session_expired', {});
       return null; // expired
@@ -28,6 +52,16 @@ export function loadSession(): Session | null {
   } catch {
     return null;
   }
+}
+
+function getLegacySsoExpiry(cookies: Session['cookies']): number | undefined {
+  const names = new Set(['ESTSAUTHPERSISTENT', 'ESTSAUTHLIGHT', 'ESTSAUTH']);
+  const now = Date.now();
+  const values = cookies
+    .filter((cookie) => names.has(cookie.name) && /login\.(microsoftonline|live)\.com$/.test(cookie.domain.replace(/^\./, '')))
+    .map((cookie) => (cookie.expires ?? 0) * 1000)
+    .filter((expiry) => expiry > now);
+  return values.length ? Math.max(...values) : undefined;
 }
 
 export function clearSession(opts: { keepProfile?: boolean } = {}): void {

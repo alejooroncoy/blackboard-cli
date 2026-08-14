@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
+import crypto from 'node:crypto';
 import type { BannerSession } from '../types.js';
 
 const SESSION_DIR = path.join(os.homedir(), '.blackboard-cli');
@@ -10,13 +11,22 @@ const SESSION_FILE = path.join(SESSION_DIR, 'banner-session.json');
 // different service. Mixing them in one file means expiring one expires both,
 // and they do not expire together.
 export function saveSession(session: BannerSession): void {
-  if (!fs.existsSync(SESSION_DIR)) fs.mkdirSync(SESSION_DIR, { recursive: true, mode: 0o700 });
-  fs.writeFileSync(SESSION_FILE, JSON.stringify(session, null, 2), { mode: 0o600 });
+  if (fs.existsSync(SESSION_DIR) && fs.lstatSync(SESSION_DIR).isSymbolicLink()) {
+    throw new Error(`Refusing to store credentials through a symbolic link: ${SESSION_DIR}`);
+  }
+  fs.mkdirSync(SESSION_DIR, { recursive: true, mode: 0o700 });
+  fs.chmodSync(SESSION_DIR, 0o700);
+  const temporary = `${SESSION_FILE}.${process.pid}.${crypto.randomUUID()}.tmp`;
+  fs.writeFileSync(temporary, JSON.stringify(session, null, 2), { mode: 0o600, flag: 'wx' });
+  fs.renameSync(temporary, SESSION_FILE);
+  fs.chmodSync(SESSION_FILE, 0o600);
 }
 
 export function loadSession(): BannerSession | null {
   try {
     if (!fs.existsSync(SESSION_FILE)) return null;
+    if (fs.lstatSync(SESSION_FILE).isSymbolicLink()) return null;
+    fs.chmodSync(SESSION_FILE, 0o600);
     const session: BannerSession = JSON.parse(fs.readFileSync(SESSION_FILE, 'utf-8'));
     return Date.now() > session.expiresAt ? null : session;
   } catch {

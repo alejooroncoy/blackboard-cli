@@ -4,6 +4,7 @@ export interface Session {
   userId?: string;
   userName?: string;
   expiresAt: number; // unix ms
+  ssoExpiresAt?: number; // metadata only; Microsoft cookies stay in the browser profile
 }
 
 export interface Cookie {

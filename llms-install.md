@@ -31,7 +31,7 @@ Add this to the MCP configuration file of the client you are setting up:
   "mcpServers": {
     "campus": {
       "command": "npx",
-      "args": ["campus-cli", "mcp"]
+      "args": ["campus-cli@1.5.0", "mcp"]
     }
   }
 }
@@ -41,7 +41,7 @@ Add this to the MCP configuration file of the client you are setting up:
 If you prefer it resident:
 
 ```bash
-npm install -g campus-cli
+npm install -g campus-cli@1.5.0
 ```
 
 and then use `"command": "campus", "args": ["mcp"]`.
@@ -53,7 +53,7 @@ Node.js 18 or newer is required.
 Tell the user to run this in their own terminal:
 
 ```bash
-campus account login    # or: npx campus-cli account login
+campus account login    # or: npx campus-cli@1.5.0 account login
 ```
 
 A browser window opens. They sign in with their Campus account and then with
@@ -78,8 +78,13 @@ submission, and a raw API escape hatch.
 
 One behavioural rule matters: `blackboard_submit_attempt` sends an assignment to
 the professor and cannot be undone. Always show the user what will be submitted
-and get their confirmation first. Saving a draft
+and get their confirmation first. The server then asks again through MCP
+elicitation and fails closed if the client cannot display it. Saving a draft
 (`blackboard_save_attempt_draft`) is safe and needs no confirmation.
+
+MCP downloads are confined to `~/Downloads/campus-cli`, never overwrite an
+existing file, and enforce 100 MB per-file and 500 MB total quotas. `outputDir`
+may only select a relative subdirectory.
 
 ## Links
 
