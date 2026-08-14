@@ -64,6 +64,10 @@ test('MCP downloads stay under their configured root and never overwrite', async
   assert.throws(() => resolveDownloadDir('/tmp/outside'), /must be relative/);
   assert.throws(() => resolveDownloadDir('../outside'), /outside/);
   assert.throws(() => resolveDownloadDir(`${DOWNLOAD_QUOTA_LOCK}/child`), /reserved/);
+  assert.throws(
+    () => safeNewFilePath(root, '.file.123.12345678-1234-1234-1234-123456789abc.part'),
+    /unsafe filename/,
+  );
 
   const dir = resolveDownloadDir('course');
   const destination = safeNewFilePath(dir, '../material.pdf');
@@ -171,6 +175,23 @@ test('the download directory quota includes files already on disk', async (t) =>
     /safety limit/,
   );
   assert.equal(fs.existsSync(destination), false);
+});
+
+test('abandoned private download files are reclaimed while holding the quota lock', async (t) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'campus-part-cleanup-test-'));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const abandoned = path.join(
+    root,
+    '.material.pdf.123.12345678-1234-1234-1234-123456789abc.part',
+  );
+  fs.writeFileSync(abandoned, Buffer.alloc(10));
+  const destination = path.join(root, 'new.bin');
+
+  assert.equal(
+    await writeLimitedDownload(Readable.from(['hello']), destination, 10, { root, maxBytes: 10 }),
+    5,
+  );
+  assert.equal(fs.existsSync(abandoned), false);
 });
 
 test('download quota waits for a filesystem lock shared with other processes', async (t) => {

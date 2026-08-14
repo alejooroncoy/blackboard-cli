@@ -10,19 +10,29 @@ export const MAX_DOWNLOAD_BYTES = 100 * 1024 * 1024;
 export const MAX_DOWNLOAD_ROOT_BYTES = 500 * 1024 * 1024;
 export const DOWNLOAD_QUOTA_LOCK = '.campus-download-quota.lock';
 const DOWNLOAD_QUOTA_OWNER = 'owner';
+const DOWNLOAD_QUOTA_REAP_PREFIX = `${DOWNLOAD_QUOTA_LOCK}.reap-`;
+const PRIVATE_PART_PATTERN = /^\..+\.\d+\.[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.part$/i;
 
-// proper-lockfile uses an atomic mkdir. Keeping the owner token inside that
-// directory makes stale-lock deletion generation-safe: a delayed rmdir cannot
-// remove a newly acquired lock because the new owner's token makes it nonempty.
+// proper-lockfile uses an atomic mkdir. Claim a specific lock generation by
+// renaming its directory before deleting anything inside it; this prevents a
+// delayed cleanup from unlinking files in a successor generation.
 const quotaLockFs: any = Object.create(fs);
 quotaLockFs.rmdir = (target: string, callback: (error?: NodeJS.ErrnoException | null) => void) => {
-  fs.unlink(path.join(target, DOWNLOAD_QUOTA_OWNER), (unlinkError) => {
-    if (unlinkError && unlinkError.code !== 'ENOENT') {
-      callback(unlinkError);
-      return;
-    }
-    fs.rmdir(target, callback);
-  });
+  if (path.basename(target) !== DOWNLOAD_QUOTA_LOCK) {
+    callback(Object.assign(new Error(`Refusing to remove unexpected lock path: ${target}`), {
+      code: 'EINVAL',
+    }));
+    return;
+  }
+  const claimed = `${target}.reap-${randomUUID()}`;
+  try {
+    fs.renameSync(target, claimed);
+    fs.rmSync(claimed, { recursive: true });
+    callback(null);
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') callback(null);
+    else callback(error as NodeJS.ErrnoException);
+  }
 };
 
 export function downloadRoot(): string {
@@ -60,7 +70,10 @@ export function resolveDownloadDir(subdirectory?: string): string {
   const realRoot = fs.realpathSync(root);
   let current = realRoot;
   const relativeParts = path.relative(root, requested).split(path.sep).filter(Boolean);
-  if (relativeParts[0] === DOWNLOAD_QUOTA_LOCK) {
+  if (
+    relativeParts[0] === DOWNLOAD_QUOTA_LOCK
+    || relativeParts[0]?.startsWith(DOWNLOAD_QUOTA_REAP_PREFIX)
+  ) {
     throw new Error(`outputDir uses the reserved Campus quota lock name: ${DOWNLOAD_QUOTA_LOCK}`);
   }
   for (const part of relativeParts) {
@@ -89,7 +102,7 @@ export function resolveDownloadDir(subdirectory?: string): string {
 
 export function safeNewFilePath(dir: string, name: string): string {
   const base = path.basename(name);
-  if (!base || base === '.' || base === '..') {
+  if (!base || base === '.' || base === '..' || PRIVATE_PART_PATTERN.test(base)) {
     throw new Error(`Refusing to write an unsafe filename: ${name}`);
   }
   return path.join(dir, base);
@@ -98,7 +111,9 @@ export function safeNewFilePath(dir: string, name: string): string {
 function treeBytes(directory: string, ignoredPath?: string): number {
   let total = 0;
   for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
-    if (entry.name === DOWNLOAD_QUOTA_LOCK) continue;
+    if (entry.name === DOWNLOAD_QUOTA_LOCK || entry.name.startsWith(DOWNLOAD_QUOTA_REAP_PREFIX)) {
+      continue;
+    }
     const item = path.join(directory, entry.name);
     if (item === ignoredPath) continue;
     if (entry.isSymbolicLink()) continue;
@@ -107,6 +122,23 @@ function treeBytes(directory: string, ignoredPath?: string): number {
     if (total > MAX_DOWNLOAD_ROOT_BYTES) break;
   }
   return total;
+}
+
+function cleanupAbandonedDownloadFiles(directory: string): void {
+  for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+    if (entry.name === DOWNLOAD_QUOTA_LOCK) continue;
+    const item = path.join(directory, entry.name);
+    if (entry.isSymbolicLink()) continue;
+    if (entry.isDirectory()) {
+      if (entry.name.startsWith(DOWNLOAD_QUOTA_REAP_PREFIX)) {
+        fs.rmSync(item, { recursive: true });
+      } else {
+        cleanupAbandonedDownloadFiles(item);
+      }
+    } else if (entry.isFile() && PRIVATE_PART_PATTERN.test(entry.name)) {
+      fs.unlinkSync(item);
+    }
+  }
 }
 
 async function acquireQuotaLock(root: string): Promise<{
@@ -219,6 +251,7 @@ export async function writeLimitedDownload(
         throw new Error(`Download destination is outside its quota root: ${quotaRoot}`);
       }
       quotaLock = await acquireQuotaLock(quotaRoot);
+      cleanupAbandonedDownloadFiles(quotaRoot);
       const available = quotaLimit - treeBytes(quotaRoot);
       const allowedBytes = Math.min(maxBytes, Math.max(0, available));
       if (allowedBytes <= 0) {
