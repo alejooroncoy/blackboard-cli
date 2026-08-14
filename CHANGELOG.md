@@ -22,7 +22,7 @@ All notable changes to `campus-cli` (formerly `blackboard-upc`) will be document
 
 ### Added
 - Pruebas de regresión para aislamiento de origen, endpoints raw/descarga, filtrado de cookies, URLs TLS, confinamiento de descargas, no sobrescritura y límites de tamaño.
-- Prueba de regresión que verifica el cierre del stream HTTP cuando una descarga no puede crear el archivo de destino.
+- Pruebas de regresión que verifican el cierre del stream HTTP cuando una descarga no puede crear el archivo de destino o recibe un nombre inseguro en la respuesta.
 
 ## [1.4.2] — 2026-08-08
 

@@ -133,3 +133,21 @@ export async function writeLimitedDownload(
     reservedDownloadBytes -= reservation;
   }
 }
+
+/** Resolve the final filename and guarantee that setup failures close the input stream. */
+export async function writeNamedDownload(
+  input: Readable,
+  directory: string,
+  name: string,
+  maxBytes = MAX_DOWNLOAD_BYTES,
+  quota?: { root: string; maxBytes?: number },
+): Promise<{ destination: string; size: number }> {
+  try {
+    const destination = safeNewFilePath(directory, name);
+    const size = await writeLimitedDownload(input, destination, maxBytes, quota);
+    return { destination, size };
+  } catch (error) {
+    input.destroy();
+    throw error;
+  }
+}

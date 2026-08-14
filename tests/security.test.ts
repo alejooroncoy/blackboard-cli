@@ -14,6 +14,7 @@ import {
   resolveDownloadDir,
   safeNewFilePath,
   writeLimitedDownload,
+  writeNamedDownload,
 } from '../src/security/files.js';
 import { secureServiceUrl } from '../src/security/urls.js';
 
@@ -95,6 +96,15 @@ test('download streams are destroyed when exclusive destination creation fails',
     writeLimitedDownload(input, destination),
     (error: NodeJS.ErrnoException) => error.code === 'EEXIST',
   );
+  assert.equal(input.destroyed, true);
+});
+
+test('download streams are destroyed when response-derived filenames are unsafe', async (t) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'campus-name-test-'));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const input = new PassThrough();
+
+  await assert.rejects(writeNamedDownload(input, root, '..'), /unsafe filename/);
   assert.equal(input.destroyed, true);
 });
 

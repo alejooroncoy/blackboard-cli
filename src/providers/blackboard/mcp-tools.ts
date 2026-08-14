@@ -16,7 +16,7 @@ import {
 } from './api/courses.js';
 import { listAssignments, listAttempts, submitAttempt, uploadFile, getAttemptFiles } from './api/assignments.js';
 import { track } from '../../analytics.js';
-import { downloadRoot, resolveDownloadDir, safeNewFilePath, writeLimitedDownload } from '../../security/files.js';
+import { downloadRoot, resolveDownloadDir, safeNewFilePath, writeNamedDownload } from '../../security/files.js';
 
 const MAX_UPLOAD_BYTES = 50 * 1024 * 1024; // 50MB
 
@@ -294,8 +294,6 @@ export function registerBlackboardTools(server: McpServer) {
       },
     },
     async ({ courseId, contentId, attachmentId, filename, outputDir }) => {
-      const { client } = await getClient();
-
       const directUrl = /^https?:/i.test(attachmentId);
       if (!directUrl && !/^_\d+_\d+$/.test(attachmentId)) {
         throw new Error('attachmentId must be a Blackboard attachment ID or a full bbcswebdav URL');
@@ -305,6 +303,9 @@ export function registerBlackboardTools(server: McpServer) {
         : `/learn/api/public/v1/courses/${courseId}/contents/${contentId}/attachments/${attachmentId}/download`;
       if (directUrl) assertBlackboardFileUrl(url);
 
+      const dir = resolveDownloadDir(outputDir);
+      if (filename !== undefined) safeNewFilePath(dir, filename);
+      const { client } = await getClient();
       const r = await client.get(url, { responseType: 'stream', headers: { Accept: '*/*' } });
 
       const contentDisposition = r.headers['content-disposition'] as string | undefined;
@@ -312,16 +313,19 @@ export function registerBlackboardTools(server: McpServer) {
         ? (contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/))?.[1]?.replace(/['"]/g, '').trim()
         : undefined;
       const finalName = filename ?? detectedName ?? 'download';
-
-      const dir = resolveDownloadDir(outputDir);
-      const dest = safeNewFilePath(dir, finalName);
-      const size = await writeLimitedDownload(r.data, dest, undefined, { root: downloadRoot() });
+      const { destination, size } = await writeNamedDownload(
+        r.data,
+        dir,
+        finalName,
+        undefined,
+        { root: downloadRoot() },
+      );
 
       const mimeType = (r.headers['content-type'] as string | undefined) ?? 'application/octet-stream';
       return {
         content: [{
           type: 'text',
-          text: JSON.stringify({ saved: dest, size, mimeType }),
+          text: JSON.stringify({ saved: destination, size, mimeType }),
         }],
       };
     }
@@ -402,6 +406,8 @@ export function registerBlackboardTools(server: McpServer) {
     },
     async ({ url, filename, outputDir }) => {
       assertBlackboardFileUrl(url);
+      const dir = resolveDownloadDir(outputDir);
+      if (filename !== undefined) safeNewFilePath(dir, filename);
       const { client } = await getClient();
       const r = await client.get(url, { responseType: 'stream', headers: { Accept: '*/*' } });
 
@@ -410,16 +416,19 @@ export function registerBlackboardTools(server: McpServer) {
         ? (contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/))?.[1]?.replace(/['"]/g, '').trim()
         : undefined;
       const finalName = filename ?? detectedName ?? 'download';
-
-      const dir = resolveDownloadDir(outputDir);
-      const dest = safeNewFilePath(dir, finalName);
-      const size = await writeLimitedDownload(r.data, dest, undefined, { root: downloadRoot() });
+      const { destination, size } = await writeNamedDownload(
+        r.data,
+        dir,
+        finalName,
+        undefined,
+        { root: downloadRoot() },
+      );
 
       const mimeType = (r.headers['content-type'] as string | undefined) ?? 'application/octet-stream';
       return {
         content: [{
           type: 'text',
-          text: JSON.stringify({ saved: dest, size, mimeType }),
+          text: JSON.stringify({ saved: destination, size, mimeType }),
         }],
       };
     }
@@ -647,6 +656,8 @@ export function registerBlackboardTools(server: McpServer) {
       annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: true },
     },
     async ({ courseId, columnId, attemptId, fileId, filename, outputDir }) => {
+      const dir = resolveDownloadDir(outputDir);
+      if (filename !== undefined) safeNewFilePath(dir, filename);
       const { client } = await getClient();
 
       const url = `/learn/api/public/v2/courses/${courseId}/gradebook/columns/${columnId}/attempts/${attemptId}/files/${fileId}/download`;
@@ -657,16 +668,19 @@ export function registerBlackboardTools(server: McpServer) {
         ? (contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/))?.[1]?.replace(/['"]/g, '').trim()
         : undefined;
       const finalName = filename ?? detectedName ?? `feedback_${fileId}`;
-
-      const dir = resolveDownloadDir(outputDir);
-      const dest = safeNewFilePath(dir, finalName);
-      const size = await writeLimitedDownload(r.data, dest, undefined, { root: downloadRoot() });
+      const { destination, size } = await writeNamedDownload(
+        r.data,
+        dir,
+        finalName,
+        undefined,
+        { root: downloadRoot() },
+      );
 
       const mimeType = (r.headers['content-type'] as string | undefined) ?? 'application/octet-stream';
       return {
         content: [{
           type: 'text',
-          text: JSON.stringify({ saved: dest, size, mimeType }),
+          text: JSON.stringify({ saved: destination, size, mimeType }),
         }],
       };
     }
