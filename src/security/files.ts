@@ -102,38 +102,48 @@ export function resolveDownloadDir(subdirectory?: string): string {
 
 export function safeNewFilePath(dir: string, name: string): string {
   const base = path.basename(name);
-  if (!base || base === '.' || base === '..' || PRIVATE_PART_PATTERN.test(base)) {
+  if (
+    !base
+    || base === '.'
+    || base === '..'
+    || base === DOWNLOAD_QUOTA_LOCK
+    || base.startsWith(DOWNLOAD_QUOTA_REAP_PREFIX)
+    || PRIVATE_PART_PATTERN.test(base)
+  ) {
     throw new Error(`Refusing to write an unsafe filename: ${name}`);
   }
   return path.join(dir, base);
 }
 
-function treeBytes(directory: string, ignoredPath?: string): number {
+function treeBytes(directory: string, ignoredPath?: string, isRoot = true): number {
   let total = 0;
   for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
-    if (entry.name === DOWNLOAD_QUOTA_LOCK || entry.name.startsWith(DOWNLOAD_QUOTA_REAP_PREFIX)) {
+    if (
+      isRoot
+      && (entry.name === DOWNLOAD_QUOTA_LOCK || entry.name.startsWith(DOWNLOAD_QUOTA_REAP_PREFIX))
+    ) {
       continue;
     }
     const item = path.join(directory, entry.name);
     if (item === ignoredPath) continue;
     if (entry.isSymbolicLink()) continue;
-    if (entry.isDirectory()) total += treeBytes(item, ignoredPath);
+    if (entry.isDirectory()) total += treeBytes(item, ignoredPath, false);
     else if (entry.isFile()) total += fs.statSync(item).size;
     if (total > MAX_DOWNLOAD_ROOT_BYTES) break;
   }
   return total;
 }
 
-function cleanupAbandonedDownloadFiles(directory: string): void {
+function cleanupAbandonedDownloadFiles(directory: string, isRoot = true): void {
   for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
-    if (entry.name === DOWNLOAD_QUOTA_LOCK) continue;
+    if (isRoot && entry.name === DOWNLOAD_QUOTA_LOCK) continue;
     const item = path.join(directory, entry.name);
     if (entry.isSymbolicLink()) continue;
     if (entry.isDirectory()) {
-      if (entry.name.startsWith(DOWNLOAD_QUOTA_REAP_PREFIX)) {
+      if (isRoot && entry.name.startsWith(DOWNLOAD_QUOTA_REAP_PREFIX)) {
         fs.rmSync(item, { recursive: true });
       } else {
-        cleanupAbandonedDownloadFiles(item);
+        cleanupAbandonedDownloadFiles(item, false);
       }
     } else if (entry.isFile() && PRIVATE_PART_PATTERN.test(entry.name)) {
       fs.unlinkSync(item);

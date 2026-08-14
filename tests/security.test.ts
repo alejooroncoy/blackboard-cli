@@ -68,6 +68,10 @@ test('MCP downloads stay under their configured root and never overwrite', async
     () => safeNewFilePath(root, '.file.123.12345678-1234-1234-1234-123456789abc.part'),
     /unsafe filename/,
   );
+  assert.throws(
+    () => safeNewFilePath(root, `${DOWNLOAD_QUOTA_LOCK}.reap-user-file`),
+    /unsafe filename/,
+  );
 
   const dir = resolveDownloadDir('course');
   const destination = safeNewFilePath(dir, '../material.pdf');
@@ -192,6 +196,23 @@ test('abandoned private download files are reclaimed while holding the quota loc
     5,
   );
   assert.equal(fs.existsSync(abandoned), false);
+});
+
+test('nested reaper-prefixed user directories are preserved and counted', async (t) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'campus-nested-reaper-test-'));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const nested = path.join(root, 'course', `${DOWNLOAD_QUOTA_LOCK}.reap-not-internal`);
+  fs.mkdirSync(nested, { recursive: true });
+  const existing = path.join(nested, 'material.bin');
+  fs.writeFileSync(existing, Buffer.alloc(8));
+  const destination = path.join(root, 'new.bin');
+
+  await assert.rejects(
+    writeLimitedDownload(Readable.from([Buffer.alloc(3)]), destination, 10, { root, maxBytes: 10 }),
+    /safety limit/,
+  );
+  assert.equal(fs.existsSync(existing), true);
+  assert.equal(fs.readFileSync(existing).byteLength, 8);
 });
 
 test('download quota waits for a filesystem lock shared with other processes', async (t) => {
