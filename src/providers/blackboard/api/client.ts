@@ -13,20 +13,33 @@ const ALLOWED_HOST = 'aulavirtual.upc.edu.pe';
 // (bbcswebdav links, blackboard_raw_api's path) must never be allowed to be
 // absolute unless it targets this exact host, or the student's session leaks
 // to whatever host was supplied.
-const ABSOLUTE_URL_RE = /^([a-z][a-z\d+\-.]*:)?\/\//i;
-
 export function assertSameOrigin(url: string): void {
-  if (!ABSOLUTE_URL_RE.test(url)) return; // relative — always resolved against baseURL
   let parsed: URL;
   try {
     parsed = new URL(url, BASE_URL);
   } catch {
     throw new Error(`Invalid URL: ${url}`);
   }
-  if (parsed.protocol !== 'https:' || parsed.hostname !== ALLOWED_HOST) {
+  if (parsed.protocol !== 'https:' || parsed.host !== ALLOWED_HOST) {
     throw new Error(
       `Refusing to send the Blackboard session to a non-Blackboard host: ${parsed.hostname}`
     );
+  }
+}
+
+export function assertPublicApiUrl(url: string): void {
+  assertSameOrigin(url);
+  const parsed = new URL(url, BASE_URL);
+  if (!parsed.pathname.startsWith('/learn/api/public/')) {
+    throw new Error('Raw API calls are restricted to /learn/api/public/ endpoints');
+  }
+}
+
+export function assertBlackboardFileUrl(url: string): void {
+  assertSameOrigin(url);
+  const parsed = new URL(url, BASE_URL);
+  if (!parsed.pathname.startsWith('/bbcswebdav/')) {
+    throw new Error('Direct downloads are restricted to Blackboard /bbcswebdav/ URLs');
   }
 }
 
@@ -70,7 +83,7 @@ export function createClient(session: Session, options: ClientOptions = {}): Axi
   const cookieStr = session.cookies
     .filter((c) => {
       const domain = c.domain.replace(/^\./, '');
-      return 'aulavirtual.upc.edu.pe'.endsWith(domain) || domain === 'aulavirtual.upc.edu.pe';
+      return ALLOWED_HOST === domain || ALLOWED_HOST.endsWith(`.${domain}`);
     })
     .map((c) => `${c.name}=${c.value}`)
     .join('; ');
@@ -84,6 +97,9 @@ export function createClient(session: Session, options: ClientOptions = {}): Axi
       ...(session.xsrfToken ? { 'X-Blackboard-XSRF': session.xsrfToken } : {}),
     },
     withCredentials: true,
+    beforeRedirect: (options) => {
+      assertSameOrigin(`${options.protocol}//${options.hostname}${options.port ? `:${options.port}` : ''}${options.path ?? '/'}`);
+    },
   });
 
   // Pacing goes on the adapter rather than on interceptors because the slot has

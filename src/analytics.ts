@@ -3,8 +3,11 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { loadAccountSession } from './account/store.js';
+import { secureServiceUrl } from './security/urls.js';
 
-const POSTHOG_HOST = (process.env.POSTHOG_HOST ?? 'https://us.i.posthog.com').replace(/\/$/, '');
+const POSTHOG_HOST = process.env.POSTHOG_DISABLED === '1'
+  ? ''
+  : secureServiceUrl(process.env.POSTHOG_HOST ?? 'https://us.i.posthog.com', 'POSTHOG_HOST');
 const POSTHOG_KEY = process.env.POSTHOG_API_KEY ?? 'phc_mVYDii8qujKLxaCagZomJjR4B2Cd53FieYqDyBPe4zGw';
 const INSTALL_FILE = path.join(os.homedir(), '.blackboard-cli', 'analytics-id');
 
@@ -37,10 +40,17 @@ const ALLOWED_PROPERTIES = new Set([
 
 function installId(): string {
   try {
-    if (fs.existsSync(INSTALL_FILE)) return fs.readFileSync(INSTALL_FILE, 'utf8').trim();
+    const directory = path.dirname(INSTALL_FILE);
+    if (fs.existsSync(directory) && fs.lstatSync(directory).isSymbolicLink()) return crypto.randomUUID();
+    fs.mkdirSync(directory, { recursive: true, mode: 0o700 });
+    fs.chmodSync(directory, 0o700);
+    if (fs.existsSync(INSTALL_FILE)) {
+      if (fs.lstatSync(INSTALL_FILE).isSymbolicLink()) return crypto.randomUUID();
+      fs.chmodSync(INSTALL_FILE, 0o600);
+      return fs.readFileSync(INSTALL_FILE, 'utf8').trim();
+    }
     const id = crypto.randomUUID();
-    fs.mkdirSync(path.dirname(INSTALL_FILE), { recursive: true, mode: 0o700 });
-    fs.writeFileSync(INSTALL_FILE, id, { mode: 0o600 });
+    fs.writeFileSync(INSTALL_FILE, id, { mode: 0o600, flag: 'wx' });
     return id;
   } catch { return crypto.randomUUID(); }
 }
@@ -69,7 +79,7 @@ function distinctId(): string {
 
 /** Best-effort analytics: failures never affect the campus client. */
 export function track(event: string, properties: Record<string, unknown> = {}) {
-  if (process.env.POSTHOG_DISABLED === '1' || !POSTHOG_KEY) return;
+  if (process.env.POSTHOG_DISABLED === '1' || !POSTHOG_HOST || !POSTHOG_KEY) return;
   const safe: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(properties)) {
     if (ALLOWED_PROPERTIES.has(key)) safe[key] = value;

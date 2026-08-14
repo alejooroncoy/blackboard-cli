@@ -4,6 +4,26 @@ All notable changes to `campus-cli` (formerly `blackboard-upc`) will be document
 
 ---
 
+## [2.0.0] — 2026-08-14
+
+### Security
+- Las descargas MCP ahora quedan confinadas a `~/Downloads/campus-cli` (configurable por la persona que inicia el proceso mediante `CAMPUS_DOWNLOAD_DIR`). `outputDir` solo acepta subdirectorios relativos, se rechazan escapes por symlink antes de crear carpetas, nunca se sobrescribe un archivo, cada descarga tiene un límite de 100 MB y la raíz completa una cuota de 500 MB coordinada entre procesos. Los bytes se escriben primero en un archivo privado, los temporales abandonados se recuperan bajo lock y el nombre final solo aparece atómicamente al completar.
+- Las subidas locales y entregas finales ya no confían en un `confirmed: true` generado por el agente: el servidor usa la elicitation de MCP para pedir una confirmación directamente en la interfaz del cliente y falla de forma cerrada si el cliente no la soporta. Las subidas también rechazan symlinks y archivos no regulares.
+- `blackboard_raw_api` queda limitado a endpoints `/learn/api/public/` y exige confirmación directa para `POST`, `PUT`, `PATCH` y `DELETE`. Las descargas directas solo aceptan URLs `/bbcswebdav/` del origen HTTPS exacto de Blackboard, incluidos redirects.
+- `session.json` deja de duplicar cookies de Microsoft: solo persiste cookies aplicables a Blackboard y migra automáticamente sesiones antiguas. Los archivos de sesión y cuenta se escriben de forma atómica, con permisos privados y sin seguir symlinks.
+- Los endpoints configurables de cuenta y analítica exigen HTTPS, salvo loopback explícito para desarrollo.
+- El sitio añade CSP, HSTS y protección contra framing.
+
+### Changed
+- **Breaking**: Node.js 22 o superior pasa a ser requisito mínimo. Esto alinea el runtime soportado con Playwright 1.62 y evita anunciar versiones de Node fuera de soporte.
+- Astro 5 → 7.2.2 y dependencias transitivas actualizadas hasta dejar `npm audit` en cero tanto para el CLI como para el sitio.
+- Playwright y Zod actualizados; dependencias de compilación movidas a `devDependencies`; eliminados `@browserbasehq/sdk`, `playwright-core` y `@types/inquirer` porque no se usaban directamente.
+- Las instrucciones con `npx` fijan `campus-cli@2.0.0` para que un cliente MCP no ejecute silenciosamente una versión distinta en el siguiente arranque.
+
+### Added
+- Pruebas de regresión para aislamiento de origen, endpoints raw/descarga, filtrado de cookies, URLs TLS, confinamiento de descargas, no sobrescritura y límites de tamaño.
+- Pruebas de regresión que verifican el cierre del stream HTTP cuando una descarga no puede crear el archivo de destino o recibe un nombre inseguro en la respuesta.
+
 ## [1.4.2] — 2026-08-08
 
 ### Security

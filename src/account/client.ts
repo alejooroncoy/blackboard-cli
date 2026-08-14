@@ -1,8 +1,12 @@
 import type { CampusAccount } from './types.js';
+import { secureServiceUrl } from '../security/urls.js';
 
 // The hosted "Campus account" service (Google login, OAuth2+PKCE) — same
 // backend that serves the MCP connector at mcp.campuscli.com/.well-known/oauth-authorization-server.
-export const CAMPUS_ACCOUNT_URL = (process.env.CAMPUS_ACCOUNT_URL ?? 'https://mcp.campuscli.com').replace(/\/$/, '');
+export const CAMPUS_ACCOUNT_URL = secureServiceUrl(
+  process.env.CAMPUS_ACCOUNT_URL ?? 'https://mcp.campuscli.com',
+  'CAMPUS_ACCOUNT_URL',
+);
 
 export function buildAuthorizeUrl(input: { redirectUri: string; codeChallenge: string; state: string }): string {
   const url = new URL(`${CAMPUS_ACCOUNT_URL}/v1/auth/google/start`);

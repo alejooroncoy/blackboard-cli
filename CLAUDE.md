@@ -33,11 +33,12 @@ If you get `Not authenticated`, ask the user to run `campus login`.
 
 ## Agent behavior rules
 
-- **Always confirm before submitting** (`blackboard_submit_attempt`). Show the user what will be submitted and ask for confirmation. Never submit silently. `blackboard_save_attempt_draft` (saving progress without sending) does not need this confirmation — only the final submit does.
+- **Always confirm before submitting** (`blackboard_submit_attempt`). Show the user what will be submitted and ask for confirmation. The server also requires direct MCP elicitation and fails closed when the client cannot show it. `blackboard_save_attempt_draft` (saving progress without sending) does not need this confirmation — only the final submit does.
+- **Downloads are sandboxed** — MCP downloads go under `~/Downloads/campus-cli` (or the user-configured `CAMPUS_DOWNLOAD_DIR`). `outputDir` is a relative subdirectory, never an arbitrary path, and existing files are not overwritten.
 - **`blackboard_save_attempt_draft`/`blackboard_submit_attempt` only work on file/text/link-submission columns** — not on quiz-style columns with interactive questions (both look identical from `blackboard_list_assignments`, since Ultra treats tests and assignments as the same `resource/x-bb-asmt-test-link` content type). If Blackboard returns `400` with a message like "Attempts cannot be created for assessments with non-presentation-only questions", that column is actually a quiz/test — tell the user, don't retry. A `403 bb-rest-attempt-past-due-exception` is expected/normal once the due date has passed and late attempts aren't allowed — same as the web UI would show, not a bug.
 - **Show grades in context** — when showing grades, also show the assignment name, max score, and due date if available.
 - **Navigate content recursively** — if the user asks for materials, explore subfolders using `blackboard_list_contents` with `parentId`.
-- **Use `blackboard_raw_api` for anything not covered** — the Blackboard REST API is extensive. If there's no specific tool, use `blackboard_raw_api` with the correct endpoint.
+- **Use `blackboard_raw_api` for anything not covered** — it is restricted to `/learn/api/public/`. `POST`, `PUT`, `PATCH`, and `DELETE` require direct user confirmation through MCP elicitation.
 - **Session errors are recoverable** — if you get a session error, tell the user to run `campus login` (not a fatal error).
 - **Respect rate limits** — don't fan out more than 5 parallel API calls.
 

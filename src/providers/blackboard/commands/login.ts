@@ -40,7 +40,7 @@ export async function runBlackboardLogin(opts: BlackboardLoginOptions = {}): Pro
     });
     track('login_success', { method: 'microsoft_sso' });
 
-    const ssoExpiresAt = getSsoExpiry(session.cookies);
+    const ssoExpiresAt = session.ssoExpiresAt ?? getSsoExpiry(session.cookies);
     const { summary, note } = formatSessionLifetime(session.expiresAt, ssoExpiresAt);
     console.log(ok(`Sesión guardada`));
     console.log(chalk.gray(`  ${summary}`));
@@ -112,7 +112,7 @@ export function loginCommand(program: Command) {
       }
 
       console.log(chalk.green(`Logged in as: ${chalk.bold(session!.userName || session!.userId || 'unknown')}`));
-      const ssoExpiresAt = getSsoExpiry(session!.cookies);
+      const ssoExpiresAt = session!.ssoExpiresAt ?? getSsoExpiry(session!.cookies);
       const { summary, note } = formatSessionLifetime(session!.expiresAt, ssoExpiresAt);
       console.log(chalk.gray(summary));
       console.log(chalk.gray(note));

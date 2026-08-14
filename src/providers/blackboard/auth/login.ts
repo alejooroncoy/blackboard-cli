@@ -3,7 +3,7 @@ import os from 'os';
 import path from 'path';
 import type { BrowserContext, Page } from 'playwright';
 import type { Session, Cookie } from '../types.js';
-import { saveSession } from './session.js';
+import { blackboardCookies, saveSession } from './session.js';
 import { launchPersistentContextSafe } from '../../../browser-install.js';
 
 const BASE_URL = 'https://aulavirtual.upc.edu.pe';
@@ -89,9 +89,11 @@ function extractXsrf(cookies: Cookie[]): string {
 }
 
 function ensureProfileDir(): void {
-  if (!fs.existsSync(PROFILE_DIR)) {
-    fs.mkdirSync(PROFILE_DIR, { recursive: true, mode: 0o700 });
+  if (fs.existsSync(PROFILE_DIR) && fs.lstatSync(PROFILE_DIR).isSymbolicLink()) {
+    throw new Error(`Refusing to use a browser profile through a symbolic link: ${PROFILE_DIR}`);
   }
+  fs.mkdirSync(PROFILE_DIR, { recursive: true, mode: 0o700 });
+  fs.chmodSync(PROFILE_DIR, 0o700);
 }
 
 export function isBlackboardUltraUrl(value: string | URL): boolean {
@@ -279,11 +281,12 @@ export async function login(opts: LoginOptions = {}): Promise<Session> {
     const displayName = resolveDisplayName(userData);
 
     const session: Session = {
-      cookies,
+      cookies: blackboardCookies(cookies),
       xsrfToken: nonce,
       userId: userData?.id,
       userName: displayName,
       expiresAt: extractBbRouterExpiry(cookies),
+      ssoExpiresAt: getSsoExpiry(cookies),
     };
 
     saveSession(session);
@@ -299,6 +302,10 @@ export async function silentRelogin(previousSession?: Session | null): Promise<S
   if (!fs.existsSync(PROFILE_DIR)) {
     throw new SilentLoginFailed('No browser profile — run campus login first');
   }
+  if (fs.lstatSync(PROFILE_DIR).isSymbolicLink()) {
+    throw new SilentLoginFailed('Browser profile is a symbolic link; run campus logout and login again');
+  }
+  fs.chmodSync(PROFILE_DIR, 0o700);
 
   let context;
   try {
@@ -349,11 +356,12 @@ export async function silentRelogin(previousSession?: Session | null): Promise<S
     }
 
     const session: Session = {
-      cookies,
+      cookies: blackboardCookies(cookies),
       xsrfToken: extractXsrf(cookies),
       userId,
       userName,
       expiresAt: extractBbRouterExpiry(cookies),
+      ssoExpiresAt: getSsoExpiry(cookies),
     };
 
     saveSession(session);

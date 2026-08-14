@@ -101,23 +101,32 @@ export async function getAttempt(
 
 export async function uploadFile(
   client: AxiosInstance,
-  filePath: string
+  filePath: string,
+  verifiedFd?: number,
 ): Promise<string> {
   const fileName = path.basename(filePath);
-  const fileBuffer = fs.readFileSync(filePath);
+  const { size } = verifiedFd === undefined ? fs.statSync(filePath) : fs.fstatSync(verifiedFd);
+  const stream = fs.createReadStream(filePath, verifiedFd === undefined
+    ? undefined
+    : { fd: verifiedFd, autoClose: true });
 
   const form = new FormData();
-  form.append('file', fileBuffer, {
+  form.append('file', stream, {
     filename: fileName,
     contentType: 'application/octet-stream',
+    knownLength: size,
   });
 
-  const r = await client.post('/learn/api/public/v1/uploads', form, {
-    headers: {
-      ...form.getHeaders(),
-    },
-  });
-  return r.data.id as string;
+  try {
+    const r = await client.post('/learn/api/public/v1/uploads', form, {
+      headers: {
+        ...form.getHeaders(),
+      },
+    });
+    return r.data.id as string;
+  } finally {
+    stream.destroy();
+  }
 }
 
 export async function submitAttempt(
