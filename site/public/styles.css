@@ -932,12 +932,22 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
 .schedule-row--clash .schedule-row__day { background: #fbe3d1; color: #93551c; }
 .schedule-row--clash svg { color: var(--warm); }
 
-/* ── Brand homepage: hero without a product mockup, and the product picker ──
-   The root page's job is routing to the right product, not pitching one, so
-   the hero drops the two-column product-stage layout and the two cards below
-   get equal visual weight — neither product outranks the other. */
-.hero--text { grid-template-columns: 1fr; min-height: auto; padding-block: 68px 28px; }
+/* ── Brand homepage: hero stat card instead of a single-product mockup ──────
+   The root page's job is routing to the right product, so its hero visual is
+   a shared stat, not a mockup of either product — bare, oversized type, the
+   same way the h1 next to it carries weight without a frame around it. */
+.hero--text { min-height: auto; padding-block: 68px 40px; }
 .hero--text .hero__copy { max-width: 640px; }
+.hero__stat { display: flex; flex-direction: column; gap: 14px; justify-self: center; }
+.hero__stat .eyebrow { margin: 0; }
+.hero__stat-number { font-size: clamp(84px, 10vw, 140px); font-weight: 700; letter-spacing: -.01em; color: var(--night); line-height: .85; }
+.hero__stat-plus { color: var(--sky); }
+.hero__stat-label { max-width: 300px; margin: 0; color: var(--muted); font-size: 17px; line-height: 1.55; }
+.hero__stat-label strong { color: var(--night); }
+
+@media (max-width: 620px) {
+  .hero__stat-number { font-size: 76px; }
+}
 
 .product-picks { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 68px; }
 .product-pick { display: flex; flex-direction: column; padding: 40px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); box-shadow: 0 14px 34px rgba(16, 42, 58, .06); transition: transform 180ms ease, box-shadow 180ms ease; }
@@ -961,6 +971,7 @@ details p { max-width: 580px; padding: 0 22px 22px; margin: 0; color: var(--mute
 
 @media (max-width: 1050px) {
   .product-picks { grid-template-columns: 1fr; }
+  .hero__stat { justify-self: start; padding-top: 6px; }
 }
 @media (max-width: 620px) {
   .hero--text { padding-block: 40px 18px; }
