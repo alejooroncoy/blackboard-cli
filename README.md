@@ -20,6 +20,7 @@ campus assignments list --pending
 ## Qué puedes hacer
 
 - Ver tus cursos del ciclo.
+- Consultar tu horario semanal, con horas y aulas de tus cursos matriculados.
 - Revisar tareas pendientes, fechas de entrega y notas.
 - Descargar archivos y carpetas completas de Blackboard.
 - Consultar anuncios, contenidos y calificaciones.
@@ -306,7 +307,7 @@ Cada cliente tiene su guía con la ruta exacta del archivo, cómo verificar la c
 
 ## Herramientas MCP
 
-Todas las herramientas actuales usan el prefijo `blackboard_` para evitar colisiones cuando se agreguen `canvas_*` o `moodle_*`.
+Las herramientas de Aula Virtual usan el prefijo `blackboard_`; `campus_get_weekly_schedule` consulta la matrícula en Banner UPC.
 
 | Herramienta | Descripción |
 |---|---|
@@ -329,6 +330,7 @@ Todas las herramientas actuales usan el prefijo `blackboard_` para evitar colisi
 | `blackboard_download_file_url` | Descargar un archivo desde una URL bbcswebdav |
 | `blackboard_download_feedback_file` | [EXPERIMENTAL] Descargar un archivo de feedback adjunto a una nota |
 | `blackboard_raw_api` | API pública de Blackboard; los métodos que modifican datos piden confirmación directa |
+| `campus_get_weekly_schedule` | Horario semanal UPC de la matrícula activa (horas, aulas, secciones y cursos sin clase presencial) |
 
 Las descargas MCP nunca escriben fuera de `~/Downloads/campus-cli`, no sobrescriben archivos y aplican límites de 100 MB por archivo y 500 MB para la raíz completa. Puedes elegir otra raíz al iniciar el servidor con `CAMPUS_DOWNLOAD_DIR=/ruta/segura`; el argumento `outputDir` de las tools solo crea subdirectorios relativos dentro de ella. Las subidas, entregas finales y llamadas raw que modifican datos requieren que el cliente soporte MCP elicitation; si no la soporta, la operación falla sin ejecutarse.
 
