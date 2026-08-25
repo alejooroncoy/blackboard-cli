@@ -20,11 +20,20 @@ function formatLocation(meeting: Meeting): string | null {
   return [meeting.building, meeting.room].filter(Boolean).join(' · ') || null;
 }
 
+/** Banner's registration history includes rows that are no longer part of the
+ * student's current enrolment. Keep unfamiliar statuses visible rather than
+ * accidentally hiding a valid class, but never schedule explicitly inactive
+ * rows. */
+function isActiveRegistration(registration: Registration): boolean {
+  return !/\b(drop(?:ped)?|withdraw(?:n)?|cancel(?:l?ed)?|retirad[oa]?|cancelad[oa]?)\b/i.test(registration.status ?? '');
+}
+
 /** Turns Banner's registration rows into a predictable, Monday-first weekly
  * agenda. Keeping the raw course list alongside the days makes asynchronous
  * courses visible instead of silently disappearing from the student's plan. */
 export function weeklySchedule(term: Term, registrations: Registration[]) {
-  const classes = registrations.flatMap((registration) => registration.meetings.map((meeting) => ({
+  const activeRegistrations = registrations.filter(isActiveRegistration);
+  const classes = activeRegistrations.flatMap((registration) => registration.meetings.map((meeting) => ({
     day: meeting.day,
     startsAt: formatTime(meeting.begin),
     endsAt: formatTime(meeting.end),
@@ -47,7 +56,7 @@ export function weeklySchedule(term: Term, registrations: Registration[]) {
 
   return {
     term: { code: term.code, description: term.description },
-    courses: registrations.map((registration) => ({
+    courses: activeRegistrations.map((registration) => ({
       courseCode: registration.courseCode,
       courseTitle: registration.courseTitle,
       section: registration.crn,

@@ -29,3 +29,23 @@ test('weekly schedule is Monday-first, formats times, and retains asynchronous c
   });
   assert.equal(result.courses.find((course) => course.courseCode === '1ASI0999')?.hasScheduledMeetings, false);
 });
+
+test('weekly schedule excludes dropped and withdrawn registrations', () => {
+  const registration = (courseCode: string, status: string) => ({
+    term: '202610', courseCode, courseTitle: courseCode, crn: `${courseCode}-NRC`, credits: 3,
+    subjectDescription: null, studyPath: null, status, scheduleType: 'Teoría',
+    meetings: [{ day: 1, begin: '0900', end: '1059', building: 'Monterrico', room: 'A-101' }],
+  });
+  const result = weeklySchedule(
+    { code: '202610', description: '1er Semestre 2026 Pregrado', viewOnly: false },
+    [
+      registration('ACTIVA', 'Web Registered'),
+      registration('RETIRADA', 'Withdrawn'),
+      registration('BAJA', 'Dropped by Web'),
+      registration('CANCELADA', 'Canceled'),
+    ],
+  );
+
+  assert.deepEqual(result.courses.map((course) => course.courseCode), ['ACTIVA']);
+  assert.deepEqual(result.week[0].classes.map((item) => item.courseCode), ['ACTIVA']);
+});
