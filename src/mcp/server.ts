@@ -1,6 +1,7 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { registerBlackboardTools } from '../providers/blackboard/mcp-tools.js';
+import { registerBannerTools } from '../providers/banner/mcp-tools.js';
 import { track } from '../analytics.js';
 
 // La versión que anunciamos en el handshake sale del package.json. Estaba
@@ -19,6 +20,10 @@ terminal (abre un navegador para el SSO de Microsoft).
 
 Flujo típico: blackboard_list_courses → blackboard_list_assignments /
 blackboard_get_grades → blackboard_list_contents para materiales.
+
+campus_get_weekly_schedule consulta la matrícula UPC en Banner y devuelve el
+horario semanal de lunes a domingo. Úsala para responder qué clases tiene el
+estudiante, a qué hora y en qué aula; acepta un código de período opcional.
 
 Para entregas: blackboard_upload_attempt_file sube cada archivo/imagen y
 devuelve un fileUploadId; blackboard_save_attempt_draft guarda texto y/o
@@ -50,6 +55,7 @@ export async function startMcpServer() {
   );
 
   registerBlackboardTools(server);
+  registerBannerTools(server);
 
   const transport = new StdioServerTransport();
   await server.connect(transport);

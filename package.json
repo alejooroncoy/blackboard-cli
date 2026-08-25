@@ -14,6 +14,7 @@
     "./assignments": "./dist/providers/blackboard/commands/assignments.js",
     "./types": "./dist/providers/blackboard/types.js",
     "./mcp-tools": "./dist/providers/blackboard/mcp-tools.js",
+    "./banner-schedule": "./dist/providers/banner/schedule.js",
     "./analytics": "./dist/analytics.js"
   },
   "files": [
