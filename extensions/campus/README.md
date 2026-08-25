@@ -1,4 +1,4 @@
-# Campus Live Notes — MVP de extensión Chrome
+# Campus — extensión Chrome
 
 Este prototipo abre un panel lateral derecho en una clase de `upc.class.com`. Lee los subtítulos que Class ya está mostrando después de que el estudiante elija explícitamente ese recuadro. No captura audio, no guarda el enlace de la clase ni sus credenciales.
 

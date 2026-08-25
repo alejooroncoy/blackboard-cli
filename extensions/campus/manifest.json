@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "Campus Live Notes",
-  "description": "Transcribe una clase de Class y consulta el contexto de tu curso Blackboard.",
+  "name": "Campus",
+  "description": "Extensión de Campus para Class y Blackboard.",
   "version": "0.1.0",
   "permissions": ["storage", "sidePanel", "scripting"],
   "host_permissions": [
@@ -9,7 +9,7 @@
     "https://aulavirtual.upc.edu.pe/*"
   ],
   "action": {
-    "default_title": "Abrir Campus Live Notes"
+    "default_title": "Abrir Campus"
   },
   "background": { "service_worker": "background.js", "type": "module" },
   "content_scripts": [{
