@@ -193,6 +193,8 @@ npx campus-cli@2.0.0 mcp
 
 Eso permite conectar tu campus a clientes como Claude, Cursor, GitHub Copilot, OpenAI Codex CLI, Windsurf y otros clientes compatibles con Model Context Protocol.
 
+Además de las herramientas de Blackboard, el MCP incluye `campus_get_weekly_schedule`: consulta tu matrícula en Banner UPC y organiza las clases de lunes a domingo. Por defecto usa el período activo; también puedes pasar un código de período si quieres revisar un ciclo anterior.
+
 ### Claude Code
 
 Agrega esto a `.mcp.json`:
@@ -307,7 +309,7 @@ Cada cliente tiene su guía con la ruta exacta del archivo, cómo verificar la c
 
 ## Herramientas MCP
 
-Las herramientas de Aula Virtual usan el prefijo `blackboard_`; `campus_get_weekly_schedule` consulta la matrícula en Banner UPC.
+Las herramientas de Aula Virtual usan el prefijo `blackboard_`; `campus_get_weekly_schedule` consulta la matrícula en Banner UPC. Las de UPC Class usan `uclass_`: entregan fuentes estructuradas para que la IA conectada (Codex, Claude, ChatGPT, etc.) las interprete, sin enviar la grabación a una IA propia del CLI.
 
 | Herramienta | Descripción |
 |---|---|
@@ -331,8 +333,13 @@ Las herramientas de Aula Virtual usan el prefijo `blackboard_`; `campus_get_week
 | `blackboard_download_feedback_file` | [EXPERIMENTAL] Descargar un archivo de feedback adjunto a una nota |
 | `blackboard_raw_api` | API pública de Blackboard; los métodos que modifican datos piden confirmación directa |
 | `campus_get_weekly_schedule` | Horario semanal UPC de la matrícula activa (horas, aulas, secciones y cursos sin clase presencial) |
+| `uclass_list_recordings` | Grabaciones publicadas de UPC Class para un curso Blackboard |
+| `uclass_search_transcript` | Fragmentos con contexto y marcas de tiempo de una transcripción de Class |
+| `uclass_read_transcript` | Transcripción estructurada completa de una grabación de Class |
 
 Las descargas MCP nunca escriben fuera de `~/Downloads/campus-cli`, no sobrescriben archivos y aplican límites de 100 MB por archivo y 500 MB para la raíz completa. Puedes elegir otra raíz al iniciar el servidor con `CAMPUS_DOWNLOAD_DIR=/ruta/segura`; el argumento `outputDir` de las tools solo crea subdirectorios relativos dentro de ella. Las subidas, entregas finales y llamadas raw que modifican datos requieren que el cliente soporte MCP elicitation; si no la soporta, la operación falla sin ejecutarse.
+
+Las transcripciones de Class se consultan por HTTP desde la sesión SSO existente, no se descarga el video ni el audio. Durante la sesión MCP se reutilizan la lista de grabaciones y la transcripción ya leída; al cerrar el proceso esa caché en memoria desaparece.
 
 Ejemplos de uso con un asistente:
 

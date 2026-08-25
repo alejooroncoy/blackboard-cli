@@ -50,6 +50,8 @@ function getGradeScore(grade: any) {
   return grade?.displayGrade?.score ?? grade?.score ?? null;
 }
 
+const ASSIGNMENTS_LIST_PARALLELISM = 5;
+
 function formatAssignment(col: any, grade: any, opts: { pending?: boolean; courseName?: string }) {
   const possible = col.score?.possible ?? '?';
   const due = col.grading?.due;
@@ -127,16 +129,28 @@ export function assignmentsCommand(program: Command) {
               name: uc.course?.name || uc.courseId,
             }));
 
-          const results = [];
+          const results: Array<{ courseId: string; courseName: string; columns: any[]; gradesRes: any[] }> = [];
           const errors: Array<{ courseId: string; courseName: string; error: string }> = [];
 
-          for (const course of availableCourses) {
-            spinner.text = `Fetching assignments: ${course.name}`;
-            try {
-              results.push(await loadCourseAssignments(course.id, course.name));
-            } catch (err: any) {
-              errors.push({ courseId: course.id, courseName: course.name, error: err.message });
-            }
+          for (let i = 0; i < availableCourses.length; i += ASSIGNMENTS_LIST_PARALLELISM) {
+            const chunk = availableCourses.slice(i, i + ASSIGNMENTS_LIST_PARALLELISM);
+            const settled = await Promise.allSettled(chunk.map(async (course) => {
+              spinner.text = `Fetching assignments: ${course.name}`;
+              return loadCourseAssignments(course.id, course.name);
+            }));
+
+            settled.forEach((entry, idx) => {
+              const course = chunk[idx];
+              if (entry.status === 'fulfilled') {
+                results.push(entry.value);
+              } else {
+                errors.push({
+                  courseId: course.id,
+                  courseName: course.name,
+                  error: entry.reason instanceof Error ? entry.reason.message : String(entry.reason),
+                });
+              }
+            });
           }
 
           const total = results.reduce((sum, r) => sum + r.columns.length, 0);

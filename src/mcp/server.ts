@@ -2,6 +2,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { registerBlackboardTools } from '../providers/blackboard/mcp-tools.js';
 import { registerBannerTools } from '../providers/banner/mcp-tools.js';
+import { registerUclassTools } from '../providers/uclass/mcp-tools.js';
 import { track } from '../analytics.js';
 
 // La versión que anunciamos en el handshake sale del package.json. Estaba
@@ -17,6 +18,11 @@ Hoy solo Blackboard Learn (Aula Virtual) está implementado — todas sus tools
 llevan el prefijo blackboard_*. Antes de usar cualquiera, verifica sesión con
 blackboard_whoami; si falla, pide al usuario que corra \`campus login\` en su
 terminal (abre un navegador para el SSO de Microsoft).
+
+Las herramientas uclass_* leen las transcripciones nativas de grabaciones UPC
+Class publicadas para un curso Blackboard. Primero usa uclass_search_transcript:
+devuelve evidencia con contexto y [m:ss]. Nunca conviertas candidatos,
+propuestas o resultados parciales en decisiones sin verificar el tramo completo.
 
 Flujo típico: blackboard_list_courses → blackboard_list_assignments /
 blackboard_get_grades → blackboard_list_contents para materiales.
@@ -56,6 +62,7 @@ export async function startMcpServer() {
 
   registerBlackboardTools(server);
   registerBannerTools(server);
+  registerUclassTools(server);
 
   const transport = new StdioServerTransport();
   await server.connect(transport);

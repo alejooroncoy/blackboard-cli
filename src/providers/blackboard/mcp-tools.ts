@@ -19,6 +19,21 @@ import { track } from '../../analytics.js';
 import { downloadRoot, resolveDownloadDir, safeNewFilePath, writeNamedDownload } from '../../security/files.js';
 
 const MAX_UPLOAD_BYTES = 50 * 1024 * 1024; // 50MB
+const MCP_MAX_PARALLELISM = 5;
+
+async function mapWithConcurrency<T, U>(
+  items: readonly T[],
+  limit: number,
+  mapper: (item: T) => Promise<U>,
+): Promise<U[]> {
+  const output: U[] = [];
+  for (let i = 0; i < items.length; i += limit) {
+    const chunk = items.slice(i, i + limit);
+    const chunkResult = await Promise.all(chunk.map(mapper));
+    output.push(...chunkResult);
+  }
+  return output;
+}
 
 // Blackboard's own IDs (course, content, column, attempt, file) always look like
 // `_529580_1`. These get interpolated straight into REST path templates below —
@@ -584,8 +599,10 @@ export function registerBlackboardTools(server: McpServer) {
 
       const assignments = await listAssignments(client, courseId);
 
-      const results = await Promise.all(
-        assignments.map(async (col) => {
+      const results = await mapWithConcurrency(
+        assignments,
+        MCP_MAX_PARALLELISM,
+        async (col) => {
           try {
             const attempts = await listAttempts(client, courseId, col.id);
             if (!attempts.length) {
@@ -630,7 +647,7 @@ export function registerBlackboardTools(server: McpServer) {
           } catch {
             return { assignment: col.name, columnId: col.id, status: 'error_fetching' };
           }
-        })
+        },
       );
 
       return { content: [{ type: 'text', text: JSON.stringify(results) }] };

@@ -15,8 +15,8 @@ import Base from "../../layouts/Base.astro";
  */
 
 const url = "https://campuscli.com/privacidad/";
-const updated = "2026-08-06";
-const updatedLabel = "6 de agosto de 2026";
+const updated = "2026-08-22";
+const updatedLabel = "22 de agosto de 2026";
 
 const schemas = [
   {
@@ -68,9 +68,9 @@ const schemas = [
       <ul>
         <li><strong>Nunca vemos tu contraseña.</strong> Inicias sesión en la página de tu universidad, no en la nuestra.</li>
         <li><strong>No guardamos el contenido de tus cursos</strong>, ni tus notas, ni tus archivos.</li>
-        <li>Solo conservamos tu sesión <strong>si tú lo activas</strong>, cifrada y por 90 días como máximo.</li>
+        <li>Solo conservamos tu sesión <strong>si tú activas “Mantener conexión activa”</strong>, cifrada y por 90 días como máximo.</li>
         <li>Las métricas van <strong>seudonimizadas</strong>: un hash irreversible, sin contenido académico.</li>
-        <li>Puedes pedirnos <strong>ver, corregir o borrar</strong> tus datos escribiendo a <a class="prose-link" href="mailto:info@campuscli.com">info@campuscli.com</a>.</li>
+        <li>Puedes <strong>revocar la conexión o eliminar tu cuenta</strong> desde Campus Mobile; también puedes escribir a <a class="prose-link" href="mailto:info@campuscli.com">info@campuscli.com</a>.</li>
       </ul>
     </section>
 
@@ -96,11 +96,11 @@ const schemas = [
 
     <h3>Material de sesión de tu universidad</h3>
     <ul>
-      <li><strong>Qué es:</strong> el material que permite mantener tu sesión abierta sin volver a iniciarla.</li>
+      <li><strong>Qué es:</strong> el material que permite mantener tu sesión abierta sin volver a iniciarla. En Campus Mobile, la app lee solo el almacén de cookies de <em>su propio</em> navegador integrado después de que tú inicias sesión en la página real de la institución.</li>
       <li><strong>Para qué:</strong> que Campus pueda consultar tu Aula Virtual sin pedirte login en cada consulta.</li>
-      <li><strong>Base legal:</strong> tu consentimiento explícito. Es una función opcional: si no la activas, no se guarda nada.</li>
-      <li><strong>Cuánto:</strong> 90 días como máximo, y menos si tu universidad lo invalida antes. Puedes revocarlo cuando quieras cerrando sesión.</li>
-      <li><strong>Cómo:</strong> cifrado con AES-256-GCM y sellado de forma que el servidor que lo custodia no tiene la clave para abrirlo.</li>
+      <li><strong>Base legal:</strong> tu consentimiento explícito. Es una función opcional: el interruptor <em>Mantener conexión activa</em> está apagado inicialmente y, si no lo activas, no se crea una sesión cloud.</li>
+      <li><strong>Cuánto:</strong> 90 días como máximo, y menos si tu universidad lo invalida antes. Puedes revocarlo desde la app o eliminar tu cuenta cuando quieras.</li>
+      <li><strong>Cómo:</strong> cifrado con AES-256-GCM y sellado de forma que el servidor que lo custodia no tiene la clave para abrirlo. El material reutilizable de Microsoft viaja directamente al worker aislado que lo sella; el relay público no lo recibe sin cifrar.</li>
     </ul>
 
     <h3>Identificador de cuenta y universidad</h3>
@@ -108,6 +108,21 @@ const schemas = [
       <li><strong>Para qué:</strong> saber a qué persona pertenece una sesión y en qué institución.</li>
       <li><strong>Base legal:</strong> ejecución del servicio que nos pediste.</li>
       <li><strong>Cuánto:</strong> mientras tengas una sesión activa con nosotros.</li>
+    </ul>
+
+    <h3>Datos de tu cuenta Campus</h3>
+    <ul>
+      <li><strong>Qué es:</strong> el identificador, nombre, correo y, si Google lo entrega, foto de perfil de la cuenta que usas para entrar a Campus.</li>
+      <li><strong>Para qué:</strong> autenticarte, vincular la sesión universitaria a la cuenta correcta y evitar que alguien que fotografíe un QR pueda conectar otra cuenta.</li>
+      <li><strong>Base legal:</strong> ejecución del servicio que nos pediste.</li>
+      <li><strong>Cuánto:</strong> mientras exista tu cuenta Campus; puedes eliminarla desde Campus Mobile.</li>
+    </ul>
+
+    <h3>Cámara para códigos QR</h3>
+    <ul>
+      <li><strong>Qué es:</strong> acceso a la cámara únicamente mientras eliges escanear un QR de Campus Web.</li>
+      <li><strong>Para qué:</strong> vincular el teléfono con la misma cuenta Campus que ya está abierta en la web.</li>
+      <li><strong>Cuánto:</strong> no guardamos ni enviamos fotografías, vídeo ni fotogramas de la cámara.</li>
     </ul>
 
     <h3>Métricas de uso</h3>
@@ -164,8 +179,8 @@ const schemas = [
     <h2 id="terceros">4. Con quién compartimos</h2>
     <p>
       <strong>No vendemos tus datos.</strong> No los cedemos a terceros con
-      fines comerciales ni publicitarios. Solo trabajamos con dos proveedores
-      que actúan como encargados del tratamiento:
+      fines comerciales ni publicitarios. Solo trabajamos con proveedores que
+      participan en la autenticación, infraestructura o seguridad del servicio:
     </p>
     <ul>
       <li>
@@ -177,11 +192,22 @@ const schemas = [
         quien envía el formulario de acceso anticipado es una persona y no un
         bot.
       </li>
+      <li>
+        <strong>Google</strong> — autentica tu cuenta Campus cuando eliges
+        entrar con Google. Google recibe tus credenciales directamente bajo su
+        propia política; Campus recibe únicamente la identidad verificada que
+        necesita para crear tu cuenta.
+      </li>
+      <li>
+        <strong>Railway</strong> (Estados Unidos) — aloja el relay, la bóveda
+        cifrada y el worker aislado que operan el servicio. No puede abrir el
+        material de Microsoft sellado que se conserva para la reconexión.
+      </li>
     </ul>
     <p>
-      Ambos están fuera del Perú, así que existe un flujo transfronterizo de
-      datos. Al aceptar esta política consientes esa transferencia. Ninguno de
-      los dos recibe contenido de tus cursos ni credenciales.
+      Algunos de estos proveedores están fuera del Perú, así que existe un
+      flujo transfronterizo de datos. Al aceptar esta política consientes esa
+      transferencia. Ninguno recibe contenido de tus cursos ni tu contraseña.
     </p>
     <p>
       También podríamos entregar información si nos lo exige una autoridad
@@ -192,6 +218,7 @@ const schemas = [
     <ul>
       <li>Todo el tráfico viaja cifrado (HTTPS).</li>
       <li>El material de sesión se guarda con cifrado autenticado AES-256-GCM y sellado de modo que el servidor que lo custodia no puede abrirlo. Un compromiso total de ese servidor no expone ninguna credencial universitaria.</li>
+      <li>La cámara de Campus Mobile procesa el QR en el dispositivo y no crea una galería ni copia de imágenes.</li>
       <li>Los datos del formulario se guardan cifrados en reposo.</li>
       <li>Los enlaces de descarga son de un solo uso y caducan a los 10 minutos.</li>
       <li>Los identificadores en métricas van convertidos en hash irreversible.</li>
@@ -212,7 +239,7 @@ const schemas = [
     <ul>
       <li>Que te digamos qué datos tuyos tenemos.</li>
       <li>Que corrijamos algo que esté mal.</li>
-      <li>Que borremos tus datos, incluida tu sesión guardada y tu registro en el formulario.</li>
+      <li>Que borremos tus datos, incluida tu sesión guardada y tu registro en el formulario. En Campus Mobile puedes hacerlo inmediatamente desde <strong>Eliminar cuenta de Campus</strong>.</li>
       <li>Que dejemos de tratarlos para una finalidad concreta.</li>
     </ul>
     <p>
