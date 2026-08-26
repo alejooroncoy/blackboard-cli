@@ -4,7 +4,7 @@ import path from 'path';
 import { Command } from 'commander';
 import chalk from 'chalk';
 import { loginCommand } from './providers/blackboard/commands/login.js';
-import { coursesCommand } from './providers/blackboard/commands/courses.js';
+import { coursesCommand, messagesCommand } from './providers/blackboard/commands/courses.js';
 import { apiDocsCommand } from './providers/blackboard/commands/api-docs.js';
 import { downloadCommand } from './providers/blackboard/commands/download.js';
 import { assignmentsCommand } from './providers/blackboard/commands/assignments.js';
@@ -53,6 +53,7 @@ loginCommand(program);
 
 // Course commands
 coursesCommand(program);
+messagesCommand(program);
 
 // Status / ping
 program

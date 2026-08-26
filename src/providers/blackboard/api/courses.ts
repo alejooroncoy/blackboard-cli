@@ -61,6 +61,58 @@ export async function getCourseAnnouncements(
   return r.data;
 }
 
+/** Blackboard Ultra's authenticated inbox summary (not part of the public REST API). */
+export async function getMessageCourseSummaries(
+  client: AxiosInstance,
+  opts: { limit?: number; offset?: number } = {}
+): Promise<PaginatedResponse<any>> {
+  const params: Record<string, number> = { limit: opts.limit ?? 50 };
+  if (opts.offset !== undefined) params.offset = opts.offset;
+  const r = await client.get('/learn/api/v1/messages/summary', { params });
+  return r.data;
+}
+
+/** Conversations for one course in Blackboard Ultra's authenticated UI API. */
+export async function getCourseConversations(
+  client: AxiosInstance,
+  courseId: string,
+  opts: { limit?: number; offset?: number } = {}
+): Promise<PaginatedResponse<any>> {
+  if (!/^_\d+_\d+$/.test(courseId)) {
+    throw new Error(`courseId must look like a Blackboard ID, e.g. _529580_1`);
+  }
+  const params: Record<string, number> = { limit: opts.limit ?? 100 };
+  if (opts.offset !== undefined) params.offset = opts.offset;
+  const r = await client.get(`/learn/api/v1/courses/${courseId}/conversations`, { params });
+  return r.data;
+}
+
+/**
+ * Read additional Ultra conversation pages without allowing one inbox request
+ * to grow without bound. Callers surface `truncated` so an assistant never
+ * mistakes the bounded result for a complete long-running conversation list.
+ */
+export async function getCourseConversationsPageSet(
+  client: AxiosInstance,
+  courseId: string,
+  opts: { limit?: number; maxPages?: number } = {}
+): Promise<{ results: any[]; truncated: boolean }> {
+  const maxPages = opts.maxPages ?? 5;
+  let page = await getCourseConversations(client, courseId, { limit: opts.limit ?? 100 });
+  const results = [...page.results];
+  let nextPage = page.paging?.nextPage;
+  for (let pageNumber = 1; nextPage && pageNumber < maxPages; pageNumber += 1) {
+    if (!nextPage.startsWith(`/learn/api/v1/courses/${courseId}/conversations?`)) {
+      throw new Error('Refusing an unexpected Blackboard conversation page');
+    }
+    const response = await client.get(nextPage);
+    page = response.data;
+    results.push(...(page.results ?? []));
+    nextPage = page.paging?.nextPage;
+  }
+  return { results, truncated: Boolean(nextPage) };
+}
+
 export async function getGradeColumns(
   client: AxiosInstance,
   courseId: string
