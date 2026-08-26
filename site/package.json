@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
-    "astro": "^7.2.3"
+    "astro": "^7.2.3",
+    "posthog-js": "^1.420.0"
   },
   "devDependencies": {
     "esbuild": "^0.28.2"

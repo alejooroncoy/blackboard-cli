@@ -7,7 +7,6 @@ import { loadSession, loadOrRefreshSession, saveSession, clearSession, isSession
 import { createClient } from '../api/client.js';
 import { getMe } from '../api/courses.js';
 import { ok, fail, warn, whatNext, formatSessionLifetime } from '../../../ui/theme.js';
-import { track } from '../../../analytics.js';
 import { getValidAccountSession } from '../../../account/session.js';
 
 export type BlackboardLoginOptions = {
@@ -30,16 +29,12 @@ export async function runBlackboardLogin(opts: BlackboardLoginOptions = {}): Pro
 
   console.log(chalk.cyan('\nOpening browser for Microsoft login...'));
   console.log(chalk.gray('A browser window will open. Complete the login and it will close automatically.\n'));
-  track('login_started', { method: 'microsoft_sso' });
-
   try {
     const session = await login({
       headless: opts.headless ?? false,
       username: opts.username,
       password: opts.password,
     });
-    track('login_success', { method: 'microsoft_sso' });
-
     const ssoExpiresAt = session.ssoExpiresAt ?? getSsoExpiry(session.cookies);
     const { summary, note } = formatSessionLifetime(session.expiresAt, ssoExpiresAt);
     console.log(ok(`Sesión guardada`));
@@ -49,7 +44,6 @@ export async function runBlackboardLogin(opts: BlackboardLoginOptions = {}): Pro
     if (session.userId)   console.log(chalk.gray(`  ID:      ${session.userId}`));
     whatNext();
   } catch (err: any) {
-    track('login_failed', { method: 'microsoft_sso', error_type: err?.name ?? 'LoginError' });
     console.error(chalk.red(`\n✗ Login failed: ${err.message}`));
     process.exit(1);
   }

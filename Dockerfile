@@ -8,7 +8,6 @@
 FROM node:22-slim
 
 ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 \
-    POSTHOG_DISABLED=1 \
     NODE_ENV=production
 
 RUN npm install -g campus-cli@2.0.0 \

@@ -130,6 +130,7 @@ founderForm.addEventListener("submit", async (event) => {
     turnstileToken = "";
     dialog.close();
     showFounderToast();
+    window.dispatchEvent(new Event("campus:founder-submitted"));
   } catch (error) {
     formStatus.dataset.state = "error";
     formStatus.textContent = error instanceof Error ? error.message : "No pudimos enviar tu solicitud.";

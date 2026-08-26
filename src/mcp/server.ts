@@ -3,7 +3,6 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { registerBlackboardTools } from '../providers/blackboard/mcp-tools.js';
 import { registerBannerTools } from '../providers/banner/mcp-tools.js';
 import { registerUclassTools } from '../providers/uclass/mcp-tools.js';
-import { track } from '../analytics.js';
 
 // La versión que anunciamos en el handshake sale del package.json. Estaba
 // escrita a mano y se quedó en 1.0.0, así que cada cliente y cada directorio
@@ -49,7 +48,6 @@ no implementados todavía.
 `.trim();
 
 export async function startMcpServer() {
-  track('mcp_started');
   const server = new McpServer(
     {
       name: 'campus-cli',

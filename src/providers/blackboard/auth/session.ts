@@ -3,7 +3,6 @@ import path from 'path';
 import os from 'os';
 import crypto from 'node:crypto';
 import type { Session } from '../types.js';
-import { track } from '../../../analytics.js';
 
 const SESSION_DIR = path.join(os.homedir(), '.blackboard-cli');
 const SESSION_FILE = path.join(SESSION_DIR, 'session.json');
@@ -44,10 +43,7 @@ export function loadSession(): Session | null {
       session.cookies = filtered;
       saveSession(session); // one-time migration from sessions that stored Microsoft cookies
     }
-    if (session.expiresAt && Date.now() > session.expiresAt) {
-      track('session_expired', {});
-      return null; // expired
-    }
+    if (session.expiresAt && Date.now() > session.expiresAt) return null; // expired
     return session;
   } catch {
     return null;

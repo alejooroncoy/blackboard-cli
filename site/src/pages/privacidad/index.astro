@@ -5,8 +5,8 @@ import Base from "../../layouts/Base.astro";
  * Privacy notice.
  *
  * Every claim here is traceable to code: the vault's AES-256-GCM records, the
- * ninety-day grant ceiling, the ten-minute download tickets, the sha256
- * pseudonym in metrics.ts, and the in-memory IP counters in founders.ts. The
+ * ninety-day grant ceiling, the ten-minute download tickets, the strictly
+ * filtered product metrics, and the in-memory IP counters in founders.ts. The
  * two processors named — PostHog (us.i.posthog.com) and Cloudflare Turnstile —
  * are the only external hosts those files talk to.
  *
@@ -69,7 +69,7 @@ const schemas = [
         <li><strong>Nunca vemos tu contraseña.</strong> Inicias sesión en la página de tu universidad, no en la nuestra.</li>
         <li><strong>No guardamos el contenido de tus cursos</strong>, ni tus notas, ni tus archivos.</li>
         <li>Solo conservamos tu sesión <strong>si tú activas “Mantener conexión activa”</strong>, cifrada y por 90 días como máximo.</li>
-        <li>Las métricas van <strong>seudonimizadas</strong>: un hash irreversible, sin contenido académico.</li>
+        <li>Las métricas van <strong>seudonimizadas</strong>, sin contenido académico ni valores de formularios.</li>
         <li>Puedes <strong>revocar la conexión o eliminar tu cuenta</strong> desde Campus Mobile; también puedes escribir a <a class="prose-link" href="mailto:info@campuscli.com">info@campuscli.com</a>.</li>
       </ul>
     </section>
@@ -127,10 +127,10 @@ const schemas = [
 
     <h3>Métricas de uso</h3>
     <ul>
-      <li><strong>Qué es:</strong> qué herramienta se usó, si funcionó, cuánto tardó y qué tipo de error ocurrió si falló.</li>
-      <li><strong>Para qué:</strong> detectar fallos y saber qué mejorar. No hacemos perfilado ni publicidad.</li>
-      <li><strong>Base legal:</strong> interés legítimo en mantener el servicio funcionando.</li>
-      <li><strong>Cómo:</strong> tu identificador viaja convertido en un hash SHA-256 irreversible. Estas métricas <em>no</em> incluyen contenido de tus cursos, ni nombres de tareas, ni notas.</li>
+      <li><strong>Qué es:</strong> en el MCP hospedado, la herramienta usada, si funcionó, cuánto tardó y el tipo de error; en la landing, visitas, scroll y clics agregados para mapas de calor.</li>
+      <li><strong>Para qué:</strong> detectar fallos y saber qué mejorar. No hacemos publicidad ni enviamos argumentos de herramientas, respuestas, contenido académico o valores de formularios.</li>
+      <li><strong>Base legal:</strong> interés legítimo para medir y mejorar la landing; la analítica técnica del MCP hospedado se limita a mantener y mejorar el servicio que pediste.</li>
+      <li><strong>Cómo:</strong> el MCP usa un identificador estable de cuenta Campus sin nombre ni correo. La landing carga PostHog de forma diferida y respeta la señal <em>Do Not Track</em> de tu navegador.</li>
     </ul>
 
     <h3>Formulario de acceso anticipado</h3>

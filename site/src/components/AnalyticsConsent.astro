@@ -1,0 +1,79 @@
+---
+const posthogKey = import.meta.env.PUBLIC_POSTHOG_KEY;
+const posthogHost = import.meta.env.PUBLIC_POSTHOG_HOST ?? "https://us.i.posthog.com";
+---
+
+{posthogKey && (
+  <div hidden data-analytics-config data-posthog-key={posthogKey} data-posthog-host={posthogHost}></div>
+)}
+
+{posthogKey && (
+  <script>
+    const config = document.querySelector("[data-analytics-config]");
+    const posthogKey = config?.dataset.posthogKey;
+    const posthogHost = config?.dataset.posthogHost;
+    if (!posthogKey || !posthogHost) throw new Error("Missing PostHog public configuration");
+    let posthog;
+    let analyticsScheduled = false;
+    const pendingEvents = [];
+
+    const capture = (event, properties = {}) => {
+      const safeProperties = { ...properties, surface: "landing" };
+      if (posthog) posthog.capture(event, safeProperties);
+      else pendingEvents.push([event, safeProperties]);
+    };
+
+    async function startAnalytics() {
+      if (posthog) {
+        posthog.opt_in_capturing();
+        return;
+      }
+      const { default: client } = await import("posthog-js");
+      client.init(posthogKey, {
+        api_host: posthogHost,
+        autocapture: true,
+        capture_pageview: true,
+        disable_session_recording: true,
+        mask_all_inputs: true,
+        mask_all_text: true,
+        persistence: "localStorage+cookie",
+        respect_dnt: true,
+      });
+      client.register({ surface: "landing" });
+      posthog = client;
+      pendingEvents.splice(0).forEach(([event, properties]) => client.capture(event, properties));
+    }
+
+    const scheduleAnalytics = () => {
+      if (posthog) {
+        posthog.opt_in_capturing();
+        return;
+      }
+      if (analyticsScheduled) return;
+      analyticsScheduled = true;
+      const load = () => {
+        void startAnalytics().catch(() => {
+          // Analytics is optional. A loading failure must never affect the landing.
+          analyticsScheduled = false;
+        });
+      };
+      if ("requestIdleCallback" in window) {
+        window.requestIdleCallback(load, { timeout: 3_000 });
+      } else {
+        window.setTimeout(load, 800);
+      }
+    };
+
+    document.querySelectorAll("[data-open-founder]").forEach((button) => {
+      button.addEventListener("click", () => {
+        capture("landing_cta_clicked", { cta: "founder_access", path: window.location.pathname });
+        capture("founder_dialog_opened", { path: window.location.pathname });
+      });
+    });
+    window.addEventListener("campus:founder-submitted", () => {
+      capture("founder_form_submitted", { path: window.location.pathname });
+    });
+
+    scheduleAnalytics();
+  </script>
+)}

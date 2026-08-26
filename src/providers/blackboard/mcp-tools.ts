@@ -17,7 +17,6 @@ import {
   getSystemVersion,
 } from './api/courses.js';
 import { listAssignments, listAttempts, submitAttempt, uploadFile, getAttemptFiles } from './api/assignments.js';
-import { track } from '../../analytics.js';
 import { downloadRoot, resolveDownloadDir, safeNewFilePath, writeNamedDownload } from '../../security/files.js';
 
 const MAX_UPLOAD_BYTES = 50 * 1024 * 1024; // 50MB
@@ -83,29 +82,7 @@ export function registerBlackboardTools(server: McpServer) {
     }
   };
 
-  // Keep usage analytics at the tool boundary. Arguments and Blackboard
-  // responses are deliberately not included in the event.
-  const registerTrackedTool: typeof server.registerTool = (name: any, ...parts: any[]) => {
-    const handler = parts.pop();
-    return (server as any).registerTool(name, ...parts, async (...input: any[]) => {
-      const startedAt = Date.now();
-      let session: any;
-      try {
-        session = await loadOrRefreshSession();
-        const result = await handler(...input);
-        track('mcp_tool_used', { tool: name, success: true, duration_ms: Date.now() - startedAt });
-        return result;
-      } catch (error) {
-        track('mcp_tool_error', {
-          tool: name,
-          success: false,
-          duration_ms: Date.now() - startedAt,
-          error_type: error instanceof Error ? error.name : 'UnknownError',
-        });
-        throw error;
-      }
-    });
-  };
+  const registerTrackedTool: typeof server.registerTool = server.registerTool.bind(server);
   // ── blackboard_whoami ─────────────────────────────────────────────────────────────────
   registerTrackedTool('blackboard_whoami', { description: 'Get the currently authenticated UPC student info' }, async () => {
     const { client } = await getClient();
