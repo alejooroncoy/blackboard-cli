@@ -9,6 +9,8 @@ import {
   getCourse,
   getCourseContents,
   getCourseAnnouncements,
+  getMessageCourseSummaries,
+  getCourseConversationsPageSet,
   getGradeColumns,
   getGrades,
 } from '../api/courses.js';
@@ -33,6 +35,9 @@ export function coursesCommand(program: Command) {
   const courses = program
     .command('courses')
     .description('Course operations');
+
+  // Messages live in the student's inbox, not inside a particular course, so
+  // this command is registered at the program root below rather than here.
 
   // List enrolled courses
   courses
@@ -333,6 +338,87 @@ export function coursesCommand(program: Command) {
           console.log(`  ${chalk.cyan(col.name || col.displayName)} ${scoreStr} ${chalk.gray(status)}`);
         }
         console.log('');
+      } catch (err: any) {
+        spinner.fail(err.message);
+        process.exit(1);
+      }
+    });
+}
+
+export function messagesCommand(program: Command) {
+  program
+    .command('messages')
+    .description('List messages from your Blackboard inbox')
+    .option('--json', 'Output raw JSON')
+    .option('--course <courseId>', 'Only show messages associated with this course')
+    .option('--limit <n>', 'Max results (1-100)', '50')
+    .option('--offset <n>', 'Pagination offset', '0')
+    .action(async (opts) => {
+      const limit = Number.parseInt(opts.limit, 10);
+      const offset = Number.parseInt(opts.offset, 10);
+      if (!Number.isInteger(limit) || limit < 1 || limit > 100) throw new Error('--limit must be an integer from 1 to 100');
+      if (!Number.isInteger(offset) || offset < 0) throw new Error('--offset must be a non-negative integer');
+
+      const session = requireSession();
+      const client = createClient(session);
+      const spinner = ora({ text: 'Fetching Blackboard messages...', stream: process.stderr }).start();
+      try {
+        const summary = await getMessageCourseSummaries(client, { limit: 100 });
+        const courses = opts.course
+          ? summary.results.filter((course: any) => course.courseId === opts.course)
+          : summary.results;
+        const groups: Array<{ course: any; conversations: any[]; truncated: boolean }> = [];
+        for (const course of courses) {
+          const { results: conversations, truncated } = await getCourseConversationsPageSet(client, course.courseId, { limit: 100 });
+          groups.push({ course, conversations, truncated });
+        }
+        const all = groups.flatMap(({ course, conversations }) => conversations.map((conversation: any) => ({
+          course: { id: course.courseId, name: course.courseName, unreadCount: course.numUnreadMessages ?? 0 },
+          ...conversation,
+        })));
+        const messages = all.slice(offset, offset + limit);
+        spinner.succeed(`${messages.length} message conversations`);
+
+        if (opts.json) {
+          console.log(JSON.stringify({
+            results: messages,
+            paging: { limit, offset, count: all.length, nextPage: offset + limit < all.length ? String(offset + limit) : undefined },
+            courseSummaries: groups.map(({ course, conversations, truncated }) => ({
+              id: course.courseId,
+              name: course.courseName,
+              unreadCount: course.numUnreadMessages ?? 0,
+              conversationCount: conversations.length,
+              truncated,
+            })),
+          }, null, 2));
+          return;
+        }
+        if (messages.length === 0) {
+          console.log(chalk.yellow('No message conversations found.'));
+          return;
+        }
+        console.log('');
+        for (const message of messages) {
+          const latest = Array.isArray(message.messages) ? message.messages.at(-1) : undefined;
+          const subject = message.subject ?? message.title ?? message.name ?? latest?.subject ?? '(no subject)';
+          const sender = (
+            message.sender?.name ?? message.senderName ?? message.from
+            ?? [latest?.sender?.givenName, latest?.sender?.familyName].filter(Boolean).join(' ')
+          ) || latest?.sender?.userName || '';
+          const date = message.created ?? message.modified ?? message.dateCreated ?? message.date ?? latest?.postDate;
+          const body = String(
+            message.body ?? message.text ?? message.message ?? message.lastMessage?.body
+            ?? latest?.body?.rawText ?? latest?.body?.displayText ?? ''
+          )
+            .replace(/<[^>]+>/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim()
+            .slice(0, 240);
+          console.log(`  ${chalk.bold(subject)}${sender ? chalk.gray(` — ${sender}`) : ''}${date ? chalk.gray(`  ${new Date(date).toLocaleString()}`) : ''}`);
+          if (message.course?.name) console.log(chalk.gray(`  ${message.course.name}`));
+          if (body) console.log(`  ${chalk.gray(body)}`);
+          console.log('');
+        }
       } catch (err: any) {
         spinner.fail(err.message);
         process.exit(1);

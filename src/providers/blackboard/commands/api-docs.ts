@@ -48,8 +48,6 @@ const ENDPOINTS: EndpointDoc[] = [
   // Attendance
   { method: 'GET', path: '/learn/api/public/v2/courses/{courseId}/coursemeetings', description: 'Course meetings/attendance (v2)' },
 
-  // Messages
-  { method: 'GET', path: '/learn/api/public/v1/users/{userId}/messages/inbox', description: 'User inbox messages' },
 ];
 
 export function apiDocsCommand(program: Command) {

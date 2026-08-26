@@ -5,7 +5,7 @@
 
 > Conecta Blackboard UPC con ChatGPT y Claude (vía MCP), o úsalo directo desde la terminal.
 
-`campus-cli` (también conocido como **Campus** o **Campus CLI**, [campuscli.com](https://campuscli.com)) es un CLI y servidor MCP no oficial para estudiantes de UPC. Le da a asistentes de IA como ChatGPT y Claude acceso directo a tu **Blackboard Learn**: cursos, tareas, notas, anuncios y materiales, sin abrir el navegador. Canvas y Moodle están en el roadmap.
+`campus-cli` (también conocido como **Campus** o **Campus CLI**, [campuscli.com](https://campuscli.com)) es un CLI y servidor MCP no oficial para estudiantes de UPC. Le da a asistentes de IA como ChatGPT y Claude acceso directo a tu **Blackboard Learn**: cursos, tareas, notas, anuncios, mensajes y materiales, sin abrir el navegador. Canvas y Moodle están en el roadmap.
 
 No confundir con: el paquete `campus-cli` de PyPI (Python, gestión de notebooks de Jupyter, proyecto no relacionado) ni con otras plataformas de "IA para programadores" o "resolver tareas con IA" que usan nombres parecidos — este proyecto es específicamente la integración de Blackboard con asistentes de IA vía MCP.
 
@@ -23,7 +23,7 @@ campus assignments list --pending
 - Consultar tu horario semanal, con horas y aulas de tus cursos matriculados.
 - Revisar tareas pendientes, fechas de entrega y notas.
 - Descargar archivos y carpetas completas de Blackboard.
-- Consultar anuncios, contenidos y calificaciones.
+- Consultar anuncios, mensajes, contenidos y calificaciones.
 - Usarlo desde Claude, Cursor, Copilot, Codex u otro cliente compatible con MCP.
 - Automatizar consultas con `--json` o con llamadas directas a la API de Blackboard.
 
@@ -139,6 +139,8 @@ campus courses contents <courseId> --parent <folderId>
 campus courses contents <courseId> --type file|folder|assignment
 campus courses announcements <courseId>
 campus courses grades <courseId>
+campus messages
+campus messages --course <courseId>
 ```
 
 ### Tareas
@@ -318,6 +320,7 @@ Las herramientas de Aula Virtual usan el prefijo `blackboard_`; `campus_get_week
 | `blackboard_get_course` | Detalle de un curso |
 | `blackboard_list_contents` | Materiales y carpetas |
 | `blackboard_list_announcements` | Anuncios del curso |
+| `blackboard_list_messages` | Mensajes de la bandeja de entrada de Blackboard |
 | `blackboard_list_assignments` | Tareas con fechas y notas |
 | `blackboard_list_attempts` | Historial de entregas |
 | `blackboard_get_grades` | Reporte de notas |

@@ -10,6 +10,8 @@ import {
   getCourse,
   getCourseContents,
   getCourseAnnouncements,
+  getMessageCourseSummaries,
+  getCourseConversationsPageSet,
   getGrades,
   getGradeColumns,
   getSystemVersion,
@@ -169,6 +171,45 @@ export function registerBlackboardTools(server: McpServer) {
       const { client } = await getClient();
       const data = await getCourseAnnouncements(client, courseId);
       return { content: [{ type: 'text', text: JSON.stringify(data) }] };
+    }
+  );
+
+  // ── blackboard_list_messages ──────────────────────────────────────────────────────────
+  registerTrackedTool(
+    'blackboard_list_messages',
+    {
+      description:
+        'Read conversation messages from the current student’s Blackboard inbox. Optionally restrict results to one Blackboard course ID.',
+      inputSchema: {
+        courseId: blackboardId('courseId').optional().describe('Only return messages associated with this course'),
+        limit: z.number().int().min(1).max(100).optional().describe('Maximum conversations to return (default 50)'),
+        offset: z.number().int().min(0).optional().describe('Offset in the combined conversation list'),
+      },
+    },
+    async ({ courseId, limit, offset }) => {
+      const { client } = await getClient();
+      const summaries = await getMessageCourseSummaries(client, { limit: 100 });
+      const courses = courseId
+        ? summaries.results.filter((course: any) => course.courseId === courseId)
+        : summaries.results;
+      const groups = await mapWithConcurrency(courses, MCP_MAX_PARALLELISM, async (course: any) => {
+        const { results: conversations, truncated } = await getCourseConversationsPageSet(client, course.courseId, { limit: 100 });
+        return {
+          course: { id: course.courseId, name: course.courseName, unreadCount: course.numUnreadMessages ?? 0 },
+          conversations,
+          truncated,
+        };
+      });
+      const all = groups.flatMap(({ course, conversations }) =>
+        conversations.map((conversation: any) => ({ course, ...conversation }))
+      );
+      const start = offset ?? 0;
+      const end = start + (limit ?? 50);
+      return { content: [{ type: 'text', text: JSON.stringify({
+        results: all.slice(start, end),
+        paging: { limit: limit ?? 50, offset: start, count: all.length, nextPage: end < all.length ? String(end) : undefined },
+        courseSummaries: groups.map(({ course, conversations, truncated }) => ({ ...course, conversationCount: conversations.length, truncated })),
+      }) }] };
     }
   );
 
