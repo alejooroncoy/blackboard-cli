@@ -27,9 +27,10 @@ propuestas o resultados parciales en decisiones sin verificar el tramo completo.
 Flujo típico: blackboard_list_courses → blackboard_list_assignments /
 blackboard_get_grades → blackboard_list_contents para materiales.
 
-campus_get_weekly_schedule consulta la matrícula UPC en Banner y devuelve el
+banner_get_weekly_schedule consulta la matrícula UPC en Banner y devuelve el
 horario semanal de lunes a domingo. Úsala para responder qué clases tiene el
 estudiante, a qué hora y en qué aula; acepta un código de período opcional.
+campus_get_weekly_schedule continúa disponible como alias deprecado.
 
 Para entregas: blackboard_upload_attempt_file sube cada archivo/imagen y
 devuelve un fileUploadId; blackboard_save_attempt_draft guarda texto y/o
