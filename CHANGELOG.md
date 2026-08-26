@@ -4,6 +4,18 @@ All notable changes to `campus-cli` (formerly `blackboard-upc`) will be document
 
 ---
 
+## [2.1.0] — 2026-08-26
+
+### Added
+- `banner_get_weekly_schedule` — devuelve el horario semanal de Banner con días, horas, cursos y aulas; excluye matrículas retiradas o anuladas.
+- Soporte para UClass y las tools asociadas, para consultar las integraciones académicas disponibles desde Campus.
+- `blackboard_list_messages` y el comando equivalente para consultar mensajes de Blackboard sin abrir el navegador.
+
+### Changed
+- El catálogo MCP diferencia explícitamente el horario de clases de Banner (`banner_get_weekly_schedule`) de la vista semanal de tareas y vencimientos de Blackboard.
+
+---
+
 ## [2.0.0] — 2026-08-14
 
 ### Security
