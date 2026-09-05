@@ -31,8 +31,8 @@ export interface Apa7VerifiedDataSoftwareTestCase {
 
 const shared = {
   status: 'verified' as const,
-  parentheticalCitation: '(Autor o entidad, Año)',
-  narrativeCitation: 'Autor o entidad (Año)',
+  parentheticalCitation: '(Autor o entidad, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores personales',
+  narrativeCitation: 'Autor o entidad (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores personales',
   refuseWhen: [
     'No se verificó el creador, desarrollador o responsable de los datos o la prueba.',
     'Se infirieron el año, versión, modelo, número de registro o estado de publicación.',

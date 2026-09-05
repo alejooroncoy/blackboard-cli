@@ -605,6 +605,8 @@ test('APA 7 guidance distinguishes signed and unsigned editorials', async () => 
   const editorial = JSON.parse((await handler({ topic: 'reference', caseId: 'periodical-editorial' })).content[0].text);
   assert.equal(editorial.case.manualExample, 19);
   assert.match(editorial.case.referenceTemplate, /\[Editorial\]/);
+  assert.match(editorial.case.referenceTemplate, /Sin firma: Título \[Editorial\]\. \(Año\)/);
+  assert.match(editorial.case.parentheticalCitation, /Sin firma: \(“Título abreviado”, Año\)/);
   assert.match(editorial.case.rules.join(' '), /no está firmado/);
 });
 
@@ -725,6 +727,9 @@ test('APA 7 guidance covers datasets, software and tests through example 83', as
   assert.match(dataset.rules.join(' '), /análisis secundarios/);
   assert.match(software.rules.join(' '), /distribución limitada/);
   assert.match(software.referenceTemplate, /solo si difiere del autor/);
+  assert.match(software.parentheticalCitation, /Autor & Autor/);
+  assert.match(software.parentheticalCitation, /tres o más autores personales/);
+  assert.match(dataset.parentheticalCitation, /Autor & Autor/);
   assert.match(testRecord.rules.join(' '), /información descriptiva o administrativa única/);
   assert.match(testRecord.parentheticalCitation, /tres o más autores/);
   assert.match(software.parentheticalCitation, /Autor|Entidad/);

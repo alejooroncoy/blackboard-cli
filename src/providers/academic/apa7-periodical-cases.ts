@@ -171,7 +171,9 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   'periodical-editorial': {
     ...base, id: 'periodical-editorial', label: 'Editorial de una publicación periódica', manualExample: 19, manualPrintedPages: '326-327',
     requiredMetadata: ['autor si está firmado', 'año o fecha', 'título', 'tipo de publicación periódica', 'volumen/número/páginas si existen', 'DOI/URL si corresponde'],
-    referenceTemplate: 'Autor, A. A. (Año). Título [Editorial]. Publicación, volumen(número), páginas. DOI/URL',
+    referenceTemplate: 'Con firma: Autor, A. A. (Año). Título [Editorial]. Publicación, volumen(número), páginas. DOI/URL. Sin firma: Título [Editorial]. (Año). Publicación, volumen(número), páginas. DOI/URL',
+    parentheticalCitation: 'Con firma: (Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores. Sin firma: (“Título abreviado”, Año)',
+    narrativeCitation: 'Con firma: Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores. Sin firma: “Título abreviado” (Año)',
     rules: [
       'Usa el formato correspondiente al tipo de publicación periódica donde apareció.',
       'Añade [Editorial] después del título, salvo que la palabra Editorial ya forme parte del título.',
