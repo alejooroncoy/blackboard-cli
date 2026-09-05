@@ -113,7 +113,7 @@ function guidanceFor(selectedTopic: z.infer<typeof topic>, selectedSourceType?: 
           ? ['Iniciales y apellido de la persona', 'fecha exacta', 'medio de comunicación']
           : ['tipo de fuente', 'autor o entidad', 'fecha', 'título', 'fuente contenedora/editorial', 'DOI o URL si corresponde'],
         template: selectedSourceType === 'personal-communication'
-          ? 'No lleva referencia. Cita en texto: (A. Apellido, comunicación personal, 5 de septiembre de 2026).'
+          ? 'No lleva referencia. Cita en texto: (A. Apellido, comunicación personal, [fecha exacta]).'
           : referenceTemplates[selectedSourceType ?? 'other'] ?? 'Autor. (Fecha). Título. Fuente. DOI o URL.',
         rules: [
           'Incluye solamente obras consultadas y citadas en el texto.',
@@ -239,7 +239,10 @@ function guidanceFor(selectedTopic: z.infer<typeof topic>, selectedSourceType?: 
  * instead of attempting to manufacture a citation from incomplete metadata.
  * It does not require a Blackboard session.
  */
-export function registerAcademicTools(server: McpServer) {
+export function registerAcademicTools(
+  server: McpServer,
+  options: { authorize?: () => boolean | Promise<boolean> } = {},
+) {
   server.registerTool('campus_apa7_guidance', {
     description: 'Get reliable Spanish APA 7 guidance, templates and review checklists for citations, references, manuscript format, research reporting, tables/figures, legal materials or Blackboard course requirements. Does not require Blackboard login and never invents metadata.',
     inputSchema: {
@@ -260,8 +263,12 @@ export function registerAcademicTools(server: McpServer) {
       principlesEthicsRuleId: principlesEthicsRuleId.optional().describe('Verified APA 7 writing, publication-ethics and professional rule from chapter 1'),
     },
     annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
-  }, async ({ topic, sourceType, caseId, citationRuleId, referenceRuleId, formatRuleId, reportingRuleId, writingStyleRuleId, biasFreeLanguageRuleId, mechanicsRuleId, tableFigureRuleId, legalRuleId, peruLegalCaseId, publicationRuleId, principlesEthicsRuleId }) => ({
-    content: [{ type: 'text', text: JSON.stringify({
+  }, async ({ topic, sourceType, caseId, citationRuleId, referenceRuleId, formatRuleId, reportingRuleId, writingStyleRuleId, biasFreeLanguageRuleId, mechanicsRuleId, tableFigureRuleId, legalRuleId, peruLegalCaseId, publicationRuleId, principlesEthicsRuleId }) => {
+    if (options.authorize && !(await options.authorize())) {
+      throw new Error('Not authenticated. Ask the user to run: campus account login');
+    }
+    return {
+      content: [{ type: 'text', text: JSON.stringify({
       ...guidanceFor(topic, sourceType, caseId, citationRuleId, referenceRuleId, formatRuleId, reportingRuleId, writingStyleRuleId, biasFreeLanguageRuleId, mechanicsRuleId, tableFigureRuleId, legalRuleId, peruLegalCaseId, publicationRuleId, principlesEthicsRuleId),
       availableCitationRules: citationRuleId ? undefined : Object.keys(citationRules),
       availableReferenceRules: referenceRuleId ? undefined : Object.keys(referenceRules),
@@ -285,6 +292,7 @@ export function registerAcademicTools(server: McpServer) {
         ...Object.keys(audiovisualAudioCases),
         ...Object.keys(visualSocialWebCases),
       ],
-    }) }],
-  }));
+      }) }],
+    };
+  });
 }

@@ -4,6 +4,7 @@ import { registerBlackboardTools } from '../providers/blackboard/mcp-tools.js';
 import { registerBannerTools } from '../providers/banner/mcp-tools.js';
 import { registerUclassTools } from '../providers/uclass/mcp-tools.js';
 import { registerAcademicTools } from '../providers/academic/apa7-mcp-tools.js';
+import { getValidAccountSession } from '../account/session.js';
 import { track } from '../analytics.js';
 
 // La versión que anunciamos en el handshake sale del package.json. Estaba
@@ -34,7 +35,8 @@ estudiante, a qué hora y en qué aula; acepta un código de período opcional.
 campus_get_weekly_schedule continúa disponible como alias deprecado.
 
 campus_apa7_guidance ofrece reglas y modelos de APA 7 en español sin necesitar
-inicio de sesión. Úsala cuando se pida una cita, referencia, formato, revisión,
+una sesión de Blackboard; en el MCP local sí requiere una cuenta Campus activa.
+Úsala cuando se pida una cita, referencia, formato, revisión,
 tabla/figura o requisitos APA de un curso. Para requisitos de una entrega, usa
 después las herramientas Blackboard para leer la rúbrica o plantilla: la guía
 general nunca reemplaza al docente. No inventes metadatos bibliográficos.
@@ -71,7 +73,9 @@ export async function startMcpServer() {
   registerBlackboardTools(server);
   registerBannerTools(server);
   registerUclassTools(server);
-  registerAcademicTools(server);
+  registerAcademicTools(server, {
+    authorize: async () => Boolean(await getValidAccountSession()),
+  });
 
   const transport = new StdioServerTransport();
   await server.connect(transport);

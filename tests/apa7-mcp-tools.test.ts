@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { registerAcademicTools } from '../src/providers/academic/apa7-mcp-tools.js';
 
-test('APA 7 guidance is publicly available and exposes a journal template', async () => {
+test('APA 7 guidance exposes a journal template when the host authorizes access', async () => {
   const tools = new Map<string, any>();
   const server = {
     registerTool(name: string, config: unknown, handler: unknown) {
@@ -19,6 +19,34 @@ test('APA 7 guidance is publicly available and exposes a journal template', asyn
   const content = JSON.parse(result.content[0].text);
   assert.match(content.template, /https:\/\/doi.org/);
   assert.match(content.safety, /No inventes/);
+});
+
+test('APA 7 guidance fails closed when the host authentication check rejects access', async () => {
+  let handler: any;
+  registerAcademicTools({
+    registerTool(_name: string, _config: unknown, registeredHandler: unknown) {
+      handler = registeredHandler;
+    },
+  } as any, { authorize: async () => false });
+
+  await assert.rejects(
+    () => handler({ topic: 'citation' }),
+    /campus account login/,
+  );
+});
+
+test('personal communication guidance requests the caller\'s exact date', async () => {
+  let handler: any;
+  registerAcademicTools({
+    registerTool(_name: string, _config: unknown, registeredHandler: unknown) {
+      handler = registeredHandler;
+    },
+  } as any);
+
+  const result = await handler({ topic: 'reference', sourceType: 'personal-communication' });
+  const content = JSON.parse(result.content[0].text);
+  assert.match(content.template, /\[fecha exacta\]/);
+  assert.doesNotMatch(content.template, /2026/);
 });
 
 test('APA 7 guidance returns usable content for every supported topic and source type', async () => {
