@@ -32,13 +32,6 @@ horario semanal de lunes a domingo. Úsala para responder qué clases tiene el
 estudiante, a qué hora y en qué aula; acepta un código de período opcional.
 campus_get_weekly_schedule continúa disponible como alias deprecado.
 
-campus_apa7_guidance ofrece reglas y modelos de APA 7 en español sin necesitar
-una sesión de Blackboard; en el MCP local sí requiere una cuenta Campus activa.
-Úsala cuando se pida una cita, referencia, formato, revisión,
-tabla/figura o requisitos APA de un curso. Para requisitos de una entrega, usa
-después las herramientas Blackboard para leer la rúbrica o plantilla: la guía
-general nunca reemplaza al docente. No inventes metadatos bibliográficos.
-
 Para entregas: blackboard_upload_attempt_file sube cada archivo/imagen y
 devuelve un fileUploadId; blackboard_save_attempt_draft guarda texto y/o
 esos fileUploadIds sin enviar (el intento queda abierto para seguir
