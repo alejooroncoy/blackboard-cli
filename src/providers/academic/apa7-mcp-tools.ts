@@ -44,14 +44,14 @@ const referenceTemplates: Partial<Record<SourceType, string>> = {
   book: 'Apellido, A. A. (Año). *Título del libro*. Editorial. URL o DOI',
   'book-chapter': 'Apellido, A. A. (Año). Título del capítulo. En A. Editor (Ed.), *Título del libro* (pp. xx-xx). Editorial.',
   'journal-article': 'Apellido, A. A., & Apellido, B. B. (Año). Título del artículo. *Revista, volumen*(número), xx-xx. https://doi.org/xxxxx',
-  webpage: 'Autor o entidad. (Año, día de mes). *Título de la página*. Nombre del sitio. URL',
+  webpage: 'Autor o entidad. (Año, día de mes). *Título de la página*. Nombre del sitio, solo si difiere del autor. URL',
   report: 'Entidad o Apellido, A. A. (Año). *Título del informe* (N.º de informe xxx). Editorial o entidad, solo si difiere del autor. URL',
   thesis: 'Apellido, A. A. (Año). *Título* [Tesis de licenciatura/maestría/doctoral, Universidad]. Repositorio. URL',
   'newspaper-article': 'Apellido, A. A. (Año, día de mes). Título. *Periódico*. URL',
   'video-webinar': 'Autor o entidad. (Año, día de mes). *Título* [Video o seminario web grabado]. Plataforma. URL',
   podcast: 'Apellido, A. A. (Host). (Año, día de mes). Título del episodio (N.º de episodio) [Episodio de pódcast]. En *Título del pódcast*. Productora. URL',
   'social-media': 'Autor [@usuario]. (Año, día de mes). *Primeras 20 palabras del contenido* [Tipo de publicación]. Red social. URL',
-  software: 'Autor o entidad. (Año). *Nombre* (Versión) [Software]. Editor o tienda. URL',
+  software: 'Autor o entidad. (Año). *Nombre* (Versión) [Software]. Editor, desarrollador o tienda, solo si difiere del autor. URL',
 };
 
 const verifiedCaseId = z.union([periodicalCaseId, bookCaseId, chapterEntryCaseId, reportConferenceThesisCaseId, reviewUnpublishedCaseId, dataSoftwareTestCaseId, audiovisualAudioCaseId, visualSocialWebCaseId]);
@@ -137,6 +137,58 @@ function validateSelectors(selectedTopic: z.infer<typeof topic>, selectors: Reco
   }
   if (selected.length > 1) {
     throw new Error(`Choose only one selector for topic "${selectedTopic}": ${selected.join(', ')}`);
+  }
+}
+
+function availableSelectorsForTopic(selectedTopic: z.infer<typeof topic>) {
+  const verifiedCases = [
+    ...Object.keys(periodicalCases),
+    ...Object.keys(bookCases),
+    ...Object.keys(chapterEntryCases),
+    ...Object.keys(reportConferenceThesisCases),
+    ...Object.keys(reviewUnpublishedCases),
+    ...Object.keys(dataSoftwareTestCases),
+    ...Object.keys(audiovisualAudioCases),
+    ...Object.keys(visualSocialWebCases),
+  ];
+
+  switch (selectedTopic) {
+    case 'principles-ethics':
+      return { availablePrinciplesEthicsRules: Object.keys(principlesEthicsRules) };
+    case 'citation':
+      return {
+        availableCitationRules: Object.keys(citationRules),
+        availableVerifiedCases: verifiedCases,
+        availablePeruLegalCases: Object.keys(peruLegalCases),
+      };
+    case 'reference':
+      return {
+        availableReferenceRules: Object.keys(referenceRules),
+        availableVerifiedCases: verifiedCases,
+        availablePeruLegalCases: Object.keys(peruLegalCases),
+      };
+    case 'format':
+      return { availableFormatRules: Object.keys(formatRules) };
+    case 'reporting':
+      return { availableReportingRules: Object.keys(reportingRules) };
+    case 'writing-style':
+      return { availableWritingStyleRules: Object.keys(writingStyleRules) };
+    case 'bias-free-language':
+      return { availableBiasFreeLanguageRules: Object.keys(biasFreeLanguageRules) };
+    case 'mechanics':
+      return { availableMechanicsRules: Object.keys(mechanicsRules) };
+    case 'table-figure':
+      return { availableTableFigureRules: Object.keys(tableFigureRules) };
+    case 'legal':
+      return {
+        availableLegalRules: Object.keys(legalRules),
+        availablePeruLegalCases: Object.keys(peruLegalCases),
+      };
+    case 'publication':
+      return { availablePublicationRules: Object.keys(publicationRules) };
+    case 'review':
+    case 'course-requirements':
+      return {};
   }
 }
 
@@ -348,32 +400,13 @@ export function registerAcademicTools(
     if (!options?.authorize || !(await options.authorize())) {
       throw new Error('Not authenticated. Ask the user to run: campus account login');
     }
-    validateSelectors(topic, { sourceType, caseId, citationRuleId, referenceRuleId, formatRuleId, reportingRuleId, writingStyleRuleId, biasFreeLanguageRuleId, mechanicsRuleId, tableFigureRuleId, legalRuleId, peruLegalCaseId, publicationRuleId, principlesEthicsRuleId });
+    const selectors = { sourceType, caseId, citationRuleId, referenceRuleId, formatRuleId, reportingRuleId, writingStyleRuleId, biasFreeLanguageRuleId, mechanicsRuleId, tableFigureRuleId, legalRuleId, peruLegalCaseId, publicationRuleId, principlesEthicsRuleId };
+    validateSelectors(topic, selectors);
+    const hasSelectedRule = Object.values(selectors).some(value => value !== undefined);
     return {
       content: [{ type: 'text', text: JSON.stringify({
       ...guidanceFor(topic, sourceType, caseId, citationRuleId, referenceRuleId, formatRuleId, reportingRuleId, writingStyleRuleId, biasFreeLanguageRuleId, mechanicsRuleId, tableFigureRuleId, legalRuleId, peruLegalCaseId, publicationRuleId, principlesEthicsRuleId),
-      availableCitationRules: citationRuleId ? undefined : Object.keys(citationRules),
-      availableReferenceRules: referenceRuleId ? undefined : Object.keys(referenceRules),
-      availableFormatRules: formatRuleId ? undefined : Object.keys(formatRules),
-      availableReportingRules: reportingRuleId ? undefined : Object.keys(reportingRules),
-      availableWritingStyleRules: writingStyleRuleId ? undefined : Object.keys(writingStyleRules),
-      availableBiasFreeLanguageRules: biasFreeLanguageRuleId ? undefined : Object.keys(biasFreeLanguageRules),
-      availableMechanicsRules: mechanicsRuleId ? undefined : Object.keys(mechanicsRules),
-      availableTableFigureRules: tableFigureRuleId ? undefined : Object.keys(tableFigureRules),
-      availableLegalRules: legalRuleId ? undefined : Object.keys(legalRules),
-      availablePeruLegalCases: peruLegalCaseId ? undefined : Object.keys(peruLegalCases),
-      availablePublicationRules: publicationRuleId ? undefined : Object.keys(publicationRules),
-      availablePrinciplesEthicsRules: principlesEthicsRuleId ? undefined : Object.keys(principlesEthicsRules),
-      availableVerifiedCases: caseId ? undefined : [
-        ...Object.keys(periodicalCases),
-        ...Object.keys(bookCases),
-        ...Object.keys(chapterEntryCases),
-        ...Object.keys(reportConferenceThesisCases),
-        ...Object.keys(reviewUnpublishedCases),
-        ...Object.keys(dataSoftwareTestCases),
-        ...Object.keys(audiovisualAudioCases),
-        ...Object.keys(visualSocialWebCases),
-      ],
+      ...(hasSelectedRule ? {} : availableSelectorsForTopic(topic)),
       }) }],
     };
   });

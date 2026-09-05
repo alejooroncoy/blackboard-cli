@@ -46,6 +46,29 @@ test('reference templates preserve APA italics with explicit Markdown notation',
 
   const report = JSON.parse((await handler({ topic: 'reference', sourceType: 'report' })).content[0].text);
   assert.match(report.template, /solo si difiere del autor/);
+  const webpage = JSON.parse((await handler({ topic: 'reference', sourceType: 'webpage' })).content[0].text);
+  assert.match(webpage.template, /sitio, solo si difiere del autor/);
+  const software = JSON.parse((await handler({ topic: 'reference', sourceType: 'software' })).content[0].text);
+  assert.match(software.template, /tienda, solo si difiere del autor/);
+});
+
+test('APA 7 catalogues only advertise selectors accepted by their topic', async () => {
+  let handler: any;
+  registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
+
+  const format = JSON.parse((await handler({ topic: 'format' })).content[0].text);
+  assert.ok(format.availableFormatRules.length > 0);
+  assert.equal(format.availableVerifiedCases, undefined);
+  assert.equal(format.availableCitationRules, undefined);
+
+  const citation = JSON.parse((await handler({ topic: 'citation' })).content[0].text);
+  assert.ok(citation.availableCitationRules.length > 0);
+  assert.ok(citation.availableVerifiedCases.length > 0);
+  assert.ok(citation.availablePeruLegalCases.length > 0);
+  assert.equal(citation.availableReferenceRules, undefined);
+
+  const selected = JSON.parse((await handler({ topic: 'format', formatRuleId: 'paper-title' })).content[0].text);
+  assert.equal(Object.keys(selected).some(key => key.startsWith('available')), false);
 });
 
 test('every verified case describes how to recover required reference italics', async () => {

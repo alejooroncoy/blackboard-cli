@@ -53,7 +53,7 @@ Usa cursiva donde se indica mediante asteriscos. Ajusta mayúsculas, edición, n
 | Capítulo de libro editado | `Apellido, A. A. (Año). Título del capítulo. En A. Editor (Ed.), *Título del libro* (pp. xx-xx). Editorial.` |
 | Artículo científico | `Apellido, A. A., & Apellido, B. B. (Año). Título del artículo. *Revista, volumen*(número), xx-xx. https://doi.org/xxxxx` |
 | Artículo con eLocator | `Apellido, A. A. (Año). Título. *Revista, volumen*, Artículo e12345. DOI` |
-| Página web | `Autor o entidad. (Año, día de mes). *Título de la página*. Nombre del sitio. URL` |
+| Página web | `Autor o entidad. (Año, día de mes). *Título de la página*. Nombre del sitio, solo si difiere del autor. URL` |
 | Página web, autor = sitio | `Entidad. (Año, día de mes). *Título de la página*. URL` |
 | Informe | `Entidad o Apellido, A. A. (Año). *Título del informe* (N.º de informe xxx). Editorial/Entidad solo si difiere del autor. URL` |
 | Tesis en repositorio | `Apellido, A. A. (Año). *Título* [Tesis de licenciatura/maestría/doctoral, Universidad]. Repositorio. URL` |
@@ -62,7 +62,7 @@ Usa cursiva donde se indica mediante asteriscos. Ajusta mayúsculas, edición, n
 | Webinar recuperable | `Autor/Entidad. (Año, día de mes). *Título* [Seminario web grabado]. Plataforma. URL` |
 | Podcast | `Apellido, A. A. (Host). (Año, día de mes). Título del episodio (N.º de episodio) [Episodio de pódcast]. En *Título del pódcast*. Productora. URL` |
 | Publicación en red social | `Autor [@usuario]. (Año, día de mes). *Contenido hasta las primeras 20 palabras* [Tipo de publicación]. Red. URL` |
-| Software/app | `Autor o entidad. (Año). *Nombre* (Versión) [Software móvil/de computadora]. Editor/Tienda. URL` |
+| Software/app | `Autor o entidad. (Año). *Nombre* (Versión) [Software móvil/de computadora]. Editor, desarrollador o tienda, solo si difiere del autor. URL` |
 
 ## Datos incompletos
 
