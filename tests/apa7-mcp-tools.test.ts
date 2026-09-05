@@ -633,6 +633,13 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
 
   const translated = JSON.parse((await handler({ topic: 'citation', caseId: 'book-translated-republication' })).content[0].text);
   assert.match(translated.case.parentheticalCitation, /Año original\/Año reedición/);
+  assert.match(translated.case.parentheticalCitation, /tres o más autores/);
+  const authored = JSON.parse((await handler({ topic: 'citation', caseId: 'book-author-doi' })).content[0].text);
+  assert.match(authored.case.parentheticalCitation, /Autor & Autor/);
+  assert.match(authored.case.parentheticalCitation, /tres o más autores/);
+  const edited = JSON.parse((await handler({ topic: 'citation', caseId: 'book-edited-doi-multiple-publishers' })).content[0].text);
+  assert.match(edited.case.parentheticalCitation, /Editor & Editor/);
+  assert.match(edited.case.parentheticalCitation, /tres o más editores/);
   const dictionary = JSON.parse((await handler({ topic: 'reference', caseId: 'dictionary-thesaurus-encyclopedia' })).content[0].text);
   assert.match(dictionary.case.rules.join(' '), /fecha de recuperación/);
 });
@@ -681,6 +688,8 @@ test('APA 7 guidance covers reports, conferences and theses through example 66',
   const symposium = cases.find(candidate => candidate.id === 'symposium-contribution');
   assert.ok(symposium);
   assert.match(symposium.parentheticalCitation, /tres o más autores/);
+  assert.match(symposium.referenceFormatting.italicize.join(' '), /título del simposio contenedor/);
+  assert.match(symposium.referenceFormatting.italicize.join(' '), /no el título de la contribución/);
 });
 
 test('APA 7 guidance covers reviews and unpublished or informally published works', async () => {

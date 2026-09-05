@@ -70,6 +70,10 @@ function getVerifiedCase(id: VerifiedCaseId) {
 
 function referenceFormattingForCase(id: VerifiedCaseId) {
   const encoding = 'El campo referenceTemplate usa texto plano; aplica la cursiva a los componentes semánticos indicados y no escribas asteriscos en la referencia final.';
+  if (id === 'symposium-contribution') return {
+    encoding,
+    italicize: ['título del simposio contenedor que sigue al coordinador; no el título de la contribución'],
+  };
   if (id in periodicalCases) return {
     encoding,
     italicize: ['nombre de la publicación periódica o base de revisiones', 'volumen de la publicación; el número entre paréntesis queda sin cursiva'],
