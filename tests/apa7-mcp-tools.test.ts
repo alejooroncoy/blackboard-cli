@@ -39,6 +39,9 @@ test('reference templates preserve APA italics with explicit Markdown notation',
     const content = JSON.parse(result.content[0].text);
     assert.match(content.template, /\*[^*]+\*/, `missing italics for ${sourceType}`);
   }
+
+  const report = JSON.parse((await handler({ topic: 'reference', sourceType: 'report' })).content[0].text);
+  assert.match(report.template, /solo si difiere del autor/);
 });
 
 test('every verified case describes how to recover required reference italics', async () => {
@@ -574,6 +577,10 @@ test('APA 7 guidance uses ampersand in a two-author parenthetical citation and r
   assert.match(result.case.referenceTemplate, / & /);
   assert.equal(result.case.parentheticalCitation, '(Autor & Autor, Año)');
   assert.equal(result.case.narrativeCitation, 'Autor y Autor (Año)');
+
+  const mixedAuthors = JSON.parse((await handler({ topic: 'citation', caseId: 'journal-individual-group-authors' })).content[0].text);
+  assert.equal(mixedAuthors.case.parentheticalCitation, '(Autor personal & Nombre del grupo, Año)');
+  assert.equal(mixedAuthors.case.narrativeCitation, 'Autor personal y Nombre del grupo (Año)');
 });
 
 test('APA 7 guidance covers all 18 verified book and reference-work examples', async () => {

@@ -82,7 +82,7 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
     ...base, id: 'journal-individual-group-authors', label: 'Artículo con autores personales y grupales', manualExample: 5, manualPrintedPages: '323',
     requiredMetadata: ['autores personales en orden', 'nombre exacto del autor grupal', 'año', 'título', 'revista', 'volumen/número', 'páginas', 'DOI/URL'],
     referenceTemplate: 'Autor personal, A. A., & Nombre exacto del grupo. (Año). Título. Revista, volumen(número), páginas. DOI/URL',
-    parentheticalCitation: '(Primer autor et al., Año)', narrativeCitation: 'Primer autor et al. (Año)',
+    parentheticalCitation: '(Autor personal & Nombre del grupo, Año)', narrativeCitation: 'Autor personal y Nombre del grupo (Año)',
     rules: ['Conserva el nombre del grupo como aparece en la fuente.'],
   },
   'journal-elocator': {

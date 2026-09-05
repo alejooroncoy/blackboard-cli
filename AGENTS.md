@@ -13,6 +13,8 @@ campus whoami              # verify session is active
 
 If you get `Not authenticated`, ask the user to run `campus login`.
 
+The read-only `campus_apa7_guidance` tool is the exception to the Blackboard-session requirement: hosts may expose it to an authenticated, entitled Campus account without a current Blackboard session. Its host-provided authorization check must still fail closed.
+
 ## Primary workflow
 
 ```
