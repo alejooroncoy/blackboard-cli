@@ -91,6 +91,7 @@ export const visualSocialWebCases: Record<VisualSocialWebCaseId, Apa7VerifiedVis
     ...visualBase, id: 'slides-or-lecture-notes', label: 'Diapositivas de PowerPoint o notas de conferencia', manualExample: 102, manualPrintedPages: '353',
     requiredMetadata: ['autores', 'fecha', 'título o descripción', 'tipo de material', 'departamento/universidad o sitio/plataforma', 'URL accesible'],
     referenceTemplate: 'Autor, A. A. (Año, día de mes). Título o [Descripción] [Diapositivas de PowerPoint o Notas de conferencia]. Departamento, Universidad o Plataforma. URL',
+    parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
     rules: ['Si el recurso está en un LMS o intranet, úsalo solo para un público con acceso.', 'Para sitios con inicio de sesión, usa la URL de la página de acceso.'],
   },
   tweet: {

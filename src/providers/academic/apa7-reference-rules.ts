@@ -264,7 +264,7 @@ export const referenceRules: Record<ReferenceRuleId, Apa7VerifiedReferenceRule> 
   'periodical-source': verified({
     id: 'periodical-source', label: 'Fuente de publicación periódica', manualSection: '9.25', manualPrintedPages: '300',
     whenToUse: 'Para revistas científicas, magazines, periódicos, boletines y blogs.',
-    rules: ['Incluye título de la publicación, volumen, número, páginas o número de artículo según existan.', 'Escribe el título periódico en title case y cursiva, seguido de coma no cursiva.', 'Reproduce el título oficial de la publicación; no adoptes abreviaturas de bases externas.', 'Volumen va en cursiva; número inmediatamente entre paréntesis sin cursiva ni espacio.', 'Tras el número usa coma; páginas o número de artículo no van en cursiva.', 'Separa rangos de páginas con guion y páginas discontinuas con comas.', 'Termina la información periódica con punto y después DOI/URL.'],
+    rules: ['Incluye título de la publicación, volumen, número, páginas o número de artículo según existan.', 'Escribe el título periódico en title case y cursiva; la coma que lo sigue también va en cursiva.', 'Reproduce el título oficial de la publicación; no adoptes abreviaturas de bases externas.', 'Volumen va en cursiva; número inmediatamente entre paréntesis sin cursiva ni espacio.', 'Tras el número usa coma; páginas o número de artículo no van en cursiva.', 'Separa rangos de páginas con guion y páginas discontinuas con comas.', 'Termina la información periódica con punto y después DOI/URL.'],
     citationImpact: ['La cita sigue usando autor y año, no título de revista, volumen ni páginas del artículo salvo localizador textual.'],
     referencePattern: 'Título de la publicación, volumen(número), páginas o Artículo eLocator. DOI/URL',
   }),

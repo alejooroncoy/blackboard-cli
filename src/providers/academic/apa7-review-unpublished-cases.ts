@@ -39,8 +39,8 @@ const shared = {
   ],
 };
 
-const reviewBase = { ...shared, manualSection: '10.7' as const, parentheticalCitation: '(Revisor, Año)', narrativeCitation: 'Revisor (Año)' };
-const unpublishedBase = { ...shared, manualSection: '10.8' as const, parentheticalCitation: '(Autor, Año)', narrativeCitation: 'Autor (Año)' };
+const reviewBase = { ...shared, manualSection: '10.7' as const, parentheticalCitation: '(Revisor, Año); (Revisor & Revisor, Año); (Primer revisor et al., Año) con tres o más revisores', narrativeCitation: 'Revisor (Año); Revisor y Revisor (Año); Primer revisor et al. (Año) con tres o más revisores' };
+const unpublishedBase = { ...shared, manualSection: '10.8' as const, parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores' };
 
 export const reviewUnpublishedCases: Record<ReviewUnpublishedCaseId, Apa7VerifiedReviewUnpublishedCase> = {
   'review-film-in-journal': {

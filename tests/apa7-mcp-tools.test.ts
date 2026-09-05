@@ -713,7 +713,11 @@ test('APA 7 guidance covers reviews and unpublished or informally published work
   const eric = JSON.parse((await handler({ topic: 'reference', caseId: 'informal-eric' })).content[0].text).case;
   assert.equal(review.manualExample, 67);
   assert.match(review.referenceTemplate, /Reseña de la película/);
+  assert.match(review.parentheticalCitation, /Revisor & Revisor/);
+  assert.match(review.parentheticalCitation, /tres o más revisores/);
   assert.match(submitted.rules.join(' '), /No nombra la revista/);
+  assert.match(submitted.parentheticalCitation, /Autor & Autor/);
+  assert.match(submitted.parentheticalCitation, /tres o más autores/);
   assert.match(eric.referenceTemplate, /documento ERIC/);
 });
 
@@ -764,12 +768,15 @@ test('APA 7 guidance covers visual, social and web works through example 114', a
   const news = JSON.parse((await handler({ topic: 'reference', caseId: 'webpage-news-site' })).content[0].text).case;
   const changing = JSON.parse((await handler({ topic: 'reference', caseId: 'webpage-retrieval-date' })).content[0].text).case;
   const infographic = JSON.parse((await handler({ topic: 'citation', caseId: 'infographic' })).content[0].text).case;
+  const slides = JSON.parse((await handler({ topic: 'citation', caseId: 'slides-or-lecture-notes' })).content[0].text).case;
   assert.equal(map.manualExample, 100);
   assert.match(map.rules.join(' '), /dinámico/);
   assert.match(tweet.rules.join(' '), /Cada emoji cuenta como una palabra/);
   assert.match(news.rules.join(' '), /no son ediciones de un periódico/);
   assert.match(changing.rules.join(' '), /no existe versión archivada/);
   assert.match(infographic.parentheticalCitation, /tres o más autores/);
+  assert.match(slides.parentheticalCitation, /Autor & Autor/);
+  assert.match(slides.parentheticalCitation, /tres o más autores/);
 });
 
 test('APA 7 guidance exposes verified citation rules 8.1 through 8.36', async () => {
@@ -901,10 +908,12 @@ test('APA 7 source rules choose DOI over URL and omit common databases', async (
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
   const ids = JSON.parse((await handler({ topic: 'reference', referenceRuleId: 'when-to-include-doi-url' })).content[0].text).referenceRule;
   const database = JSON.parse((await handler({ topic: 'reference', referenceRuleId: 'database-archive-source' })).content[0].text).referenceRule;
+  const periodical = JSON.parse((await handler({ topic: 'reference', referenceRuleId: 'periodical-source' })).content[0].text).referenceRule;
   assert.match(ids.rules.join(' '), /incluye solo DOI/);
   assert.match(ids.rules.join(' '), /ISBN e ISSN no se incluyen/);
   assert.match(database.rules.join(' '), /Omítela para obras ampliamente disponibles/);
   assert.match(database.refuseWhen.join(' '), /sesión, token/);
+  assert.match(periodical.rules.join(' '), /coma que lo sigue también va en cursiva/);
 });
 
 test('APA 7 periodical rules omit rather than invent missing publication data', async () => {
