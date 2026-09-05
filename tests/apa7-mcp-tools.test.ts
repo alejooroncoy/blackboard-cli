@@ -863,9 +863,15 @@ test('APA 7 periodical rules omit rather than invent missing publication data', 
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
   const missing = JSON.parse((await handler({ topic: 'reference', referenceRuleId: 'periodical-missing-information' })).content[0].text).referenceRule;
   const article = JSON.parse((await handler({ topic: 'reference', referenceRuleId: 'article-number' })).content[0].text).referenceRule;
+  const cochrane = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-cochrane' })).content[0].text).case;
+  const upToDate = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-uptodate' })).content[0].text).case;
   assert.match(missing.rules.join(' '), /Omite volumen, número, páginas/);
   assert.match(missing.refuseWhen.join(' '), /inventó volumen/);
   assert.match(article.referencePattern, /Artículo eLocator/);
+  assert.match(cochrane.referenceTemplate, /Año\(número de edición\), Artículo CD/);
+  assert.ok(cochrane.requiredMetadata.includes('número de artículo CD'));
+  assert.match(upToDate.referenceTemplate, /En E\. Editor \(Ed\.\), UpToDate/);
+  assert.ok(upToDate.requiredMetadata.includes('editor acreditado'));
 });
 
 test('APA 7 no-source rule produces an in-text personal communication only', async () => {

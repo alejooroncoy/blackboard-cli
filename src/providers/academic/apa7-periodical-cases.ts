@@ -133,14 +133,14 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   },
   'journal-cochrane': {
     ...base, id: 'journal-cochrane', label: 'Artículo de Cochrane Database of Systematic Reviews', manualExample: 13, manualPrintedPages: '325',
-    requiredMetadata: ['autores', 'año', 'título', 'Cochrane Database of Systematic Reviews', 'DOI'],
-    referenceTemplate: 'Autor, A. A. (Año). Título. Cochrane Database of Systematic Reviews. DOI',
-    rules: ['Se presenta como artículo de publicación periódica.'],
+    requiredMetadata: ['autores', 'año', 'título', 'número de edición', 'número de artículo CD', 'DOI'],
+    referenceTemplate: 'Autor, A. A. (Año). Título. Cochrane Database of Systematic Reviews, Año(número de edición), Artículo CDxxxxxx. DOI',
+    rules: ['Se presenta como artículo de publicación periódica.', 'Conserva el número de edición y el identificador de artículo CD verificados.'],
   },
   'journal-uptodate': {
     ...base, id: 'journal-uptodate', label: 'Artículo de UpToDate', manualExample: 14, manualPrintedPages: '325-326',
-    requiredMetadata: ['autor', 'año de última actualización', 'título', 'fecha de recuperación', 'URL'],
-    referenceTemplate: 'Autor, A. A. (Año de última actualización). Título. UpToDate. Recuperado el día de mes de año, de URL',
+    requiredMetadata: ['autor', 'año de última actualización', 'título', 'editor acreditado', 'fecha de recuperación', 'URL'],
+    referenceTemplate: 'Autor, A. A. (Año de última actualización). Título. En E. Editor (Ed.), UpToDate. Recuperado el día de mes de año, de URL',
     rules: ['Incluye fecha de recuperación porque el contenido cambia y las versiones no se archivan.'],
   },
   'magazine-article': {
