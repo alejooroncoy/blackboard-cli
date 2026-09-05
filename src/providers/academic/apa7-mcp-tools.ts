@@ -41,17 +41,17 @@ const sourceType = z.enum([
 type SourceType = z.infer<typeof sourceType>;
 
 const referenceTemplates: Partial<Record<SourceType, string>> = {
-  book: 'Apellido, A. A. (Año). Título del libro. Editorial. URL o DOI',
-  'book-chapter': 'Apellido, A. A. (Año). Título del capítulo. En A. Editor (Ed.), Título del libro (pp. xx-xx). Editorial.',
-  'journal-article': 'Apellido, A. A., & Apellido, B. B. (Año). Título del artículo. Revista, volumen(número), xx-xx. https://doi.org/xxxxx',
-  webpage: 'Autor o entidad. (Año, día de mes). Título de la página. Nombre del sitio. URL',
-  report: 'Entidad o Apellido, A. A. (Año). Título del informe (N.º de informe xxx). Editorial o entidad. URL',
-  thesis: 'Apellido, A. A. (Año). Título [Tesis de licenciatura/maestría/doctoral, Universidad]. Repositorio. URL',
-  'newspaper-article': 'Apellido, A. A. (Año, día de mes). Título. Periódico. URL',
-  'video-webinar': 'Autor o entidad. (Año, día de mes). Título [Video o seminario web grabado]. Plataforma. URL',
-  podcast: 'Apellido, A. A. (Host). (Año, día de mes). Título del episodio (N.º de episodio) [Episodio de pódcast]. En Título del pódcast. Productora. URL',
-  'social-media': 'Autor [@usuario]. (Año, día de mes). Primeras 20 palabras del contenido [Tipo de publicación]. Red social. URL',
-  software: 'Autor o entidad. (Año). Nombre (Versión) [Software]. Editor o tienda. URL',
+  book: 'Apellido, A. A. (Año). *Título del libro*. Editorial. URL o DOI',
+  'book-chapter': 'Apellido, A. A. (Año). Título del capítulo. En A. Editor (Ed.), *Título del libro* (pp. xx-xx). Editorial.',
+  'journal-article': 'Apellido, A. A., & Apellido, B. B. (Año). Título del artículo. *Revista, volumen*(número), xx-xx. https://doi.org/xxxxx',
+  webpage: 'Autor o entidad. (Año, día de mes). *Título de la página*. Nombre del sitio. URL',
+  report: 'Entidad o Apellido, A. A. (Año). *Título del informe* (N.º de informe xxx). Editorial o entidad. URL',
+  thesis: 'Apellido, A. A. (Año). *Título* [Tesis de licenciatura/maestría/doctoral, Universidad]. Repositorio. URL',
+  'newspaper-article': 'Apellido, A. A. (Año, día de mes). Título. *Periódico*. URL',
+  'video-webinar': 'Autor o entidad. (Año, día de mes). *Título* [Video o seminario web grabado]. Plataforma. URL',
+  podcast: 'Apellido, A. A. (Host). (Año, día de mes). Título del episodio (N.º de episodio) [Episodio de pódcast]. En *Título del pódcast*. Productora. URL',
+  'social-media': 'Autor [@usuario]. (Año, día de mes). *Primeras 20 palabras del contenido* [Tipo de publicación]. Red social. URL',
+  software: 'Autor o entidad. (Año). *Nombre* (Versión) [Software]. Editor o tienda. URL',
 };
 
 const verifiedCaseId = z.union([periodicalCaseId, bookCaseId, chapterEntryCaseId, reportConferenceThesisCaseId, reviewUnpublishedCaseId, dataSoftwareTestCaseId, audiovisualAudioCaseId, visualSocialWebCaseId]);
@@ -73,6 +73,7 @@ function guidanceFor(selectedTopic: z.infer<typeof topic>, selectedSourceType?: 
     authority: 'Prioriza la rúbrica o plantilla del docente; luego la guía vigente de Biblioteca UPC y APA 7.',
     sourceGuide: 'https://biblioteca.upc.edu.pe/citas-referencias-APA7',
     safety: 'No inventes autor, fecha, página, DOI, URL ni datos bibliográficos. Marca los datos faltantes entre corchetes.',
+    templateNotation: 'En las plantillas de referencia, el texto entre asteriscos debe mostrarse en cursiva; los asteriscos son notación Markdown y no forman parte de la referencia final.',
   };
 
   switch (selectedTopic) {

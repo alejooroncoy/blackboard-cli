@@ -18,7 +18,27 @@ test('APA 7 guidance exposes a journal template when the host authorizes access'
   const result = await tool.handler({ topic: 'reference', sourceType: 'journal-article' });
   const content = JSON.parse(result.content[0].text);
   assert.match(content.template, /https:\/\/doi.org/);
+  assert.match(content.template, /\*Revista, volumen\*\(número\)/);
+  assert.match(content.templateNotation, /cursiva/);
   assert.match(content.safety, /No inventes/);
+});
+
+test('reference templates preserve APA italics with explicit Markdown notation', async () => {
+  let handler: any;
+  registerAcademicTools({
+    registerTool(_name: string, _config: unknown, registeredHandler: unknown) {
+      handler = registeredHandler;
+    },
+  } as any);
+
+  for (const sourceType of [
+    'book', 'book-chapter', 'journal-article', 'webpage', 'report', 'thesis',
+    'newspaper-article', 'video-webinar', 'podcast', 'social-media', 'software',
+  ]) {
+    const result = await handler({ topic: 'reference', sourceType });
+    const content = JSON.parse(result.content[0].text);
+    assert.match(content.template, /\*[^*]+\*/, `missing italics for ${sourceType}`);
+  }
 });
 
 test('APA 7 guidance fails closed when the host authentication check rejects access', async () => {
