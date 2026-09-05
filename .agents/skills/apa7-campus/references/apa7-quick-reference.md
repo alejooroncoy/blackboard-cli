@@ -36,7 +36,7 @@ Esta ficha guía la respuesta, pero no reemplaza las instrucciones del docente n
 | Mismo autor, años distintos | `(Apellido, 2019, 2024)` |
 | Mismo autor y año | `(Apellido, 2024a, 2024b)` |
 | Fuente secundaria | `(Autor original, 2000, como se cita en Autor secundario, 2024)` |
-| Comunicación personal | `(A. Apellido, comunicación personal, 5 de septiembre de 2026)` |
+| Comunicación personal | `(A. Apellido, comunicación personal, [fecha exacta])` |
 
 La guía UPC recomienda el uso moderado de citas secundarias: registra en referencias solo la fuente secundaria leída.
 
