@@ -648,6 +648,13 @@ test('APA 7 guidance covers reports, conferences and theses through example 66',
   assert.match(cases.find(item => item.id === 'grant-award').rules.join(' '), /solicitud de subvención no recuperable/);
   assert.match(cases.find(item => item.id === 'symposium-contribution').rules.join(' '), /actas publicadas/);
   assert.match(cases.find(item => item.id === 'thesis-database').referenceTemplate, /Nombre de la base de datos/);
+
+  for (const id of ['report-series', 'conference-session', 'conference-paper-presentation']) {
+    const item = cases.find(candidate => candidate.id === id);
+    assert.ok(item);
+    assert.match(item.parentheticalCitation, /tres o más/);
+    assert.match(item.parentheticalCitation, / & /);
+  }
 });
 
 test('APA 7 guidance covers reviews and unpublished or informally published works', async () => {
@@ -672,6 +679,7 @@ test('APA 7 guidance covers datasets, software and tests through example 83', as
   assert.match(dataset.rules.join(' '), /análisis secundarios/);
   assert.match(software.rules.join(' '), /distribución limitada/);
   assert.match(testRecord.rules.join(' '), /información descriptiva o administrativa única/);
+  assert.match(testRecord.parentheticalCitation, /tres o más autores/);
 });
 
 test('APA 7 guidance covers audiovisual and audio works through example 96', async () => {
@@ -682,6 +690,7 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   const interview = JSON.parse((await handler({ topic: 'reference', caseId: 'archived-radio-interview' })).content[0].text).case;
   const podcast = JSON.parse((await handler({ topic: 'reference', caseId: 'podcast-series' })).content[0].text).case;
   const episode = JSON.parse((await handler({ topic: 'citation', caseId: 'television-episode-or-webisode' })).content[0].text).case;
+  const series = JSON.parse((await handler({ topic: 'citation', caseId: 'television-series' })).content[0].text).case;
   assert.equal(ted.manualExample, 88);
   assert.match(ted.rules.join(' '), /En YouTube/);
   assert.match(webinar.rules.join(' '), /comunicación personal/);
@@ -689,6 +698,7 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   assert.match(podcast.referenceTemplate, /Año inicial–presente o Año inicial–Año final/);
   assert.equal(episode.parentheticalCitation, '(Guionista & Director, Año)');
   assert.equal(episode.narrativeCitation, 'Guionista y Director (Año)');
+  assert.match(series.parentheticalCitation, /tres o más productores/);
 });
 
 test('APA 7 guidance covers visual, social and web works through example 114', async () => {

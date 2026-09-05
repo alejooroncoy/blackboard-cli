@@ -66,7 +66,7 @@ export const audiovisualAudioCases: Record<AudiovisualAudioCaseId, Apa7VerifiedA
     ...audiovisualBase, id: 'television-series', label: 'Serie de televisión completa', manualExample: 86, manualPrintedPages: '349',
     requiredMetadata: ['productores ejecutivos', 'años de emisión', 'título de la serie', 'productora(s)'],
     referenceTemplate: 'Productor, P. P. (Productor ejecutivo). (Año inicial–Año final o presente). Título de la serie [Serie de TV]. Productora(s).',
-    parentheticalCitation: '(Primer productor et al., Años)', narrativeCitation: 'Primer productor et al. (Años)',
+    parentheticalCitation: '(Productor, Años); (Productor & Productor, Años); (Primer productor et al., Años) con tres o más productores', narrativeCitation: 'Productor (Años); Productor y Productor (Años); Primer productor et al. (Años) con tres o más productores',
     rules: ['Los productores ejecutivos ocupan la posición de autor.', 'Usa un rango para una serie concluida y “Año inicial–presente” para una serie en emisión.'],
   },
   'television-episode-or-webisode': {

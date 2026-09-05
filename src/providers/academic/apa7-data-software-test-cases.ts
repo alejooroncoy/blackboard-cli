@@ -99,7 +99,7 @@ export const dataSoftwareTestCases: Record<DataSoftwareTestCaseId, Apa7VerifiedD
     ...testBase, id: 'test-database-record', label: 'Registro de base de datos para una prueba', manualExample: 83, manualPrintedPages: '347',
     requiredMetadata: ['autores', 'año', 'nombre de la prueba', 'sigla/código si existe', 'descripción de registro', 'base de datos de pruebas', 'DOI/URL'],
     referenceTemplate: 'Autor, A. A. (Año). Nombre de la prueba (Sigla/código) [Registro de base de datos]. Base de datos de pruebas. DOI/URL',
-    parentheticalCitation: '(Primer autor et al., Año)', narrativeCitation: 'Primer autor et al. (Año)',
+    parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
     rules: ['Cita el registro solo cuando utilizas información descriptiva o administrativa única de ese registro.', 'Si no usas información única del registro, cita la literatura de apoyo disponible.', 'El nombre de la base se incluye para registros, no por el mero hecho de que la prueba pueda encontrarse allí.'],
   },
 };

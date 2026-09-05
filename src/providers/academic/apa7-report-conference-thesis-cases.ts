@@ -70,7 +70,7 @@ export const reportConferenceThesisCases: Record<ReportConferenceThesisCaseId, A
     ...reportBase, id: 'report-series', label: 'Reporte de autores individuales publicado en una serie', manualExample: 52, manualPrintedPages: '336',
     requiredMetadata: ['autores', 'año', 'título', 'nombre/número de serie o fascículo', 'organización', 'URL/DOI'],
     referenceTemplate: 'Autor, A. A. (Año). Título del reporte (Nombre de la serie y número/fascículo). Organización. URL/DOI',
-    parentheticalCitation: '(Primer autor et al., Año)', narrativeCitation: 'Primer autor et al. (Año)',
+    parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
     rules: ['La información identificadora de la serie se coloca entre paréntesis después del título.'],
   },
   'report-working-group': {
@@ -124,14 +124,14 @@ export const reportConferenceThesisCases: Record<ReportConferenceThesisCaseId, A
     ...conferenceBase, id: 'conference-session', label: 'Sesión de congreso', manualExample: 60, manualPrintedPages: '338',
     requiredMetadata: ['todos los ponentes/contribuyentes', 'fechas completas del congreso', 'título', 'nombre del congreso', 'ubicación', 'DOI/URL si existe'],
     referenceTemplate: 'Ponente, A. A. (Año, día–día de mes). Título [Sesión de congreso]. Nombre del congreso, Ciudad, región, país. DOI/URL',
-    parentheticalCitation: '(Primer ponente et al., Año)', narrativeCitation: 'Primer ponente et al. (Año)',
+    parentheticalCitation: '(Ponente, Año); (Ponente & Ponente, Año); (Primer ponente et al., Año) con tres o más ponentes', narrativeCitation: 'Ponente (Año); Ponente y Ponente (Año); Primer ponente et al. (Año) con tres o más ponentes',
     rules: ['Incluye a todas las personas acreditadas como contribuyentes aunque no hayan estado físicamente presentes.', 'Usa las fechas del congreso completo y una ubicación verificable.'],
   },
   'conference-paper-presentation': {
     ...conferenceBase, id: 'conference-paper-presentation', label: 'Presentación de escrito', manualExample: 61, manualPrintedPages: '338',
     requiredMetadata: ['todos los autores', 'fechas completas del congreso', 'título', 'nombre del congreso', 'ubicación', 'DOI/URL si existe'],
     referenceTemplate: 'Autor, A. A. (Año, día de mes–día de mes). Título [Presentación de escrito]. Nombre del congreso, Ciudad, región, país. DOI/URL',
-    parentheticalCitation: '(Primer autor et al., Año)', narrativeCitation: 'Primer autor et al. (Año)',
+    parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
     rules: ['La etiqueta entre corchetes debe coincidir con la forma en que el congreso describió la presentación.'],
   },
   'conference-poster-presentation': {
