@@ -322,7 +322,7 @@ function guidanceFor(selectedTopic: z.infer<typeof topic>, selectedSourceType?: 
  */
 export function registerAcademicTools(
   server: McpServer,
-  options: { authorize?: () => boolean | Promise<boolean> } = {},
+  options: { authorize: () => boolean | Promise<boolean> },
 ) {
   server.registerTool('campus_apa7_guidance', {
     description: 'Get reliable Spanish APA 7 guidance, templates and review checklists for citations, references, manuscript format, research reporting, tables/figures, legal materials or Blackboard course requirements. Does not require Blackboard login and never invents metadata.',
@@ -345,7 +345,7 @@ export function registerAcademicTools(
     },
     annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
   }, async ({ topic, sourceType, caseId, citationRuleId, referenceRuleId, formatRuleId, reportingRuleId, writingStyleRuleId, biasFreeLanguageRuleId, mechanicsRuleId, tableFigureRuleId, legalRuleId, peruLegalCaseId, publicationRuleId, principlesEthicsRuleId }) => {
-    if (options.authorize && !(await options.authorize())) {
+    if (!options?.authorize || !(await options.authorize())) {
       throw new Error('Not authenticated. Ask the user to run: campus account login');
     }
     validateSelectors(topic, { sourceType, caseId, citationRuleId, referenceRuleId, formatRuleId, reportingRuleId, writingStyleRuleId, biasFreeLanguageRuleId, mechanicsRuleId, tableFigureRuleId, legalRuleId, peruLegalCaseId, publicationRuleId, principlesEthicsRuleId });

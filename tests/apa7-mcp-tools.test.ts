@@ -1,6 +1,10 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { registerAcademicTools } from '../src/providers/academic/apa7-mcp-tools.js';
+import { registerAcademicTools as registerAcademicToolsWithAuthorization } from '../src/providers/academic/apa7-mcp-tools.js';
+
+function registerAcademicTools(server: any, options: { authorize: () => boolean | Promise<boolean> } = { authorize: () => true }) {
+  return registerAcademicToolsWithAuthorization(server, options);
+}
 
 test('APA 7 guidance exposes a journal template when the host authorizes access', async () => {
   const tools = new Map<string, any>();
@@ -94,6 +98,17 @@ test('APA 7 guidance fails closed when the host authentication check rejects acc
     () => handler({ topic: 'citation' }),
     /campus account login/,
   );
+});
+
+test('APA 7 guidance fails closed when an untyped host omits authorization', async () => {
+  let handler: any;
+  (registerAcademicToolsWithAuthorization as any)({
+    registerTool(_name: string, _config: unknown, registeredHandler: unknown) {
+      handler = registeredHandler;
+    },
+  });
+
+  await assert.rejects(() => handler({ topic: 'citation' }), /campus account login/);
 });
 
 test('personal communication guidance requests the caller\'s exact date', async () => {
@@ -666,11 +681,14 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   const webinar = JSON.parse((await handler({ topic: 'reference', caseId: 'recorded-webinar' })).content[0].text).case;
   const interview = JSON.parse((await handler({ topic: 'reference', caseId: 'archived-radio-interview' })).content[0].text).case;
   const podcast = JSON.parse((await handler({ topic: 'reference', caseId: 'podcast-series' })).content[0].text).case;
+  const episode = JSON.parse((await handler({ topic: 'citation', caseId: 'television-episode-or-webisode' })).content[0].text).case;
   assert.equal(ted.manualExample, 88);
   assert.match(ted.rules.join(' '), /En YouTube/);
   assert.match(webinar.rules.join(' '), /comunicación personal/);
   assert.match(interview.rules.join(' '), /persona entrevistada/);
   assert.match(podcast.referenceTemplate, /Año inicial–presente o Año inicial–Año final/);
+  assert.equal(episode.parentheticalCitation, '(Guionista & Director, Año)');
+  assert.equal(episode.narrativeCitation, 'Guionista y Director (Año)');
 });
 
 test('APA 7 guidance covers visual, social and web works through example 114', async () => {

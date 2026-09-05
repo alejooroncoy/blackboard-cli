@@ -73,7 +73,7 @@ export const audiovisualAudioCases: Record<AudiovisualAudioCaseId, Apa7VerifiedA
     ...audiovisualBase, id: 'television-episode-or-webisode', label: 'Episodio de televisión o webisodio', manualExample: 87, manualPrintedPages: '349',
     requiredMetadata: ['guionistas', 'director del episodio', 'fecha completa', 'título', 'temporada y episodio', 'productores ejecutivos', 'serie', 'productora(s)', 'URL si corresponde'],
     referenceTemplate: 'Guionista, G. G. (Guionista), & Director, D. D. (Director). (Año, día de mes). Título (Temporada x, Episodio y) [Episodio de serie de TV]. En P. Productor (Productor ejecutivo), Título de la serie. Productora(s). URL',
-    parentheticalCitation: '(Primer responsable et al., Año)', narrativeCitation: 'Primer responsable et al. (Año)',
+    parentheticalCitation: '(Guionista & Director, Año)', narrativeCitation: 'Guionista y Director (Año)',
     rules: ['Incluye guionista(s) y director del episodio con sus roles.', 'Incluye temporada y episodio entre paréntesis después del título.', 'Distingue responsables del episodio de productores ejecutivos de la serie.'],
   },
   'ted-talk': {
