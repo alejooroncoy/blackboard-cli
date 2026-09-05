@@ -57,6 +57,7 @@ export const reportConferenceThesisCases: Record<ReportConferenceThesisCaseId, A
     ...reportBase, id: 'report-government-or-organization', label: 'Reporte de agencia gubernamental u otra organización', manualExample: 50, manualPrintedPages: '335-336',
     requiredMetadata: ['autor o autores grupales exactos', 'año', 'título', 'número de reporte si existe', 'organismo superior/editorial si corresponde', 'URL/DOI'],
     referenceTemplate: 'Entidad autora. (Año). Título del reporte (N.º de reporte si existe). Organismo superior si no figura en el autor. URL/DOI',
+    parentheticalCitation: '(Entidad, Año); (Entidad & Entidad, Año); (Primera entidad et al., Año) con tres o más entidades autoras', narrativeCitation: 'Entidad (Año); Entidad y Entidad (Año); Primera entidad et al. (Año) con tres o más entidades autoras',
     rules: ['Si autor y editorial son la misma entidad, omite la editorial.', 'Si un organismo superior no aparece en el nombre del autor grupal, inclúyelo como fuente.', 'Une dos agencias autoras con &; separa tres o más con comas y & antes de la última.'],
   },
   'report-individual-authors-in-organization': {
@@ -138,6 +139,7 @@ export const reportConferenceThesisCases: Record<ReportConferenceThesisCaseId, A
     ...conferenceBase, id: 'conference-poster-presentation', label: 'Presentación de cartel', manualExample: 62, manualPrintedPages: '339',
     requiredMetadata: ['autores', 'fechas completas del congreso', 'título', 'nombre del congreso', 'ubicación', 'DOI/URL si existe'],
     referenceTemplate: 'Autor, A. A. (Año, día–día de mes). Título [Presentación de cartel]. Nombre del congreso, Ciudad, región, país. DOI/URL',
+    parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
     rules: ['No usa el formato de artículo salvo que el trabajo esté publicado formalmente en actas o revista.'],
   },
   'symposium-contribution': {

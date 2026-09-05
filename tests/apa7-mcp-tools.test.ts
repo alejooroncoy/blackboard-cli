@@ -435,6 +435,8 @@ test('Peruvian legal profiles reject common hallucinations and preserve official
   assert.match(tc.parentheticalCitation, /fundamento X/);
   assert.match(tc.rules.join(' '), /Distingue sentencia, auto y resolución/);
   assert.match(patent.rules.join(' '), /año de concesión, no de solicitud/);
+  assert.match(patent.parentheticalCitation, /Inventor & Inventor/);
+  assert.match(patent.parentheticalCitation, /tres o más inventores/);
   assert.match(treaty.rules.join(' '), /firma, aprobación, ratificación y entrada en vigor/);
 });
 
@@ -692,12 +694,16 @@ test('APA 7 guidance covers reports, conferences and theses through example 66',
   assert.match(cases.find(item => item.id === 'symposium-contribution').rules.join(' '), /actas publicadas/);
   assert.match(cases.find(item => item.id === 'thesis-database').referenceTemplate, /Nombre de la base de datos/);
 
-  for (const id of ['report-series', 'conference-session', 'conference-paper-presentation']) {
+  for (const id of ['report-series', 'conference-session', 'conference-paper-presentation', 'conference-poster-presentation']) {
     const item = cases.find(candidate => candidate.id === id);
     assert.ok(item);
     assert.match(item.parentheticalCitation, /tres o más/);
     assert.match(item.parentheticalCitation, / & /);
   }
+  const organization = cases.find(candidate => candidate.id === 'report-government-or-organization');
+  assert.ok(organization);
+  assert.match(organization.parentheticalCitation, /Entidad & Entidad/);
+  assert.match(organization.parentheticalCitation, /tres o más entidades autoras/);
   const symposium = cases.find(candidate => candidate.id === 'symposium-contribution');
   assert.ok(symposium);
   assert.match(symposium.parentheticalCitation, /tres o más autores/);
