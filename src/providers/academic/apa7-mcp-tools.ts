@@ -132,6 +132,7 @@ function guidanceFor(selectedTopic: z.infer<typeof topic>, selectedSourceType?: 
         ],
       };
     case 'citation':
+      if (selectedPeruLegalCaseId) return { ...base, legalCase: getPeruLegalCase(selectedPeruLegalCaseId) };
       if (selectedCitationRuleId) return { ...base, citationRule: getCitationRule(selectedCitationRuleId) };
       if (selectedCaseId) return { ...base, case: getVerifiedCaseWithFormatting(selectedCaseId) };
       if (selectedSourceType === 'personal-communication') {
@@ -155,6 +156,7 @@ function guidanceFor(selectedTopic: z.infer<typeof topic>, selectedSourceType?: 
         },
       };
     case 'reference':
+      if (selectedPeruLegalCaseId) return { ...base, legalCase: getPeruLegalCase(selectedPeruLegalCaseId) };
       if (selectedReferenceRuleId) return { ...base, referenceRule: getReferenceRule(selectedReferenceRuleId) };
       if (selectedCaseId) return { ...base, case: getVerifiedCaseWithFormatting(selectedCaseId) };
       return {

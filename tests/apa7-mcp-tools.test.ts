@@ -65,6 +65,20 @@ test('citation sourceType specializes personal communications without pretending
   assert.match(journal.sourceTypeNote, /no cambia por sí solo la cita autor-fecha/);
 });
 
+test('Peruvian legal profiles are honored from citation and reference topics', async () => {
+  let handler: any;
+  registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
+
+  for (const topic of ['citation', 'reference']) {
+    const result = JSON.parse((await handler({
+      topic,
+      peruLegalCaseId: 'peru-law-or-legislative-decree',
+    })).content[0].text);
+    assert.equal(result.legalCase.id, 'peru-law-or-legislative-decree');
+    assert.match(result.legalCase.referenceTemplate, /Diario Oficial El Peruano/);
+  }
+});
+
 test('APA 7 guidance fails closed when the host authentication check rejects access', async () => {
   let handler: any;
   registerAcademicTools({
