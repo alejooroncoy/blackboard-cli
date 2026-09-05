@@ -107,6 +107,24 @@ test('personal communication guidance requests the caller\'s exact date', async 
   assert.doesNotMatch(content.template, /2026/);
 });
 
+test('APA 7 guidance rejects selectors from another topic and conflicting selectors', async () => {
+  let handler: any;
+  registerAcademicTools({
+    registerTool(_name: string, _config: unknown, registeredHandler: unknown) {
+      handler = registeredHandler;
+    },
+  } as any);
+
+  await assert.rejects(
+    () => handler({ topic: 'format', citationRuleId: 'short-quote' }),
+    /Selectors incompatible with topic "format": citationRuleId/,
+  );
+  await assert.rejects(
+    () => handler({ topic: 'citation', caseId: 'journal-article', citationRuleId: 'short-quote' }),
+    /Choose only one selector for topic "citation"/,
+  );
+});
+
 test('APA 7 guidance returns usable content for every supported topic and source type', async () => {
   let handler: any;
   registerAcademicTools({
@@ -530,7 +548,7 @@ test('APA 7 guidance exposes every verified case with citations and refusal guar
   assert.equal(catalogue.availableVerifiedCases.length, 114);
 
   for (const caseId of catalogue.availableVerifiedCases) {
-    const result = JSON.parse((await handler({ topic: 'reference', sourceType: 'journal-article', caseId })).content[0].text);
+    const result = JSON.parse((await handler({ topic: 'reference', caseId })).content[0].text);
     assert.equal(result.case.status, 'verified');
     assert.ok(result.case.requiredMetadata.length > 0, `missing metadata for ${caseId}`);
     assert.ok(result.case.referenceTemplate, `missing reference for ${caseId}`);
@@ -640,10 +658,12 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   const ted = JSON.parse((await handler({ topic: 'reference', caseId: 'ted-talk' })).content[0].text).case;
   const webinar = JSON.parse((await handler({ topic: 'reference', caseId: 'recorded-webinar' })).content[0].text).case;
   const interview = JSON.parse((await handler({ topic: 'reference', caseId: 'archived-radio-interview' })).content[0].text).case;
+  const podcast = JSON.parse((await handler({ topic: 'reference', caseId: 'podcast-series' })).content[0].text).case;
   assert.equal(ted.manualExample, 88);
   assert.match(ted.rules.join(' '), /En YouTube/);
   assert.match(webinar.rules.join(' '), /comunicación personal/);
   assert.match(interview.rules.join(' '), /persona entrevistada/);
+  assert.match(podcast.referenceTemplate, /Año inicial–presente o Año inicial–Año final/);
 });
 
 test('APA 7 guidance covers visual, social and web works through example 114', async () => {

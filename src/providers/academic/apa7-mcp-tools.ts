@@ -111,6 +111,35 @@ function getVerifiedCaseWithFormatting(id: VerifiedCaseId) {
   };
 }
 
+const allowedSelectorsByTopic: Record<z.infer<typeof topic>, readonly string[]> = {
+  'principles-ethics': ['principlesEthicsRuleId'],
+  citation: ['sourceType', 'caseId', 'citationRuleId', 'peruLegalCaseId'],
+  reference: ['sourceType', 'caseId', 'referenceRuleId', 'peruLegalCaseId'],
+  format: ['formatRuleId'],
+  reporting: ['reportingRuleId'],
+  'writing-style': ['writingStyleRuleId'],
+  'bias-free-language': ['biasFreeLanguageRuleId'],
+  mechanics: ['mechanicsRuleId'],
+  'table-figure': ['tableFigureRuleId'],
+  legal: ['legalRuleId', 'peruLegalCaseId'],
+  publication: ['publicationRuleId'],
+  review: [],
+  'course-requirements': [],
+};
+
+function validateSelectors(selectedTopic: z.infer<typeof topic>, selectors: Record<string, unknown>) {
+  const selected = Object.entries(selectors)
+    .filter(([, value]) => value !== undefined)
+    .map(([name]) => name);
+  const incompatible = selected.filter(name => !allowedSelectorsByTopic[selectedTopic].includes(name));
+  if (incompatible.length > 0) {
+    throw new Error(`Selectors incompatible with topic "${selectedTopic}": ${incompatible.join(', ')}`);
+  }
+  if (selected.length > 1) {
+    throw new Error(`Choose only one selector for topic "${selectedTopic}": ${selected.join(', ')}`);
+  }
+}
+
 function guidanceFor(selectedTopic: z.infer<typeof topic>, selectedSourceType?: SourceType, selectedCaseId?: VerifiedCaseId, selectedCitationRuleId?: CitationRuleId, selectedReferenceRuleId?: ReferenceRuleId, selectedFormatRuleId?: FormatRuleId, selectedReportingRuleId?: ReportingRuleId, selectedWritingStyleRuleId?: WritingStyleRuleId, selectedBiasFreeLanguageRuleId?: BiasFreeLanguageRuleId, selectedMechanicsRuleId?: MechanicsRuleId, selectedTableFigureRuleId?: TableFigureRuleId, selectedLegalRuleId?: LegalRuleId, selectedPeruLegalCaseId?: PeruLegalCaseId, selectedPublicationRuleId?: PublicationRuleId, selectedPrinciplesEthicsRuleId?: PrinciplesEthicsRuleId) {
   const base = {
     authority: 'Prioriza la rúbrica o plantilla del docente; luego la guía vigente de Biblioteca UPC y APA 7.',
@@ -319,6 +348,7 @@ export function registerAcademicTools(
     if (options.authorize && !(await options.authorize())) {
       throw new Error('Not authenticated. Ask the user to run: campus account login');
     }
+    validateSelectors(topic, { sourceType, caseId, citationRuleId, referenceRuleId, formatRuleId, reportingRuleId, writingStyleRuleId, biasFreeLanguageRuleId, mechanicsRuleId, tableFigureRuleId, legalRuleId, peruLegalCaseId, publicationRuleId, principlesEthicsRuleId });
     return {
       content: [{ type: 'text', text: JSON.stringify({
       ...guidanceFor(topic, sourceType, caseId, citationRuleId, referenceRuleId, formatRuleId, reportingRuleId, writingStyleRuleId, biasFreeLanguageRuleId, mechanicsRuleId, tableFigureRuleId, legalRuleId, peruLegalCaseId, publicationRuleId, principlesEthicsRuleId),

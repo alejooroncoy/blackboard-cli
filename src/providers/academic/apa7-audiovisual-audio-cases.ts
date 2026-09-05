@@ -114,7 +114,7 @@ export const audiovisualAudioCases: Record<AudiovisualAudioCaseId, Apa7VerifiedA
   'podcast-series': {
     ...audioBase, id: 'podcast-series', label: 'Pódcast completo', manualExample: 93, manualPrintedPages: '351',
     requiredMetadata: ['anfitrión o productor ejecutivo', 'rol', 'años de publicación', 'título', 'tipo audio/video', 'productora', 'URL si se conoce'],
-    referenceTemplate: 'Anfitrión, A. A. (Anfitrión). (Año inicial–presente o Año final). Título [Pódcast de audio o video]. Productora. URL',
+    referenceTemplate: 'Anfitrión, A. A. (Anfitrión). (Año inicial–presente o Año inicial–Año final). Título [Pódcast de audio o video]. Productora. URL',
     parentheticalCitation: '(Anfitrión, Años)', narrativeCitation: 'Anfitrión (Años)',
     rules: ['El anfitrión ocupa la posición de autor; alternativamente, usa productores ejecutivos conocidos.', 'Incluye el rol y especifica si es pódcast de audio o video.', 'Si la URL se desconoce porque se accedió desde una aplicación, omítela.'],
   },
