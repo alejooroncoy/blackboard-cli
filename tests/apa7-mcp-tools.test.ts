@@ -41,6 +41,30 @@ test('reference templates preserve APA italics with explicit Markdown notation',
   }
 });
 
+test('every verified case describes how to recover required reference italics', async () => {
+  let handler: any;
+  registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
+  const catalogue = JSON.parse((await handler({ topic: 'reference' })).content[0].text);
+
+  for (const caseId of catalogue.availableVerifiedCases) {
+    const result = JSON.parse((await handler({ topic: 'reference', caseId })).content[0].text);
+    assert.match(result.case.referenceFormatting.encoding, /texto plano/);
+    assert.ok(result.case.referenceFormatting.italicize.length > 0, `missing italics metadata for ${caseId}`);
+  }
+});
+
+test('citation sourceType specializes personal communications without pretending media changes author-date rules', async () => {
+  let handler: any;
+  registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
+
+  const personal = JSON.parse((await handler({ topic: 'citation', sourceType: 'personal-communication' })).content[0].text);
+  assert.equal(personal.citationRule.id, 'personal-communication');
+  assert.match(personal.citationRule.rules.join(' '), /fecha tan exacta/);
+
+  const journal = JSON.parse((await handler({ topic: 'citation', sourceType: 'journal-article' })).content[0].text);
+  assert.match(journal.sourceTypeNote, /no cambia por sí solo la cita autor-fecha/);
+});
+
 test('APA 7 guidance fails closed when the host authentication check rejects access', async () => {
   let handler: any;
   registerAcademicTools({

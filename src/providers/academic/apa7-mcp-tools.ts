@@ -68,6 +68,49 @@ function getVerifiedCase(id: VerifiedCaseId) {
   return getVisualSocialWebCase(id as VisualSocialWebCaseId);
 }
 
+function referenceFormattingForCase(id: VerifiedCaseId) {
+  const encoding = 'El campo referenceTemplate usa texto plano; aplica la cursiva a los componentes semánticos indicados y no escribas asteriscos en la referencia final.';
+  if (id in periodicalCases) return {
+    encoding,
+    italicize: ['nombre de la publicación periódica o base de revisiones', 'volumen de la publicación; el número entre paréntesis queda sin cursiva'],
+  };
+  if (id in bookCases) return {
+    encoding,
+    italicize: ['título de la obra independiente, libro, manual, antología o volumen'],
+  };
+  if (id in chapterEntryCases) return {
+    encoding,
+    italicize: ['título del libro, obra de consulta o contenedor; no el título del capítulo o entrada'],
+  };
+  if (id in reportConferenceThesisCases) return {
+    encoding,
+    italicize: ['título del informe, proyecto, comunicado, contribución de congreso, tesis o disertación que funciona como obra independiente'],
+  };
+  if (id in reviewUnpublishedCases) return {
+    encoding,
+    italicize: ['título y volumen de la publicación contenedora', 'título de la obra reseñada o del manuscrito independiente cuando corresponda'],
+  };
+  if (id in dataSoftwareTestCases) return {
+    encoding,
+    italicize: ['título del conjunto de datos, software, aplicación, aparato, prueba o manual que funciona como obra independiente'],
+  };
+  if (id in audiovisualAudioCases) return {
+    encoding,
+    italicize: ['título de la obra audiovisual o sonora independiente, serie, álbum o pódcast', 'título de la serie, álbum o pódcast contenedor; no el episodio o canción'],
+  };
+  return {
+    encoding,
+    italicize: ['título o descripción de la obra visual, publicación social o página web independiente; no el nombre del sitio o plataforma'],
+  };
+}
+
+function getVerifiedCaseWithFormatting(id: VerifiedCaseId) {
+  return {
+    ...getVerifiedCase(id),
+    referenceFormatting: referenceFormattingForCase(id),
+  };
+}
+
 function guidanceFor(selectedTopic: z.infer<typeof topic>, selectedSourceType?: SourceType, selectedCaseId?: VerifiedCaseId, selectedCitationRuleId?: CitationRuleId, selectedReferenceRuleId?: ReferenceRuleId, selectedFormatRuleId?: FormatRuleId, selectedReportingRuleId?: ReportingRuleId, selectedWritingStyleRuleId?: WritingStyleRuleId, selectedBiasFreeLanguageRuleId?: BiasFreeLanguageRuleId, selectedMechanicsRuleId?: MechanicsRuleId, selectedTableFigureRuleId?: TableFigureRuleId, selectedLegalRuleId?: LegalRuleId, selectedPeruLegalCaseId?: PeruLegalCaseId, selectedPublicationRuleId?: PublicationRuleId, selectedPrinciplesEthicsRuleId?: PrinciplesEthicsRuleId) {
   const base = {
     authority: 'Prioriza la rúbrica o plantilla del docente; luego la guía vigente de Biblioteca UPC y APA 7.',
@@ -90,9 +133,15 @@ function guidanceFor(selectedTopic: z.infer<typeof topic>, selectedSourceType?: 
       };
     case 'citation':
       if (selectedCitationRuleId) return { ...base, citationRule: getCitationRule(selectedCitationRuleId) };
-      if (selectedCaseId) return { ...base, case: getVerifiedCase(selectedCaseId) };
+      if (selectedCaseId) return { ...base, case: getVerifiedCaseWithFormatting(selectedCaseId) };
+      if (selectedSourceType === 'personal-communication') {
+        return { ...base, citationRule: getCitationRule('personal-communication') };
+      }
       return {
         ...base,
+        sourceTypeNote: selectedSourceType
+          ? 'El tipo de soporte no cambia por sí solo la cita autor-fecha. Usa caseId para un caso bibliográfico verificado o citationRuleId para una regla de citación específica.'
+          : undefined,
         rules: [
           'Distingue paráfrasis de cita textual y cita narrativa de parentética.',
           'Una cita textual necesita autor, año y localizador verificable; si no hay página, usa párrafo, sección o marca de tiempo.',
@@ -107,7 +156,7 @@ function guidanceFor(selectedTopic: z.infer<typeof topic>, selectedSourceType?: 
       };
     case 'reference':
       if (selectedReferenceRuleId) return { ...base, referenceRule: getReferenceRule(selectedReferenceRuleId) };
-      if (selectedCaseId) return { ...base, case: getVerifiedCase(selectedCaseId) };
+      if (selectedCaseId) return { ...base, case: getVerifiedCaseWithFormatting(selectedCaseId) };
       return {
         ...base,
         requiredMetadata: selectedSourceType === 'personal-communication'
@@ -248,7 +297,7 @@ export function registerAcademicTools(
     description: 'Get reliable Spanish APA 7 guidance, templates and review checklists for citations, references, manuscript format, research reporting, tables/figures, legal materials or Blackboard course requirements. Does not require Blackboard login and never invents metadata.',
     inputSchema: {
       topic: topic.describe('The APA 7 help needed'),
-      sourceType: sourceType.optional().describe('Source type when asking about a reference or citation'),
+      sourceType: sourceType.optional().describe('Source type for a reference template; citation requests specialize personal communications and otherwise use caseId or citationRuleId'),
       caseId: verifiedCaseId.optional().describe('Verified APA 7 case; use this instead of guessing a specialized format'),
       citationRuleId: citationRuleId.optional().describe('Verified APA 7 citation rule from chapter 8; use this for exact quotation and attribution behavior'),
       referenceRuleId: referenceRuleId.optional().describe('Verified APA 7 reference-list rule from chapter 9; use this for category, missing-data, punctuation and metadata decisions'),
