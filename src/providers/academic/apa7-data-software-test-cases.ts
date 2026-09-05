@@ -60,7 +60,7 @@ export const dataSoftwareTestCases: Record<DataSoftwareTestCaseId, Apa7VerifiedD
   'specialized-software': {
     ...softwareBase, id: 'specialized-software', label: 'Software especializado o de distribución limitada', manualExample: 77, manualPrintedPages: '345',
     requiredMetadata: ['autores o entidad', 'año de la versión', 'título', 'versión', 'desarrollador/editor si difiere', 'URL'],
-    referenceTemplate: 'Autor, A. A. (Año). Título (Versión x) [Software]. Desarrollador. URL',
+    referenceTemplate: 'Autor, A. A. (Año). Título (Versión x) [Software]. Desarrollador, solo si difiere del autor. URL',
     rules: ['Referencia software especializado o de distribución limitada y cualquier software que se haya parafraseado o citado.', 'El título va en cursiva en referencias, no cuando se menciona en el texto.', 'Si autor y desarrollador son iguales, omite el desarrollador.'],
   },
   'apparatus-or-equipment': {

@@ -655,6 +655,12 @@ test('APA 7 guidance covers all 12 chapter and reference-entry examples', async 
     'reference-entry-group-author', 'reference-entry-individual-author', 'wikipedia-entry',
   ].includes(id));
   assert.equal(ids.length, 12);
+  const chapter = JSON.parse((await handler({ topic: 'citation', caseId: 'chapter-edited-doi' })).content[0].text).case;
+  assert.match(chapter.parentheticalCitation, /Autor & Autor/);
+  assert.match(chapter.parentheticalCitation, /tres o más autores/);
+  const translated = JSON.parse((await handler({ topic: 'citation', caseId: 'chapter-translated-republication' })).content[0].text).case;
+  assert.match(translated.parentheticalCitation, /Autor & Autor/);
+  assert.match(translated.parentheticalCitation, /Año original\/Año reedición/);
 
   const wikipedia = JSON.parse((await handler({ topic: 'citation', caseId: 'wikipedia-entry' })).content[0].text);
   assert.match(wikipedia.case.rules.join(' '), /revisión archivada/);
@@ -713,6 +719,7 @@ test('APA 7 guidance covers datasets, software and tests through example 83', as
   assert.equal(dataset.manualExample, 75);
   assert.match(dataset.rules.join(' '), /análisis secundarios/);
   assert.match(software.rules.join(' '), /distribución limitada/);
+  assert.match(software.referenceTemplate, /solo si difiere del autor/);
   assert.match(testRecord.rules.join(' '), /información descriptiva o administrativa única/);
   assert.match(testRecord.parentheticalCitation, /tres o más autores/);
   assert.match(software.parentheticalCitation, /Autor|Entidad/);
