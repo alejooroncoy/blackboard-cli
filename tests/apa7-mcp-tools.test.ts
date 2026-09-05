@@ -655,6 +655,9 @@ test('APA 7 guidance covers reports, conferences and theses through example 66',
     assert.match(item.parentheticalCitation, /tres o más/);
     assert.match(item.parentheticalCitation, / & /);
   }
+  const symposium = cases.find(candidate => candidate.id === 'symposium-contribution');
+  assert.ok(symposium);
+  assert.match(symposium.parentheticalCitation, /tres o más autores/);
 });
 
 test('APA 7 guidance covers reviews and unpublished or informally published works', async () => {
@@ -680,6 +683,9 @@ test('APA 7 guidance covers datasets, software and tests through example 83', as
   assert.match(software.rules.join(' '), /distribución limitada/);
   assert.match(testRecord.rules.join(' '), /información descriptiva o administrativa única/);
   assert.match(testRecord.parentheticalCitation, /tres o más autores/);
+  assert.match(software.parentheticalCitation, /Autor|Entidad/);
+  const manual = JSON.parse((await handler({ topic: 'citation', caseId: 'test-manual' })).content[0].text).case;
+  assert.match(manual.parentheticalCitation, /tres o más autores/);
 });
 
 test('APA 7 guidance covers audiovisual and audio works through example 96', async () => {
@@ -708,11 +714,13 @@ test('APA 7 guidance covers visual, social and web works through example 114', a
   const tweet = JSON.parse((await handler({ topic: 'reference', caseId: 'tweet' })).content[0].text).case;
   const news = JSON.parse((await handler({ topic: 'reference', caseId: 'webpage-news-site' })).content[0].text).case;
   const changing = JSON.parse((await handler({ topic: 'reference', caseId: 'webpage-retrieval-date' })).content[0].text).case;
+  const infographic = JSON.parse((await handler({ topic: 'citation', caseId: 'infographic' })).content[0].text).case;
   assert.equal(map.manualExample, 100);
   assert.match(map.rules.join(' '), /dinámico/);
   assert.match(tweet.rules.join(' '), /Cada emoji cuenta como una palabra/);
   assert.match(news.rules.join(' '), /no son ediciones de un periódico/);
   assert.match(changing.rules.join(' '), /no existe versión archivada/);
+  assert.match(infographic.parentheticalCitation, /tres o más autores/);
 });
 
 test('APA 7 guidance exposes verified citation rules 8.1 through 8.36', async () => {

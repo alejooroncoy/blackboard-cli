@@ -70,7 +70,7 @@ export const visualSocialWebCases: Record<VisualSocialWebCaseId, Apa7VerifiedVis
     ...visualBase, id: 'infographic', label: 'Infografía', manualExample: 99, manualPrintedPages: '353',
     requiredMetadata: ['autores o entidad', 'año', 'título', 'descripción infografía', 'sitio', 'URL'],
     referenceTemplate: 'Autor, A. A. (Año). Título [Infografía]. Sitio. URL',
-    parentheticalCitation: '(Autor & Autor, Año)', narrativeCitation: 'Autor y Autor (Año)',
+    parentheticalCitation: '(Autor o entidad, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor o entidad (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
     rules: ['Reproducir una infografía puede exigir permiso o atribución de derechos además de la referencia.'],
   },
   map: {

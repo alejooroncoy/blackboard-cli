@@ -3,8 +3,6 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { registerBlackboardTools } from '../providers/blackboard/mcp-tools.js';
 import { registerBannerTools } from '../providers/banner/mcp-tools.js';
 import { registerUclassTools } from '../providers/uclass/mcp-tools.js';
-import { registerAcademicTools } from '../providers/academic/apa7-mcp-tools.js';
-import { getValidAccountSession } from '../account/session.js';
 import { track } from '../analytics.js';
 
 // La versión que anunciamos en el handshake sale del package.json. Estaba
@@ -73,10 +71,6 @@ export async function startMcpServer() {
   registerBlackboardTools(server);
   registerBannerTools(server);
   registerUclassTools(server);
-  registerAcademicTools(server, {
-    authorize: async () => Boolean(await getValidAccountSession()),
-  });
-
   const transport = new StdioServerTransport();
   await server.connect(transport);
 }
