@@ -56,6 +56,7 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
     ...base, id: 'journal-doi', label: 'Artículo de revista científica con DOI', manualExample: 1, manualPrintedPages: '323',
     requiredMetadata: ['autores', 'año', 'título del artículo', 'revista', 'volumen', 'número si existe', 'páginas o eLocator', 'DOI verificado'],
     referenceTemplate: 'Autor, A. A., & Autor, B. B. (Año). Título del artículo. Título de la revista, volumen(número), páginas. https://doi.org/xxxxx',
+    parentheticalCitation: '(Autor & Autor, Año)', narrativeCitation: 'Autor y Autor (Año)',
     rules: ['El DOI se expresa como URL https://doi.org/...', 'Se omiten los elementos que realmente no existen.'],
   },
   'journal-no-doi-public-url': {

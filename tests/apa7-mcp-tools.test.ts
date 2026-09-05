@@ -572,8 +572,8 @@ test('APA 7 guidance uses ampersand in a two-author parenthetical citation and r
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
   const result = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-doi' })).content[0].text);
   assert.match(result.case.referenceTemplate, / & /);
-  assert.equal(result.case.parentheticalCitation, '(Autor, Año)');
-  assert.equal(result.case.narrativeCitation, 'Autor (Año)');
+  assert.equal(result.case.parentheticalCitation, '(Autor & Autor, Año)');
+  assert.equal(result.case.narrativeCitation, 'Autor y Autor (Año)');
 });
 
 test('APA 7 guidance covers all 18 verified book and reference-work examples', async () => {
