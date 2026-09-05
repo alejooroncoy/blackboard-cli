@@ -42,8 +42,8 @@ export interface Apa7VerifiedCase {
 const base = {
   manualSection: '10.1' as const,
   status: 'verified' as const,
-  parentheticalCitation: '(Autor, Año)',
-  narrativeCitation: 'Autor (Año)',
+  parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores',
+  narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
   refuseWhen: [
     'No se verificó la identidad del autor o entidad.',
     'La fecha, el título o la publicación fueron completados por conjetura.',
@@ -56,7 +56,7 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
     ...base, id: 'journal-doi', label: 'Artículo de revista científica con DOI', manualExample: 1, manualPrintedPages: '323',
     requiredMetadata: ['autores', 'año', 'título del artículo', 'revista', 'volumen', 'número si existe', 'páginas o eLocator', 'DOI verificado'],
     referenceTemplate: 'Autor, A. A., & Autor, B. B. (Año). Título del artículo. Título de la revista, volumen(número), páginas. https://doi.org/xxxxx',
-    parentheticalCitation: '(Autor & Autor, Año)', narrativeCitation: 'Autor y Autor (Año)',
+    parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
     rules: ['El DOI se expresa como URL https://doi.org/...', 'Se omiten los elementos que realmente no existen.'],
   },
   'journal-no-doi-public-url': {
@@ -101,7 +101,7 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
     ...base, id: 'journal-in-press', label: 'Artículo en prensa', manualExample: 8, manualPrintedPages: '324',
     requiredMetadata: ['autores', 'título', 'revista', 'confirmación de aceptación/en prensa'],
     referenceTemplate: 'Autor, A. A. (en prensa). Título. Revista.',
-    parentheticalCitation: '(Autor, en prensa)', narrativeCitation: 'Autor (en prensa)',
+    parentheticalCitation: '(Autor, en prensa); (Autor & Autor, en prensa); (Primer autor et al., en prensa) con tres o más autores', narrativeCitation: 'Autor (en prensa); Autor y Autor (en prensa); Primer autor et al. (en prensa) con tres o más autores',
     rules: ['No inventa año, volumen, número ni páginas todavía no publicados.'],
   },
   'journal-other-language': {
@@ -114,21 +114,21 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
     ...base, id: 'journal-translated-republication', label: 'Artículo reeditado en traducción', manualExample: 10, manualPrintedPages: '324',
     requiredMetadata: ['autor', 'año de reedición', 'año original', 'título', 'traductores', 'revista', 'volumen/número/páginas', 'DOI/URL'],
     referenceTemplate: 'Autor, A. A. (Año reedición). Título (A. Traductor, Trad.). Revista, volumen(número), páginas. DOI/URL (Obra original publicada en Año original)',
-    parentheticalCitation: '(Autor, Año original/Año reedición)', narrativeCitation: 'Autor (Año original/Año reedición)',
+    parentheticalCitation: '(Autor, Año original/Año reedición); (Autor & Autor, Año original/Año reedición); (Primer autor et al., Año original/Año reedición) con tres o más autores', narrativeCitation: 'Autor (Año original/Año reedición); Autor y Autor (Año original/Año reedición); Primer autor et al. (Año original/Año reedición) con tres o más autores',
     rules: ['Los dos años son obligatorios para la citación de la reedición consultada.'],
   },
   'journal-reprint': {
     ...base, id: 'journal-reprint', label: 'Artículo reimpreso de otra fuente', manualExample: 11, manualPrintedPages: '324-325',
     requiredMetadata: ['autor', 'año y fuente de la reimpresión consultada', 'título', 'datos completos de la publicación original'],
     referenceTemplate: 'Autor, A. A. (Año reimpresión). Título. Fuente de la reimpresión. (Reimpreso de Título original, Año original, Fuente original)',
-    parentheticalCitation: '(Autor, Año original/Año reimpresión)', narrativeCitation: 'Autor (Año original/Año reimpresión)',
+    parentheticalCitation: '(Autor, Año original/Año reimpresión); (Autor & Autor, Año original/Año reimpresión); (Primer autor et al., Año original/Año reimpresión) con tres o más autores', narrativeCitation: 'Autor (Año original/Año reimpresión); Autor y Autor (Año original/Año reimpresión); Primer autor et al. (Año original/Año reimpresión) con tres o más autores',
     rules: ['La referencia describe primero la versión realmente consultada.'],
   },
   'journal-special-section-issue': {
     ...base, id: 'journal-special-section-issue', label: 'Sección especial o edición especial', manualExample: 12, manualPrintedPages: '325',
     requiredMetadata: ['editores', 'año', 'título', 'tipo sección/edición', 'revista', 'volumen/número', 'páginas si es sección'],
     referenceTemplate: 'Editor, A. A. (Ed.). (Año). Título [Sección especial o Edición especial]. Revista, volumen(número), páginas si corresponde.',
-    parentheticalCitation: '(Editor, Año)', narrativeCitation: 'Editor (Año)',
+    parentheticalCitation: '(Editor, Año); (Editor & Editor, Año); (Primer editor et al., Año) con tres o más editores', narrativeCitation: 'Editor (Año); Editor y Editor (Año); Primer editor et al. (Año) con tres o más editores',
     rules: ['Incluye páginas para una sección especial, no para una edición especial completa.', 'Un artículo individual dentro del especial usa el formato normal de artículo.'],
   },
   'journal-cochrane': {
