@@ -119,7 +119,7 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   'journal-translated-republication': {
     ...base, id: 'journal-translated-republication', label: 'Artículo reeditado en traducción', manualExample: 10, manualPrintedPages: '324',
     requiredMetadata: ['autor', 'año de reedición', 'año original', 'título', 'traductores', 'revista', 'volumen/número/páginas', 'DOI/URL'],
-    referenceTemplate: `${completeAuthorList} (Año reedición). Título (${titlePositionTranslators}). Revista, volumen(número), páginas. DOI/URL (Obra original publicada en Año original)`,
+    referenceTemplate: `${completeAuthorList} (Año reedición). Título (${titlePositionTranslators}). Revista, volumen(número), páginas. (Obra original publicada en Año original). DOI/URL`,
     parentheticalCitation: '(Autor, Año original/Año reedición); (Autor & Autor, Año original/Año reedición); (Primer autor et al., Año original/Año reedición) con tres o más autores', narrativeCitation: 'Autor (Año original/Año reedición); Autor y Autor (Año original/Año reedición); Primer autor et al. (Año original/Año reedición) con tres o más autores',
     rules: ['Conserva la lista completa de traductores acreditados y usa (Trad.) para uno o (Trads.) para varios.', 'Los dos años son obligatorios para la citación de la reedición consultada.'],
   },

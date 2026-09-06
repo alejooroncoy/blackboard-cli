@@ -788,7 +788,7 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(multivolume.rules.join(' '), /lista completa de autores/);
   assert.match(multivolume.rules.join(' '), /lista completa en posición de autor/);
   const multivolumeChapter = JSON.parse((await handler({ topic: 'reference', caseId: 'chapter-multivolume-work' })).content[0].text).case;
-  assert.match(multivolumeChapter.referenceTemplate, /Con título propio:.*Sin título propio: Título general \(Vol\. x; edición, pp\. xx-xx\)/);
+  assert.match(multivolumeChapter.referenceTemplate, /Con título propio:.*Sin título propio: Título general \(edición, Vol\. x, pp\. xx-xx\)/);
   const stableEntry = JSON.parse((await handler({ topic: 'reference', caseId: 'reference-entry-group-author' })).content[0].text).case;
   assert.match(stableEntry.referenceTemplate, /Entrada estable o archivada:.*URL/);
   assert.match(stableEntry.referenceTemplate, /Entrada que cambia continuamente sin archivo:.*Recuperado/);
@@ -1023,6 +1023,15 @@ test('APA 7 newspaper book reviews distinguish print pages from online URLs', as
   assert.match(review.referenceTemplate, /p\. x o pp\. xx–xx para versión impresa/);
   assert.match(review.referenceTemplate, /URL para versión en línea/);
   assert.match(review.rules.join(' '), /incluye la página o el intervalo/);
+});
+
+test('APA 7 episode reviews preserve every credited contributor and role', async () => {
+  let handler: any;
+  registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
+  const review = JSON.parse((await handler({ topic: 'reference', caseId: 'review-tv-episode-on-website' })).content[0].text).case;
+  assert.match(review.referenceTemplate, /de 3 a 20 responsables combinados/);
+  assert.match(review.referenceTemplate, /21 o más: responsables 1–19/);
+  assert.match(review.rules.join(' '), /lista completa de guionistas, director y otros responsables/);
 });
 
 test('APA 7 guidance covers datasets, software and tests through example 83', async () => {
