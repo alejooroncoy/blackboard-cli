@@ -55,10 +55,17 @@ test('reference templates preserve APA italics with explicit Markdown notation',
   assert.match(webpage.template, /No inventes mes ni día/);
   assert.match(webpage.template, /sitio, solo si difiere del autor/);
   const software = JSON.parse((await handler({ topic: 'reference', sourceType: 'software' })).content[0].text);
+  const book = JSON.parse((await handler({ topic: 'reference', sourceType: 'book' })).content[0].text);
+  const chapter = JSON.parse((await handler({ topic: 'reference', sourceType: 'book-chapter' })).content[0].text);
+  const thesis = JSON.parse((await handler({ topic: 'reference', sourceType: 'thesis' })).content[0].text);
   const podcast = JSON.parse((await handler({ topic: 'reference', sourceType: 'podcast' })).content[0].text);
   assert.match(podcast.template, /Serie completa:.*Año inicial–Año final/);
   assert.match(podcast.template, /Episodio:.*N.º de episodio, solo si existe/);
   assert.match(software.template, /tienda, solo si difiere del autor/);
+  assert.match(book.template, /omite DOI y URL/);
+  assert.match(chapter.template, /DOI si existe.*URL pública.*omite DOI y URL/);
+  assert.match(thesis.template, /Inédita:.*En base de datos:.*En repositorio:/);
+  assert.match(thesis.template, /N.º de publicación, solo si existe/);
 });
 
 test('APA 7 catalogues only advertise selectors accepted by their topic', async () => {

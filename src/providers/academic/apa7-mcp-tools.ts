@@ -41,17 +41,17 @@ const sourceType = z.enum([
 type SourceType = z.infer<typeof sourceType>;
 
 const referenceTemplates: Partial<Record<SourceType, string>> = {
-  book: 'Apellido, A. A. (Año). *Título del libro*. Editorial. URL o DOI',
-  'book-chapter': 'Apellido, A. A. (Año). Título del capítulo. En A. Editor (Ed.), *Título del libro* (pp. xx-xx). Editorial.',
+  book: 'Autor, A. A.; Autor, A. A., & Autor, B. B.; o lista completa conforme a APA. (Año). *Título del libro* (edición, desde la segunda). Editorial. Añade DOI si existe; si no, añade una URL pública cuando corresponda; para una obra impresa o de base académica común sin DOI, omite DOI y URL.',
+  'book-chapter': 'Autor, A. A.; Autor, A. A., & Autor, B. B.; o lista completa conforme a APA. (Año). Título del capítulo. En E. Editor (Ed.) o E. Editor, & F. Editor (Eds.), *Título del libro* (edición/volumen si existen, pp. xx-xx). Editorial. Añade DOI si existe; si no, una URL pública ajena a una base de datos cuando corresponda; para una obra impresa o de base académica común sin DOI, omite DOI y URL.',
   'journal-article': 'Autor, A. A.; Autor, A. A., & Autor, B. B.; o lista completa conforme a APA. (Año). Título del artículo. *Revista, volumen*(número), xx-xx. Añade https://doi.org/xxxxx si existe DOI; de lo contrario, una URL pública ajena a una base de datos si existe; si es impreso o proviene de una base académica común, omite DOI y URL.',
   webpage: 'Autor o entidad. (Año), (Año, mes), (Año, día de mes) o (s. f.), según la fecha realmente publicada. *Título de la página*. Nombre del sitio, solo si difiere del autor. URL. No inventes mes ni día.',
-  report: 'Entidad o Apellido, A. A. (Año). *Título del informe* (N.º de informe xxx, solo si existe). Editorial o entidad, solo si difiere del autor. URL. Si el informe no tiene número asignado, omite por completo ese paréntesis.',
-  thesis: 'Apellido, A. A. (Año). *Título* [Tesis de licenciatura/maestría/doctoral, Universidad]. Repositorio. URL',
-  'newspaper-article': 'Apellido, A. A. (Año, día de mes). Título. *Periódico*, p. x o pp. xx–xx para versión impresa. URL para versión en línea',
-  'video-webinar': 'Autor o entidad. (Año, día de mes). *Título* [Video o seminario web grabado]. Plataforma. URL',
-  podcast: 'Serie completa: Responsable, R. R. (Anfitrión o Productor ejecutivo). (Año único; Año inicial–Año final; o Año inicial–presente). *Título del pódcast* [Pódcast de audio o video]. Productora. URL. Episodio: Responsable, R. R. (Anfitrión o Productor ejecutivo). (Año, día de mes). Título del episodio (N.º de episodio, solo si existe) [Episodio de pódcast]. En *Título del pódcast*. Productora. URL.',
+  report: 'Entidad o lista completa de autores conforme a APA. (Año). *Título del informe* (N.º de informe xxx, solo si existe). Editorial o entidad, solo si difiere del autor. Añade DOI o URL si corresponde; omítelos si no existe un localizador aplicable. Si el informe no tiene número asignado, omite por completo ese paréntesis.',
+  thesis: 'Inédita: Autor, A. A. (Año). *Título* [Tesis de licenciatura/maestría/doctoral inédita]. Universidad. En base de datos: Autor, A. A. (Año). *Título* (N.º de publicación, solo si existe) [Tesis de licenciatura/maestría/doctoral, Universidad]. Base de datos. En repositorio: Autor, A. A. (Año). *Título* [Tesis de licenciatura/maestría/doctoral, Universidad]. Repositorio. URL.',
+  'newspaper-article': 'Autor, A. A.; Autor, A. A., & Autor, B. B.; o lista completa conforme a APA. (Año, día de mes). Título. *Periódico*, p. x o pp. xx–xx para versión impresa. URL para versión en línea',
+  'video-webinar': 'Autor o entidad. (Año), (Año, mes) o (Año, día de mes), según la fecha publicada. *Título* [Video o seminario web grabado]. Plataforma. URL',
+  podcast: 'Serie completa: Responsable, R. R. (Anfitrión o Productor ejecutivo). (Año único; Año inicial–Año final; o Año inicial–presente). *Título del pódcast* [Pódcast de audio o video]. Productora. URL si se conoce. Episodio: Responsable, R. R. (Anfitrión o Productor ejecutivo). (Año, día de mes). Título del episodio (N.º de episodio, solo si existe) [Episodio de pódcast]. En *Título del pódcast*. Productora. URL si se conoce.',
   'social-media': 'Autor [@usuario]. (Año, día de mes). *Primeras 20 palabras del contenido* [Tipo de publicación]. Red social. URL',
-  software: 'Autor o entidad. (Año). *Nombre* (Versión) [Software]. Editor, desarrollador o tienda, solo si difiere del autor. URL',
+  software: 'Autor, autores o entidad responsable. (Año). *Nombre* (Versión, solo si existe) [Software]. Editor, desarrollador o tienda, solo si difiere del autor. URL si corresponde',
 };
 
 const verifiedCaseId = z.union([periodicalCaseId, bookCaseId, chapterEntryCaseId, reportConferenceThesisCaseId, reviewUnpublishedCaseId, dataSoftwareTestCaseId, audiovisualAudioCaseId, visualSocialWebCaseId]);
