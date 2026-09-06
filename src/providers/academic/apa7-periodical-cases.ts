@@ -74,7 +74,7 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   'journal-no-doi-database-or-print': {
     ...base, id: 'journal-no-doi-database-or-print', label: 'Artículo sin DOI de una base académica común o impreso', manualExample: 3, manualPrintedPages: '323',
     requiredMetadata: ['autores', 'año de publicación', 'título', 'revista científica', 'volumen/número/páginas si existen'],
-    referenceTemplate: `${completeAuthorList} (Año). Título del artículo. Título de la revista científica. Añade volumen, número y páginas únicamente cuando existan.`,
+    referenceTemplate: `${completeAuthorList} (Año). Título del artículo. Título de la revista científica, volumen(número), páginas; sin número: Título de la revista científica, volumen, páginas; sin volumen: Título de la revista científica, número, páginas; sin volumen ni número: Título de la revista científica, páginas; omite también las páginas si no existen.`,
     rules: [completeAuthorRule, 'Usa solo el año para un artículo de revista científica, aunque el número muestre mes o estación.', 'Omite volumen, número y páginas individualmente cuando la publicación no los proporcione.', 'No incluye el nombre de la base de datos ni su URL.'],
   },
   'journal-21-plus-authors': {

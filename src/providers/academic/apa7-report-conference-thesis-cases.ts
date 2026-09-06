@@ -107,14 +107,14 @@ export const reportConferenceThesisCases: Record<ReportConferenceThesisCaseId, A
   },
   'issue-brief': {
     ...reportBase, id: 'issue-brief', label: 'Informe temático (issue brief)', manualExample: 57, manualPrintedPages: '337',
-    requiredMetadata: ['autor', 'año', 'título', 'número si existe', 'organización', 'URL/DOI'],
-    referenceTemplate: 'Con número: Autor, A. A. (Año). Título (Informe temático N.º x). Organización. URL/DOI. Sin número: Autor, A. A. (Año). Título [Informe temático]. Organización. URL/DOI',
-    rules: ['Si tiene número, identifícalo entre paréntesis.', 'Si no tiene número, añade [Informe temático] después del título.'],
+    requiredMetadata: ['autor', 'año', 'título', 'número si existe', 'organización', 'DOI o URL pública si corresponde'],
+    referenceTemplate: 'Con número: Autor, A. A. (Año). Título (Informe temático N.º x). Organización. Sin número: Autor, A. A. (Año). Título [Informe temático]. Organización. En ambos: añade DOI al final si existe; si no, URL pública cuando corresponda; impreso o base académica común sin localizador termina en la organización.',
+    rules: ['Si tiene número, identifícalo entre paréntesis.', 'Si no tiene número, añade [Informe temático] después del título.', 'Prefiere DOI; usa URL pública si no hay DOI y omite ambos en una versión impresa o base académica común sin localizador.'],
   },
   'policy-brief': {
     ...reportBase, id: 'policy-brief', label: 'Informe de políticas', manualExample: 58, manualPrintedPages: '337',
-    requiredMetadata: ['autor', 'año', 'título', 'organización', 'URL/DOI'],
-    referenceTemplate: 'Autor, A. A. (Año). Título [Informe de políticas]. Organización. URL/DOI',
+    requiredMetadata: ['autor', 'año', 'título', 'organización', 'DOI o URL pública si corresponde'],
+    referenceTemplate: 'Autor, A. A. (Año). Título [Informe de políticas]. Organización. Con DOI: añade DOI al final. Con URL pública sin DOI: añade URL al final. Impreso o base académica común sin localizador: termina en la organización.',
     rules: ['La descripción [Informe de políticas] aparece inmediatamente después del título.'],
   },
   'press-release': {
