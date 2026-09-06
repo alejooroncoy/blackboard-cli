@@ -786,6 +786,8 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(multivolume.referenceTemplate, /Autor, C\. C\./);
   assert.match(multivolume.rules.join(' '), /lista completa de autores/);
   assert.match(multivolume.rules.join(' '), /lista completa en posición de autor/);
+  const multivolumeChapter = JSON.parse((await handler({ topic: 'reference', caseId: 'chapter-multivolume-work' })).content[0].text).case;
+  assert.match(multivolumeChapter.referenceTemplate, /Con título propio:.*Sin título propio: Título general \(Vol\. x; edición, pp\. xx-xx\)/);
   const stableEntry = JSON.parse((await handler({ topic: 'reference', caseId: 'reference-entry-group-author' })).content[0].text).case;
   assert.match(stableEntry.referenceTemplate, /Entrada estable o archivada:.*URL/);
   assert.match(stableEntry.referenceTemplate, /Entrada que cambia continuamente sin archivo:.*Recuperado/);
@@ -828,6 +830,8 @@ test('APA 7 electronic books omit audiobook-only fields unless applicable', asyn
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
   const electronic = JSON.parse((await handler({ topic: 'reference', caseId: 'book-author-electronic-public-url' })).content[0].text).case;
   assert.match(electronic.referenceTemplate, /Libro electrónico:.*Editorial\. URL\. Audiolibro:/);
+  assert.match(electronic.referenceTemplate, /Libro electrónico:.*\(edición, solo desde la segunda\)/);
+  assert.match(electronic.referenceTemplate, /Audiolibro:.*Narr\.; edición, solo desde la segunda/);
   assert.match(electronic.rules.join(' '), /únicamente cuando la versión consultada es un audiolibro/);
 });
 
@@ -1129,6 +1133,7 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   assert.match(episode.referenceTemplate, /dos guionistas y director: Guionista, G\. G\./);
   assert.match(episode.referenceTemplate, /de 3 a 20 responsables combinados: Guionista/);
   assert.match(episode.referenceTemplate, /21 o más responsables combinados: responsables 1–19/);
+  assert.match(episode.referenceTemplate, /dos: P\. Productor & Q\. Productor \(Productores ejecutivos\)/);
   assert.match(episode.rules.join(' '), /una sola vez con ambos roles/);
   assert.match(film.parentheticalCitation, /tres o más directores/);
 });
