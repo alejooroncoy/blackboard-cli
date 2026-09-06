@@ -53,6 +53,7 @@ test('APA 7 quick reference never leaves a book URL or DOI as an unconditional p
   const quickReference = await readFile('.agents/skills/apa7-campus/references/apa7-quick-reference.md', 'utf8');
   assert.match(quickReference, /Con DOI o URL pública:/);
   assert.match(quickReference, /impreso o en base académica común sin localizador:/);
+  assert.match(quickReference, /Artículo científico \| Con DOI:.*sin DOI con URL pública:.*impreso o base académica común sin localizador:/);
 });
 
 test('APA 7 guidance exposes a journal template when the host authorizes access', async () => {
@@ -738,10 +739,12 @@ test('APA 7 guidance uses ampersand in a two-author parenthetical citation and r
 
   const mixedAuthors = JSON.parse((await handler({ topic: 'citation', caseId: 'journal-individual-group-authors' })).content[0].text);
   assert.match(mixedAuthors.case.referenceTemplate, /Autor personal, B\. B\./);
+  assert.match(mixedAuthors.case.referenceTemplate, /Nombre exacto del grupo, Autor personal, A\. A\., & Autor personal, B\. B\./);
   assert.match(mixedAuthors.case.parentheticalCitation, /dos autores totales/);
   assert.match(mixedAuthors.case.parentheticalCitation, /tres o más autores personales y grupales en total/);
   assert.match(mixedAuthors.case.narrativeCitation, /Primer autor et al\./);
   assert.match(mixedAuthors.case.rules.join(' '), /número total de autores/);
+  assert.match(mixedAuthors.case.rules.join(' '), /exactamente en el orden acreditado/);
 });
 
 test('APA 7 guidance covers all 18 verified book and reference-work examples', async () => {
@@ -936,6 +939,11 @@ test('APA 7 guidance covers reports, conferences and theses through example 66',
   assert.match(organization.referenceTemplate, /dos: Entidad autora, & Entidad autora/);
   assert.match(organization.referenceTemplate, /de 3 a 20: Entidad autora, Entidad autora, Entidad autora/);
   assert.match(organization.referenceTemplate, /Con número:.*Sin número:.*Impreso o base académica común sin localizador:/);
+  for (const id of ['conference-session', 'conference-paper-presentation', 'conference-poster-presentation', 'symposium-contribution']) {
+    const conference = cases.find(candidate => candidate.id === id);
+    assert.ok(conference);
+    assert.match(conference.referenceTemplate, /meses distintos: Año, día de mes–día de mes; años distintos: Año, día de mes–Año, día de mes/, id);
+  }
   assert.match(organization.referenceTemplate, /21 o más: entidades autoras 1–19/);
   assert.match(organization.rules.join(' '), /todas las agencias coautoras/);
   for (const id of ['report-individual-authors-in-organization', 'report-series']) {

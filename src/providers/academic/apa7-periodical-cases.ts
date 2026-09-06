@@ -86,10 +86,10 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   },
   'journal-individual-group-authors': {
     ...base, id: 'journal-individual-group-authors', label: 'Artículo con autores personales y grupales', manualExample: 5, manualPrintedPages: '323',
-    requiredMetadata: ['lista completa de autores personales en orden', 'nombre exacto del autor grupal', 'año', 'título', 'revista', 'volumen/número', 'páginas', 'DOI/URL'],
-    referenceTemplate: 'Uno o dos responsables: conserva sus nombres en orden y usa & antes del último. De 3 a 20: incluye la lista completa en el orden acreditado, por ejemplo Autor personal, A. A., Autor personal, B. B., & Nombre exacto del grupo. Con 21 o más: responsables 1–19, …, Último responsable. (Año). Título. Revista, volumen(número), páginas. DOI/URL',
+    requiredMetadata: ['lista única y ordenada de autores personales y grupales', 'año', 'título', 'revista', 'volumen/número', 'páginas', 'DOI/URL'],
+    referenceTemplate: 'Uno o dos responsables: conserva la lista única en el orden acreditado y usa & antes del último, incluso si es entidad. De 3 a 20: incluye todos en ese mismo orden, por ejemplo Nombre exacto del grupo, Autor personal, A. A., & Autor personal, B. B. Con 21 o más: responsables 1–19, …, Último responsable. (Año). Título. Revista, volumen(número), páginas. DOI/URL',
     parentheticalCitation: '(Autor personal & Nombre del grupo, Año) cuando hay dos autores totales; (Primer autor et al., Año) cuando hay tres o más autores personales y grupales en total', narrativeCitation: 'Autor personal y Nombre del grupo (Año) cuando hay dos autores totales; Primer autor et al. (Año) cuando hay tres o más autores personales y grupales en total',
-    rules: ['Conserva todos los autores personales en su orden y después el nombre exacto del grupo.', 'Calcula la cita por el número total de autores personales y grupales.'],
+    rules: ['Conserva una sola lista de autores personales y grupales exactamente en el orden acreditado; no traslada una entidad al final.', 'Calcula la cita por el número total de autores personales y grupales y usa el primer responsable acreditado para et al.'],
   },
   'journal-elocator': {
     ...base, id: 'journal-elocator', label: 'Artículo con eLocator', manualExample: 6, manualPrintedPages: '324',
