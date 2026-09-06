@@ -79,6 +79,10 @@ function referenceFormattingForCase(id: VerifiedCaseId) {
     italicize: ['título de la entrada de blog'],
     doNotItalicize: ['nombre del blog que ocupa el elemento fuente'],
   };
+  if (id === 'journal-special-section-issue') return {
+    encoding,
+    italicize: ['título de la sección o edición especial que funciona como obra independiente', 'nombre y volumen de la publicación periódica; el número entre paréntesis queda sin cursiva'],
+  };
   if (id in periodicalCases) return {
     encoding,
     italicize: ['nombre de la publicación periódica o base de revisiones', 'volumen de la publicación; el número entre paréntesis queda sin cursiva'],
