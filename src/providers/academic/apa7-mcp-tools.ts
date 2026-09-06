@@ -266,7 +266,7 @@ function guidanceFor(selectedTopic: z.infer<typeof topic>, selectedSourceType?: 
           : ['tipo de fuente', 'autor o entidad', 'fecha', 'título', 'fuente contenedora/editorial', 'DOI o URL si corresponde'],
         template: selectedSourceType === 'personal-communication'
           ? 'No lleva referencia. Cita en texto: (A. Apellido, comunicación personal, [fecha exacta]).'
-          : referenceTemplates[selectedSourceType ?? 'other'] ?? 'Autor. (Fecha). Título. Fuente. DOI o URL.',
+          : referenceTemplates[selectedSourceType ?? 'other'] ?? 'Clasifica primero el tipo real de obra. Patrón general: Autor. (Fecha). Título. Fuente. Añade DOI o URL solo cuando corresponda; omite el localizador si la categoría aplicable no lo requiere o no existe.',
         rules: [
           'Incluye solamente obras consultadas y citadas en el texto.',
           'Ordena alfabéticamente y aplica sangría francesa de 1,27 cm.',

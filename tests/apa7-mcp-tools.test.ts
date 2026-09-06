@@ -238,6 +238,14 @@ test('APA 7 guidance returns usable content for every supported topic and source
   }
 });
 
+test('APA 7 generic fallback never requires an invented locator', async () => {
+  let handler: any;
+  registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
+  const fallback = JSON.parse((await handler({ topic: 'reference', sourceType: 'other' })).content[0].text);
+  assert.match(fallback.template, /Clasifica primero el tipo real de obra/);
+  assert.match(fallback.template, /omite el localizador/);
+});
+
 test('APA 7 guidance covers every JARS reporting section 3.1 through 3.18', async () => {
   let handler: any;
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
@@ -936,6 +944,12 @@ test('APA 7 guidance covers datasets, software and tests through example 83', as
   assert.match(software.parentheticalCitation, /Autor & Autor/);
   assert.match(software.parentheticalCitation, /tres o más autores personales/);
   assert.match(dataset.parentheticalCitation, /Autor & Autor/);
+  const rawData = JSON.parse((await handler({ topic: 'reference', caseId: 'raw-data-unpublished' })).content[0].text).case;
+  const equipment = JSON.parse((await handler({ topic: 'reference', caseId: 'apparatus-or-equipment' })).content[0].text).case;
+  assert.match(rawData.referenceTemplate, /o Entidad autora/);
+  assert.match(rawData.rules.join(' '), /entidad en posición de autor/);
+  assert.match(equipment.referenceTemplate, /Modelo x, solo si existe/);
+  assert.match(equipment.rules.join(' '), /si no existe, omite todo el paréntesis/);
   assert.match(testRecord.rules.join(' '), /información descriptiva o administrativa única/);
   assert.match(testRecord.parentheticalCitation, /tres o más autores/);
   assert.match(mobileApp.referenceTemplate, /Tienda o desarrollador verificado, solo si difiere del autor/);
@@ -966,6 +980,8 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   assert.match(ted.rules.join(' '), /En YouTube/);
   assert.match(webinar.rules.join(' '), /comunicación personal/);
   assert.match(interview.rules.join(' '), /persona entrevistada/);
+  assert.match(interview.referenceTemplate, /Archivo físico sin URL/);
+  assert.match(interview.rules.join(' '), /omite URL e institución\/museo/);
   assert.match(podcast.referenceTemplate, /Año único; Año inicial–Año final; o Año inicial–presente/);
   assert.match(podcast.referenceTemplate, /Responsable, T\. T\. \(Anfitriones o Productores ejecutivos\)/);
   assert.match(podcast.rules.join(' '), /comenzó y terminó ese año/);

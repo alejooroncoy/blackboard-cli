@@ -56,8 +56,8 @@ export const dataSoftwareTestCases: Record<DataSoftwareTestCaseId, Apa7VerifiedD
   'raw-data-unpublished': {
     ...dataBase, id: 'raw-data-unpublished', label: 'Datos brutos no publicados', manualExample: 76, manualPrintedPages: '344',
     requiredMetadata: ['autor o entidad', 'año o rango de años de recolección', 'título o descripción', 'estado inédito', 'fuente institucional si se conoce'],
-    referenceTemplate: 'Autor, A. A. (Año o Años). Título [Datos brutos inéditos]. Fuente institucional si se conoce.',
-    rules: ['Si no existe título, usa una descripción entre corchetes que indique estado y enfoque de los datos.', 'Para datos no publicados, la fecha es el año o rango de años de recolección.', 'Incluye la institución al final solo cuando se conoce.'],
+    referenceTemplate: 'Autor, A. A. o Entidad autora. (Año o Años). Título [Datos brutos inéditos]. Fuente institucional si se conoce.',
+    rules: ['Usa el nombre completo de la entidad en posición de autor cuando el conjunto pertenece a una institución o grupo.', 'Si no existe título, usa una descripción entre corchetes que indique estado y enfoque de los datos.', 'Para datos no publicados, la fecha es el año o rango de años de recolección.', 'Incluye la institución al final solo cuando se conoce.'],
   },
   'specialized-software': {
     ...softwareBase, id: 'specialized-software', label: 'Software especializado o de distribución limitada', manualExample: 77, manualPrintedPages: '345',
@@ -68,8 +68,8 @@ export const dataSoftwareTestCases: Record<DataSoftwareTestCaseId, Apa7VerifiedD
   'apparatus-or-equipment': {
     ...softwareBase, id: 'apparatus-or-equipment', label: 'Aparato o equipo', manualExample: 78, manualPrintedPages: '345-346',
     requiredMetadata: ['fabricante/autor', 'año', 'nombre', 'número de modelo si existe', 'descripción aparato/equipo/software', 'desarrollador si difiere', 'URL'],
-    referenceTemplate: 'Fabricante. (Año). Nombre (Modelo x) [Aparato, Equipo o Aparato y software]. Desarrollador si difiere. URL',
-    rules: ['Si incluye software, identifica ambos en la descripción.', 'Si el modelo no figura en el título, añádelo entre paréntesis después.', 'Omite la editorial/desarrollador cuando coincide con el autor.'],
+    referenceTemplate: 'Fabricante. (Año). Nombre (Modelo x, solo si existe) [Aparato, Equipo o Aparato y software]. Desarrollador si difiere. URL',
+    rules: ['Si incluye software, identifica ambos en la descripción.', 'Si existe un modelo y no figura en el título, añádelo entre paréntesis después; si no existe, omite todo el paréntesis.', 'Omite la editorial/desarrollador cuando coincide con el autor.'],
   },
   'mobile-application': {
     ...softwareBase, id: 'mobile-application', label: 'Aplicación móvil', manualExample: 79, manualPrintedPages: '346',

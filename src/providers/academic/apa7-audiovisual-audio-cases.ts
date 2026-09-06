@@ -127,10 +127,10 @@ export const audiovisualAudioCases: Record<AudiovisualAudioCaseId, Apa7VerifiedA
   },
   'archived-radio-interview': {
     ...audioBase, id: 'archived-radio-interview', label: 'Grabación de entrevista de radio en archivo', manualExample: 95, manualPrintedPages: '352',
-    requiredMetadata: ['persona entrevistada', 'fecha completa', 'título', 'descripción entrevista', 'archivo', 'institución/museo si corresponde', 'URL'],
-    referenceTemplate: 'Entrevistado, A. A. (Año, día de mes). Título [Entrevista]. Archivo; Institución. URL',
+    requiredMetadata: ['persona entrevistada', 'fecha completa', 'título', 'descripción entrevista', 'archivo', 'institución/museo si corresponde', 'URL si existe'],
+    referenceTemplate: 'Archivo digital: Entrevistado, A. A. (Año, día de mes). Título [Entrevista]. Archivo; Institución o museo, solo si corresponde. URL. Archivo físico sin URL: Entrevistado, A. A. (Año, día de mes). Título [Entrevista]. Archivo; Institución o museo, solo si corresponde.',
     parentheticalCitation: '(Entrevistado, Año)', narrativeCitation: 'Entrevistado (Año)',
-    rules: ['En entrevistas recuperadas desde archivos digitales o físicos, la persona entrevistada ocupa la posición de autor.'],
+    rules: ['En entrevistas recuperadas desde archivos digitales o físicos, la persona entrevistada ocupa la posición de autor.', 'Para una colección física, omite URL e institución/museo cuando esos elementos no existan.'],
   },
   'speech-audio-recording': {
     ...audioBase, id: 'speech-audio-recording', label: 'Grabación de audio de un discurso', manualExample: 96, manualPrintedPages: '352',
