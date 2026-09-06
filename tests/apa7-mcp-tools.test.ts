@@ -774,6 +774,12 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(dictionary.case.referenceTemplate, /\(Ed\.\).*\(Eds\.\)/);
   assert.match(dictionary.case.referenceTemplate, /Con DOI\/URL:.*Impreso o base académica común sin localizador:/);
   assert.match(dictionary.case.rules.join(' '), /Distingue el autor grupal de los editores/);
+  const foreignBook = JSON.parse((await handler({ topic: 'reference', caseId: 'book-other-language' })).content[0].text).case;
+  assert.match(foreignBook.referenceTemplate, /Con DOI:.*Con URL pública sin DOI:.*sin localizador/);
+  assert.match(foreignBook.rules.join(' '), /Prefiere DOI/);
+  const anthology = JSON.parse((await handler({ topic: 'reference', caseId: 'anthology' })).content[0].text).case;
+  assert.match(anthology.referenceTemplate, /Con DOI\/URL:.*sin localizador/);
+  assert.match(anthology.rules.join(' '), /termina en la editorial/);
   const religious = JSON.parse((await handler({ topic: 'citation', caseId: 'religious-work' })).content[0].text).case;
   const multivolume = JSON.parse((await handler({ topic: 'reference', caseId: 'book-multivolume-single-volume' })).content[0].text).case;
   const ancient = JSON.parse((await handler({ topic: 'citation', caseId: 'ancient-greek-roman-work' })).content[0].text).case;

@@ -105,9 +105,9 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   },
   'book-other-language': {
     ...base, id: 'book-other-language', label: 'Libro en otro idioma', manualExample: 27, manualPrintedPages: '329',
-    requiredMetadata: ['autores', 'año', 'título original', 'traducción del título si el idioma difiere', 'volumen/edición si existe', 'editorial'],
-    referenceTemplate: `${completeAuthorList} (Año). Título original [Traducción del título, solo si el idioma difiere] (volumen/edición, solo si existe). Editorial.`,
-    rules: [completeAuthorRule, 'Añade la traducción del título entre corchetes cuando el idioma difiere del trabajo; omite los corchetes si no corresponde.', 'Omite por completo el paréntesis de volumen o edición cuando ninguno existe.'],
+    requiredMetadata: ['autores', 'año', 'título original', 'traducción del título si el idioma difiere', 'volumen/edición si existe', 'editorial', 'DOI o URL pública si corresponde'],
+    referenceTemplate: `${completeAuthorList} (Año). Título original [Traducción del título, solo si el idioma difiere] (volumen/edición, solo si existe). Editorial. Con DOI: añade DOI al final. Con URL pública sin DOI: añade URL al final. Impreso o base académica común sin localizador: termina en la editorial.`,
+    rules: [completeAuthorRule, 'Añade la traducción del título entre corchetes cuando el idioma difiere del trabajo; omite los corchetes si no corresponde.', 'Omite por completo el paréntesis de volumen o edición cuando ninguno existe.', 'Prefiere DOI; usa URL pública si no hay DOI y omite ambos en una versión impresa o base académica común sin localizador.'],
   },
   'book-translated-republication': {
     ...base, id: 'book-translated-republication', label: 'Libro reeditado en traducción', manualExample: 28, manualPrintedPages: '329',
@@ -152,10 +152,10 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   },
   anthology: {
     ...base, id: 'anthology', label: 'Antología completa', manualExample: 34, manualPrintedPages: '331',
-    requiredMetadata: ['editores de la antología', 'año de la antología', 'título', 'editorial', 'DOI/URL'],
-    referenceTemplate: `${completeEditorList}. (Año). Título de la antología. Editorial. DOI/URL`,
+    requiredMetadata: ['editores de la antología', 'año de la antología', 'título', 'editorial', 'DOI/URL si corresponde'],
+    referenceTemplate: `${completeEditorList}. (Año). Título de la antología. Editorial. Con DOI/URL: añade el localizador al final. Impreso o base académica común sin localizador: termina en la editorial.`,
     parentheticalCitation: '(Editor, Año); (Editor & Editor, Año); (Primer editor et al., Año) con tres o más editores', narrativeCitation: 'Editor (Año); Editor y Editor (Año); Primer editor et al. (Año) con tres o más editores',
-    rules: ['Incluye la lista completa de editores y usa (Ed.) para uno o (Eds.) para varios.', 'Para una obra individual incluida en la antología se utiliza el caso de capítulo/obra incluida, no esta referencia global.'],
+    rules: ['Incluye la lista completa de editores y usa (Ed.) para uno o (Eds.) para varios.', 'Añade DOI/URL solo cuando corresponda; una antología impresa o de base académica común sin localizador termina en la editorial.', 'Para una obra individual incluida en la antología se utiliza el caso de capítulo/obra incluida, no esta referencia global.'],
   },
   'religious-work': {
     ...base, id: 'religious-work', label: 'Obra religiosa', manualExample: 35, manualPrintedPages: '331',
