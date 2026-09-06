@@ -313,10 +313,12 @@ test('Mechanics guidance preserves quotation, DOI, statistical and list semantic
   const quotes = JSON.parse((await handler({ topic: 'mechanics', mechanicsRuleId: 'quotation-marks' })).content[0].text).mechanicsRule;
   const decimals = JSON.parse((await handler({ topic: 'mechanics', mechanicsRuleId: 'decimal-fractions' })).content[0].text).mechanicsRule;
   const lists = JSON.parse((await handler({ topic: 'mechanics', mechanicsRuleId: 'list-guidelines' })).content[0].text).mechanicsRule;
+  const italics = JSON.parse((await handler({ topic: 'mechanics', mechanicsRuleId: 'italics' })).content[0].text).mechanicsRule;
   assert.match(period.referenceTreatment.join(' '), /no añadas punto después de DOI o URL/i);
   assert.match(quotes.citationTreatment.join(' '), /Menos de 40 palabras/);
   assert.match(decimals.rules.join(' '), /no pueden superar 1/);
   assert.match(lists.citationTreatment.join(' '), /respalda solo ese elemento/);
+  assert.match(italics.rules.join(' '), /coma después del título de una publicación periódica/);
 });
 
 test('APA 7 guidance covers every publication-process section 12.1 through 12.24', async () => {
@@ -735,6 +737,7 @@ test('APA 7 guidance covers datasets, software and tests through example 83', as
   const testRecord = JSON.parse((await handler({ topic: 'reference', caseId: 'test-database-record' })).content[0].text).case;
   assert.equal(dataset.manualExample, 75);
   assert.match(dataset.rules.join(' '), /análisis secundarios/);
+  assert.match(dataset.referenceTemplate, /solo si difiere del autor/);
   assert.match(software.rules.join(' '), /distribución limitada/);
   assert.match(software.referenceTemplate, /solo si difiere del autor/);
   assert.match(software.parentheticalCitation, /Autor & Autor/);
@@ -761,8 +764,9 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   assert.match(webinar.rules.join(' '), /comunicación personal/);
   assert.match(interview.rules.join(' '), /persona entrevistada/);
   assert.match(podcast.referenceTemplate, /Año inicial–presente o Año inicial–Año final/);
-  assert.equal(episode.parentheticalCitation, '(Guionista & Director, Año)');
-  assert.equal(episode.narrativeCitation, 'Guionista y Director (Año)');
+  assert.match(episode.parentheticalCitation, /\(Guionista & Director, Año\)/);
+  assert.match(episode.parentheticalCitation, /tres o más responsables acreditados/);
+  assert.match(episode.narrativeCitation, /Guionista y Director \(Año\)/);
   assert.match(series.parentheticalCitation, /tres o más productores/);
 });
 
