@@ -50,24 +50,27 @@ const base = {
   ],
 };
 
+const completeAuthorList = 'Autor, A. A.; Autor, A. A., & Autor, B. B.; o Autor, A. A., Autor, B. B., & Autor, C. C.';
+const completeAuthorRule = 'Incluye la lista completa de autores en el orden acreditado conforme a los límites del elemento autor de APA.';
+
 export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   'book-author-doi': {
     ...base, id: 'book-author-doi', label: 'Libro de autor con DOI', manualExample: 20, manualPrintedPages: '327',
     requiredMetadata: ['autores', 'año', 'título', 'edición desde la segunda', 'editorial', 'DOI verificado'],
-    referenceTemplate: 'Autor, A. A. (Año). Título del libro (edición). Editorial. https://doi.org/xxxxx',
-    rules: ['La edición se incluye desde la segunda.', 'El DOI se expresa como URL.'],
+    referenceTemplate: `${completeAuthorList} (Año). Título del libro (edición). Editorial. https://doi.org/xxxxx`,
+    rules: [completeAuthorRule, 'La edición se incluye desde la segunda.', 'El DOI se expresa como URL.'],
   },
   'book-author-no-doi-database-or-print': {
     ...base, id: 'book-author-no-doi-database-or-print', label: 'Libro de autor sin DOI, de base académica común o impreso', manualExample: 21, manualPrintedPages: '327',
     requiredMetadata: ['autores', 'año', 'título', 'edición desde la segunda', 'editorial'],
-    referenceTemplate: 'Autor, A. A. (Año). Título del libro (edición). Editorial.',
-    rules: ['No incluye nombre ni URL de la base de datos.'],
+    referenceTemplate: `${completeAuthorList} (Año). Título del libro (edición). Editorial.`,
+    rules: [completeAuthorRule, 'No incluye nombre ni URL de la base de datos.'],
   },
   'book-author-electronic-public-url': {
     ...base, id: 'book-author-electronic-public-url', label: 'Libro electrónico o audiolibro de autor sin DOI con URL pública', manualExample: 22, manualPrintedPages: '327-328',
     requiredMetadata: ['autores', 'año', 'título', 'editorial', 'URL pública', 'narrador y formato solo si son relevantes'],
-    referenceTemplate: 'Autor, A. A. (Año). Título del libro (N. Narrador, Narr.) [Audiolibro, si corresponde]. Editorial. URL',
-    rules: ['No incluye plataforma o dispositivo cuando el contenido coincide con el libro.', 'Identifica audiolibro cuando el contenido o la narración son relevantes.'],
+    referenceTemplate: `${completeAuthorList} (Año). Título del libro (N. Narrador, Narr.) [Audiolibro, si corresponde]. Editorial. URL`,
+    rules: [completeAuthorRule, 'No incluye plataforma o dispositivo cuando el contenido coincide con el libro.', 'Identifica audiolibro cuando el contenido o la narración son relevantes.'],
   },
   'book-author-editor-on-cover': {
     ...base, id: 'book-author-editor-on-cover', label: 'Libro de autor con editor acreditado en portada', manualExample: 23, manualPrintedPages: '328',
@@ -99,15 +102,15 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   'book-other-language': {
     ...base, id: 'book-other-language', label: 'Libro en otro idioma', manualExample: 27, manualPrintedPages: '329',
     requiredMetadata: ['autores', 'año', 'título original', 'traducción del título si el idioma difiere', 'volumen/edición si existe', 'editorial'],
-    referenceTemplate: 'Autor, A. A. (Año). Título original [Traducción del título] (volumen/edición). Editorial.',
-    rules: ['Añade la traducción del título entre corchetes cuando el idioma difiere del trabajo.'],
+    referenceTemplate: `${completeAuthorList} (Año). Título original [Traducción del título] (volumen/edición). Editorial.`,
+    rules: [completeAuthorRule, 'Añade la traducción del título entre corchetes cuando el idioma difiere del trabajo.'],
   },
   'book-translated-republication': {
     ...base, id: 'book-translated-republication', label: 'Libro reeditado en traducción', manualExample: 28, manualPrintedPages: '329',
     requiredMetadata: ['autores', 'año original', 'año de reedición', 'título', 'traductores', 'edición', 'editorial'],
-    referenceTemplate: 'Autor, A. A. (Año reedición). Título (T. Traductor, Trad.; edición). Editorial. (Obra original publicada en Año original)',
+    referenceTemplate: `${completeAuthorList} (Año reedición). Título (T. Traductor, Trad.; edición). Editorial. (Obra original publicada en Año original)`,
     parentheticalCitation: '(Autor, Año original/Año reedición); (Autor & Autor, Año original/Año reedición); (Primer autor et al., Año original/Año reedición) con tres o más autores', narrativeCitation: 'Autor (Año original/Año reedición); Autor y Autor (Año original/Año reedición); Primer autor et al. (Año original/Año reedición) con tres o más autores',
-    rules: ['Conserva ambos años en la cita.'],
+    rules: [completeAuthorRule, 'Conserva ambos años en la cita.'],
   },
   'book-republished': {
     ...base, id: 'book-republished', label: 'Libro, libro electrónico o audiolibro reeditado', manualExample: 29, manualPrintedPages: '329',

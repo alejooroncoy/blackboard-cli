@@ -712,6 +712,16 @@ test('APA 7 edited works preserve the complete editor list and plural role', asy
   }
 });
 
+test('APA 7 authored books preserve every credited author', async () => {
+  let handler: any;
+  registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
+  for (const caseId of ['book-author-doi', 'book-author-no-doi-database-or-print', 'book-author-electronic-public-url', 'book-other-language', 'book-translated-republication']) {
+    const authored = JSON.parse((await handler({ topic: 'reference', caseId })).content[0].text).case;
+    assert.match(authored.referenceTemplate, /Autor, C\. C\./, caseId);
+    assert.match(authored.rules.join(' '), /lista completa de autores/, caseId);
+  }
+});
+
 test('APA 7 guidance covers all 12 chapter and reference-entry examples', async () => {
   let handler: any;
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
@@ -897,6 +907,8 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   assert.match(series.parentheticalCitation, /tres o más productores/);
   assert.match(series.referenceTemplate, /Productores ejecutivos/);
   assert.match(series.rules.join(' '), /Incluye la lista completa/);
+  assert.match(series.referenceTemplate, /Año único; Año inicial–Año final; o Año inicial–presente/);
+  assert.match(series.rules.join(' '), /comenzó y terminó en ese mismo año/);
   assert.match(film.parentheticalCitation, /Director & Director/);
   assert.match(film.referenceTemplate, /Director, F\. F\. \(Directores\)/);
   assert.match(film.rules.join(' '), /lista completa de directores/);
@@ -916,6 +928,7 @@ test('APA 7 guidance covers visual, social and web works through example 114', a
   const changing = JSON.parse((await handler({ topic: 'reference', caseId: 'webpage-retrieval-date' })).content[0].text).case;
   const infographic = JSON.parse((await handler({ topic: 'citation', caseId: 'infographic' })).content[0].text).case;
   const slides = JSON.parse((await handler({ topic: 'citation', caseId: 'slides-or-lecture-notes' })).content[0].text).case;
+  const individualWebpage = JSON.parse((await handler({ topic: 'reference', caseId: 'webpage-individual-author' })).content[0].text).case;
   assert.equal(map.manualExample, 100);
   assert.match(map.rules.join(' '), /dinámico/);
   assert.match(tweet.rules.join(' '), /Cada emoji cuenta como una palabra/);
@@ -926,6 +939,8 @@ test('APA 7 guidance covers visual, social and web works through example 114', a
   assert.match(infographic.parentheticalCitation, /tres o más autores/);
   assert.match(slides.parentheticalCitation, /Autor & Autor/);
   assert.match(slides.parentheticalCitation, /tres o más autores/);
+  assert.match(individualWebpage.referenceTemplate, /\(Año\), \(Año, mes\) o \(Año, día de mes\)/);
+  assert.match(individualWebpage.rules.join(' '), /No inventes el mes ni el día/);
 });
 
 test('APA 7 guidance exposes verified citation rules 8.1 through 8.36', async () => {

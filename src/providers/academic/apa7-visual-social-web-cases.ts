@@ -157,9 +157,9 @@ export const visualSocialWebCases: Record<VisualSocialWebCaseId, Apa7VerifiedVis
   'webpage-individual-author': {
     ...webBase, id: 'webpage-individual-author', label: 'Página web con autor individual', manualExample: 112, manualPrintedPages: '357',
     requiredMetadata: ['autor', 'fecha más específica disponible', 'título', 'sitio', 'URL'],
-    referenceTemplate: 'Autor, A. A. (Año, día de mes). Título. Nombre del sitio. URL',
+    referenceTemplate: 'Autor, A. A. (Año), (Año, mes) o (Año, día de mes), según la fecha publicada. Título. Nombre del sitio. URL',
     parentheticalCitation: '(Autor, Año)', narrativeCitation: 'Autor (Año)',
-    rules: ['Comprueba autor en la propia página, en “Acerca de” o en reconocimientos antes de declararlo ausente.'],
+    rules: ['Usa la fecha más específica disponible: solo año, año y mes, o fecha completa.', 'No inventes el mes ni el día cuando la página no los publica.', 'Comprueba autor en la propia página, en “Acerca de” o en reconocimientos antes de declararlo ausente.'],
   },
   'webpage-no-date': {
     ...webBase, id: 'webpage-no-date', label: 'Página web sin fecha', manualExample: 113, manualPrintedPages: '358',

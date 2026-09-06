@@ -65,9 +65,9 @@ export const audiovisualAudioCases: Record<AudiovisualAudioCaseId, Apa7VerifiedA
   'television-series': {
     ...audiovisualBase, id: 'television-series', label: 'Serie de televisión completa', manualExample: 86, manualPrintedPages: '349',
     requiredMetadata: ['productores ejecutivos', 'años de emisión', 'título de la serie', 'productora(s)'],
-    referenceTemplate: 'Productor, P. P. (Productor ejecutivo), o Productor, P. P., & Productor, Q. Q. (Productores ejecutivos). (Año inicial–Año final o presente). Título de la serie [Serie de TV]. Productora(s).',
-    parentheticalCitation: '(Productor, Años); (Productor & Productor, Años); (Primer productor et al., Años) con tres o más productores', narrativeCitation: 'Productor (Años); Productor y Productor (Años); Primer productor et al. (Años) con tres o más productores',
-    rules: ['Los productores ejecutivos ocupan la posición de autor.', 'Incluye la lista completa y usa el rol plural cuando se acredita a más de un productor ejecutivo.', 'Usa un rango para una serie concluida y “Año inicial–presente” para una serie en emisión.'],
+    referenceTemplate: 'Productor, P. P. (Productor ejecutivo), o Productor, P. P., & Productor, Q. Q. (Productores ejecutivos). (Año único; Año inicial–Año final; o Año inicial–presente). Título de la serie [Serie de TV]. Productora(s).',
+    parentheticalCitation: '(Productor, Año único o rango); (Productor & Productor, Año único o rango); (Primer productor et al., Año único o rango) con tres o más productores', narrativeCitation: 'Productor (Año único o rango); Productor y Productor (Año único o rango); Primer productor et al. (Año único o rango) con tres o más productores',
+    rules: ['Los productores ejecutivos ocupan la posición de autor.', 'Incluye la lista completa y usa el rol plural cuando se acredita a más de un productor ejecutivo.', 'Usa un solo año si la serie comenzó y terminó en ese mismo año, un rango si abarcó varios años y “Año inicial–presente” si sigue en emisión.'],
   },
   'television-episode-or-webisode': {
     ...audiovisualBase, id: 'television-episode-or-webisode', label: 'Episodio de televisión o webisodio', manualExample: 87, manualPrintedPages: '349',
