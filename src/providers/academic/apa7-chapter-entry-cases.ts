@@ -52,19 +52,19 @@ export const chapterEntryCases: Record<ChapterEntryCaseId, Apa7VerifiedChapterEn
   'chapter-edited-doi': {
     ...base, id: 'chapter-edited-doi', label: 'Capítulo de libro editado con DOI', manualExample: 38, manualPrintedPages: '332',
     requiredMetadata: ['autores del capítulo', 'año', 'título del capítulo', 'editores', 'título del libro', 'edición/volumen si existen', 'páginas', 'editorial', 'DOI'],
-    referenceTemplate: `${completeChapterAuthors} (Año). Título del capítulo. En ${completeChapterEditors}, Título del libro (edición, pp. xx-xx). Editorial. https://doi.org/xxxxx`,
+    referenceTemplate: `${completeChapterAuthors} (Año). Título del capítulo. En ${completeChapterEditors}, Título del libro (con edición: edición, Vol. x, pp. xx-xx; sin edición: Vol. x, pp. xx-xx; si tampoco hay volumen: pp. xx-xx). Editorial. https://doi.org/xxxxx`,
     rules: [completeChapterAuthorRule, 'Omite edición o volumen cuando el libro no proporcione esos datos; conserva siempre el intervalo de páginas del capítulo.', 'El autor del capítulo, no el editor del libro, gobierna la cita.', 'El DOI se expresa como URL.'],
   },
   'chapter-edited-no-doi-database-or-print': {
     ...base, id: 'chapter-edited-no-doi-database-or-print', label: 'Capítulo sin DOI de base académica común o impreso', manualExample: 39, manualPrintedPages: '332-333',
     requiredMetadata: ['autores del capítulo', 'año', 'título', 'editores', 'libro', 'edición/volumen si existen', 'páginas', 'editorial'],
-    referenceTemplate: `${completeChapterAuthors} (Año). Título del capítulo. En ${completeChapterEditors}, Título del libro (edición, pp. xx-xx). Editorial.`,
+    referenceTemplate: `${completeChapterAuthors} (Año). Título del capítulo. En ${completeChapterEditors}, Título del libro (con edición: edición, Vol. x, pp. xx-xx; sin edición: Vol. x, pp. xx-xx; si tampoco hay volumen: pp. xx-xx). Editorial.`,
     rules: [completeChapterAuthorRule, 'Omite edición o volumen cuando el libro no proporcione esos datos; conserva siempre el intervalo de páginas del capítulo.', 'No incluye el nombre ni la URL de una base de datos académica común.'],
   },
   'chapter-electronic-public-url': {
     ...base, id: 'chapter-electronic-public-url', label: 'Capítulo electrónico o de audiolibro sin DOI con URL pública', manualExample: 40, manualPrintedPages: '333',
     requiredMetadata: ['autores del capítulo', 'año', 'título', 'editores', 'libro', 'edición', 'páginas', 'editorial', 'URL pública'],
-    referenceTemplate: `${completeChapterAuthors} (Año). Título del capítulo. En ${completeChapterEditors}, Título del libro (edición, pp. xx-xx). Editorial. URL`,
+    referenceTemplate: `${completeChapterAuthors} (Año). Título del capítulo. En ${completeChapterEditors}, Título del libro (con edición: edición, Vol. x, pp. xx-xx; sin edición: Vol. x, pp. xx-xx; si tampoco hay volumen: pp. xx-xx). Editorial. URL`,
     rules: [completeChapterAuthorRule, 'Incluye la URL cuando no pertenece a una base de datos.', 'No añade plataforma o dispositivo; trata los detalles especiales de audiolibro solo cuando sean relevantes.'],
   },
   'chapter-other-language': {

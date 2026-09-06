@@ -792,7 +792,9 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(ancient.rules.join(' '), /\(Trad\.\).*\(Ed\.\)/);
   const shakespeare = JSON.parse((await handler({ topic: 'citation', caseId: 'shakespeare-work' })).content[0].text).case;
   assert.match(shakespeare.referenceTemplate, /Con editor:.*Con traductor:/);
-  assert.match(shakespeare.rules.join(' '), /\(Ed\.\).*\(Trad\.\)/);
+  assert.match(shakespeare.referenceTemplate, /21 o más: editores 1–19/);
+  assert.match(shakespeare.referenceTemplate, /21 o más: traductores 1–19/);
+  assert.match(shakespeare.rules.join(' '), /lista completa de editores o traductores acreditados/);
   assert.match(ancient.rules.join(' '), /omítelo ante una fecha exacta verificada/);
 });
 
@@ -872,6 +874,7 @@ test('APA 7 chapter containers preserve multiple editors', async () => {
   for (const caseId of ['chapter-edited-doi', 'chapter-edited-no-doi-database-or-print', 'chapter-electronic-public-url']) {
     const chapter = JSON.parse((await handler({ topic: 'reference', caseId })).content[0].text).case;
     assert.match(chapter.referenceTemplate, /E\. E\. Editor, & F\. F\. Editor \(Eds\.\)/, caseId);
+    assert.match(chapter.referenceTemplate, /con edición: edición, Vol\. x, pp\. xx-xx; sin edición: Vol\. x, pp\. xx-xx/, caseId);
   }
 });
 
