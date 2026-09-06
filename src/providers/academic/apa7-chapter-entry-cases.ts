@@ -64,15 +64,15 @@ export const chapterEntryCases: Record<ChapterEntryCaseId, Apa7VerifiedChapterEn
   },
   'chapter-electronic-public-url': {
     ...base, id: 'chapter-electronic-public-url', label: 'Capítulo electrónico o de audiolibro sin DOI con URL pública', manualExample: 40, manualPrintedPages: '333',
-    requiredMetadata: ['autores del capítulo', 'año', 'título', 'editores', 'libro', 'edición', 'páginas', 'editorial', 'URL pública'],
+    requiredMetadata: ['autores del capítulo', 'año', 'título', 'editores', 'libro', 'edición si existe', 'volumen si existe', 'páginas', 'editorial', 'URL pública'],
     referenceTemplate: `${completeChapterAuthors} (Año). Título del capítulo. En ${completeChapterEditors}, Título del libro (edición y volumen: edición, Vol. x, pp. xx-xx; solo edición: edición, pp. xx-xx; solo volumen: Vol. x, pp. xx-xx; sin ambos: pp. xx-xx). Editorial. URL`,
-    rules: [completeChapterAuthorRule, 'Incluye la URL cuando no pertenece a una base de datos.', 'No añade plataforma o dispositivo; trata los detalles especiales de audiolibro solo cuando sean relevantes.'],
+    rules: [completeChapterAuthorRule, 'Incluye edición y volumen solo cuando existan.', 'Incluye la URL cuando no pertenece a una base de datos.', 'No añade plataforma o dispositivo; trata los detalles especiales de audiolibro solo cuando sean relevantes.'],
   },
   'chapter-other-language': {
     ...base, id: 'chapter-other-language', label: 'Capítulo de libro editado en otro idioma', manualExample: 41, manualPrintedPages: '333',
-    requiredMetadata: ['autor', 'año', 'título original del capítulo', 'traducción del título', 'editores', 'libro', 'páginas', 'editorial', 'DOI o URL pública si corresponde'],
-    referenceTemplate: `${completeChapterAuthors} (Año). Título original del capítulo [Traducción del título]. En ${completeChapterEditors}, Título del libro (pp. xx-xx). Editorial. Con DOI: añade DOI al final. Con URL pública sin DOI: añade URL al final. Impreso o base académica común sin localizador: termina en la editorial.`,
-    rules: [completeChapterAuthorRule, 'Añade entre corchetes la traducción del título del capítulo cuando su idioma difiere del idioma del trabajo.', 'Prefiere DOI; usa URL pública si no hay DOI y omite ambos en una versión impresa o base académica común sin localizador.'],
+    requiredMetadata: ['autor', 'año', 'título original del capítulo', 'traducción del título', 'editores', 'libro', 'edición si existe', 'volumen si existe', 'páginas', 'editorial', 'DOI o URL pública si corresponde'],
+    referenceTemplate: `${completeChapterAuthors} (Año). Título original del capítulo [Traducción del título]. En ${completeChapterEditors}, Título del libro (edición y volumen: edición, Vol. x, pp. xx-xx; solo edición: edición, pp. xx-xx; solo volumen: Vol. x, pp. xx-xx; sin ambos: pp. xx-xx). Editorial. Con DOI: añade DOI al final. Con URL pública sin DOI: añade URL al final. Impreso o base académica común sin localizador: termina en la editorial.`,
+    rules: [completeChapterAuthorRule, 'Añade entre corchetes la traducción del título del capítulo cuando su idioma difiere del idioma del trabajo.', 'Incluye edición y volumen solo cuando existan.', 'Prefiere DOI; usa URL pública si no hay DOI y omite ambos en una versión impresa o base académica común sin localizador.'],
   },
   'chapter-translated-republication': {
     ...base, id: 'chapter-translated-republication', label: 'Capítulo reeditado en traducción', manualExample: 42, manualPrintedPages: '333',

@@ -111,10 +111,10 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   },
   'book-translated-republication': {
     ...base, id: 'book-translated-republication', label: 'Libro reeditado en traducción', manualExample: 28, manualPrintedPages: '329',
-    requiredMetadata: ['autores', 'año original', 'año de reedición', 'título', 'traductores', 'edición', 'editorial'],
-    referenceTemplate: `${completeAuthorList} (Año reedición). Título (${titlePositionTranslators}; edición, solo desde la segunda). Editorial. (Obra original publicada en Año original)`,
+    requiredMetadata: ['autores', 'año original', 'año de reedición', 'título', 'traductores', 'edición', 'editorial', 'DOI o URL pública si corresponde'],
+    referenceTemplate: `${completeAuthorList} (Año reedición). Título (${titlePositionTranslators}; edición, solo desde la segunda). Editorial. (Obra original publicada en Año original). Con DOI: añade DOI al final. Con URL pública sin DOI: añade URL al final. Impreso o base académica común sin localizador: termina en la nota de obra original.`,
     parentheticalCitation: '(Autor, Año original/Año reedición); (Autor & Autor, Año original/Año reedición); (Primer autor et al., Año original/Año reedición) con tres o más autores', narrativeCitation: 'Autor (Año original/Año reedición); Autor y Autor (Año original/Año reedición); Primer autor et al. (Año original/Año reedición) con tres o más autores',
-    rules: [completeAuthorRule, 'Conserva la lista completa de traductores acreditados y usa (Trad.) para uno o (Trads.) para varios.', 'Conserva ambos años en la cita.'],
+    rules: [completeAuthorRule, 'Conserva la lista completa de traductores acreditados y usa (Trad.) para uno o (Trads.) para varios.', 'Conserva ambos años en la cita.', 'Prefiere DOI; usa URL pública si no hay DOI y omite ambos en una versión impresa o base académica común sin localizador.'],
   },
   'book-republished': {
     ...base, id: 'book-republished', label: 'Libro, libro electrónico o audiolibro reeditado', manualExample: 29, manualPrintedPages: '329',
@@ -125,10 +125,10 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   },
   'book-multivolume-single-volume': {
     ...base, id: 'book-multivolume-single-volume', label: 'Volumen de una obra de varios volúmenes', manualExample: 30, manualPrintedPages: '329',
-    requiredMetadata: ['autores o editores del volumen', 'año', 'título general', 'número de volumen', 'título propio del volumen si existe', 'edición', 'editorial', 'DOI/URL'],
-    referenceTemplate: `${completeAuthorList} (Año). Título general (edición, Vol. x) o Título general: Vol. x. Título del volumen. Editorial. DOI/URL; si el volumen se acredita a editores: ${completeEditorList}. (Año). Título y demás elementos.`,
+    requiredMetadata: ['autores o editores del volumen', 'año', 'título general', 'número de volumen', 'título propio del volumen si existe', 'edición', 'editorial', 'DOI/URL si corresponde'],
+    referenceTemplate: `${completeAuthorList} (Año). Título general (edición, Vol. x) o Título general: Vol. x. Título del volumen. Editorial. Con DOI/URL: añade el localizador al final; impreso o base académica común sin localizador: termina en la editorial. Si el volumen se acredita a editores: ${completeEditorList}. (Año). Título y demás elementos.`,
     parentheticalCitation: '(Autor/Editor, Año); (Autor/Editor & Autor/Editor, Año); (Primer autor/editor et al., Año) con tres o más responsables', narrativeCitation: 'Autor/Editor (Año); Autor/Editor y Autor/Editor (Año); Primer autor/editor et al. (Año) con tres o más responsables',
-    rules: [completeAuthorRule, 'Si el volumen no tiene título propio, el número va entre paréntesis sin cursiva.', 'Si tiene título propio, número y título siguen al título general.', 'Cuando el volumen se acredita a editores, incluye la lista completa en posición de autor y añade (Ed.) o (Eds.) según corresponda.'],
+    rules: [completeAuthorRule, 'Si el volumen no tiene título propio, el número va entre paréntesis sin cursiva.', 'Si tiene título propio, número y título siguen al título general.', 'Añade DOI/URL solo cuando corresponda; en impreso o base académica común sin localizador termina en la editorial.', 'Cuando el volumen se acredita a editores, incluye la lista completa en posición de autor y añade (Ed.) o (Eds.) según corresponda.'],
   },
   'book-in-series': {
     ...base, id: 'book-in-series', label: 'Libro perteneciente a una serie', manualExample: 31, manualPrintedPages: '329-330',
