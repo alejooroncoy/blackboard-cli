@@ -41,6 +41,10 @@ test('APA 7 case contracts guard optional metadata and every author cardinality'
       const optionalGuard = `${item.referenceTemplate} ${item.rules.join(' ')}`;
       assert.match(optionalGuard, /solo si|si no |cuando |omite|omít|sin |únicamente|de lo contrario/i, item.id);
     }
+
+    if ((item.optionalMetadata ?? []).some((field: string) => /URL oficial/i.test(field))) {
+      assert.match(item.referenceTemplate, /URL oficial, solo si existe/i, item.id);
+    }
   }
 });
 
@@ -860,6 +864,11 @@ test('APA 7 edited chapters preserve every credited chapter author', async () =>
     assert.match(chapter.referenceTemplate, /Autor, C\. C\./, caseId);
     assert.match(chapter.rules.join(' '), /lista completa y ordenada de autores del capítulo/, caseId);
   }
+  for (const caseId of ['chapter-other-language', 'chapter-translated-republication', 'chapter-reprinted-from-book', 'chapter-multivolume-work']) {
+    const chapter = JSON.parse((await handler({ topic: 'reference', caseId })).content[0].text).case;
+    assert.match(chapter.referenceTemplate, /de 3 a 20:/i, caseId);
+    assert.match(chapter.referenceTemplate, /21 o más:.*1–19.*Último/i, caseId);
+  }
 });
 
 test('APA 7 anthology work makes an earlier publication date optional', async () => {
@@ -1072,6 +1081,9 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   assert.match(translatedFilm.referenceTemplate, /Director, F\. F\., …, & Director final/);
   assert.match(translatedFilm.referenceTemplate, /21 o más:.*1–19.*Último director/);
   assert.match(episode.referenceTemplate, /Responsable, R\. R\. \(Guionista y Director\)/);
+  assert.match(episode.referenceTemplate, /dos: Guionista, G\. G\., & Guionista, H\. H\./);
+  assert.match(episode.referenceTemplate, /de 3 a 20: Guionista/);
+  assert.match(episode.referenceTemplate, /21 o más: guionistas 1–19/);
   assert.match(episode.rules.join(' '), /una sola vez con ambos roles/);
   assert.match(film.parentheticalCitation, /tres o más directores/);
 });
