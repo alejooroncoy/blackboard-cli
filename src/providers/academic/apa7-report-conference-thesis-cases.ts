@@ -72,10 +72,10 @@ export const reportConferenceThesisCases: Record<ReportConferenceThesisCaseId, A
   },
   'report-series': {
     ...reportBase, id: 'report-series', label: 'Reporte de autores individuales publicado en una serie', manualExample: 52, manualPrintedPages: '336',
-    requiredMetadata: ['autores', 'año', 'título', 'nombre/número de serie o fascículo', 'organización', 'URL/DOI'],
-    referenceTemplate: `${completeContributionAuthors} (Año). Título del reporte (Nombre de la serie y número/fascículo). Organización. URL/DOI`,
+    requiredMetadata: ['autores', 'año', 'título', 'nombre/número de serie o fascículo', 'organización', 'DOI o URL pública si corresponde'],
+    referenceTemplate: `${completeContributionAuthors} (Año). Título del reporte (Nombre de la serie y número/fascículo). Organización. Con DOI: añade DOI al final. Con URL pública sin DOI: añade URL al final. Impreso o base académica común sin localizador: termina en la organización.`,
     parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
-    rules: ['Incluye la lista completa de autores en el orden acreditado.', 'La información identificadora de la serie se coloca entre paréntesis después del título.'],
+    rules: ['Incluye la lista completa de autores en el orden acreditado.', 'La información identificadora de la serie se coloca entre paréntesis después del título.', 'Prefiere DOI; usa URL pública si no hay DOI y omite ambos en una versión impresa o base académica común sin localizador.'],
   },
   'report-working-group': {
     ...reportBase, id: 'report-working-group', label: 'Reporte de grupo de trabajo u otro grupo', manualExample: 53, manualPrintedPages: '336',

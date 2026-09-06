@@ -57,10 +57,10 @@ export const audiovisualAudioCases: Record<AudiovisualAudioCaseId, Apa7VerifiedA
   },
   'film-other-language': {
     ...audiovisualBase, id: 'film-other-language', label: 'Película o video en otro idioma', manualExample: 85, manualPrintedPages: '349',
-    requiredMetadata: ['director o lista completa de directores', 'año', 'título original', 'traducción del título', 'descripción', 'productora(s)'],
-    referenceTemplate: 'Un director: Director, D. D. (Director); dos: Director, D. D., & Director, E. E. (Directores); de 3 a 20: Director, D. D., Director, E. E., Director, F. F., …, & Director final, Z. Z. (Directores; incluye todos); 21 o más: directores 1–19, …, Último director (Directores). (Año). Título original [Traducción del título] [Película]. Productora 1; Productora 2; conserva todas en el orden acreditado.',
+    requiredMetadata: ['director o lista completa de directores', 'año', 'título original', 'traducción del título', 'descripción', 'productora(s)', 'URL pública específica si corresponde'],
+    referenceTemplate: 'Un director: Director, D. D. (Director); dos: Director, D. D., & Director, E. E. (Directores); de 3 a 20: Director, D. D., Director, E. E., Director, F. F., …, & Director final, Z. Z. (Directores; incluye todos); 21 o más: directores 1–19, …, Último director (Directores). (Año). Título original [Traducción del título] [Película]. Productora 1; Productora 2; conserva todas en el orden acreditado. Añade URL solo cuando exista un localizador público específico de la versión consultada; de lo contrario, termina en las productoras.',
     parentheticalCitation: '(Director, Año); (Director & Director, Año); (Primer director et al., Año) con tres o más directores', narrativeCitation: 'Director (Año); Director y Director (Año); Primer director et al. (Año) con tres o más directores',
-    rules: ['Conserva la lista completa de directores conforme a los límites del elemento autor de APA y usa el rol plural para varios.', 'Conserva todas las productoras en el orden acreditado y sepáralas con punto y coma.', 'Añade entre corchetes la traducción del título cuando el idioma difiere del idioma del trabajo.'],
+    rules: ['Conserva la lista completa de directores conforme a los límites del elemento autor de APA y usa el rol plural para varios.', 'Conserva todas las productoras en el orden acreditado y sepáralas con punto y coma.', 'Añade entre corchetes la traducción del título cuando el idioma difiere del idioma del trabajo.', 'Añade URL solo para un localizador público específico de la versión consultada.'],
   },
   'television-series': {
     ...audiovisualBase, id: 'television-series', label: 'Serie de televisión completa', manualExample: 86, manualPrintedPages: '349',
