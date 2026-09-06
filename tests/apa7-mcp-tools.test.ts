@@ -815,6 +815,11 @@ test('APA 7 edited works preserve the complete editor list and plural role', asy
     const edited = JSON.parse((await handler({ topic: 'reference', caseId })).content[0].text).case;
     assert.match(edited.referenceTemplate, /\(Eds\.\)/, caseId);
     assert.match(edited.rules.join(' '), /lista completa de editores/, caseId);
+    if (caseId !== 'anthology') {
+      assert.match(edited.requiredMetadata.join(' '), /edición desde la segunda/, caseId);
+      assert.match(edited.referenceTemplate, /\(edición, solo desde la segunda\)/, caseId);
+      assert.match(edited.rules.join(' '), /Incluye la edición desde la segunda/, caseId);
+    }
   }
 });
 
