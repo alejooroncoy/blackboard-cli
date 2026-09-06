@@ -45,11 +45,11 @@ const referenceTemplates: Partial<Record<SourceType, string>> = {
   'book-chapter': 'Apellido, A. A. (Año). Título del capítulo. En A. Editor (Ed.), *Título del libro* (pp. xx-xx). Editorial.',
   'journal-article': 'Autor, A. A.; Autor, A. A., & Autor, B. B.; o lista completa conforme a APA. (Año). Título del artículo. *Revista, volumen*(número), xx-xx. Añade https://doi.org/xxxxx si existe DOI; de lo contrario, una URL pública ajena a una base de datos si existe; si es impreso o proviene de una base académica común, omite DOI y URL.',
   webpage: 'Autor o entidad. (Año), (Año, mes), (Año, día de mes) o (s. f.), según la fecha realmente publicada. *Título de la página*. Nombre del sitio, solo si difiere del autor. URL. No inventes mes ni día.',
-  report: 'Entidad o Apellido, A. A. (Año). *Título del informe* (N.º de informe xxx). Editorial o entidad, solo si difiere del autor. URL',
+  report: 'Entidad o Apellido, A. A. (Año). *Título del informe* (N.º de informe xxx, solo si existe). Editorial o entidad, solo si difiere del autor. URL. Si el informe no tiene número asignado, omite por completo ese paréntesis.',
   thesis: 'Apellido, A. A. (Año). *Título* [Tesis de licenciatura/maestría/doctoral, Universidad]. Repositorio. URL',
   'newspaper-article': 'Apellido, A. A. (Año, día de mes). Título. *Periódico*, p. x o pp. xx–xx para versión impresa. URL para versión en línea',
   'video-webinar': 'Autor o entidad. (Año, día de mes). *Título* [Video o seminario web grabado]. Plataforma. URL',
-  podcast: 'Apellido, A. A. (Host). (Año, día de mes). Título del episodio (N.º de episodio) [Episodio de pódcast]. En *Título del pódcast*. Productora. URL',
+  podcast: 'Serie completa: Responsable, R. R. (Anfitrión o Productor ejecutivo). (Año único; Año inicial–Año final; o Año inicial–presente). *Título del pódcast* [Pódcast de audio o video]. Productora. URL. Episodio: Responsable, R. R. (Anfitrión o Productor ejecutivo). (Año, día de mes). Título del episodio (N.º de episodio, solo si existe) [Episodio de pódcast]. En *Título del pódcast*. Productora. URL.',
   'social-media': 'Autor [@usuario]. (Año, día de mes). *Primeras 20 palabras del contenido* [Tipo de publicación]. Red social. URL',
   software: 'Autor o entidad. (Año). *Nombre* (Versión) [Software]. Editor, desarrollador o tienda, solo si difiere del autor. URL',
 };

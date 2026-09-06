@@ -47,12 +47,17 @@ test('reference templates preserve APA italics with explicit Markdown notation',
   }
 
   const report = JSON.parse((await handler({ topic: 'reference', sourceType: 'report' })).content[0].text);
+  assert.match(report.template, /N.º de informe xxx, solo si existe/);
+  assert.match(report.template, /omite por completo ese paréntesis/);
   assert.match(report.template, /solo si difiere del autor/);
   const webpage = JSON.parse((await handler({ topic: 'reference', sourceType: 'webpage' })).content[0].text);
   assert.match(webpage.template, /\(Año\), \(Año, mes\), \(Año, día de mes\) o \(s\. f\.\)/);
   assert.match(webpage.template, /No inventes mes ni día/);
   assert.match(webpage.template, /sitio, solo si difiere del autor/);
   const software = JSON.parse((await handler({ topic: 'reference', sourceType: 'software' })).content[0].text);
+  const podcast = JSON.parse((await handler({ topic: 'reference', sourceType: 'podcast' })).content[0].text);
+  assert.match(podcast.template, /Serie completa:.*Año inicial–Año final/);
+  assert.match(podcast.template, /Episodio:.*N.º de episodio, solo si existe/);
   assert.match(software.template, /tienda, solo si difiere del autor/);
 });
 
