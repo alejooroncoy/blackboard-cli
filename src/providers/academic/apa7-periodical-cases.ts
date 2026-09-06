@@ -80,10 +80,10 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   },
   'journal-individual-group-authors': {
     ...base, id: 'journal-individual-group-authors', label: 'Artículo con autores personales y grupales', manualExample: 5, manualPrintedPages: '323',
-    requiredMetadata: ['autores personales en orden', 'nombre exacto del autor grupal', 'año', 'título', 'revista', 'volumen/número', 'páginas', 'DOI/URL'],
-    referenceTemplate: 'Autor personal, A. A., & Nombre exacto del grupo. (Año). Título. Revista, volumen(número), páginas. DOI/URL',
-    parentheticalCitation: '(Autor personal & Nombre del grupo, Año)', narrativeCitation: 'Autor personal y Nombre del grupo (Año)',
-    rules: ['Conserva el nombre del grupo como aparece en la fuente.'],
+    requiredMetadata: ['lista completa de autores personales en orden', 'nombre exacto del autor grupal', 'año', 'título', 'revista', 'volumen/número', 'páginas', 'DOI/URL'],
+    referenceTemplate: 'Autor personal, A. A., Autor personal, B. B., & Nombre exacto del grupo. (Año). Título. Revista, volumen(número), páginas. DOI/URL',
+    parentheticalCitation: '(Autor personal & Nombre del grupo, Año) cuando hay dos autores totales; (Primer autor et al., Año) cuando hay tres o más autores personales y grupales en total', narrativeCitation: 'Autor personal y Nombre del grupo (Año) cuando hay dos autores totales; Primer autor et al. (Año) cuando hay tres o más autores personales y grupales en total',
+    rules: ['Conserva todos los autores personales en su orden y después el nombre exacto del grupo.', 'Calcula la cita por el número total de autores personales y grupales.'],
   },
   'journal-elocator': {
     ...base, id: 'journal-elocator', label: 'Artículo con eLocator', manualExample: 6, manualPrintedPages: '324',

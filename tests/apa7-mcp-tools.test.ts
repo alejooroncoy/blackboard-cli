@@ -655,8 +655,11 @@ test('APA 7 guidance uses ampersand in a two-author parenthetical citation and r
   assert.match(noDoi.case.parentheticalCitation, /tres o más autores/);
 
   const mixedAuthors = JSON.parse((await handler({ topic: 'citation', caseId: 'journal-individual-group-authors' })).content[0].text);
-  assert.equal(mixedAuthors.case.parentheticalCitation, '(Autor personal & Nombre del grupo, Año)');
-  assert.equal(mixedAuthors.case.narrativeCitation, 'Autor personal y Nombre del grupo (Año)');
+  assert.match(mixedAuthors.case.referenceTemplate, /Autor personal, B\. B\./);
+  assert.match(mixedAuthors.case.parentheticalCitation, /dos autores totales/);
+  assert.match(mixedAuthors.case.parentheticalCitation, /tres o más autores personales y grupales en total/);
+  assert.match(mixedAuthors.case.narrativeCitation, /Primer autor et al\./);
+  assert.match(mixedAuthors.case.rules.join(' '), /número total de autores/);
 });
 
 test('APA 7 guidance covers all 18 verified book and reference-work examples', async () => {
@@ -683,6 +686,8 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   const religious = JSON.parse((await handler({ topic: 'citation', caseId: 'religious-work' })).content[0].text).case;
   assert.match(religious.parentheticalCitation, /\(\*Título\*,/);
   assert.match(religious.narrativeCitation, /^\*Título\*/);
+  assert.match(religious.parentheticalCitation, /Año versión\) si no corresponde un año original/);
+  assert.match(religious.rules.join(' '), /No inventes un año original/);
 });
 
 test('APA 7 edited works preserve the complete editor list and plural role', async () => {
