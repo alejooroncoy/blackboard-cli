@@ -103,7 +103,7 @@ export const chapterEntryCases: Record<ChapterEntryCaseId, Apa7VerifiedChapterEn
   'work-in-anthology': {
     ...base, id: 'work-in-anthology', label: 'Obra individual incluida en una antología', manualExample: 46, manualPrintedPages: '334',
     requiredMetadata: ['autor de la obra', 'año de la antología', 'título de la obra', 'editor de la antología', 'título de la antología', 'páginas', 'editorial', 'DOI/URL', 'año original si ya se publicó'],
-    referenceTemplate: 'Autor, A. A. (Año antología). Título de la obra. En E. Editor (Ed.), Título de la antología (pp. xx-xx). Editorial. DOI/URL. Añade (Obra original publicada en Año original) solo si hubo una publicación anterior verificada.',
+    referenceTemplate: `${completeChapterAuthors} (Año antología). Título de la obra. En ${completeChapterEditors}, Título de la antología (pp. xx-xx). Editorial. DOI/URL. Añade (Obra original publicada en Año original) solo si hubo una publicación anterior verificada.`,
     parentheticalCitation: '(Autor, Año antología), (Autor & Autor, Año antología) o (Primer autor et al., Año antología) si no hubo publicación anterior; usa Año original/Año antología cuando ambos están verificados', narrativeCitation: 'Autor (Año antología), Autor y Autor (Año antología) o Primer autor et al. (Año antología) si no hubo publicación anterior; usa Año original/Año antología cuando ambos están verificados',
     rules: ['No inventes un año original cuando la obra apareció por primera vez en la antología.', 'Si la obra se publicó antes en otro lugar, se trata como reedición, no como reimpresión.'],
   },
@@ -117,7 +117,7 @@ export const chapterEntryCases: Record<ChapterEntryCaseId, Apa7VerifiedChapterEn
   'reference-entry-individual-author': {
     ...base, id: 'reference-entry-individual-author', label: 'Entrada de obra de consulta con autor individual', manualExample: 48, manualPrintedPages: '334',
     requiredMetadata: ['autor de la entrada', 'año', 'título de la entrada', 'editor', 'obra de consulta', 'edición o versión', 'editorial', 'URL'],
-    referenceTemplate: 'Autor, A. A. (Año). Título de la entrada. En E. Editor (Ed.), Obra de consulta (edición o versión). Editorial. URL',
+    referenceTemplate: `${completeChapterAuthors} (Año). Título de la entrada. En ${completeChapterEditors}, Obra de consulta (edición o versión). Editorial. URL`,
     rules: ['Se estructura como capítulo de libro editado.', 'Una versión archivada estable no necesita fecha de recuperación.'],
   },
   'wikipedia-entry': {

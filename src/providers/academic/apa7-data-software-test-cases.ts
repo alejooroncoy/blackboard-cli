@@ -50,13 +50,13 @@ export const dataSoftwareTestCases: Record<DataSoftwareTestCaseId, Apa7VerifiedD
   'dataset-published': {
     ...dataBase, id: 'dataset-published', label: 'Conjunto de datos publicado', manualExample: 75, manualPrintedPages: '344',
     requiredMetadata: ['autores o entidad', 'año de publicación', 'título', 'identificador y versión si existen', 'descripción del conjunto', 'organización publicadora/archivo', 'DOI/URL'],
-    referenceTemplate: `${completePersonalAuthors} o Entidad autora. (Año). Título del conjunto. Si existen identificador o versión: Título del conjunto (Identificador), (Versión x) o (Identificador; Versión x). [Conjunto de datos y libro de códigos, si corresponde]. Organización o archivo, solo si difiere del autor. DOI/URL`,
+    referenceTemplate: `${completePersonalAuthors} o Entidad autora. (Año). Elige una sola forma de título: Título del conjunto; Título del conjunto (Identificador); Título del conjunto (Versión x); o Título del conjunto (Identificador; Versión x). [Conjunto de datos y libro de códigos, si corresponde]. Organización o archivo, solo si difiere del autor. DOI/URL`,
     rules: [completePersonalAuthorRule, 'Cita el conjunto cuando realizas análisis secundarios de datos públicos o archivas datos propios presentados por primera vez.', 'Incluye entre paréntesis únicamente el identificador y/o la versión que realmente existan; omite todo el paréntesis si no existe ninguno.', 'Incluye fecha de recuperación solo si el conjunto está diseñado para cambiar con el tiempo.'],
   },
   'raw-data-unpublished': {
     ...dataBase, id: 'raw-data-unpublished', label: 'Datos brutos no publicados', manualExample: 76, manualPrintedPages: '344',
     requiredMetadata: ['autor o entidad', 'año o rango de años de recolección', 'título o descripción', 'estado inédito', 'fuente institucional si se conoce'],
-    referenceTemplate: 'Autor, A. A. o Entidad autora. (Año o Años). Título [Datos brutos inéditos]. Fuente institucional si se conoce.',
+    referenceTemplate: `${completePersonalAuthors} o Entidad autora. (Año o Años). Título [Datos brutos inéditos]. Fuente institucional si se conoce.`,
     rules: ['Usa el nombre completo de la entidad en posición de autor cuando el conjunto pertenece a una institución o grupo.', 'Si no existe título, usa una descripción entre corchetes que indique estado y enfoque de los datos.', 'Para datos no publicados, la fecha es el año o rango de años de recolección.', 'Incluye la institución al final solo cuando se conoce.'],
   },
   'specialized-software': {
@@ -74,13 +74,13 @@ export const dataSoftwareTestCases: Record<DataSoftwareTestCaseId, Apa7VerifiedD
   'mobile-application': {
     ...softwareBase, id: 'mobile-application', label: 'Aplicación móvil', manualExample: 79, manualPrintedPages: '346',
     requiredMetadata: ['autor o desarrollador', 'año de la versión', 'nombre', 'versión', 'tienda o desarrollador', 'URL'],
-    referenceTemplate: 'Autor o entidad. (Año). Nombre de la aplicación (Versión x) [Aplicación móvil]. Tienda o desarrollador verificado, solo si difiere del autor. URL',
+    referenceTemplate: `${completePersonalAuthors} o Entidad autora. (Año). Nombre de la aplicación (Versión x) [Aplicación móvil]. Tienda o desarrollador verificado, solo si difiere del autor. URL`,
     rules: ['Usa como fuente la tienda cuando allí se distribuye la aplicación o el desarrollador cuando la distribuye directamente; si coincide con el autor, omite ese elemento.', 'Usa el año de publicación de la versión consultada.', 'No confunde una aplicación completa con contenido publicado dentro de una red social.'],
   },
   'mobile-app-reference-entry': {
     ...softwareBase, id: 'mobile-app-reference-entry', label: 'Entrada en una obra de consulta de una aplicación móvil', manualExample: 80, manualPrintedPages: '346',
     requiredMetadata: ['autor de la entrada o de la obra', 'año', 'título de la entrada', 'nombre y versión de la aplicación', 'desarrollador o tienda', 'URL'],
-    referenceTemplate: 'Autor. (Año). Título de la entrada. En Nombre de la aplicación (Versión x) [Aplicación móvil]. Desarrollador o tienda. URL',
+    referenceTemplate: `${completePersonalAuthors} (Año). Título de la entrada. En Nombre de la aplicación (Versión x) [Aplicación móvil]. Desarrollador o tienda. URL`,
     rules: ['Se estructura como entrada de una obra de consulta.', 'No inventa un autor individual cuando una entidad es responsable de toda la aplicación y sus entradas.'],
   },
   'test-manual': {

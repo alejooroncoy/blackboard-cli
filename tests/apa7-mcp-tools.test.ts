@@ -984,7 +984,8 @@ test('APA 7 guidance covers datasets, software and tests through example 83', as
   assert.equal(dataset.manualExample, 75);
   assert.match(dataset.rules.join(' '), /análisis secundarios/);
   assert.match(dataset.referenceTemplate, /solo si difiere del autor/);
-  assert.match(dataset.referenceTemplate, /\(Identificador\), \(Versión x\) o \(Identificador; Versión x\)/);
+  assert.match(dataset.referenceTemplate, /Elige una sola forma de título/);
+  assert.match(dataset.referenceTemplate, /Título del conjunto \(Identificador\); Título del conjunto \(Versión x\); o Título del conjunto \(Identificador; Versión x\)/);
   assert.match(dataset.rules.join(' '), /omite todo el paréntesis si no existe ninguno/);
   assert.match(software.rules.join(' '), /distribución limitada/);
   assert.match(software.referenceTemplate, /solo si difiere del autor/);

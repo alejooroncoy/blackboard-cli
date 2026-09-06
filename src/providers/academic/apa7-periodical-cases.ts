@@ -117,14 +117,14 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   'journal-translated-republication': {
     ...base, id: 'journal-translated-republication', label: 'Artículo reeditado en traducción', manualExample: 10, manualPrintedPages: '324',
     requiredMetadata: ['autor', 'año de reedición', 'año original', 'título', 'traductores', 'revista', 'volumen/número/páginas', 'DOI/URL'],
-    referenceTemplate: 'Autor, A. A. (Año reedición). Título (A. Traductor, Trad.). Revista, volumen(número), páginas. DOI/URL (Obra original publicada en Año original)',
+    referenceTemplate: `${completeAuthorList} (Año reedición). Título (A. Traductor, Trad.). Revista, volumen(número), páginas. DOI/URL (Obra original publicada en Año original)`,
     parentheticalCitation: '(Autor, Año original/Año reedición); (Autor & Autor, Año original/Año reedición); (Primer autor et al., Año original/Año reedición) con tres o más autores', narrativeCitation: 'Autor (Año original/Año reedición); Autor y Autor (Año original/Año reedición); Primer autor et al. (Año original/Año reedición) con tres o más autores',
     rules: ['Los dos años son obligatorios para la citación de la reedición consultada.'],
   },
   'journal-reprint': {
     ...base, id: 'journal-reprint', label: 'Artículo reimpreso de otra fuente', manualExample: 11, manualPrintedPages: '324-325',
     requiredMetadata: ['autor', 'año y fuente de la reimpresión consultada', 'título', 'datos completos de la publicación original'],
-    referenceTemplate: 'Autor, A. A. (Año reimpresión). Título. Fuente de la reimpresión. (Reimpreso de Título original, Año original, Fuente original)',
+    referenceTemplate: `${completeAuthorList} (Año reimpresión). Título. Fuente de la reimpresión. (Reimpreso de Título original, Año original, Fuente original)`,
     parentheticalCitation: '(Autor, Año original/Año reimpresión); (Autor & Autor, Año original/Año reimpresión); (Primer autor et al., Año original/Año reimpresión) con tres o más autores', narrativeCitation: 'Autor (Año original/Año reimpresión); Autor y Autor (Año original/Año reimpresión); Primer autor et al. (Año original/Año reimpresión) con tres o más autores',
     rules: ['La referencia describe primero la versión realmente consultada.'],
   },
@@ -144,25 +144,25 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   'journal-uptodate': {
     ...base, id: 'journal-uptodate', label: 'Artículo de UpToDate', manualExample: 14, manualPrintedPages: '325-326',
     requiredMetadata: ['autor', 'año de última actualización', 'título', 'editor acreditado', 'fecha de recuperación', 'URL'],
-    referenceTemplate: 'Autor, A. A. (Año de última actualización). Título. En E. Editor (Ed.), UpToDate. Recuperado el día de mes de año, de URL',
+    referenceTemplate: `${completeAuthorList} (Año de última actualización). Título. En E. Editor (Ed.), UpToDate. Recuperado el día de mes de año, de URL`,
     rules: ['Incluye fecha de recuperación porque el contenido cambia y las versiones no se archivan.'],
   },
   'magazine-article': {
     ...base, id: 'magazine-article', label: 'Artículo de revista o magazine', manualExample: 15, manualPrintedPages: '326',
     requiredMetadata: ['autor', 'fecha disponible', 'título', 'revista', 'volumen/número/páginas si existen', 'DOI/URL si corresponde'],
-    referenceTemplate: 'Autor, A. A. (Año), (Año, mes o estación) o (Año, día de mes), según la fecha publicada. Título. Revista. Añade volumen, número, páginas y DOI/URL únicamente cuando existan y correspondan.',
+    referenceTemplate: `${completeAuthorList} (Año), (Año, mes o estación) o (Año, día de mes), según la fecha publicada. Título. Revista. Añade volumen, número, páginas y DOI/URL únicamente cuando existan y correspondan.`,
     rules: ['Usa la precisión de fecha publicada por la revista: año, año y mes/estación, o fecha completa.', 'No inventes mes ni día y omite individualmente volumen, número, páginas y localizador cuando sean inexistentes.'],
   },
   'newspaper-article': {
     ...base, id: 'newspaper-article', label: 'Artículo de periódico', manualExample: 16, manualPrintedPages: '326',
     requiredMetadata: ['autor', 'fecha completa', 'título', 'periódico', 'página o URL según versión'],
-    referenceTemplate: 'Autor, A. A. (Año, día de mes). Título. Periódico, página si es impreso. URL si es en línea',
+    referenceTemplate: `${completeAuthorList} (Año, día de mes). Título. Periódico, página si es impreso. URL si es en línea`,
     rules: ['Un sitio web de noticias que no es un periódico se trata como página web, no como artículo de periódico.'],
   },
   'blog-post': {
     ...base, id: 'blog-post', label: 'Entrada de blog', manualExample: 17, manualPrintedPages: '326',
     requiredMetadata: ['autor', 'fecha completa', 'título de la entrada', 'nombre del blog', 'URL'],
-    referenceTemplate: 'Autor, A. A. (Año, día de mes). Título de la entrada. Blog. URL',
+    referenceTemplate: `${completeAuthorList} (Año, día de mes). Título de la entrada. Blog. URL`,
     rules: ['El nombre del blog ocupa el elemento fuente.'],
   },
   'periodical-comment': {
@@ -175,7 +175,7 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   'periodical-editorial': {
     ...base, id: 'periodical-editorial', label: 'Editorial de una publicación periódica', manualExample: 19, manualPrintedPages: '326-327',
     requiredMetadata: ['autor si está firmado', 'año o fecha', 'título', 'tipo de publicación periódica', 'volumen/número/páginas si existen', 'DOI/URL si corresponde'],
-    referenceTemplate: 'Con firma: Autor, A. A. (Año). Título [Editorial]. Publicación. Sin firma: Título [Editorial]. (Año). Publicación. En ambas formas, añade volumen, número, páginas y DOI/URL únicamente cuando existan y correspondan.',
+    referenceTemplate: `Con firma: ${completeAuthorList} (Año). Título [Editorial]. Publicación. Sin firma: Título [Editorial]. (Año). Publicación. En ambas formas, añade volumen, número, páginas y DOI/URL únicamente cuando existan y correspondan.`,
     parentheticalCitation: 'Con firma: (Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores. Sin firma: (“Título abreviado”, Año)',
     narrativeCitation: 'Con firma: Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores. Sin firma: “Título abreviado” (Año)',
     rules: [

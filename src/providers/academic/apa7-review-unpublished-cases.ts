@@ -91,7 +91,7 @@ export const reviewUnpublishedCases: Record<ReviewUnpublishedCaseId, Apa7Verifie
   'informal-eric': {
     ...unpublishedBase, id: 'informal-eric', label: 'Obra publicada informalmente en ERIC', manualExample: 74, manualPrintedPages: '343',
     requiredMetadata: ['autor', 'año', 'título', 'número de documento ERIC', 'ERIC', 'URL'],
-    referenceTemplate: 'Autor, A. A. (Año). Título (N.º de documento ERIC). ERIC. URL',
+    referenceTemplate: `${completeManuscriptAuthors} (Año). Título (N.º de documento ERIC). ERIC. URL`,
     rules: ['Incluye el número asignado por ERIC entre paréntesis después del título.'],
   },
 };
