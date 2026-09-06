@@ -264,7 +264,7 @@ export const citationRules: Record<CitationRuleId, Apa7VerifiedCitationRule> = {
   'short-quote': verified({
     id: 'short-quote', label: 'Cita corta', manualSection: '8.26', manualPrintedPages: '277',
     whenToUse: 'Cuando la cita directa contiene menos de 40 palabras.',
-    rules: ['Integra el texto entre comillas dobles.', 'En formato parentético, coloca autor, año y localizador inmediatamente después de la cita o al final de la oración.', 'En formato narrativo, autor y año aparecen en la oración y el localizador después de la cita.', 'Si la cita cierra la oración, la puntuación final va después del paréntesis de la cita.', 'Puntos y comas van dentro de las comillas; otros signos solo si pertenecen al material citado.'],
+    rules: ['Integra el texto entre comillas dobles.', 'En formato parentético, coloca autor, año y localizador inmediatamente después de la cita o al final de la oración.', 'En formato narrativo, autor y año aparecen en la oración y el localizador después de la cita.', 'Si la cita cierra la oración, la puntuación final va después del paréntesis de la cita.', 'Conserva dentro de las comillas únicamente la puntuación que pertenece al fragmento original; en prosa española, la puntuación de la oración que contiene la cita va después de las comillas o, si sigue una cita parentética, después del paréntesis.'],
     examples: ['“Texto exacto” (Autor, Año, p. 10).', 'Autor (Año) indicó que “texto exacto” (p. 10).'],
     referenceTreatment: 'La obra citada debe aparecer en referencias.',
   }),
@@ -300,7 +300,7 @@ export const citationRules: Record<CitationRuleId, Apa7VerifiedCitationRule> = {
     id: 'quote-changes-requiring-explanation', label: 'Cambios que requieren explicación', manualSection: '8.31', manualPrintedPages: '281-282',
     whenToUse: 'Cuando se omite, inserta o enfatiza material dentro de una cita directa.',
     rules: ['Marca omisiones internas con tres puntos suspensivos separados por espacios.', 'No uses puntos suspensivos al inicio o final salvo que la fuente los contenga.', 'Usa cuatro puntos cuando la omisión abarca el final de una oración.', 'Usa corchetes, no paréntesis, para material insertado.', 'Para énfasis añadido, usa cursiva y agrega [énfasis añadido] inmediatamente después.'],
-    examples: ['“Texto . . . texto” (Autor, Año, p. 1).', '“Aquellos [adultos]…” (Autor, Año, p. 1).', '“Palabra” [énfasis añadido] (Autor, Año, p. 1).'],
+    examples: ['“Texto . . . texto” (Autor, Año, p. 1).', '“Aquellos [adultos]…” (Autor, Año, p. 1).', '“Palabra *enfatizada* [énfasis añadido]” (Autor, Año, p. 1).'],
     referenceTreatment: 'La obra citada debe aparecer en referencias.',
   }),
   'quote-containing-citations': verified({

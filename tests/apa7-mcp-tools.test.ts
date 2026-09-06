@@ -861,8 +861,17 @@ test('APA 7 guidance distinguishes short, block and participant quotations', asy
   assert.match(short.whenToUse, /menos de 40/);
   assert.match(block.whenToUse, /40 palabras o más/);
   assert.match(block.rules.join(' '), /sin otro punto después/);
+  assert.match(short.rules.join(' '), /puntuación que pertenece al fragmento original/);
+  assert.match(short.rules.join(' '), /después de las comillas/);
   assert.match(participant.referenceTreatment, /No se incluye/);
   assert.match(participant.rules.join(' '), /No las trates como comunicaciones personales/);
+});
+
+test('APA 7 guidance keeps added emphasis inside a direct quotation', async () => {
+  let handler: any;
+  registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
+  const changes = JSON.parse((await handler({ topic: 'citation', citationRuleId: 'quote-changes-requiring-explanation' })).content[0].text).citationRule;
+  assert.match(changes.examples.join(' '), /\*enfatizada\* \[énfasis añadido\]”/);
 });
 
 test('APA 7 guidance refuses invented locators and separates citation from copyright permission', async () => {
