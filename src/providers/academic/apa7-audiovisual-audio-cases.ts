@@ -50,16 +50,16 @@ const audioBase = { ...shared, manualSection: '10.13' as const };
 export const audiovisualAudioCases: Record<AudiovisualAudioCaseId, Apa7VerifiedAudiovisualAudioCase> = {
   'film-or-video': {
     ...audiovisualBase, id: 'film-or-video', label: 'Película o video', manualExample: 84, manualPrintedPages: '348-349',
-    requiredMetadata: ['director u otro rol equivalente verificable', 'año de la versión', 'título', 'descripción película/video y edición especial si importa', 'productora(s)', 'URL si corresponde'],
-    referenceTemplate: 'Director, D. D. (Director). (Año). Título [Película; información especial de versión si es necesaria]. Productora 1; Productora 2. URL',
-    parentheticalCitation: '(Director, Año)', narrativeCitation: 'Director (Año)',
+    requiredMetadata: ['director o lista completa de directores, u otro rol equivalente verificable', 'año de la versión', 'título', 'descripción película/video y edición especial si importa', 'productora(s)', 'URL si corresponde'],
+    referenceTemplate: 'Director, D. D. (Director) o Director, D. D., & Director, D. D. (Directores). (Año). Título [Película; información especial de versión si es necesaria]. Productora 1; Productora 2. URL',
+    parentheticalCitation: '(Director, Año); (Director & Director, Año); (Primer director et al., Año) con tres o más directores', narrativeCitation: 'Director (Año); Director y Director (Año); Primer director et al. (Año) con tres o más directores',
     rules: ['El director ocupa la posición de autor; si es desconocido puede acreditarse un rol equivalente que facilite recuperar la obra.', 'No indica cine, DVD o streaming por defecto; añade detalles solo si la versión concreta es relevante.', 'Una cita textual de una obra audiovisual usa marca de tiempo real.'],
   },
   'film-other-language': {
     ...audiovisualBase, id: 'film-other-language', label: 'Película o video en otro idioma', manualExample: 85, manualPrintedPages: '349',
-    requiredMetadata: ['director', 'año', 'título original', 'traducción del título', 'descripción', 'productora(s)'],
-    referenceTemplate: 'Director, D. D. (Director). (Año). Título original [Traducción del título] [Película]. Productora.',
-    parentheticalCitation: '(Director, Año)', narrativeCitation: 'Director (Año)',
+    requiredMetadata: ['director o lista completa de directores', 'año', 'título original', 'traducción del título', 'descripción', 'productora(s)'],
+    referenceTemplate: 'Director, D. D. (Director) o Director, D. D., & Director, D. D. (Directores). (Año). Título original [Traducción del título] [Película]. Productora.',
+    parentheticalCitation: '(Director, Año); (Director & Director, Año); (Primer director et al., Año) con tres o más directores', narrativeCitation: 'Director (Año); Director y Director (Año); Primer director et al. (Año) con tres o más directores',
     rules: ['Añade entre corchetes la traducción del título cuando el idioma difiere del idioma del trabajo.'],
   },
   'television-series': {

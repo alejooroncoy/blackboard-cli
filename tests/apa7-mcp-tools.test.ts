@@ -653,6 +653,9 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(edited.case.parentheticalCitation, /tres o más editores/);
   const dictionary = JSON.parse((await handler({ topic: 'reference', caseId: 'dictionary-thesaurus-encyclopedia' })).content[0].text);
   assert.match(dictionary.case.rules.join(' '), /fecha de recuperación/);
+  const religious = JSON.parse((await handler({ topic: 'citation', caseId: 'religious-work' })).content[0].text).case;
+  assert.match(religious.parentheticalCitation, /\(\*Título\*,/);
+  assert.match(religious.narrativeCitation, /^\*Título\*/);
 });
 
 test('APA 7 guidance covers all 12 chapter and reference-entry examples', async () => {
@@ -759,6 +762,7 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   const podcast = JSON.parse((await handler({ topic: 'reference', caseId: 'podcast-series' })).content[0].text).case;
   const episode = JSON.parse((await handler({ topic: 'citation', caseId: 'television-episode-or-webisode' })).content[0].text).case;
   const series = JSON.parse((await handler({ topic: 'citation', caseId: 'television-series' })).content[0].text).case;
+  const film = JSON.parse((await handler({ topic: 'citation', caseId: 'film-or-video' })).content[0].text).case;
   assert.equal(ted.manualExample, 88);
   assert.match(ted.rules.join(' '), /En YouTube/);
   assert.match(webinar.rules.join(' '), /comunicación personal/);
@@ -768,6 +772,8 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   assert.match(episode.parentheticalCitation, /tres o más responsables acreditados/);
   assert.match(episode.narrativeCitation, /Guionista y Director \(Año\)/);
   assert.match(series.parentheticalCitation, /tres o más productores/);
+  assert.match(film.parentheticalCitation, /Director & Director/);
+  assert.match(film.parentheticalCitation, /tres o más directores/);
 });
 
 test('APA 7 guidance covers visual, social and web works through example 114', async () => {

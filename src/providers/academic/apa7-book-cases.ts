@@ -154,7 +154,7 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
     ...base, id: 'religious-work', label: 'Obra religiosa', manualExample: 35, manualPrintedPages: '331',
     requiredMetadata: ['título de la obra', 'año de versión', 'traductores/edición si existen', 'editorial o URL', 'año original si corresponde'],
     referenceTemplate: 'Título de la obra. (Año de versión). (Traductor, Trad.; edición). Editorial/URL. (Obra original publicada en Año original)',
-    parentheticalCitation: '(Título, Año original/Año versión)', narrativeCitation: 'Título (Año original/Año versión)',
+    parentheticalCitation: '(*Título*, Año original/Año versión)', narrativeCitation: '*Título* (Año original/Año versión)',
     rules: ['El título ocupa la posición de autor cuando no hay autor.', 'Para libro, versículo o pasaje se añade el localizador canónico en el texto.'],
   },
   'ancient-greek-roman-work': {
