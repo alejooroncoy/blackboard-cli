@@ -54,6 +54,8 @@ const completeAuthorList = 'Un autor: Autor, A. A.; dos: Autor, A. A., & Autor, 
 const completeAuthorRule = 'Incluye la lista completa de autores en el orden acreditado conforme a los límites del elemento autor de APA.';
 const completeEditorList = 'Un editor: Editor, E. E. (Ed.); dos: Editor, E. E., & Editor, F. F. (Eds.); de 3 a 20: Editor, E. E., Editor, F. F., Editor, G. G., …, & Editor final, Z. Z. (Eds.; incluye todos); 21 o más: editores 1–19, …, Último editor (Eds.)';
 const completeTranslatorList = 'Un traductor: T. Traductor (Trad.); dos: T. Traductor & U. Traductor (Trads.); de 3 a 20: T. Traductor, U. Traductor, V. Traductor, …, & Traductor final (Trads.; incluye todos); 21 o más: traductores 1–19, …, Último traductor (Trads.)';
+const titlePositionEditors = 'Un editor: E. E. Editor, Ed.; dos: E. E. Editor, F. F. Editor, Eds.; de 3 a 20: E. E. Editor, F. F. Editor, G. G. Editor, …, & Z. Z. Editor final, Eds.; 21 o más: editores 1–19, …, Último editor, Eds.';
+const titlePositionTranslators = 'Un traductor: T. Traductor, Trad.; dos: T. Traductor, U. Traductor, Trads.; de 3 a 20: T. Traductor, U. Traductor, V. Traductor, …, & Traductor final, Trads.; 21 o más: traductores 1–19, …, Último traductor, Trads.';
 
 export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   'book-author-doi': {
@@ -110,7 +112,7 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   'book-translated-republication': {
     ...base, id: 'book-translated-republication', label: 'Libro reeditado en traducción', manualExample: 28, manualPrintedPages: '329',
     requiredMetadata: ['autores', 'año original', 'año de reedición', 'título', 'traductores', 'edición', 'editorial'],
-    referenceTemplate: `${completeAuthorList} (Año reedición). Título (${completeTranslatorList}; edición, solo desde la segunda). Editorial. (Obra original publicada en Año original)`,
+    referenceTemplate: `${completeAuthorList} (Año reedición). Título (${titlePositionTranslators}; edición, solo desde la segunda). Editorial. (Obra original publicada en Año original)`,
     parentheticalCitation: '(Autor, Año original/Año reedición); (Autor & Autor, Año original/Año reedición); (Primer autor et al., Año original/Año reedición) con tres o más autores', narrativeCitation: 'Autor (Año original/Año reedición); Autor y Autor (Año original/Año reedición); Primer autor et al. (Año original/Año reedición) con tres o más autores',
     rules: [completeAuthorRule, 'Conserva la lista completa de traductores acreditados y usa (Trad.) para uno o (Trads.) para varios.', 'Conserva ambos años en la cita.'],
   },
@@ -172,7 +174,7 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   'shakespeare-work': {
     ...base, id: 'shakespeare-work', label: 'Obra de Shakespeare u otra obra clásica con edición moderna', manualExample: 37, manualPrintedPages: '331',
     requiredMetadata: ['autor', 'año de edición consultada', 'título', 'editores/traductores', 'editorial', 'año original'],
-    referenceTemplate: `Con editor: Autor. (Año edición). Título (${completeEditorList}). Editorial. Con traductor: Autor. (Año edición). Título (${completeTranslatorList}). Editorial. (Obra original publicada en Año original)`,
+    referenceTemplate: `Con editor: Autor. (Año edición). Título (${titlePositionEditors}). Editorial. Con traductor: Autor. (Año edición). Título (${titlePositionTranslators}). Editorial. (Obra original publicada en Año original)`,
     parentheticalCitation: '(Autor, Año original/Año edición)', narrativeCitation: 'Autor (Año original/Año edición)',
     rules: ['Conserva la lista completa de editores o traductores acreditados; usa (Ed.)/(Eds.) o (Trad.)/(Trads.) según corresponda, sin cambiar el rol acreditado.', 'Acto, escena, línea o pasaje se añade como localizador al citar una parte.'],
   },

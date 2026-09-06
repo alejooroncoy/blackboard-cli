@@ -55,6 +55,7 @@ const completeAuthorList = 'Un autor: Autor, A. A.; dos: Autor, A. A., & Autor, 
 const completeAuthorRule = 'Conserva la lista completa y ordenada de autores conforme a los límites del elemento autor de APA.';
 const completePeriodicalEditors = 'Un editor: Editor, A. A. (Ed.); dos: Editor, A. A., & Editor, B. B. (Eds.); de 3 a 20: Editor, A. A., Editor, B. B., Editor, C. C., …, & Editor final, Z. Z. (Eds.; incluye todos); 21 o más: editores 1–19, …, Último editor (Eds.)';
 const completeTranslatorList = 'Un traductor: A. Traductor (Trad.); dos: A. Traductor & B. Traductor (Trads.); de 3 a 20: A. Traductor, B. Traductor, C. Traductor, …, & Traductor final (Trads.; incluye todos); 21 o más: traductores 1–19, …, Último traductor (Trads.)';
+const titlePositionTranslators = 'Un traductor: A. Traductor, Trad.; dos: A. Traductor, B. Traductor, Trads.; de 3 a 20: A. Traductor, B. Traductor, C. Traductor, …, & Traductor final, Trads.; 21 o más: traductores 1–19, …, Último traductor, Trads.';
 
 export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   'journal-doi': {
@@ -118,7 +119,7 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   'journal-translated-republication': {
     ...base, id: 'journal-translated-republication', label: 'Artículo reeditado en traducción', manualExample: 10, manualPrintedPages: '324',
     requiredMetadata: ['autor', 'año de reedición', 'año original', 'título', 'traductores', 'revista', 'volumen/número/páginas', 'DOI/URL'],
-    referenceTemplate: `${completeAuthorList} (Año reedición). Título (${completeTranslatorList}). Revista, volumen(número), páginas. DOI/URL (Obra original publicada en Año original)`,
+    referenceTemplate: `${completeAuthorList} (Año reedición). Título (${titlePositionTranslators}). Revista, volumen(número), páginas. DOI/URL (Obra original publicada en Año original)`,
     parentheticalCitation: '(Autor, Año original/Año reedición); (Autor & Autor, Año original/Año reedición); (Primer autor et al., Año original/Año reedición) con tres o más autores', narrativeCitation: 'Autor (Año original/Año reedición); Autor y Autor (Año original/Año reedición); Primer autor et al. (Año original/Año reedición) con tres o más autores',
     rules: ['Conserva la lista completa de traductores acreditados y usa (Trad.) para uno o (Trads.) para varios.', 'Los dos años son obligatorios para la citación de la reedición consultada.'],
   },

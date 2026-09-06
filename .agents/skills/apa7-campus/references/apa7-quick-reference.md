@@ -55,7 +55,7 @@ Usa cursiva donde se indica mediante asteriscos. Ajusta mayúsculas, edición, n
 | Artículo con eLocator | `Apellido, A. A. (Año). Título. *Revista, volumen*, Artículo e12345. DOI` |
 | Página web | `Autor o entidad. (Año, día de mes). *Título de la página*. Nombre del sitio, solo si difiere del autor. URL` |
 | Página web, autor = sitio | `Entidad. (Año, día de mes). *Título de la página*. URL` |
-| Informe | `Entidad o Apellido, A. A. (Año). *Título del informe* (N.º de informe xxx). Editorial/Entidad solo si difiere del autor. URL` |
+| Informe | Con número y DOI/URL: `Entidad o Apellido, A. A. (Año). *Título del informe* (N.º de informe xxx). Editorial/Entidad solo si difiere del autor. URL`; sin número: omite todo el paréntesis; impreso o en base académica común sin localizador: termina en la editorial/entidad. |
 | Tesis en repositorio | `Apellido, A. A. (Año). *Título* [Tesis de licenciatura/maestría/doctoral, Universidad]. Repositorio. URL` |
 | Artículo de periódico en línea | `Apellido, A. A. (Año, día de mes). Título. *Periódico*. URL` |
 | Video de YouTube | `Autor, A. A. [Canal]. (Año, día de mes). *Título* [Video]. YouTube. URL` |

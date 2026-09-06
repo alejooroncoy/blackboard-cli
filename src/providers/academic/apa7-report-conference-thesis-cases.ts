@@ -52,7 +52,7 @@ const reportBase = { ...shared, manualSection: '10.4' as const };
 const conferenceBase = { ...shared, manualSection: '10.5' as const };
 const completeContributionAuthors = 'Un autor: Autor, A. A.; dos: Autor, A. A., & Autor, B. B.; de 3 a 20: Autor, A. A., Autor, B. B., Autor, C. C., …, & Autor final, Z. Z. (incluye todos); 21 o más: autores 1–19, …, Último autor';
 const completeSessionContributors = 'Un ponente: Ponente, A. A.; dos: Ponente, A. A., & Ponente, B. B.; de 3 a 20: Ponente, A. A., Ponente, B. B., Ponente, C. C., …, & Ponente final, Z. Z. (incluye todos); 21 o más: ponentes 1–19, …, Último ponente';
-const completeGroupAuthors = 'Una entidad: Entidad autora; dos: Entidad autora & Entidad autora; de 3 a 20: Entidad autora, Entidad autora, Entidad autora, …, & Entidad autora final (incluye todas); 21 o más: entidades autoras 1–19, …, Última entidad autora';
+const completeGroupAuthors = 'Una entidad: Entidad autora; dos: Entidad autora, & Entidad autora; de 3 a 20: Entidad autora, Entidad autora, Entidad autora, …, & Entidad autora final (incluye todas); 21 o más: entidades autoras 1–19, …, Última entidad autora';
 const thesisBase = { ...shared, manualSection: '10.6' as const, parentheticalCitation: '(Autor, Año)', narrativeCitation: 'Autor (Año)' };
 
 export const reportConferenceThesisCases: Record<ReportConferenceThesisCaseId, Apa7VerifiedReportConferenceThesisCase> = {
