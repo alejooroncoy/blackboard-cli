@@ -986,6 +986,10 @@ test('APA 7 guidance covers reports, conferences and theses through example 66',
   assert.match(organization.referenceTemplate, /de 3 a 20: Entidad autora, Entidad autora, Entidad autora/);
   assert.match(organization.referenceTemplate, /Con número:.*Sin número:.*Impreso o base académica común sin localizador:/);
   assert.match(organization.referenceTemplate, /Con DOI:.*Con URL pública sin DOI:/);
+  const issueBrief = cases.find(candidate => candidate.id === 'issue-brief');
+  assert.ok(issueBrief);
+  assert.match(issueBrief.referenceTemplate, /21 o más: autores 1–19/);
+  assert.match(issueBrief.parentheticalCitation, /tres o más responsables/);
   assert.match(organization.requiredMetadata.join(' '), /URL\/DOI si corresponde/);
   for (const id of ['conference-session', 'conference-paper-presentation', 'conference-poster-presentation', 'symposium-contribution']) {
     const conference = cases.find(candidate => candidate.id === id);
@@ -1256,6 +1260,8 @@ test('APA 7 magazine dates preserve the precision actually published', async () 
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
   const magazine = JSON.parse((await handler({ topic: 'reference', caseId: 'magazine-article' })).content[0].text).case;
   assert.match(magazine.referenceTemplate, /\(Año\), \(Año, mes o estación\) o \(Año, día de mes\)/);
+  assert.match(magazine.referenceTemplate, /Revista, volumen\(número\), páginas/);
+  assert.match(magazine.referenceTemplate, /Solo número y páginas/);
   assert.match(magazine.rules.join(' '), /No inventes mes ni día/);
 });
 

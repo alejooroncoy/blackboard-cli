@@ -107,8 +107,9 @@ export const reportConferenceThesisCases: Record<ReportConferenceThesisCaseId, A
   },
   'issue-brief': {
     ...reportBase, id: 'issue-brief', label: 'Informe temático (issue brief)', manualExample: 57, manualPrintedPages: '337',
-    requiredMetadata: ['autor', 'año', 'título', 'número si existe', 'organización', 'DOI o URL pública si corresponde'],
-    referenceTemplate: 'Con número: Autor, A. A. (Año). Título (Informe temático N.º x). Organización. Sin número: Autor, A. A. (Año). Título [Informe temático]. Organización. En ambos: añade DOI al final si existe; si no, URL pública cuando corresponda; impreso o base académica común sin localizador termina en la organización.',
+    requiredMetadata: ['autores personales o entidad', 'año', 'título', 'número si existe', 'organización', 'DOI o URL pública si corresponde'],
+    referenceTemplate: `Autores personales: ${completeContributionAuthors}; entidad: Entidad autora. Con número: Autor o entidad. (Año). Título (Informe temático N.º x). Organización. Sin número: Autor o entidad. (Año). Título [Informe temático]. Organización. En ambos: añade DOI al final si existe; si no, URL pública cuando corresponda; impreso o base académica común sin localizador termina en la organización.`,
+    parentheticalCitation: '(Autor o entidad, Año); (Autor o entidad & Autor o entidad, Año); (Primer autor o entidad et al., Año) con tres o más responsables', narrativeCitation: 'Autor o entidad (Año); Autor o entidad y Autor o entidad (Año); Primer autor o entidad et al. (Año) con tres o más responsables',
     rules: ['Si tiene número, identifícalo entre paréntesis.', 'Si no tiene número, añade [Informe temático] después del título.', 'Prefiere DOI; usa URL pública si no hay DOI y omite ambos en una versión impresa o base académica común sin localizador.'],
   },
   'policy-brief': {
