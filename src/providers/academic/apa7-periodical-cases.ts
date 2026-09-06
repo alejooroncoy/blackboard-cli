@@ -55,7 +55,7 @@ const completeAuthorList = 'Un autor: Autor, A. A.; dos: Autor, A. A., & Autor, 
 const completeAuthorRule = 'Conserva la lista completa y ordenada de autores conforme a los límites del elemento autor de APA.';
 const completePeriodicalEditors = 'Un editor: Editor, A. A. (Ed.); dos: Editor, A. A., & Editor, B. B. (Eds.); de 3 a 20: Editor, A. A., Editor, B. B., Editor, C. C., …, & Editor final, Z. Z. (Eds.; incluye todos); 21 o más: editores 1–19, …, Último editor (Eds.)';
 const completeTranslatorList = 'Un traductor: A. Traductor (Trad.); dos: A. Traductor & B. Traductor (Trads.); de 3 a 20: A. Traductor, B. Traductor, C. Traductor, …, & Traductor final (Trads.; incluye todos); 21 o más: traductores 1–19, …, Último traductor (Trads.)';
-const titlePositionTranslators = 'Un traductor: A. Traductor, Trad.; dos: A. Traductor, B. Traductor, Trads.; de 3 a 20: A. Traductor, B. Traductor, C. Traductor, …, & Traductor final, Trads.; 21 o más: traductores 1–19, …, Último traductor, Trads.';
+const titlePositionTranslators = 'Un traductor: A. Traductor, Trad.; dos: A. Traductor & B. Traductor, Trads.; de 3 a 20: A. Traductor, B. Traductor, C. Traductor, …, & Traductor final, Trads.; 21 o más: traductores 1–19, …, Último traductor, Trads.';
 
 export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   'journal-doi': {

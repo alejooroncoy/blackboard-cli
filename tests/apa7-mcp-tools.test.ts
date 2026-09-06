@@ -757,7 +757,7 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   const translated = JSON.parse((await handler({ topic: 'citation', caseId: 'book-translated-republication' })).content[0].text);
   assert.match(translated.case.parentheticalCitation, /Año original\/Año reedición/);
   assert.match(translated.case.parentheticalCitation, /tres o más autores/);
-  assert.match(translated.case.referenceTemplate, /dos: T\. Traductor, U\. Traductor, Trads\./);
+  assert.match(translated.case.referenceTemplate, /dos: T\. Traductor & U\. Traductor, Trads\./);
   assert.match(translated.case.referenceTemplate, /21 o más: traductores 1–19/);
   assert.match(translated.case.rules.join(' '), /lista completa de traductores acreditados/);
   const authored = JSON.parse((await handler({ topic: 'citation', caseId: 'book-author-doi' })).content[0].text);
@@ -792,6 +792,7 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(ancient.rules.join(' '), /\(Trad\.\).*\(Ed\.\)/);
   const shakespeare = JSON.parse((await handler({ topic: 'citation', caseId: 'shakespeare-work' })).content[0].text).case;
   assert.match(shakespeare.referenceTemplate, /Con editor:.*Con traductor:/);
+  assert.match(shakespeare.referenceTemplate, /dos: E\. E\. Editor & F\. F\. Editor, Eds\./);
   assert.match(shakespeare.referenceTemplate, /21 o más: editores 1–19/);
   assert.match(shakespeare.referenceTemplate, /21 o más: traductores 1–19/);
   assert.doesNotMatch(shakespeare.referenceTemplate, /\(Ed\.\)\)/);
@@ -836,7 +837,7 @@ test('APA 7 standard journals preserve every credited author', async () => {
     assert.match(article.rules.join(' '), /lista completa y ordenada de autores/, caseId);
   }
   const translated = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-translated-republication' })).content[0].text).case;
-  assert.match(translated.referenceTemplate, /dos: A\. Traductor, B\. Traductor, Trads\./);
+  assert.match(translated.referenceTemplate, /dos: A\. Traductor & B\. Traductor, Trads\./);
   assert.match(translated.referenceTemplate, /21 o más: traductores 1–19/);
   assert.match(translated.rules.join(' '), /lista completa de traductores acreditados/);
 });
@@ -858,7 +859,7 @@ test('APA 7 guidance covers all 12 chapter and reference-entry examples', async 
   const translated = JSON.parse((await handler({ topic: 'citation', caseId: 'chapter-translated-republication' })).content[0].text).case;
   assert.match(translated.parentheticalCitation, /Autor & Autor/);
   assert.match(translated.parentheticalCitation, /Año original\/Año reedición/);
-  assert.match(translated.referenceTemplate, /dos: T\. Traductor, U\. Traductor, Trads\./);
+  assert.match(translated.referenceTemplate, /dos: T\. Traductor & U\. Traductor, Trads\./);
   assert.match(translated.referenceTemplate, /21 o más: traductores 1–19/);
 
   const wikipedia = JSON.parse((await handler({ topic: 'citation', caseId: 'wikipedia-entry' })).content[0].text);
