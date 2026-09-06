@@ -1,9 +1,9 @@
 # Ficha de consulta APA 7 (español)
 
-Esta ficha guía la respuesta, pero no reemplaza las instrucciones del docente ni la guía vigente de Biblioteca UPC. Se sintetizó a partir de:
+Esta ficha guía la respuesta, pero no reemplaza las instrucciones del docente ni la guía vigente de Biblioteca UPC. Se sintetizó a partir de las siguientes fuentes consultadas durante su preparación; los manuales y PDF fuente no se distribuyen con este paquete:
 
-- `3_Normas-APA-7-ed-2019-11-6.pdf`, Universidad Central, 2019: citación, referencias y adaptación al español.
-- `Manual_De_Normas_APA.pdf`: formato de trabajos, títulos, tablas/figuras, citación y referencias.
+- Guía de normas APA 7 de Universidad Central (2019): citación, referencias y adaptación al español.
+- Manual de normas APA consultado para formato de trabajos, títulos, tablas/figuras, citación y referencias.
 - Guía temática **Citas y referencias en APA 7**, Biblioteca UPC: <https://biblioteca.upc.edu.pe/citas-referencias-APA7>.
 - *Manual de publicaciones de la American Psychological Association*, consulta licenciada en eLibro UPC. Se contrastaron los apartados de atribución en el texto y principios de la lista de referencias. El contenido del libro no se reproduce ni se distribuye desde esta habilidad.
 

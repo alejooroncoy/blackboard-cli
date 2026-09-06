@@ -74,6 +74,11 @@ function referenceFormattingForCase(id: VerifiedCaseId) {
     encoding,
     italicize: ['título del simposio contenedor que sigue al coordinador; no el título de la contribución'],
   };
+  if (id === 'blog-post') return {
+    encoding,
+    italicize: ['título de la entrada de blog'],
+    doNotItalicize: ['nombre del blog que ocupa el elemento fuente'],
+  };
   if (id in periodicalCases) return {
     encoding,
     italicize: ['nombre de la publicación periódica o base de revisiones', 'volumen de la publicación; el número entre paréntesis queda sin cursiva'],
@@ -101,6 +106,11 @@ function referenceFormattingForCase(id: VerifiedCaseId) {
   if (id in audiovisualAudioCases) return {
     encoding,
     italicize: ['título de la obra audiovisual o sonora independiente, serie, álbum o pódcast', 'título de la serie, álbum o pódcast contenedor; no el episodio o canción'],
+  };
+  if (id === 'artwork-museum-or-museum-site' || id === 'clip-art-or-stock-image' || id === 'map' || id === 'photograph') return {
+    encoding,
+    italicize: ['título real de la obra visual, cuando existe'],
+    doNotItalicize: ['descripción entre corchetes que reemplaza un título ausente', 'nombre del sitio, museo o plataforma'],
   };
   return {
     encoding,

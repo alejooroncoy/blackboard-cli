@@ -12,7 +12,7 @@ La regla de prioridad es:
 1. Las instrucciones explícitas del docente, rúbrica o plantilla del curso.
 2. La guía vigente de Biblioteca UPC: <https://biblioteca.upc.edu.pe/citas-referencias-APA7>.
 3. El *Publication Manual of the American Psychological Association* (7.ª ed.).
-4. La ficha rápida incluida en [references/apa7-quick-reference.md](references/apa7-quick-reference.md), elaborada a partir de los dos manuales que acompañan este repositorio.
+4. La ficha rápida incluida en [references/apa7-quick-reference.md](references/apa7-quick-reference.md), elaborada a partir de las fuentes consultadas durante su preparación. Los manuales fuente no se distribuyen con este paquete.
 
 Las guías resumidas pueden simplificar o adaptar reglas para español. Si difieren de una instrucción del curso, dilo y aplica la instrucción del curso. Para casos no cubiertos o que dependan de la jurisdicción (en especial, normas legales), consulta la guía UPC o una fuente oficial y explica la incertidumbre.
 

@@ -83,6 +83,21 @@ test('every verified case describes how to recover required reference italics', 
   }
 });
 
+test('APA 7 case formatting distinguishes blog and untitled visual works', async () => {
+  let handler: any;
+  registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
+
+  const blog = JSON.parse((await handler({ topic: 'reference', caseId: 'blog-post' })).content[0].text).case.referenceFormatting;
+  assert.match(blog.italicize.join(' '), /título de la entrada/);
+  assert.match(blog.doNotItalicize.join(' '), /nombre del blog/);
+
+  for (const caseId of ['artwork-museum-or-museum-site', 'clip-art-or-stock-image', 'map', 'photograph']) {
+    const formatting = JSON.parse((await handler({ topic: 'reference', caseId })).content[0].text).case.referenceFormatting;
+    assert.match(formatting.italicize.join(' '), /título real/);
+    assert.match(formatting.doNotItalicize.join(' '), /descripción entre corchetes/, caseId);
+  }
+});
+
 test('citation sourceType specializes personal communications without pretending media changes author-date rules', async () => {
   let handler: any;
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
