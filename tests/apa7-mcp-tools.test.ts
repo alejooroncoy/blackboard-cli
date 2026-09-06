@@ -1064,6 +1064,9 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   const podcast = JSON.parse((await handler({ topic: 'reference', caseId: 'podcast-series' })).content[0].text).case;
   const song = JSON.parse((await handler({ topic: 'reference', caseId: 'song-or-track' })).content[0].text).case;
   const episode = JSON.parse((await handler({ topic: 'citation', caseId: 'television-episode-or-webisode' })).content[0].text).case;
+  assert.match(episode.referenceTemplate, /dos guionistas y director:.*Guionista, H\. H\. \(Guionista\), & Director/);
+  assert.doesNotMatch(episode.referenceTemplate, /Guionistas\).*&, & Director/);
+  assert.match(episode.rules.join(' '), /un único & antes del último responsable/);
   const series = JSON.parse((await handler({ topic: 'citation', caseId: 'television-series' })).content[0].text).case;
   const film = JSON.parse((await handler({ topic: 'citation', caseId: 'film-or-video' })).content[0].text).case;
   assert.equal(ted.manualExample, 88);
@@ -1112,9 +1115,9 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   assert.match(translatedFilm.referenceTemplate, /Director, F\. F\., …, & Director final/);
   assert.match(translatedFilm.referenceTemplate, /21 o más:.*1–19.*Último director/);
   assert.match(episode.referenceTemplate, /Responsable, R\. R\. \(Guionista y Director\)/);
-  assert.match(episode.referenceTemplate, /dos: Guionista, G\. G\., & Guionista, H\. H\./);
-  assert.match(episode.referenceTemplate, /de 3 a 20: Guionista/);
-  assert.match(episode.referenceTemplate, /21 o más: guionistas 1–19/);
+  assert.match(episode.referenceTemplate, /dos guionistas y director: Guionista, G\. G\./);
+  assert.match(episode.referenceTemplate, /de 3 a 20 responsables combinados: Guionista/);
+  assert.match(episode.referenceTemplate, /21 o más responsables combinados: responsables 1–19/);
   assert.match(episode.rules.join(' '), /una sola vez con ambos roles/);
   assert.match(film.parentheticalCitation, /tres o más directores/);
 });

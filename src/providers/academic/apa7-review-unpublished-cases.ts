@@ -61,7 +61,7 @@ export const reviewUnpublishedCases: Record<ReviewUnpublishedCaseId, Apa7Verifie
   'review-tv-episode-on-website': {
     ...reviewBase, id: 'review-tv-episode-on-website', label: 'Reseña de episodio de televisión publicada en sitio web', manualExample: 69, manualPrintedPages: '341',
     requiredMetadata: ['revisor', 'fecha completa', 'título de la reseña', 'episodio', 'guionista/director u otros responsables', 'sitio', 'URL'],
-    referenceTemplate: `${completeReviewers} (Año, día de mes). Título de la reseña [Reseña del episodio de serie de TV “Título del episodio”, de G. Guionista & D. Director, Dir.]. Nombre del sitio. URL`,
+    referenceTemplate: `${completeReviewers} (Año, día de mes). Título de la reseña [Reseña del episodio de serie de TV “Título del episodio”, de G. Guionista (Guionista) & D. Director (Director)]. Nombre del sitio. URL`,
     rules: ['Usa el formato de página web.', 'En la descripción de la obra conserva los roles relevantes; el título del programa se escribe como título dentro de la descripción.'],
   },
   'manuscript-unpublished': {
