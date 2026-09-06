@@ -772,6 +772,7 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   const dictionary = JSON.parse((await handler({ topic: 'reference', caseId: 'dictionary-thesaurus-encyclopedia' })).content[0].text);
   assert.match(dictionary.case.rules.join(' '), /fecha de recuperación/);
   assert.match(dictionary.case.referenceTemplate, /\(Ed\.\).*\(Eds\.\)/);
+  assert.match(dictionary.case.referenceTemplate, /Con DOI\/URL:.*Impreso o base académica común sin localizador:/);
   assert.match(dictionary.case.rules.join(' '), /Distingue el autor grupal de los editores/);
   const religious = JSON.parse((await handler({ topic: 'citation', caseId: 'religious-work' })).content[0].text).case;
   const multivolume = JSON.parse((await handler({ topic: 'reference', caseId: 'book-multivolume-single-volume' })).content[0].text).case;
@@ -1129,6 +1130,8 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   const translatedFilm = JSON.parse((await handler({ topic: 'reference', caseId: 'film-other-language' })).content[0].text).case;
   assert.match(translatedFilm.referenceTemplate, /Director, F\. F\., …, & Director final/);
   assert.match(translatedFilm.referenceTemplate, /21 o más:.*1–19.*Último director/);
+  assert.match(translatedFilm.referenceTemplate, /Productora 1; Productora 2; conserva todas/);
+  assert.match(translatedFilm.rules.join(' '), /todas las productoras/);
   assert.match(episode.referenceTemplate, /Responsable, R\. R\. \(Guionista y Director\)/);
   assert.match(episode.referenceTemplate, /dos guionistas y director: Guionista, G\. G\./);
   assert.match(episode.referenceTemplate, /de 3 a 20 responsables combinados: Guionista/);
