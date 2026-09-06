@@ -1016,7 +1016,9 @@ test('APA 7 guidance covers datasets, software and tests through example 83', as
   assert.match(software.parentheticalCitation, /Autor|Entidad/);
   const manual = JSON.parse((await handler({ topic: 'citation', caseId: 'test-manual' })).content[0].text).case;
   assert.match(manual.parentheticalCitation, /tres o más autores/);
-  assert.match(manual.referenceTemplate, /\(edición, desde la segunda\)/);
+  assert.match(manual.referenceTemplate, /\(edición, solo desde la segunda\)/);
+  assert.match(manual.referenceTemplate, /Con DOI\/URL/);
+  assert.match(manual.referenceTemplate, /Impreso o base académica común sin localizador/);
   assert.match(manual.rules.join(' '), /omítela para la primera/);
   for (const item of [dataset, software, testRecord, manual]) {
     assert.match(item.referenceTemplate, /Autor, C\. C\./);

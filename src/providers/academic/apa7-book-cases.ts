@@ -58,14 +58,14 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   'book-author-doi': {
     ...base, id: 'book-author-doi', label: 'Libro de autor con DOI', manualExample: 20, manualPrintedPages: '327',
     requiredMetadata: ['autores', 'año', 'título', 'edición desde la segunda', 'editorial', 'DOI verificado'],
-    referenceTemplate: `${completeAuthorList} (Año). Título del libro (edición). Editorial. https://doi.org/xxxxx`,
-    rules: [completeAuthorRule, 'La edición se incluye desde la segunda.', 'El DOI se expresa como URL.'],
+    referenceTemplate: `${completeAuthorList} (Año). Título del libro (edición, solo desde la segunda). Editorial. https://doi.org/xxxxx`,
+    rules: [completeAuthorRule, 'La edición se incluye desde la segunda; omite todo el paréntesis para la primera.', 'El DOI se expresa como URL.'],
   },
   'book-author-no-doi-database-or-print': {
     ...base, id: 'book-author-no-doi-database-or-print', label: 'Libro de autor sin DOI, de base académica común o impreso', manualExample: 21, manualPrintedPages: '327',
     requiredMetadata: ['autores', 'año', 'título', 'edición desde la segunda', 'editorial'],
-    referenceTemplate: `${completeAuthorList} (Año). Título del libro (edición). Editorial.`,
-    rules: [completeAuthorRule, 'No incluye nombre ni URL de la base de datos.'],
+    referenceTemplate: `${completeAuthorList} (Año). Título del libro (edición, solo desde la segunda). Editorial.`,
+    rules: [completeAuthorRule, 'La edición se incluye desde la segunda; omite todo el paréntesis para la primera.', 'No incluye nombre ni URL de la base de datos.'],
   },
   'book-author-electronic-public-url': {
     ...base, id: 'book-author-electronic-public-url', label: 'Libro electrónico o audiolibro de autor sin DOI con URL pública', manualExample: 22, manualPrintedPages: '327-328',
@@ -130,15 +130,15 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   'book-in-series': {
     ...base, id: 'book-in-series', label: 'Libro perteneciente a una serie', manualExample: 31, manualPrintedPages: '329-330',
     requiredMetadata: ['autor', 'año', 'título', 'edición', 'editorial', 'DOI/URL'],
-    referenceTemplate: `${completeAuthorList} (Año). Título del libro (edición). Editorial. DOI/URL`,
-    rules: ['No incluye el título de una serie de obras conceptualmente relacionadas.'],
+    referenceTemplate: `${completeAuthorList} (Año). Título del libro (edición, solo desde la segunda). Editorial. DOI/URL`,
+    rules: ['Omite todo el paréntesis de edición para la primera edición.', 'No incluye el título de una serie de obras conceptualmente relacionadas.'],
   },
   'diagnostic-manual': {
     ...base, id: 'diagnostic-manual', label: 'Manual de diagnóstico (DSM, CIE)', manualExample: 32, manualPrintedPages: '330',
     requiredMetadata: ['autor grupal', 'año', 'título completo', 'edición', 'abreviatura si se usará', 'DOI/URL'],
-    referenceTemplate: 'Entidad. (Año). Título completo del manual (edición). DOI/URL',
+    referenceTemplate: 'Entidad. (Año). Título completo del manual (edición, solo desde la segunda). DOI/URL',
     parentheticalCitation: '(Entidad, Año)', narrativeCitation: 'Entidad (Año)',
-    rules: ['Si autor y editorial son iguales, omite la editorial.', 'Título, edición y abreviatura pueden introducirse en la primera mención del texto, pero no se abrevian en referencias.', 'Después de introducir el manual, repite la cita solo cuando sustenta directamente una afirmación.'],
+    rules: ['Si autor y editorial son iguales, omite la editorial.', 'La edición se incluye desde la segunda; omite todo el paréntesis para la primera.', 'Título, edición y abreviatura pueden introducirse en la primera mención del texto, pero no se abrevian en referencias.', 'Después de introducir el manual, repite la cita solo cuando sustenta directamente una afirmación.'],
   },
   'dictionary-thesaurus-encyclopedia': {
     ...base, id: 'dictionary-thesaurus-encyclopedia', label: 'Diccionario, tesauro o enciclopedia completos', manualExample: 33, manualPrintedPages: '330-331',
