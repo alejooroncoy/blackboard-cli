@@ -762,6 +762,10 @@ test('APA 7 guidance covers reports, conferences and theses through example 66',
   assert.match(symposium.referenceFormatting.italicize.join(' '), /no el título de la contribución/);
   assert.match(symposium.referenceTemplate, /\(Coordinadores\)/);
   assert.match(symposium.rules.join(' '), /lista completa de coordinadores/);
+  const session = cases.find(candidate => candidate.id === 'conference-session');
+  assert.ok(session);
+  assert.match(session.referenceTemplate, /Ponente, B\. B\./);
+  assert.match(session.rules.join(' '), /lista completa de personas acreditadas/);
 });
 
 test('APA 7 special periodical issues preserve multiple editors', async () => {
@@ -803,6 +807,7 @@ test('APA 7 guidance covers datasets, software and tests through example 83', as
   const dataset = JSON.parse((await handler({ topic: 'reference', caseId: 'dataset-published' })).content[0].text).case;
   const software = JSON.parse((await handler({ topic: 'reference', caseId: 'specialized-software' })).content[0].text).case;
   const testRecord = JSON.parse((await handler({ topic: 'reference', caseId: 'test-database-record' })).content[0].text).case;
+  const mobileApp = JSON.parse((await handler({ topic: 'reference', caseId: 'mobile-application' })).content[0].text).case;
   assert.equal(dataset.manualExample, 75);
   assert.match(dataset.rules.join(' '), /análisis secundarios/);
   assert.match(dataset.referenceTemplate, /solo si difiere del autor/);
@@ -813,6 +818,8 @@ test('APA 7 guidance covers datasets, software and tests through example 83', as
   assert.match(dataset.parentheticalCitation, /Autor & Autor/);
   assert.match(testRecord.rules.join(' '), /información descriptiva o administrativa única/);
   assert.match(testRecord.parentheticalCitation, /tres o más autores/);
+  assert.match(mobileApp.referenceTemplate, /Tienda o desarrollador verificado, solo si difiere del autor/);
+  assert.match(mobileApp.rules.join(' '), /desarrollador cuando la distribuye directamente/);
   assert.match(software.parentheticalCitation, /Autor|Entidad/);
   const manual = JSON.parse((await handler({ topic: 'citation', caseId: 'test-manual' })).content[0].text).case;
   assert.match(manual.parentheticalCitation, /tres o más autores/);
@@ -861,6 +868,8 @@ test('APA 7 guidance covers visual, social and web works through example 114', a
   assert.equal(map.manualExample, 100);
   assert.match(map.rules.join(' '), /dinámico/);
   assert.match(tweet.rules.join(' '), /Cada emoji cuenta como una palabra/);
+  assert.match(tweet.referenceTemplate, /Plataforma verificada/);
+  assert.match(tweet.rules.join(' '), /solo cuando esa sea la plataforma real/);
   assert.match(news.rules.join(' '), /no son ediciones de un periódico/);
   assert.match(changing.rules.join(' '), /no existe versión archivada/);
   assert.match(infographic.parentheticalCitation, /tres o más autores/);

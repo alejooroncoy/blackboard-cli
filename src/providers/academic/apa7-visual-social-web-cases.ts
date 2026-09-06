@@ -97,9 +97,9 @@ export const visualSocialWebCases: Record<VisualSocialWebCaseId, Apa7VerifiedVis
   tweet: {
     ...socialBase, id: 'tweet', label: 'Tweet o publicación equivalente', manualExample: 103, manualPrintedPages: '354-355',
     requiredMetadata: ['nombre real o grupal', 'usuario', 'fecha completa', 'primeras 20 palabras', 'descripción de medios/enlaces si existen', 'plataforma', 'URL'],
-    referenceTemplate: 'Autor o entidad [@usuario]. (Año, día de mes). Primeras 20 palabras [Descripción de medios si existe] [Tweet]. Twitter. URL',
+    referenceTemplate: 'Autor o entidad [@usuario]. (Año, día de mes). Primeras 20 palabras [Descripción de medios si existe] [Tweet o tipo equivalente verificado]. Plataforma verificada. URL',
     parentheticalCitation: '(Autor o entidad, Año)', narrativeCitation: 'Autor o entidad (Año)',
-    rules: ['Conserva ortografía, mayúsculas, hashtags, enlaces y emojis del original.', 'Cada emoji cuenta como una palabra; si no puede reproducirse, usa su nombre entre corchetes.', 'En respuestas, no añade “en respuesta a” a la referencia; puede explicarse en el texto.', 'Si solo descubriste otra fuente mediante el tweet, cita directamente esa fuente.'],
+    rules: ['Usa “Tweet” y “Twitter” solo cuando esa sea la plataforma real; para una publicación equivalente, conserva el tipo y nombre oficiales de la plataforma verificada.', 'Conserva ortografía, mayúsculas, hashtags, enlaces y emojis del original.', 'Cada emoji cuenta como una palabra; si no puede reproducirse, usa su nombre entre corchetes.', 'En respuestas, no añade “en respuesta a” a la referencia; puede explicarse en el texto.', 'Si solo descubriste otra fuente mediante el tweet, cita directamente esa fuente.'],
   },
   'twitter-profile': {
     ...socialBase, id: 'twitter-profile', label: 'Perfil de Twitter', manualExample: 104, manualPrintedPages: '355',

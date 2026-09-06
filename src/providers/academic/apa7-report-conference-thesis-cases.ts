@@ -124,9 +124,9 @@ export const reportConferenceThesisCases: Record<ReportConferenceThesisCaseId, A
   'conference-session': {
     ...conferenceBase, id: 'conference-session', label: 'Sesión de congreso', manualExample: 60, manualPrintedPages: '338',
     requiredMetadata: ['todos los ponentes/contribuyentes', 'fechas completas del congreso', 'título', 'nombre del congreso', 'ubicación', 'DOI/URL si existe'],
-    referenceTemplate: 'Ponente, A. A. (Año, día–día de mes). Título [Sesión de congreso]. Nombre del congreso, Ciudad, región, país. DOI/URL',
+    referenceTemplate: 'Ponente, A. A., Ponente, B. B., & Ponente, C. C. (Año, día–día de mes). Título [Sesión de congreso]. Nombre del congreso, Ciudad, región, país. DOI/URL',
     parentheticalCitation: '(Ponente, Año); (Ponente & Ponente, Año); (Primer ponente et al., Año) con tres o más ponentes', narrativeCitation: 'Ponente (Año); Ponente y Ponente (Año); Primer ponente et al. (Año) con tres o más ponentes',
-    rules: ['Incluye a todas las personas acreditadas como contribuyentes aunque no hayan estado físicamente presentes.', 'Usa las fechas del congreso completo y una ubicación verificable.'],
+    rules: ['Incluye la lista completa de personas acreditadas como contribuyentes, aunque no hayan estado físicamente presentes.', 'Usa las fechas del congreso completo y una ubicación verificable.'],
   },
   'conference-paper-presentation': {
     ...conferenceBase, id: 'conference-paper-presentation', label: 'Presentación de escrito', manualExample: 61, manualPrintedPages: '338',
