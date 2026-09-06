@@ -78,23 +78,23 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   'book-edited-doi-multiple-publishers': {
     ...base, id: 'book-edited-doi-multiple-publishers', label: 'Libro editado con DOI y varias editoriales', manualExample: 24, manualPrintedPages: '328',
     requiredMetadata: ['editores', 'año', 'título', 'editoriales en orden', 'DOI'],
-    referenceTemplate: 'Editor, E. E. (Ed.). (Año). Título del libro. Editorial 1; Editorial 2. DOI',
+    referenceTemplate: 'Editor, E. E. (Ed.), o Editor, E. E., Editor, F. F., & Editor, G. G. (Eds.). (Año). Título del libro. Editorial 1; Editorial 2. DOI',
     parentheticalCitation: '(Editor, Año); (Editor & Editor, Año); (Primer editor et al., Año) con tres o más editores', narrativeCitation: 'Editor (Año); Editor y Editor (Año); Primer editor et al. (Año) con tres o más editores',
-    rules: ['Separa editoriales con punto y coma y conserva su orden.'],
+    rules: ['Incluye la lista completa de editores y usa (Ed.) para uno o (Eds.) para varios.', 'Separa editoriales con punto y coma y conserva su orden.'],
   },
   'book-edited-no-doi-database-or-print': {
     ...base, id: 'book-edited-no-doi-database-or-print', label: 'Libro editado sin DOI, de base académica común o impreso', manualExample: 25, manualPrintedPages: '328',
     requiredMetadata: ['editores', 'año', 'título', 'editorial'],
-    referenceTemplate: 'Editor, E. E. (Ed.). (Año). Título del libro. Editorial.',
+    referenceTemplate: 'Editor, E. E. (Ed.), o Editor, E. E., Editor, F. F., & Editor, G. G. (Eds.). (Año). Título del libro. Editorial.',
     parentheticalCitation: '(Editor, Año); (Editor & Editor, Año); (Primer editor et al., Año) con tres o más editores', narrativeCitation: 'Editor (Año); Editor y Editor (Año); Primer editor et al. (Año) con tres o más editores',
-    rules: ['No incluye nombre ni URL de la base de datos.'],
+    rules: ['Incluye la lista completa de editores y usa (Ed.) para uno o (Eds.) para varios.', 'No incluye nombre ni URL de la base de datos.'],
   },
   'book-edited-electronic-public-url': {
     ...base, id: 'book-edited-electronic-public-url', label: 'Libro electrónico o audiolibro editado sin DOI con URL pública', manualExample: 26, manualPrintedPages: '328',
     requiredMetadata: ['editores', 'año', 'título', 'editorial', 'URL pública', 'formato si corresponde'],
-    referenceTemplate: 'Editor, E. E. (Ed.). (Año). Título del libro [Formato, si corresponde]. Editorial. URL',
+    referenceTemplate: 'Editor, E. E. (Ed.), o Editor, E. E., Editor, F. F., & Editor, G. G. (Eds.). (Año). Título del libro [Formato, si corresponde]. Editorial. URL',
     parentheticalCitation: '(Editor, Año); (Editor & Editor, Año); (Primer editor et al., Año) con tres o más editores', narrativeCitation: 'Editor (Año); Editor y Editor (Año); Primer editor et al. (Año) con tres o más editores',
-    rules: ['No incluye la URL de una base de datos académica común.'],
+    rules: ['Incluye la lista completa de editores y usa (Ed.) para uno o (Eds.) para varios.', 'No incluye la URL de una base de datos académica común.'],
   },
   'book-other-language': {
     ...base, id: 'book-other-language', label: 'Libro en otro idioma', manualExample: 27, manualPrintedPages: '329',
@@ -146,9 +146,9 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   anthology: {
     ...base, id: 'anthology', label: 'Antología completa', manualExample: 34, manualPrintedPages: '331',
     requiredMetadata: ['editores de la antología', 'año de la antología', 'título', 'editorial', 'DOI/URL'],
-    referenceTemplate: 'Editor, E. E. (Ed.). (Año). Título de la antología. Editorial. DOI/URL',
+    referenceTemplate: 'Editor, E. E. (Ed.), o Editor, E. E., Editor, F. F., & Editor, G. G. (Eds.). (Año). Título de la antología. Editorial. DOI/URL',
     parentheticalCitation: '(Editor, Año); (Editor & Editor, Año); (Primer editor et al., Año) con tres o más editores', narrativeCitation: 'Editor (Año); Editor y Editor (Año); Primer editor et al. (Año) con tres o más editores',
-    rules: ['Para una obra individual incluida en la antología se utiliza el caso de capítulo/obra incluida, no esta referencia global.'],
+    rules: ['Incluye la lista completa de editores y usa (Ed.) para uno o (Eds.) para varios.', 'Para una obra individual incluida en la antología se utiliza el caso de capítulo/obra incluida, no esta referencia global.'],
   },
   'religious-work': {
     ...base, id: 'religious-work', label: 'Obra religiosa', manualExample: 35, manualPrintedPages: '331',

@@ -682,6 +682,16 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(religious.narrativeCitation, /^\*Título\*/);
 });
 
+test('APA 7 edited works preserve the complete editor list and plural role', async () => {
+  let handler: any;
+  registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
+  for (const caseId of ['book-edited-doi-multiple-publishers', 'book-edited-no-doi-database-or-print', 'book-edited-electronic-public-url', 'anthology']) {
+    const edited = JSON.parse((await handler({ topic: 'reference', caseId })).content[0].text).case;
+    assert.match(edited.referenceTemplate, /\(Eds\.\)/, caseId);
+    assert.match(edited.rules.join(' '), /lista completa de editores/, caseId);
+  }
+});
+
 test('APA 7 guidance covers all 12 chapter and reference-entry examples', async () => {
   let handler: any;
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
@@ -802,6 +812,8 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   assert.match(episode.parentheticalCitation, /tres o más responsables acreditados/);
   assert.match(episode.narrativeCitation, /Guionista y Director \(Año\)/);
   assert.match(series.parentheticalCitation, /tres o más productores/);
+  assert.match(series.referenceTemplate, /Productores ejecutivos/);
+  assert.match(series.rules.join(' '), /Incluye la lista completa/);
   assert.match(film.parentheticalCitation, /Director & Director/);
   assert.match(film.parentheticalCitation, /tres o más directores/);
 });
