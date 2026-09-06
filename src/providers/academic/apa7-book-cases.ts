@@ -174,7 +174,7 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   'shakespeare-work': {
     ...base, id: 'shakespeare-work', label: 'Obra de Shakespeare u otra obra clásica con edición moderna', manualExample: 37, manualPrintedPages: '331',
     requiredMetadata: ['autor', 'año de edición consultada', 'título', 'editores/traductores', 'editorial', 'año original'],
-    referenceTemplate: `Con editor: Autor. (Año edición). Título (${titlePositionEditors}). Editorial. Con traductor: Autor. (Año edición). Título (${titlePositionTranslators}). Editorial. (Obra original publicada en Año original)`,
+    referenceTemplate: `Con editor: Autor. (Año edición). Título (${titlePositionEditors}). Editorial. (Obra original publicada en Año original). Con traductor: Autor. (Año edición). Título (${titlePositionTranslators}). Editorial. (Obra original publicada en Año original)`,
     parentheticalCitation: '(Autor, Año original/Año edición)', narrativeCitation: 'Autor (Año original/Año edición)',
     rules: ['Conserva la lista completa de editores o traductores acreditados; usa (Ed.)/(Eds.) o (Trad.)/(Trads.) según corresponda, sin cambiar el rol acreditado.', 'Acto, escena, línea o pasaje se añade como localizador al citar una parte.'],
   },

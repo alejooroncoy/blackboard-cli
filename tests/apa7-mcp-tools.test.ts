@@ -800,6 +800,7 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(ancient.rules.join(' '), /\(Trad\.\).*\(Ed\.\)/);
   const shakespeare = JSON.parse((await handler({ topic: 'citation', caseId: 'shakespeare-work' })).content[0].text).case;
   assert.match(shakespeare.referenceTemplate, /Con editor:.*Con traductor:/);
+  assert.equal((shakespeare.referenceTemplate.match(/Obra original publicada en Año original/g) ?? []).length, 2);
   assert.match(shakespeare.referenceTemplate, /dos: E\. E\. Editor & F\. F\. Editor, Eds\./);
   assert.match(shakespeare.referenceTemplate, /21 o más: editores 1–19/);
   assert.match(shakespeare.referenceTemplate, /21 o más: traductores 1–19/);
@@ -1176,8 +1177,14 @@ test('APA 7 guidance covers visual, social and web works through example 114', a
   assert.match(artwork.referenceTemplate, /para una obra consultada físicamente sin URL, termina después de la ubicación/);
   assert.match(artwork.rules.join(' '), /No inventes una URL/);
   assert.match(map.rules.join(' '), /dinámico/);
-  assert.match(map.referenceTemplate, /Mapa estático o archivado:.*Fuente\. URL/);
-  assert.match(map.referenceTemplate, /Mapa dinámico no archivado:.*Recuperado/);
+  assert.match(map.referenceTemplate, /Mapa estático o archivado con título:.*Fuente\. URL/);
+  assert.match(map.referenceTemplate, /Mapa dinámico no archivado con título:.*Recuperado/);
+  assert.match(map.referenceTemplate, /\[Mapa de descripción\]/);
+  assert.doesNotMatch(map.referenceTemplate, /\[Descripción del mapa\] \[Mapa\]/);
+  const photograph = JSON.parse((await handler({ topic: 'reference', caseId: 'photograph' })).content[0].text).case;
+  assert.match(photograph.referenceTemplate, /\[Fotografía de descripción\]/);
+  assert.doesNotMatch(photograph.referenceTemplate, /\[Descripción\] \[Fotografía\]/);
+  assert.match(slides.referenceTemplate, /\[Diapositivas de PowerPoint o Notas de conferencia sobre descripción\]/);
   assert.match(tweet.rules.join(' '), /Cada emoji cuenta como una palabra/);
   assert.match(tweet.referenceTemplate, /Plataforma verificada/);
   assert.match(tweet.rules.join(' '), /solo cuando esa sea la plataforma real/);
