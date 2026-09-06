@@ -97,9 +97,9 @@ export const chapterEntryCases: Record<ChapterEntryCaseId, Apa7VerifiedChapterEn
   },
   'chapter-multivolume-work': {
     ...base, id: 'chapter-multivolume-work', label: 'Capítulo de un volumen de una obra multivolumen', manualExample: 45, manualPrintedPages: '334',
-    requiredMetadata: ['autor del capítulo', 'año', 'título del capítulo', 'editores del volumen', 'título general', 'número y título del volumen', 'edición', 'páginas', 'editorial', 'DOI/URL'],
-    referenceTemplate: `${completeChapterAuthors} (Año). Título del capítulo. En ${completeChapterEditors}, Con título propio: Título general: Vol. x. Título del volumen (edición, pp. xx-xx). Sin título propio: Título general (edición, Vol. x, pp. xx-xx). Editorial. DOI/URL`,
-    rules: ['Si hay editores de serie y de volumen, solo los editores del volumen aparecen en la información del libro.', 'Si el volumen carece de título propio, el número de volumen va entre paréntesis después del título general.'],
+    requiredMetadata: ['autor del capítulo', 'año', 'título del capítulo', 'editores del volumen', 'título general', 'número y título del volumen', 'edición si existe', 'páginas', 'editorial', 'DOI/URL si corresponde'],
+    referenceTemplate: `${completeChapterAuthors} (Año). Título del capítulo. En ${completeChapterEditors}, Con título propio: Título general: Vol. x. Título del volumen (edición, solo si existe; pp. xx-xx). Sin título propio: Título general (edición, solo si existe; Vol. x, pp. xx-xx). Editorial. Con DOI/URL: añade el localizador al final; impreso o base académica común sin localizador: termina en la editorial.`,
+    rules: ['Si hay editores de serie y de volumen, solo los editores del volumen aparecen en la información del libro.', 'Si el volumen carece de título propio, el número de volumen va entre paréntesis después del título general.', 'Omite por completo la edición cuando es primera o no se declara.'],
   },
   'work-in-anthology': {
     ...base, id: 'work-in-anthology', label: 'Obra individual incluida en una antología', manualExample: 46, manualPrintedPages: '334',

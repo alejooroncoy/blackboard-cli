@@ -48,9 +48,9 @@ const completeReviewers = 'Un revisor: Revisor, A. A.; dos: Revisor, A. A., & Re
 export const reviewUnpublishedCases: Record<ReviewUnpublishedCaseId, Apa7VerifiedReviewUnpublishedCase> = {
   'review-film-in-journal': {
     ...reviewBase, id: 'review-film-in-journal', label: 'Reseña de película publicada en revista científica', manualExample: 67, manualPrintedPages: '341',
-    requiredMetadata: ['autores de la reseña', 'año', 'título de la reseña', 'título de la película', 'director', 'revista', 'volumen/número/páginas', 'DOI/URL'],
-    referenceTemplate: `${completeReviewers} (Año). Título de la reseña [Reseña de la película Título, de D. Director, Dir.]. Revista, volumen(número), páginas. DOI/URL`,
-    rules: ['Conserva la lista completa y ordenada de revisores conforme a los límites del elemento autor de APA.', 'Usa el formato de revista científica porque allí se publicó la reseña.', 'La obra reseñada y su responsable se describen entre corchetes.'],
+    requiredMetadata: ['autores de la reseña', 'año', 'título de la reseña', 'título de la película', 'director', 'revista', 'volumen/número/páginas', 'DOI o URL pública si corresponde'],
+    referenceTemplate: `${completeReviewers} (Año). Título de la reseña [Reseña de la película Título, de D. Director, Dir.]. Revista, volumen(número), páginas. Con DOI: añade DOI al final. Con URL pública sin DOI: añade URL al final. Impreso o base académica común sin localizador: termina en las páginas.`,
+    rules: ['Conserva la lista completa y ordenada de revisores conforme a los límites del elemento autor de APA.', 'Usa el formato de revista científica porque allí se publicó la reseña.', 'La obra reseñada y su responsable se describen entre corchetes.', 'Prefiere DOI; usa URL pública si no hay DOI y omite ambos en una versión impresa o base académica común sin localizador.'],
   },
   'review-book-in-newspaper': {
     ...reviewBase, id: 'review-book-in-newspaper', label: 'Reseña de libro publicada en periódico', manualExample: 68, manualPrintedPages: '341',

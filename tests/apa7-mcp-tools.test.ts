@@ -801,7 +801,7 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(multivolume.rules.join(' '), /lista completa de autores/);
   assert.match(multivolume.rules.join(' '), /lista completa en posición de autor/);
   const multivolumeChapter = JSON.parse((await handler({ topic: 'reference', caseId: 'chapter-multivolume-work' })).content[0].text).case;
-  assert.match(multivolumeChapter.referenceTemplate, /Con título propio:.*Sin título propio: Título general \(edición, Vol\. x, pp\. xx-xx\)/);
+  assert.match(multivolumeChapter.referenceTemplate, /Con título propio:.*edición, solo si existe.*Sin título propio: Título general \(edición, solo si existe; Vol\. x, pp\. xx-xx\)/);
   const stableEntry = JSON.parse((await handler({ topic: 'reference', caseId: 'reference-entry-group-author' })).content[0].text).case;
   assert.match(stableEntry.referenceTemplate, /Entrada estable o archivada:.*URL/);
   assert.match(stableEntry.referenceTemplate, /Entrada que cambia continuamente sin archivo:.*Recuperado/);

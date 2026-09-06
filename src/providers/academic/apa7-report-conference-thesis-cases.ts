@@ -79,10 +79,10 @@ export const reportConferenceThesisCases: Record<ReportConferenceThesisCaseId, A
   },
   'report-working-group': {
     ...reportBase, id: 'report-working-group', label: 'Reporte de grupo de trabajo u otro grupo', manualExample: 53, manualPrintedPages: '336',
-    requiredMetadata: ['nombre completo del grupo de trabajo', 'año', 'título', 'organización matriz si corresponde', 'URL/DOI'],
-    referenceTemplate: 'Nombre del grupo de trabajo. (Año). Título del reporte. Organización matriz, solo si corresponde. URL/DOI',
+    requiredMetadata: ['nombre completo del grupo de trabajo', 'año', 'título', 'organización matriz si corresponde', 'DOI o URL pública si corresponde'],
+    referenceTemplate: 'Nombre del grupo de trabajo. (Año). Título del reporte. Organización matriz, solo si corresponde. Con DOI: añade DOI al final. Con URL pública sin DOI: añade URL al final. Impreso o base académica común sin localizador: termina en la organización o título.',
     parentheticalCitation: '(Nombre del grupo, Año)', narrativeCitation: 'Nombre del grupo (Año)',
-    rules: ['Conserva las mayúsculas del nombre propio del grupo dondequiera que aparezca.', 'No sustituye el grupo específico por la organización matriz.', 'Omite la organización matriz cuando no corresponda como fuente separada.'],
+    rules: ['Conserva las mayúsculas del nombre propio del grupo dondequiera que aparezca.', 'No sustituye el grupo específico por la organización matriz.', 'Omite la organización matriz cuando no corresponda como fuente separada.', 'Prefiere DOI; usa URL pública si no hay DOI y omite ambos en una versión impresa o base académica común sin localizador.'],
   },
   'annual-report': {
     ...reportBase, id: 'annual-report', label: 'Reporte anual', manualExample: 54, manualPrintedPages: '336-337',
