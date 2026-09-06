@@ -107,7 +107,7 @@ function referenceFormattingForCase(id: VerifiedCaseId) {
     encoding,
     italicize: ['título de la obra audiovisual o sonora independiente, serie, álbum o pódcast', 'título de la serie, álbum o pódcast contenedor; no el episodio o canción'],
   };
-  if (id === 'artwork-museum-or-museum-site' || id === 'clip-art-or-stock-image' || id === 'map' || id === 'photograph') return {
+  if (id === 'artwork-museum-or-museum-site' || id === 'clip-art-or-stock-image' || id === 'map' || id === 'photograph' || id === 'slides-or-lecture-notes') return {
     encoding,
     italicize: ['título real de la obra visual, cuando existe'],
     doNotItalicize: ['descripción entre corchetes que reemplaza un título ausente', 'nombre del sitio, museo o plataforma'],
@@ -210,7 +210,7 @@ function guidanceFor(selectedTopic: z.infer<typeof topic>, selectedSourceType?: 
   const base = {
     authority: 'Prioriza la rúbrica o plantilla del docente; luego la guía vigente de Biblioteca UPC y APA 7.',
     sourceGuide: 'https://biblioteca.upc.edu.pe/citas-referencias-APA7',
-    safety: 'No inventes autor, fecha, página, DOI, URL ni datos bibliográficos. Marca los datos faltantes entre corchetes.',
+    safety: 'No inventes autor, fecha, página, DOI, URL ni datos bibliográficos. Usa [marcadores] para datos no confirmados solo en plantillas provisionales y nunca los dejes en una referencia final. En la referencia final, aplica la omisión o sustitución indicada por el caso; las descripciones APA requeridas entre corchetes no son marcadores provisionales.',
     templateNotation: 'En las plantillas de referencia, el texto entre asteriscos debe mostrarse en cursiva; los asteriscos son notación Markdown y no forman parte de la referencia final.',
   };
 

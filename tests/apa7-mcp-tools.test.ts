@@ -91,11 +91,20 @@ test('APA 7 case formatting distinguishes blog and untitled visual works', async
   assert.match(blog.italicize.join(' '), /título de la entrada/);
   assert.match(blog.doNotItalicize.join(' '), /nombre del blog/);
 
-  for (const caseId of ['artwork-museum-or-museum-site', 'clip-art-or-stock-image', 'map', 'photograph']) {
+  for (const caseId of ['artwork-museum-or-museum-site', 'clip-art-or-stock-image', 'map', 'photograph', 'slides-or-lecture-notes']) {
     const formatting = JSON.parse((await handler({ topic: 'reference', caseId })).content[0].text).case.referenceFormatting;
     assert.match(formatting.italicize.join(' '), /título real/);
     assert.match(formatting.doNotItalicize.join(' '), /descripción entre corchetes/, caseId);
   }
+});
+
+test('APA 7 guidance keeps unresolved placeholders out of final references', async () => {
+  let handler: any;
+  registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
+  const missing = JSON.parse((await handler({ topic: 'reference', referenceRuleId: 'periodical-missing-information' })).content[0].text);
+  assert.match(missing.safety, /solo en plantillas provisionales/);
+  assert.match(missing.safety, /nunca los dejes en una referencia final/);
+  assert.match(missing.safety, /omisión o sustitución indicada por el caso/);
 });
 
 test('citation sourceType specializes personal communications without pretending media changes author-date rules', async () => {
@@ -783,6 +792,12 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   assert.match(webinar.rules.join(' '), /comunicación personal/);
   assert.match(interview.rules.join(' '), /persona entrevistada/);
   assert.match(podcast.referenceTemplate, /Año inicial–presente o Año inicial–Año final/);
+  assert.match(podcast.requiredMetadata.join(' '), /lista completa/);
+  assert.match(podcast.parentheticalCitation, /tres o más responsables/);
+  const podcastEpisode = JSON.parse((await handler({ topic: 'reference', caseId: 'podcast-episode' })).content[0].text).case;
+  assert.match(podcastEpisode.requiredMetadata.join(' '), /lista completa/);
+  assert.match(podcastEpisode.parentheticalCitation, /Responsable & Responsable/);
+  assert.match(podcastEpisode.narrativeCitation, /et al\./);
   assert.match(episode.parentheticalCitation, /\(Guionista & Director, Año\)/);
   assert.match(episode.parentheticalCitation, /tres o más responsables acreditados/);
   assert.match(episode.narrativeCitation, /Guionista y Director \(Año\)/);
