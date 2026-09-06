@@ -108,16 +108,16 @@ export const reportConferenceThesisCases: Record<ReportConferenceThesisCaseId, A
   'issue-brief': {
     ...reportBase, id: 'issue-brief', label: 'Informe temático (issue brief)', manualExample: 57, manualPrintedPages: '337',
     requiredMetadata: ['autores personales o entidad', 'año', 'título', 'número si existe', 'organización', 'DOI o URL pública si corresponde'],
-    referenceTemplate: `Autores personales: ${completeContributionAuthors}; entidad: Entidad autora. Con número: Autor o entidad. (Año). Título (Informe temático N.º x). Organización. Sin número: Autor o entidad. (Año). Título [Informe temático]. Organización. En ambos: añade DOI al final si existe; si no, URL pública cuando corresponda; impreso o base académica común sin localizador termina en la organización.`,
+    referenceTemplate: `Autores personales: ${completeContributionAuthors} (Año). Con número: Título (Informe temático N.º x). Organización. Sin número: Título [Informe temático]. Organización. Entidad autora: Entidad autora. (Año). Con número: Título (Informe temático N.º x). Organización, solo si difiere de la entidad autora. Sin número: Título [Informe temático]. Organización, solo si difiere de la entidad autora. En ambos casos, añade DOI al final si existe; si no, URL pública cuando corresponda; impreso o base académica común sin localizador termina en la organización o título.`,
     parentheticalCitation: '(Autor o entidad, Año); (Autor o entidad & Autor o entidad, Año); (Primer autor o entidad et al., Año) con tres o más responsables', narrativeCitation: 'Autor o entidad (Año); Autor o entidad y Autor o entidad (Año); Primer autor o entidad et al. (Año) con tres o más responsables',
     rules: ['Si tiene número, identifícalo entre paréntesis.', 'Si no tiene número, añade [Informe temático] después del título.', 'Prefiere DOI; usa URL pública si no hay DOI y omite ambos en una versión impresa o base académica común sin localizador.'],
   },
   'policy-brief': {
     ...reportBase, id: 'policy-brief', label: 'Informe de políticas', manualExample: 58, manualPrintedPages: '337',
-    requiredMetadata: ['autores personales o entidad', 'año', 'título', 'organización', 'DOI o URL pública si corresponde'],
-    referenceTemplate: `Autores personales: ${completeContributionAuthors} (Año). Título [Informe de políticas]. Organización. Entidad autora: Entidad autora. (Año). Título [Informe de políticas]. Organización. En ambos casos, con DOI: añade DOI al final; con URL pública sin DOI: añade URL al final; impreso o base académica común sin localizador termina en la organización.`,
+    requiredMetadata: ['autores personales o entidad', 'año', 'título', 'organización si difiere de la entidad autora', 'DOI o URL pública si corresponde'],
+    referenceTemplate: `Autores personales: ${completeContributionAuthors} (Año). Título [Informe de políticas]. Organización. Entidad autora: Entidad autora. (Año). Título [Informe de políticas]. Organización, solo si difiere de la entidad autora. En ambos casos, con DOI: añade DOI al final; con URL pública sin DOI: añade URL al final; impreso o base académica común sin localizador termina en la organización o título.`,
     parentheticalCitation: '(Autor o entidad, Año); (Autor o entidad & Autor o entidad, Año); (Primer autor o entidad et al., Año) con tres o más responsables', narrativeCitation: 'Autor o entidad (Año); Autor o entidad y Autor o entidad (Año); Primer autor o entidad et al. (Año) con tres o más responsables',
-    rules: ['Incluye la lista completa de autores personales en el orden acreditado o la entidad autora.', 'La descripción [Informe de políticas] aparece inmediatamente después del título.'],
+    rules: ['Incluye la lista completa de autores personales en el orden acreditado o la entidad autora.', 'Omite la organización cuando coincide con la entidad autora.', 'La descripción [Informe de políticas] aparece inmediatamente después del título.'],
   },
   'press-release': {
     ...reportBase, id: 'press-release', label: 'Comunicado de prensa', manualExample: 59, manualPrintedPages: '337',

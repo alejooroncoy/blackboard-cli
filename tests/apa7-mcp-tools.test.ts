@@ -995,14 +995,17 @@ test('APA 7 guidance covers reports, conferences and theses through example 66',
   const issueBrief = cases.find(candidate => candidate.id === 'issue-brief');
   assert.ok(issueBrief);
   assert.match(issueBrief.referenceTemplate, /21 o más: autores 1–19/);
+  assert.doesNotMatch(issueBrief.referenceTemplate, /Entidad autora\. Con número: Autor o entidad/);
+  assert.match(issueBrief.referenceTemplate, /Entidad autora: Entidad autora\. \(Año\)/);
   assert.match(issueBrief.parentheticalCitation, /tres o más responsables/);
   const policyBrief = cases.find(candidate => candidate.id === 'policy-brief');
   assert.ok(policyBrief);
-  assert.match(policyBrief.requiredMetadata.join(' '), /autores personales o entidad/);
+  assert.match(policyBrief.requiredMetadata.join(' '), /organización si difiere de la entidad autora/);
   assert.match(policyBrief.referenceTemplate, /21 o más: autores 1–19/);
   assert.doesNotMatch(policyBrief.referenceTemplate, /Entidad autora\. Autor o entidad/);
   assert.match(policyBrief.referenceTemplate, /Entidad autora: Entidad autora\. \(Año\)/);
   assert.match(policyBrief.parentheticalCitation, /tres o más responsables/);
+  assert.match(policyBrief.rules.join(' '), /Omite la organización cuando coincide/);
   assert.match(organization.requiredMetadata.join(' '), /URL\/DOI si corresponde/);
   for (const id of ['conference-session', 'conference-paper-presentation', 'conference-poster-presentation', 'symposium-contribution']) {
     const conference = cases.find(candidate => candidate.id === id);
@@ -1074,6 +1077,9 @@ test('APA 7 guidance covers reviews and unpublished or informally published work
     assert.match(manuscript.referenceTemplate, /Autor, C\. C\./, caseId);
     assert.match(manuscript.rules.join(' '), /lista completa y ordenada de autores/, caseId);
   }
+  const preprint = JSON.parse((await handler({ topic: 'reference', caseId: 'informal-preprint-or-repository' })).content[0].text).case;
+  assert.match(preprint.referenceTemplate, /Con DOI: https:\/\/doi\.org\/xxxxx/);
+  assert.match(preprint.rules.join(' '), /DOI como URL completa/);
 });
 
 test('APA 7 newspaper book reviews distinguish print pages from online URLs', async () => {

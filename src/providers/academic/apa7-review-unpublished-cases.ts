@@ -85,8 +85,8 @@ export const reviewUnpublishedCases: Record<ReviewUnpublishedCaseId, Apa7Verifie
   'informal-preprint-or-repository': {
     ...unpublishedBase, id: 'informal-preprint-or-repository', label: 'Obra informal en archivo de preimpresión o repositorio', manualExample: 73, manualPrintedPages: '343',
     requiredMetadata: ['autores', 'año', 'título', 'nombre del archivo o repositorio', 'DOI/URL'],
-    referenceTemplate: `${completeManuscriptAuthors} (Año). Título. Nombre del archivo o repositorio. DOI/URL`,
-    rules: [completeManuscriptAuthorRule, 'Puede ser un preprint no revisado por pares o el manuscrito aceptado del autor; no presupone ninguno de los dos.', 'Cuando exista la versión final publicada, se prefiere y se actualiza la referencia.'],
+    referenceTemplate: `${completeManuscriptAuthors} (Año). Título. Nombre del archivo o repositorio. Con DOI: https://doi.org/xxxxx. Con URL pública sin DOI: URL.`,
+    rules: [completeManuscriptAuthorRule, 'Expresa el DOI como URL completa https://doi.org/...; usa URL pública solo si no existe DOI.', 'Puede ser un preprint no revisado por pares o el manuscrito aceptado del autor; no presupone ninguno de los dos.', 'Cuando exista la versión final publicada, se prefiere y se actualiza la referencia.'],
   },
   'informal-eric': {
     ...unpublishedBase, id: 'informal-eric', label: 'Obra publicada informalmente en ERIC', manualExample: 74, manualPrintedPages: '343',
