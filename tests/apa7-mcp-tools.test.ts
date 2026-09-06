@@ -722,6 +722,14 @@ test('APA 7 authored books preserve every credited author', async () => {
   }
 });
 
+test('APA 7 electronic books omit audiobook-only fields unless applicable', async () => {
+  let handler: any;
+  registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
+  const electronic = JSON.parse((await handler({ topic: 'reference', caseId: 'book-author-electronic-public-url' })).content[0].text).case;
+  assert.match(electronic.referenceTemplate, /Libro electrónico:.*Editorial\. URL\. Audiolibro:/);
+  assert.match(electronic.rules.join(' '), /únicamente cuando la versión consultada es un audiolibro/);
+});
+
 test('APA 7 standard journals preserve every credited author', async () => {
   let handler: any;
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
@@ -860,6 +868,11 @@ test('APA 7 guidance covers reviews and unpublished or informally published work
   assert.match(submitted.parentheticalCitation, /Autor & Autor/);
   assert.match(submitted.parentheticalCitation, /tres o más autores/);
   assert.match(eric.referenceTemplate, /documento ERIC/);
+  for (const caseId of ['manuscript-unpublished', 'manuscript-in-preparation', 'manuscript-submitted', 'informal-preprint-or-repository']) {
+    const manuscript = JSON.parse((await handler({ topic: 'reference', caseId })).content[0].text).case;
+    assert.match(manuscript.referenceTemplate, /Autor, C\. C\./, caseId);
+    assert.match(manuscript.rules.join(' '), /lista completa y ordenada de autores/, caseId);
+  }
 });
 
 test('APA 7 newspaper book reviews distinguish print pages from online URLs', async () => {
@@ -956,6 +969,8 @@ test('APA 7 guidance covers visual, social and web works through example 114', a
   const individualWebpage = JSON.parse((await handler({ topic: 'reference', caseId: 'webpage-individual-author' })).content[0].text).case;
   assert.equal(map.manualExample, 100);
   assert.match(map.rules.join(' '), /dinámico/);
+  assert.match(map.referenceTemplate, /Mapa estático o archivado:.*Fuente\. URL/);
+  assert.match(map.referenceTemplate, /Mapa dinámico no archivado:.*Recuperado/);
   assert.match(tweet.rules.join(' '), /Cada emoji cuenta como una palabra/);
   assert.match(tweet.referenceTemplate, /Plataforma verificada/);
   assert.match(tweet.rules.join(' '), /solo cuando esa sea la plataforma real/);
@@ -966,6 +981,9 @@ test('APA 7 guidance covers visual, social and web works through example 114', a
   assert.match(slides.parentheticalCitation, /tres o más autores/);
   assert.match(individualWebpage.referenceTemplate, /\(Año\), \(Año, mes\) o \(Año, día de mes\)/);
   assert.match(individualWebpage.rules.join(' '), /No inventes el mes ni el día/);
+  const groupWebpage = JSON.parse((await handler({ topic: 'reference', caseId: 'webpage-group-author' })).content[0].text).case;
+  assert.match(groupWebpage.referenceTemplate, /\(Año\), \(Año, mes\) o \(Año, día de mes\)/);
+  assert.match(groupWebpage.rules.join(' '), /No inventes el mes ni el día/);
 });
 
 test('APA 7 magazine dates preserve the precision actually published', async () => {

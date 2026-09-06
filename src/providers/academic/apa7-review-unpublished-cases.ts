@@ -41,6 +41,8 @@ const shared = {
 
 const reviewBase = { ...shared, manualSection: '10.7' as const, parentheticalCitation: '(Revisor, Año); (Revisor & Revisor, Año); (Primer revisor et al., Año) con tres o más revisores', narrativeCitation: 'Revisor (Año); Revisor y Revisor (Año); Primer revisor et al. (Año) con tres o más revisores' };
 const unpublishedBase = { ...shared, manualSection: '10.8' as const, parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores' };
+const completeManuscriptAuthors = 'Autor, A. A.; Autor, A. A., & Autor, B. B.; o Autor, A. A., Autor, B. B., & Autor, C. C.';
+const completeManuscriptAuthorRule = 'Conserva la lista completa y ordenada de autores conforme a los límites del elemento autor de APA.';
 
 export const reviewUnpublishedCases: Record<ReviewUnpublishedCaseId, Apa7VerifiedReviewUnpublishedCase> = {
   'review-film-in-journal': {
@@ -64,26 +66,26 @@ export const reviewUnpublishedCases: Record<ReviewUnpublishedCaseId, Apa7Verifie
   'manuscript-unpublished': {
     ...unpublishedBase, id: 'manuscript-unpublished', label: 'Manuscrito inédito', manualExample: 70, manualPrintedPages: '342',
     requiredMetadata: ['autores', 'año de terminación', 'título', 'departamento', 'universidad o institución'],
-    referenceTemplate: 'Autor, A. A. (Año). Título [Manuscrito inédito]. Departamento, Universidad.',
-    rules: ['Solo está en posesión de los autores.', 'Incluye departamento e institución cuando puedan verificarse.', 'Un manuscrito disponible públicamente en línea se trata como publicación informal.'],
+    referenceTemplate: `${completeManuscriptAuthors} (Año). Título [Manuscrito inédito]. Departamento, Universidad.`,
+    rules: [completeManuscriptAuthorRule, 'Solo está en posesión de los autores.', 'Incluye departamento e institución cuando puedan verificarse.', 'Un manuscrito disponible públicamente en línea se trata como publicación informal.'],
   },
   'manuscript-in-preparation': {
     ...unpublishedBase, id: 'manuscript-in-preparation', label: 'Manuscrito en preparación', manualExample: 71, manualPrintedPages: '342',
     requiredMetadata: ['autores', 'año del borrador', 'título', 'departamento', 'universidad o institución'],
-    referenceTemplate: 'Autor, A. A. (Año). Título [Manuscrito en preparación]. Departamento, Universidad.',
-    rules: ['El estado editorial se describe después del título, no en el elemento fecha.', 'Si está disponible en línea, se trata como publicación informal.'],
+    referenceTemplate: `${completeManuscriptAuthors} (Año). Título [Manuscrito en preparación]. Departamento, Universidad.`,
+    rules: [completeManuscriptAuthorRule, 'El estado editorial se describe después del título, no en el elemento fecha.', 'Si está disponible en línea, se trata como publicación informal.'],
   },
   'manuscript-submitted': {
     ...unpublishedBase, id: 'manuscript-submitted', label: 'Manuscrito presentado para publicación', manualExample: 72, manualPrintedPages: '342-343',
     requiredMetadata: ['autores', 'año del manuscrito', 'título', 'departamento', 'universidad o institución'],
-    referenceTemplate: 'Autor, A. A. (Año). Título [Manuscrito presentado para su publicación]. Departamento, Universidad.',
-    rules: ['No nombra la revista a la que se presentó.', 'Si es aceptado, pasa al caso de artículo en prensa.', 'Si el texto está disponible públicamente en línea, se trata como publicación informal.'],
+    referenceTemplate: `${completeManuscriptAuthors} (Año). Título [Manuscrito presentado para su publicación]. Departamento, Universidad.`,
+    rules: [completeManuscriptAuthorRule, 'No nombra la revista a la que se presentó.', 'Si es aceptado, pasa al caso de artículo en prensa.', 'Si el texto está disponible públicamente en línea, se trata como publicación informal.'],
   },
   'informal-preprint-or-repository': {
     ...unpublishedBase, id: 'informal-preprint-or-repository', label: 'Obra informal en archivo de preimpresión o repositorio', manualExample: 73, manualPrintedPages: '343',
     requiredMetadata: ['autores', 'año', 'título', 'nombre del archivo o repositorio', 'DOI/URL'],
-    referenceTemplate: 'Autor, A. A. (Año). Título. Nombre del archivo o repositorio. DOI/URL',
-    rules: ['Puede ser un preprint no revisado por pares o el manuscrito aceptado del autor; no presupone ninguno de los dos.', 'Cuando exista la versión final publicada, se prefiere y se actualiza la referencia.'],
+    referenceTemplate: `${completeManuscriptAuthors} (Año). Título. Nombre del archivo o repositorio. DOI/URL`,
+    rules: [completeManuscriptAuthorRule, 'Puede ser un preprint no revisado por pares o el manuscrito aceptado del autor; no presupone ninguno de los dos.', 'Cuando exista la versión final publicada, se prefiere y se actualiza la referencia.'],
   },
   'informal-eric': {
     ...unpublishedBase, id: 'informal-eric', label: 'Obra publicada informalmente en ERIC', manualExample: 74, manualPrintedPages: '343',

@@ -52,6 +52,7 @@ const shared = {
 const visualBase = { ...shared, manualSection: '10.14' as const };
 const socialBase = { ...shared, manualSection: '10.15' as const };
 const webBase = { ...shared, manualSection: '10.16' as const };
+const completeVisualAuthors = 'Autor, A. A.; Autor, A. A., & Autor, B. B.; o Autor, A. A., Autor, B. B., & Autor, C. C.';
 
 export const visualSocialWebCases: Record<VisualSocialWebCaseId, Apa7VerifiedVisualSocialWebCase> = {
   'artwork-museum-or-museum-site': {
@@ -69,16 +70,16 @@ export const visualSocialWebCases: Record<VisualSocialWebCaseId, Apa7VerifiedVis
   infographic: {
     ...visualBase, id: 'infographic', label: 'Infografía', manualExample: 99, manualPrintedPages: '353',
     requiredMetadata: ['autores o entidad', 'año', 'título', 'descripción infografía', 'sitio', 'URL'],
-    referenceTemplate: 'Autor, A. A. (Año). Título [Infografía]. Sitio. URL',
+    referenceTemplate: `${completeVisualAuthors} o Entidad autora. (Año). Título [Infografía]. Sitio. URL`,
     parentheticalCitation: '(Autor o entidad, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor o entidad (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
-    rules: ['Reproducir una infografía puede exigir permiso o atribución de derechos además de la referencia.'],
+    rules: ['Conserva la lista completa y ordenada de autores personales, o el nombre completo de la entidad autora.', 'Reproducir una infografía puede exigir permiso o atribución de derechos además de la referencia.'],
   },
   map: {
     ...visualBase, id: 'map', label: 'Mapa estático o dinámico', manualExample: 100, manualPrintedPages: '353',
     requiredMetadata: ['autor o entidad', 'año o s. f.', 'título o descripción', 'descripción mapa', 'fuente/sitio', 'URL', 'fecha de recuperación si cambia'],
-    referenceTemplate: 'Autor o entidad. (Año o s. f.). Título o [Descripción del mapa] [Mapa]. Fuente. Recuperado el día de mes de año, de URL si es dinámico',
+    referenceTemplate: 'Mapa estático o archivado: Autor o entidad. (Año o s. f.). Título o [Descripción del mapa] [Mapa]. Fuente. URL. Mapa dinámico no archivado: Autor o entidad. (Año o s. f.). Título o [Descripción del mapa] [Mapa]. Fuente. Recuperado el día de mes de año, de URL',
     parentheticalCitation: '(Autor o entidad, Año o s. f.)', narrativeCitation: 'Autor o entidad (Año o s. f.)',
-    rules: ['Un mapa dinámico sin título se describe entre corchetes y lleva fecha de recuperación.', 'Un mapa estático y archivado no necesita fecha de recuperación.'],
+    rules: ['Un mapa dinámico sin título se describe entre corchetes y lleva fecha de recuperación.', 'Un mapa estático o archivado conserva la URL pero no necesita fecha de recuperación.'],
   },
   photograph: {
     ...visualBase, id: 'photograph', label: 'Fotografía fuera de un museo', manualExample: 101, manualPrintedPages: '353',
@@ -90,9 +91,9 @@ export const visualSocialWebCases: Record<VisualSocialWebCaseId, Apa7VerifiedVis
   'slides-or-lecture-notes': {
     ...visualBase, id: 'slides-or-lecture-notes', label: 'Diapositivas de PowerPoint o notas de conferencia', manualExample: 102, manualPrintedPages: '353',
     requiredMetadata: ['autores', 'fecha', 'título o descripción', 'tipo de material', 'departamento/universidad o sitio/plataforma', 'URL accesible'],
-    referenceTemplate: 'Autor, A. A. (Año, día de mes). Título o [Descripción] [Diapositivas de PowerPoint o Notas de conferencia]. Departamento, Universidad o Plataforma. URL',
+    referenceTemplate: `${completeVisualAuthors} (Año, día de mes). Título o [Descripción] [Diapositivas de PowerPoint o Notas de conferencia]. Departamento, Universidad o Plataforma. URL`,
     parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
-    rules: ['Si el recurso está en un LMS o intranet, úsalo solo para un público con acceso.', 'Para sitios con inicio de sesión, usa la URL de la página de acceso.'],
+    rules: ['Conserva la lista completa y ordenada de autores personales.', 'Si el recurso está en un LMS o intranet, úsalo solo para un público con acceso.', 'Para sitios con inicio de sesión, usa la URL de la página de acceso.'],
   },
   tweet: {
     ...socialBase, id: 'tweet', label: 'Tweet o publicación equivalente', manualExample: 103, manualPrintedPages: '354-355',
@@ -150,9 +151,9 @@ export const visualSocialWebCases: Record<VisualSocialWebCaseId, Apa7VerifiedVis
   'webpage-group-author': {
     ...webBase, id: 'webpage-group-author', label: 'Página web con autor grupal', manualExample: 111, manualPrintedPages: '357',
     requiredMetadata: ['entidad autora', 'fecha más específica disponible', 'título', 'nombre del sitio si difiere', 'URL'],
-    referenceTemplate: 'Entidad autora. (Año, mes o día de mes). Título. Nombre del sitio si difiere. URL',
+    referenceTemplate: 'Entidad autora. (Año), (Año, mes) o (Año, día de mes), según la fecha publicada. Título. Nombre del sitio si difiere. URL',
     parentheticalCitation: '(Entidad, Año)', narrativeCitation: 'Entidad (Año)',
-    rules: ['Si el autor y el sitio son la misma entidad, omite el nombre del sitio.'],
+    rules: ['Usa la fecha más específica disponible: solo año, año y mes, o fecha completa.', 'No inventes el mes ni el día cuando la página no los publica.', 'Si el autor y el sitio son la misma entidad, omite el nombre del sitio.'],
   },
   'webpage-individual-author': {
     ...webBase, id: 'webpage-individual-author', label: 'Página web con autor individual', manualExample: 112, manualPrintedPages: '357',
