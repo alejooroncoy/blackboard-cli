@@ -776,6 +776,8 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(authoredWithEditor.referenceTemplate, /\(E\. Editor, Ed\.; edición, solo desde la segunda\)/);
   const dictionary = JSON.parse((await handler({ topic: 'reference', caseId: 'dictionary-thesaurus-encyclopedia' })).content[0].text);
   assert.match(dictionary.case.rules.join(' '), /fecha de recuperación/);
+  assert.match(dictionary.case.requiredMetadata.join(' '), /edición\/versión si existe/);
+  assert.match(dictionary.case.referenceTemplate, /Sin edición\/versión:/);
   assert.match(dictionary.case.referenceTemplate, /\(Ed\.\).*\(Eds\.\)/);
   assert.match(dictionary.case.referenceTemplate, /Con DOI\/URL:.*Impreso o base académica común sin localizador:/);
   assert.match(dictionary.case.rules.join(' '), /Distingue el autor grupal de los editores/);
