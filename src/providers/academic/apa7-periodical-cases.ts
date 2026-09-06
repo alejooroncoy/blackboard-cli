@@ -100,8 +100,8 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   'journal-advance-online': {
     ...base, id: 'journal-advance-online', label: 'Artículo publicado anticipadamente en línea', manualExample: 7, manualPrintedPages: '324',
     requiredMetadata: ['autores', 'año', 'título', 'revista', 'estado de publicación anticipada', 'DOI o URL pública si corresponde'],
-    referenceTemplate: `${completeAuthorList} (Año). Título. Revista. Publicación anticipada en línea. Con DOI: añade DOI al final. Con URL pública sin DOI: añade URL al final.`,
-    rules: [completeAuthorRule, 'Prefiere DOI; si no existe pero el artículo es recuperable públicamente, usa la URL directa.', 'Debe sustituirse por la referencia de la versión final cuando esta exista.'],
+    referenceTemplate: `${completeAuthorList} (Año). Título. Revista. Publicación anticipada en línea. Con DOI: añade https://doi.org/xxxxx al final. Con URL pública sin DOI: añade URL al final.`,
+    rules: [completeAuthorRule, 'Prefiere DOI y exprésalo como URL completa https://doi.org/...; si no existe pero el artículo es recuperable públicamente, usa la URL directa.', 'Debe sustituirse por la referencia de la versión final cuando esta exista.'],
   },
   'journal-in-press': {
     ...base, id: 'journal-in-press', label: 'Artículo en prensa', manualExample: 8, manualPrintedPages: '324',

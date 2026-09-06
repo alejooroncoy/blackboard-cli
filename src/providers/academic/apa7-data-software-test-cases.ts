@@ -61,9 +61,9 @@ export const dataSoftwareTestCases: Record<DataSoftwareTestCaseId, Apa7VerifiedD
   },
   'specialized-software': {
     ...softwareBase, id: 'specialized-software', label: 'Software especializado o de distribución limitada', manualExample: 77, manualPrintedPages: '345',
-    requiredMetadata: ['autores o entidad', 'año de la versión', 'título', 'versión', 'desarrollador/editor si difiere', 'URL'],
-    referenceTemplate: `${completePersonalAuthors} o Entidad autora. (Año). Título (Versión x) [Software]. Desarrollador, solo si difiere del autor. URL`,
-    rules: [completePersonalAuthorRule, 'Referencia software especializado o de distribución limitada y cualquier software que se haya parafraseado o citado.', 'El título va en cursiva en referencias, no cuando se menciona en el texto.', 'Si autor y desarrollador son iguales, omite el desarrollador.'],
+    requiredMetadata: ['autores o entidad', 'año de la versión', 'título', 'versión si existe', 'desarrollador/editor si difiere', 'URL pública si es recuperable'],
+    referenceTemplate: `${completePersonalAuthors} o Entidad autora. (Año). Con versión: Título (Versión x) [Software]. Sin versión: Título [Software]. Desarrollador, solo si difiere del autor. Añade URL pública solo si el software es recuperable; sin URL, termina después del desarrollador o de [Software].`,
+    rules: [completePersonalAuthorRule, 'Referencia software especializado o de distribución limitada y cualquier software que se haya parafraseado o citado.', 'El título va en cursiva en referencias, no cuando se menciona en el texto.', 'Si no se declara versión, omite por completo ese paréntesis; si el software no es recuperable, omite la URL.', 'Si autor y desarrollador son iguales, omite el desarrollador.'],
   },
   'apparatus-or-equipment': {
     ...softwareBase, id: 'apparatus-or-equipment', label: 'Aparato o equipo', manualExample: 78, manualPrintedPages: '345-346',

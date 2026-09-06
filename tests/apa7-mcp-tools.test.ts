@@ -881,6 +881,7 @@ test('APA 7 standard journals preserve every credited author', async () => {
   }
   const advanceOnline = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-advance-online' })).content[0].text).case;
   assert.match(advanceOnline.requiredMetadata.join(' '), /DOI o URL pública si corresponde/);
+  assert.match(advanceOnline.referenceTemplate, /Con DOI: añade https:\/\/doi\.org\/xxxxx/);
   assert.match(advanceOnline.referenceTemplate, /Con URL pública sin DOI/);
   const translated = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-translated-republication' })).content[0].text).case;
   assert.match(translated.referenceTemplate, /dos: A\. Traductor & B\. Traductor, Trads\./);
@@ -1128,6 +1129,10 @@ test('APA 7 guidance covers datasets, software and tests through example 83', as
   assert.match(foreignJournal.rules.join(' '), /Omite volumen, número y páginas\/eLocator individualmente/);
   assert.match(foreignJournal.requiredMetadata.join(' '), /DOI\/URL si corresponde/);
   assert.match(software.rules.join(' '), /distribución limitada/);
+  assert.match(software.requiredMetadata.join(' '), /versión si existe/);
+  assert.match(software.requiredMetadata.join(' '), /URL pública si es recuperable/);
+  assert.match(software.referenceTemplate, /Sin versión: Título \[Software\]/);
+  assert.match(software.rules.join(' '), /si el software no es recuperable, omite la URL/);
   assert.match(software.referenceTemplate, /solo si difiere del autor/);
   assert.match(mobileApp.requiredMetadata.join(' '), /tienda o desarrollador si difiere del autor/);
   assert.match(mobileAppEntry.requiredMetadata.join(' '), /desarrollador o tienda si difiere del autor/);
