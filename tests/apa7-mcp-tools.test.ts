@@ -744,7 +744,7 @@ test('APA 7 guidance uses ampersand in a two-author parenthetical citation and r
   assert.match(mixedAuthors.case.referenceTemplate, /Nombre exacto del grupo, Autor personal, A\. A\., & Autor personal, B\. B\./);
   assert.match(mixedAuthors.case.parentheticalCitation, /dos autores totales/);
   assert.match(mixedAuthors.case.parentheticalCitation, /tres o más autores personales y grupales en total/);
-  assert.match(mixedAuthors.case.narrativeCitation, /Primer autor et al\./);
+  assert.match(mixedAuthors.case.narrativeCitation, /Primer responsable acreditado et al\./);
   assert.match(mixedAuthors.case.rules.join(' '), /número total de autores/);
   assert.match(mixedAuthors.case.rules.join(' '), /exactamente en el orden acreditado/);
 });
