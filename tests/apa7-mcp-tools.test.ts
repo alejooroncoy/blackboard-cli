@@ -1074,6 +1074,7 @@ test('APA 7 guidance covers datasets, software and tests through example 83', as
   const software = JSON.parse((await handler({ topic: 'reference', caseId: 'specialized-software' })).content[0].text).case;
   const testRecord = JSON.parse((await handler({ topic: 'reference', caseId: 'test-database-record' })).content[0].text).case;
   const mobileApp = JSON.parse((await handler({ topic: 'reference', caseId: 'mobile-application' })).content[0].text).case;
+  const mobileAppEntry = JSON.parse((await handler({ topic: 'reference', caseId: 'mobile-app-reference-entry' })).content[0].text).case;
   assert.equal(dataset.manualExample, 75);
   assert.match(dataset.rules.join(' '), /análisis secundarios/);
   assert.match(dataset.referenceTemplate, /solo si difiere del autor/);
@@ -1083,8 +1084,12 @@ test('APA 7 guidance covers datasets, software and tests through example 83', as
   assert.match(dataset.rules.join(' '), /omite todo el paréntesis si no existe ninguno/);
   const foreignJournal = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-other-language' })).content[0].text).case;
   assert.match(foreignJournal.referenceTemplate, /Con DOI:.*Sin DOI con URL pública:.*Impreso o base académica común sin localizador:/);
+  assert.match(foreignJournal.requiredMetadata.join(' '), /DOI\/URL si corresponde/);
   assert.match(software.rules.join(' '), /distribución limitada/);
   assert.match(software.referenceTemplate, /solo si difiere del autor/);
+  assert.match(mobileAppEntry.requiredMetadata.join(' '), /desarrollador o tienda si difiere del autor/);
+  assert.match(mobileAppEntry.referenceTemplate, /Desarrollador o tienda, solo si difiere del autor/);
+  assert.match(mobileAppEntry.rules.join(' '), /coincide con el autor, omite ese elemento/);
   assert.match(software.parentheticalCitation, /Autor & Autor/);
   assert.match(software.parentheticalCitation, /tres o más autores personales/);
   assert.match(dataset.parentheticalCitation, /Autor & Autor/);
@@ -1221,6 +1226,8 @@ test('APA 7 guidance covers visual, social and web works through example 114', a
   assert.match(slides.referenceTemplate, /\(Año\), \(Año, mes\) o \(Año, día de mes\)/);
   assert.match(slides.rules.join(' '), /no inventes mes ni día/);
   assert.match(individualWebpage.referenceTemplate, /\(Año\), \(Año, mes\) o \(Año, día de mes\)/);
+  assert.match(individualWebpage.referenceTemplate, /Nombre del sitio, solo si difiere del autor/);
+  assert.match(individualWebpage.rules.join(' '), /Omite el nombre del sitio cuando coincide con el autor/);
   assert.match(individualWebpage.rules.join(' '), /No inventes el mes ni el día/);
   const groupWebpage = JSON.parse((await handler({ topic: 'reference', caseId: 'webpage-group-author' })).content[0].text).case;
   assert.match(groupWebpage.referenceTemplate, /\(Año\), \(Año, mes\) o \(Año, día de mes\)/);

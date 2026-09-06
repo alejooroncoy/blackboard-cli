@@ -112,7 +112,7 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   },
   'journal-other-language': {
     ...base, id: 'journal-other-language', label: 'Artículo publicado en otro idioma', manualExample: 9, manualPrintedPages: '324',
-    requiredMetadata: ['autores', 'año', 'título original', 'traducción del título al idioma del trabajo si corresponde', 'revista', 'volumen/número/páginas', 'DOI/URL'],
+    requiredMetadata: ['autores', 'año', 'título original', 'traducción del título al idioma del trabajo si corresponde', 'revista', 'volumen/número/páginas', 'DOI/URL si corresponde'],
     referenceTemplate: `${completeAuthorList} (Año). Título original [Traducción del título]. Revista, volumen(número), páginas. Con DOI: añade https://doi.org/xxxxx. Sin DOI con URL pública: añade la URL. Impreso o base académica común sin localizador: termina en las páginas o eLocator.`,
     rules: [completeAuthorRule, 'La traducción entre corchetes se añade cuando el idioma del artículo difiere del idioma del trabajo.', 'Incluye DOI o URL únicamente cuando exista un localizador aplicable; omite ambos en impreso o base académica común.'],
   },

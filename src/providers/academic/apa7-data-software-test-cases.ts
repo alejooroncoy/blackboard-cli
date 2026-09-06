@@ -79,9 +79,9 @@ export const dataSoftwareTestCases: Record<DataSoftwareTestCaseId, Apa7VerifiedD
   },
   'mobile-app-reference-entry': {
     ...softwareBase, id: 'mobile-app-reference-entry', label: 'Entrada en una obra de consulta de una aplicación móvil', manualExample: 80, manualPrintedPages: '346',
-    requiredMetadata: ['autor de la entrada o de la obra', 'año', 'título de la entrada', 'nombre y versión de la aplicación', 'desarrollador o tienda', 'URL'],
-    referenceTemplate: `${completePersonalAuthors} (Año). Título de la entrada. En Nombre de la aplicación (Versión x) [Aplicación móvil]. Desarrollador o tienda. URL`,
-    rules: ['Se estructura como entrada de una obra de consulta.', 'No inventa un autor individual cuando una entidad es responsable de toda la aplicación y sus entradas.'],
+    requiredMetadata: ['autor de la entrada o de la obra', 'año', 'título de la entrada', 'nombre y versión de la aplicación', 'desarrollador o tienda si difiere del autor', 'URL'],
+    referenceTemplate: `${completePersonalAuthors} o Entidad autora. (Año). Título de la entrada. En Nombre de la aplicación (Versión x) [Aplicación móvil]. Desarrollador o tienda, solo si difiere del autor. URL`,
+    rules: ['Se estructura como entrada de una obra de consulta.', 'Si el desarrollador o tienda coincide con el autor, omite ese elemento.', 'No inventa un autor individual cuando una entidad es responsable de toda la aplicación y sus entradas.'],
   },
   'test-manual': {
     ...testBase, id: 'test-manual', label: 'Manual de una prueba, escala o inventario', manualExample: 81, manualPrintedPages: '346',
