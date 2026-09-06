@@ -43,7 +43,7 @@ type SourceType = z.infer<typeof sourceType>;
 const referenceTemplates: Partial<Record<SourceType, string>> = {
   book: 'Apellido, A. A. (Año). *Título del libro*. Editorial. URL o DOI',
   'book-chapter': 'Apellido, A. A. (Año). Título del capítulo. En A. Editor (Ed.), *Título del libro* (pp. xx-xx). Editorial.',
-  'journal-article': 'Apellido, A. A., & Apellido, B. B. (Año). Título del artículo. *Revista, volumen*(número), xx-xx. https://doi.org/xxxxx',
+  'journal-article': 'Autor, A. A.; Autor, A. A., & Autor, B. B.; o lista completa conforme a APA. (Año). Título del artículo. *Revista, volumen*(número), xx-xx. Añade https://doi.org/xxxxx si existe DOI; de lo contrario, una URL pública ajena a una base de datos si existe; si es impreso o proviene de una base académica común, omite DOI y URL.',
   webpage: 'Autor o entidad. (Año, día de mes). *Título de la página*. Nombre del sitio, solo si difiere del autor. URL',
   report: 'Entidad o Apellido, A. A. (Año). *Título del informe* (N.º de informe xxx). Editorial o entidad, solo si difiere del autor. URL',
   thesis: 'Apellido, A. A. (Año). *Título* [Tesis de licenciatura/maestría/doctoral, Universidad]. Repositorio. URL',

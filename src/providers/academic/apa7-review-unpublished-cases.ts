@@ -43,13 +43,14 @@ const reviewBase = { ...shared, manualSection: '10.7' as const, parentheticalCit
 const unpublishedBase = { ...shared, manualSection: '10.8' as const, parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores' };
 const completeManuscriptAuthors = 'Autor, A. A.; Autor, A. A., & Autor, B. B.; o Autor, A. A., Autor, B. B., & Autor, C. C.';
 const completeManuscriptAuthorRule = 'Conserva la lista completa y ordenada de autores conforme a los límites del elemento autor de APA.';
+const completeReviewers = 'Revisor, A. A.; Revisor, A. A., & Revisor, B. B.; o Revisor, A. A., Revisor, B. B., & Revisor, C. C.';
 
 export const reviewUnpublishedCases: Record<ReviewUnpublishedCaseId, Apa7VerifiedReviewUnpublishedCase> = {
   'review-film-in-journal': {
     ...reviewBase, id: 'review-film-in-journal', label: 'Reseña de película publicada en revista científica', manualExample: 67, manualPrintedPages: '341',
     requiredMetadata: ['autores de la reseña', 'año', 'título de la reseña', 'título de la película', 'director', 'revista', 'volumen/número/páginas', 'DOI/URL'],
-    referenceTemplate: 'Revisor, A. A. (Año). Título de la reseña [Reseña de la película Título, de D. Director, Dir.]. Revista, volumen(número), páginas. DOI/URL',
-    rules: ['Usa el formato de revista científica porque allí se publicó la reseña.', 'La obra reseñada y su responsable se describen entre corchetes.'],
+    referenceTemplate: `${completeReviewers} (Año). Título de la reseña [Reseña de la película Título, de D. Director, Dir.]. Revista, volumen(número), páginas. DOI/URL`,
+    rules: ['Conserva la lista completa y ordenada de revisores conforme a los límites del elemento autor de APA.', 'Usa el formato de revista científica porque allí se publicó la reseña.', 'La obra reseñada y su responsable se describen entre corchetes.'],
   },
   'review-book-in-newspaper': {
     ...reviewBase, id: 'review-book-in-newspaper', label: 'Reseña de libro publicada en periódico', manualExample: 68, manualPrintedPages: '341',

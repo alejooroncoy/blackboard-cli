@@ -22,6 +22,8 @@ test('APA 7 guidance exposes a journal template when the host authorizes access'
   const result = await tool.handler({ topic: 'reference', sourceType: 'journal-article' });
   const content = JSON.parse(result.content[0].text);
   assert.match(content.template, /https:\/\/doi.org/);
+  assert.match(content.template, /si existe DOI/);
+  assert.match(content.template, /omite DOI y URL/);
   assert.match(content.template, /\*Revista, volumen\*\(número\)/);
   assert.match(content.templateNotation, /cursiva/);
   assert.match(content.safety, /No inventes/);
@@ -864,6 +866,8 @@ test('APA 7 guidance covers reviews and unpublished or informally published work
   assert.match(review.referenceTemplate, /Reseña de la película/);
   assert.match(review.parentheticalCitation, /Revisor & Revisor/);
   assert.match(review.parentheticalCitation, /tres o más revisores/);
+  assert.match(review.referenceTemplate, /Revisor, C\. C\./);
+  assert.match(review.rules.join(' '), /lista completa y ordenada de revisores/);
   assert.match(submitted.rules.join(' '), /No nombra la revista/);
   assert.match(submitted.parentheticalCitation, /Autor & Autor/);
   assert.match(submitted.parentheticalCitation, /tres o más autores/);
@@ -894,6 +898,8 @@ test('APA 7 guidance covers datasets, software and tests through example 83', as
   assert.equal(dataset.manualExample, 75);
   assert.match(dataset.rules.join(' '), /análisis secundarios/);
   assert.match(dataset.referenceTemplate, /solo si difiere del autor/);
+  assert.match(dataset.referenceTemplate, /\(Identificador\), \(Versión x\) o \(Identificador; Versión x\)/);
+  assert.match(dataset.rules.join(' '), /omite todo el paréntesis si no existe ninguno/);
   assert.match(software.rules.join(' '), /distribución limitada/);
   assert.match(software.referenceTemplate, /solo si difiere del autor/);
   assert.match(software.parentheticalCitation, /Autor & Autor/);

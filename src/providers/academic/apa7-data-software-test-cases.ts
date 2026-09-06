@@ -50,8 +50,8 @@ export const dataSoftwareTestCases: Record<DataSoftwareTestCaseId, Apa7VerifiedD
   'dataset-published': {
     ...dataBase, id: 'dataset-published', label: 'Conjunto de datos publicado', manualExample: 75, manualPrintedPages: '344',
     requiredMetadata: ['autores o entidad', 'año de publicación', 'título', 'identificador y versión si existen', 'descripción del conjunto', 'organización publicadora/archivo', 'DOI/URL'],
-    referenceTemplate: `${completePersonalAuthors} o Entidad autora. (Año). Título del conjunto (Identificador; Versión x) [Conjunto de datos y libro de códigos, si corresponde]. Organización o archivo, solo si difiere del autor. DOI/URL`,
-    rules: [completePersonalAuthorRule, 'Cita el conjunto cuando realizas análisis secundarios de datos públicos o archivas datos propios presentados por primera vez.', 'La versión va entre paréntesis después del título.', 'Incluye fecha de recuperación solo si el conjunto está diseñado para cambiar con el tiempo.'],
+    referenceTemplate: `${completePersonalAuthors} o Entidad autora. (Año). Título del conjunto. Si existen identificador o versión: Título del conjunto (Identificador), (Versión x) o (Identificador; Versión x). [Conjunto de datos y libro de códigos, si corresponde]. Organización o archivo, solo si difiere del autor. DOI/URL`,
+    rules: [completePersonalAuthorRule, 'Cita el conjunto cuando realizas análisis secundarios de datos públicos o archivas datos propios presentados por primera vez.', 'Incluye entre paréntesis únicamente el identificador y/o la versión que realmente existan; omite todo el paréntesis si no existe ninguno.', 'Incluye fecha de recuperación solo si el conjunto está diseñado para cambiar con el tiempo.'],
   },
   'raw-data-unpublished': {
     ...dataBase, id: 'raw-data-unpublished', label: 'Datos brutos no publicados', manualExample: 76, manualPrintedPages: '344',
