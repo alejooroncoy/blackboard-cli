@@ -58,8 +58,8 @@ export const visualSocialWebCases: Record<VisualSocialWebCaseId, Apa7VerifiedVis
   'artwork-museum-or-museum-site': {
     ...visualBase, id: 'artwork-museum-or-museum-site', label: 'Obra de arte en museo o sitio web de museo', manualExample: 97, manualPrintedPages: '352',
     requiredMetadata: ['artista', 'fecha o rango', 'título o descripción', 'medio/formato', 'museo', 'ubicación', 'URL si corresponde'],
-    referenceTemplate: 'Artista, A. A. (Año o rango). Título [Medio o formato]. Museo, Ciudad, región, país. URL',
-    rules: ['Aplica a pinturas, esculturas, fotografías, grabados, dibujos e instalaciones de museo.', 'Si no tiene título, usa una descripción entre corchetes en lugar del título.', 'Reproducir la obra puede exigir permiso o atribución de derechos además de citarla.'],
+    referenceTemplate: 'Artista, A. A. (Año o rango). Título [Medio o formato]. Museo, Ciudad, región, país. Añade URL solo si existe un localizador público aplicable; para una obra consultada físicamente sin URL, termina después de la ubicación.',
+    rules: ['Aplica a pinturas, esculturas, fotografías, grabados, dibujos e instalaciones de museo.', 'Si no tiene título, usa una descripción entre corchetes en lugar del título.', 'No inventes una URL para una obra consultada físicamente o sin localizador público aplicable.', 'Reproducir la obra puede exigir permiso o atribución de derechos además de citarla.'],
   },
   'clip-art-or-stock-image': {
     ...visualBase, id: 'clip-art-or-stock-image', label: 'Clip art o imagen de stock', manualExample: 98, manualPrintedPages: '352-353',

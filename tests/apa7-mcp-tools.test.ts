@@ -67,6 +67,7 @@ test('reference templates preserve APA italics with explicit Markdown notation',
   assert.match(software.template, /tienda, solo si difiere del autor/);
   assert.match(book.template, /omite DOI y URL/);
   assert.match(chapter.template, /DOI si existe.*URL pública.*omite DOI y URL/);
+  assert.match(chapter.template, /G\. Editor \(Eds\.\)/);
   assert.match(thesis.template, /Inédita:.*En base de datos:.*En repositorio:/);
   assert.match(thesis.template, /N.º de publicación, solo si existe/);
 });
@@ -717,6 +718,8 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(religious.parentheticalCitation, /Año versión\) si no corresponde un año original/);
   assert.match(religious.rules.join(' '), /No inventes un año original/);
   assert.match(multivolume.referenceTemplate, /\(Ed\.\).*\(Eds\.\)/);
+  assert.match(multivolume.referenceTemplate, /Autor, C\. C\./);
+  assert.match(multivolume.rules.join(' '), /lista completa de autores/);
   assert.match(multivolume.rules.join(' '), /lista completa en posición de autor/);
   const stableEntry = JSON.parse((await handler({ topic: 'reference', caseId: 'reference-entry-group-author' })).content[0].text).case;
   assert.match(stableEntry.referenceTemplate, /Entrada estable o archivada:.*URL/);
@@ -980,6 +983,8 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   assert.match(episode.narrativeCitation, /Guionista y Director \(Año\)/);
   assert.match(episode.referenceTemplate, /Productores ejecutivos/);
   assert.match(episode.referenceTemplate, /R\. Productor \(Productores ejecutivos\)/);
+  assert.match(episode.referenceTemplate, /Añade URL solo si existe un localizador público específico/);
+  assert.match(episode.rules.join(' '), /Omite la URL para una emisión o versión de streaming ordinaria/);
   assert.match(episode.rules.join(' '), /lista completa de productores ejecutivos/);
   assert.match(series.parentheticalCitation, /tres o más productores/);
   assert.match(series.referenceTemplate, /Productores ejecutivos/);
@@ -1010,6 +1015,9 @@ test('APA 7 guidance covers visual, social and web works through example 114', a
   const slides = JSON.parse((await handler({ topic: 'citation', caseId: 'slides-or-lecture-notes' })).content[0].text).case;
   const individualWebpage = JSON.parse((await handler({ topic: 'reference', caseId: 'webpage-individual-author' })).content[0].text).case;
   assert.equal(map.manualExample, 100);
+  const artwork = JSON.parse((await handler({ topic: 'reference', caseId: 'artwork-museum-or-museum-site' })).content[0].text).case;
+  assert.match(artwork.referenceTemplate, /para una obra consultada físicamente sin URL, termina después de la ubicación/);
+  assert.match(artwork.rules.join(' '), /No inventes una URL/);
   assert.match(map.rules.join(' '), /dinámico/);
   assert.match(map.referenceTemplate, /Mapa estático o archivado:.*Fuente\. URL/);
   assert.match(map.referenceTemplate, /Mapa dinámico no archivado:.*Recuperado/);
