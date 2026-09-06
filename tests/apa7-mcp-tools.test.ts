@@ -780,7 +780,9 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(religious.parentheticalCitation, /\(\*Título\*,/);
   assert.match(religious.narrativeCitation, /^\*Título\*/);
   assert.match(religious.parentheticalCitation, /Año versión\) si no corresponde un año original/);
-  assert.match(religious.referenceTemplate, /con traductor:.*con edición:.*con ambos:/);
+  assert.match(religious.referenceTemplate, /con traductor:.*con edición:.*con ambos:/i);
+  assert.match(religious.referenceTemplate, /Obra original publicada.*URL\./);
+  assert.match(ancient.referenceTemplate, /nota antes de la URL final/);
   assert.match(religious.rules.join(' '), /Omite el traductor, la edición o todo el paréntesis/);
   assert.match(religious.rules.join(' '), /No inventes un año original/);
   assert.match(multivolume.referenceTemplate, /\(Ed\.\).*\(Eds\.\)/);
@@ -794,7 +796,7 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(stableEntry.referenceTemplate, /Entrada que cambia continuamente sin archivo:.*Recuperado/);
   assert.match(ancient.parentheticalCitation, /fecha original es exacta/);
   assert.match(ancient.parentheticalCitation, /ca\. Año original.*si es aproximada/);
-  assert.match(ancient.referenceTemplate, /Con traductor:.*Con editor:/);
+  assert.match(ancient.referenceTemplate, /Con traductor.*Con editor:/);
   assert.match(ancient.rules.join(' '), /\(Trad\.\).*\(Ed\.\)/);
   const shakespeare = JSON.parse((await handler({ topic: 'citation', caseId: 'shakespeare-work' })).content[0].text).case;
   assert.match(shakespeare.referenceTemplate, /Con editor:.*Con traductor:/);
@@ -912,7 +914,7 @@ test('APA 7 anthology work makes an earlier publication date optional', async ()
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
   const work = JSON.parse((await handler({ topic: 'reference', caseId: 'work-in-anthology' })).content[0].text).case;
   assert.match(work.parentheticalCitation, /Año antología\).*si no hubo publicación anterior/);
-  assert.match(work.referenceTemplate, /solo si hubo una publicación anterior verificada/);
+  assert.match(work.referenceTemplate, /solo si hubo una publicación anterior verificada\)\. Añade DOI\/URL solo si corresponde al final/);
   assert.match(work.rules.join(' '), /No inventes un año original/);
 });
 
