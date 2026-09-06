@@ -50,8 +50,9 @@ const base = {
   ],
 };
 
-const completeAuthorList = 'Autor, A. A.; Autor, A. A., & Autor, B. B.; o Autor, A. A., Autor, B. B., & Autor, C. C.';
+const completeAuthorList = 'Un autor: Autor, A. A.; dos: Autor, A. A., & Autor, B. B.; de 3 a 20: Autor, A. A., Autor, B. B., Autor, C. C., …, & Autor final, Z. Z. (incluye todos); 21 o más: autores 1–19, …, Último autor';
 const completeAuthorRule = 'Incluye la lista completa de autores en el orden acreditado conforme a los límites del elemento autor de APA.';
+const completeEditorList = 'Un editor: Editor, E. E. (Ed.); dos: Editor, E. E., & Editor, F. F. (Eds.); de 3 a 20: Editor, E. E., Editor, F. F., Editor, G. G., …, & Editor final, Z. Z. (Eds.; incluye todos); 21 o más: editores 1–19, …, Último editor (Eds.)';
 
 export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   'book-author-doi': {
@@ -81,29 +82,29 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   'book-edited-doi-multiple-publishers': {
     ...base, id: 'book-edited-doi-multiple-publishers', label: 'Libro editado con DOI y varias editoriales', manualExample: 24, manualPrintedPages: '328',
     requiredMetadata: ['editores', 'año', 'título', 'editoriales en orden', 'DOI'],
-    referenceTemplate: 'Editor, E. E. (Ed.), o Editor, E. E., Editor, F. F., & Editor, G. G. (Eds.). (Año). Título del libro. Editorial 1; Editorial 2. DOI',
+    referenceTemplate: `${completeEditorList}. (Año). Título del libro. Editorial 1; Editorial 2. DOI`,
     parentheticalCitation: '(Editor, Año); (Editor & Editor, Año); (Primer editor et al., Año) con tres o más editores', narrativeCitation: 'Editor (Año); Editor y Editor (Año); Primer editor et al. (Año) con tres o más editores',
     rules: ['Incluye la lista completa de editores y usa (Ed.) para uno o (Eds.) para varios.', 'Separa editoriales con punto y coma y conserva su orden.'],
   },
   'book-edited-no-doi-database-or-print': {
     ...base, id: 'book-edited-no-doi-database-or-print', label: 'Libro editado sin DOI, de base académica común o impreso', manualExample: 25, manualPrintedPages: '328',
     requiredMetadata: ['editores', 'año', 'título', 'editorial'],
-    referenceTemplate: 'Editor, E. E. (Ed.), o Editor, E. E., Editor, F. F., & Editor, G. G. (Eds.). (Año). Título del libro. Editorial.',
+    referenceTemplate: `${completeEditorList}. (Año). Título del libro. Editorial.`,
     parentheticalCitation: '(Editor, Año); (Editor & Editor, Año); (Primer editor et al., Año) con tres o más editores', narrativeCitation: 'Editor (Año); Editor y Editor (Año); Primer editor et al. (Año) con tres o más editores',
     rules: ['Incluye la lista completa de editores y usa (Ed.) para uno o (Eds.) para varios.', 'No incluye nombre ni URL de la base de datos.'],
   },
   'book-edited-electronic-public-url': {
     ...base, id: 'book-edited-electronic-public-url', label: 'Libro electrónico o audiolibro editado sin DOI con URL pública', manualExample: 26, manualPrintedPages: '328',
     requiredMetadata: ['editores', 'año', 'título', 'editorial', 'URL pública', 'formato si corresponde'],
-    referenceTemplate: 'Editor, E. E. (Ed.), o Editor, E. E., Editor, F. F., & Editor, G. G. (Eds.). (Año). Título del libro [Formato, si corresponde]. Editorial. URL',
+    referenceTemplate: `${completeEditorList}. (Año). Título del libro [Formato, solo si corresponde]. Editorial. URL`,
     parentheticalCitation: '(Editor, Año); (Editor & Editor, Año); (Primer editor et al., Año) con tres o más editores', narrativeCitation: 'Editor (Año); Editor y Editor (Año); Primer editor et al. (Año) con tres o más editores',
     rules: ['Incluye la lista completa de editores y usa (Ed.) para uno o (Eds.) para varios.', 'No incluye la URL de una base de datos académica común.'],
   },
   'book-other-language': {
     ...base, id: 'book-other-language', label: 'Libro en otro idioma', manualExample: 27, manualPrintedPages: '329',
     requiredMetadata: ['autores', 'año', 'título original', 'traducción del título si el idioma difiere', 'volumen/edición si existe', 'editorial'],
-    referenceTemplate: `${completeAuthorList} (Año). Título original [Traducción del título] (volumen/edición). Editorial.`,
-    rules: [completeAuthorRule, 'Añade la traducción del título entre corchetes cuando el idioma difiere del trabajo.'],
+    referenceTemplate: `${completeAuthorList} (Año). Título original [Traducción del título, solo si el idioma difiere] (volumen/edición, solo si existe). Editorial.`,
+    rules: [completeAuthorRule, 'Añade la traducción del título entre corchetes cuando el idioma difiere del trabajo; omite los corchetes si no corresponde.', 'Omite por completo el paréntesis de volumen o edición cuando ninguno existe.'],
   },
   'book-translated-republication': {
     ...base, id: 'book-translated-republication', label: 'Libro reeditado en traducción', manualExample: 28, manualPrintedPages: '329',
@@ -115,14 +116,14 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   'book-republished': {
     ...base, id: 'book-republished', label: 'Libro, libro electrónico o audiolibro reeditado', manualExample: 29, manualPrintedPages: '329',
     requiredMetadata: ['autor', 'año original', 'año de reedición', 'título', 'editor/traductor/narrador si aplica', 'formato si aplica', 'editorial', 'DOI/URL si corresponde'],
-    referenceTemplate: 'Autor, A. A. (Año reedición). Título (responsable, función) [Formato, si aplica]. Editorial. DOI/URL (Obra original publicada en Año original)',
+    referenceTemplate: 'Autor, A. A. (Año reedición). Título (responsable, función, solo si se acredita) [Formato, solo si aplica]. Editorial. Añade DOI/URL solo si corresponde. (Obra original publicada en Año original)',
     parentheticalCitation: '(Autor, Año original/Año reedición); (Autor & Autor, Año original/Año reedición); (Primer autor et al., Año original/Año reedición) con tres o más autores', narrativeCitation: 'Autor (Año original/Año reedición); Autor y Autor (Año original/Año reedición); Primer autor et al. (Año original/Año reedición) con tres o más autores',
-    rules: ['Describe la versión efectivamente consultada.', 'Un audiolibro publicado en año diferente se trata como reedición.'],
+    rules: ['Describe la versión efectivamente consultada.', 'Omite el paréntesis de responsable, los corchetes de formato y el localizador cuando esos elementos no correspondan.', 'Un audiolibro publicado en año diferente se trata como reedición.'],
   },
   'book-multivolume-single-volume': {
     ...base, id: 'book-multivolume-single-volume', label: 'Volumen de una obra de varios volúmenes', manualExample: 30, manualPrintedPages: '329',
     requiredMetadata: ['autores o editores del volumen', 'año', 'título general', 'número de volumen', 'título propio del volumen si existe', 'edición', 'editorial', 'DOI/URL'],
-    referenceTemplate: `${completeAuthorList} (Año). Título general (edición, Vol. x) o Título general: Vol. x. Título del volumen. Editorial. DOI/URL; si el volumen se acredita a editores: Editor, E. E. (Ed.), o Editor, E. E., & Editor, F. F. (Eds.). (Año). Título y demás elementos.`,
+    referenceTemplate: `${completeAuthorList} (Año). Título general (edición, Vol. x) o Título general: Vol. x. Título del volumen. Editorial. DOI/URL; si el volumen se acredita a editores: ${completeEditorList}. (Año). Título y demás elementos.`,
     parentheticalCitation: '(Autor/Editor, Año); (Autor/Editor & Autor/Editor, Año); (Primer autor/editor et al., Año) con tres o más responsables', narrativeCitation: 'Autor/Editor (Año); Autor/Editor y Autor/Editor (Año); Primer autor/editor et al. (Año) con tres o más responsables',
     rules: [completeAuthorRule, 'Si el volumen no tiene título propio, el número va entre paréntesis sin cursiva.', 'Si tiene título propio, número y título siguen al título general.', 'Cuando el volumen se acredita a editores, incluye la lista completa en posición de autor y añade (Ed.) o (Eds.) según corresponda.'],
   },
@@ -142,14 +143,14 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   'dictionary-thesaurus-encyclopedia': {
     ...base, id: 'dictionary-thesaurus-encyclopedia', label: 'Diccionario, tesauro o enciclopedia completos', manualExample: 33, manualPrintedPages: '330-331',
     requiredMetadata: ['autor grupal o editor', 'fecha o s. f.', 'título', 'edición/versión', 'editorial si corresponde', 'URL', 'fecha de recuperación si cambia sin archivo'],
-    referenceTemplate: 'Autor grupal. (Fecha o s. f.). Título de la obra (edición/versión). Editorial. URL; si se acredita a editores: Editor, E. E. (Ed.), o Editor, E. E., & Editor, F. F. (Eds.). (Fecha o s. f.). Título y demás elementos. Añade fecha de recuperación solo si cambia sin archivo.',
+    referenceTemplate: `Autor grupal. (Fecha o s. f.). Título de la obra (edición/versión). Editorial. URL; si se acredita a editores: ${completeEditorList}. (Fecha o s. f.). Título y demás elementos. Añade fecha de recuperación solo si cambia sin archivo.`,
     parentheticalCitation: '(Autor/Editor, Fecha); (Autor/Editor & Autor/Editor, Fecha); (Primer autor/editor et al., Fecha) con tres o más responsables', narrativeCitation: 'Autor/Editor (Fecha); Autor/Editor y Autor/Editor (Fecha); Primer autor/editor et al. (Fecha) con tres o más responsables',
     rules: ['Distingue el autor grupal de los editores; para estos últimos incluye la lista completa y añade (Ed.) o (Eds.).', 'Usa s. f. y fecha de recuperación para obras actualizadas continuamente sin versiones archivadas.', 'Omite fecha de recuperación para versiones estables o archivadas.'],
   },
   anthology: {
     ...base, id: 'anthology', label: 'Antología completa', manualExample: 34, manualPrintedPages: '331',
     requiredMetadata: ['editores de la antología', 'año de la antología', 'título', 'editorial', 'DOI/URL'],
-    referenceTemplate: 'Editor, E. E. (Ed.), o Editor, E. E., Editor, F. F., & Editor, G. G. (Eds.). (Año). Título de la antología. Editorial. DOI/URL',
+    referenceTemplate: `${completeEditorList}. (Año). Título de la antología. Editorial. DOI/URL`,
     parentheticalCitation: '(Editor, Año); (Editor & Editor, Año); (Primer editor et al., Año) con tres o más editores', narrativeCitation: 'Editor (Año); Editor y Editor (Año); Primer editor et al. (Año) con tres o más editores',
     rules: ['Incluye la lista completa de editores y usa (Ed.) para uno o (Eds.) para varios.', 'Para una obra individual incluida en la antología se utiliza el caso de capítulo/obra incluida, no esta referencia global.'],
   },

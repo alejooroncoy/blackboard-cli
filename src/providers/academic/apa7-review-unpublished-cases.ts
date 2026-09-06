@@ -41,9 +41,9 @@ const shared = {
 
 const reviewBase = { ...shared, manualSection: '10.7' as const, parentheticalCitation: '(Revisor, Año); (Revisor & Revisor, Año); (Primer revisor et al., Año) con tres o más revisores', narrativeCitation: 'Revisor (Año); Revisor y Revisor (Año); Primer revisor et al. (Año) con tres o más revisores' };
 const unpublishedBase = { ...shared, manualSection: '10.8' as const, parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores' };
-const completeManuscriptAuthors = 'Autor, A. A.; Autor, A. A., & Autor, B. B.; o Autor, A. A., Autor, B. B., & Autor, C. C.';
+const completeManuscriptAuthors = 'Un autor: Autor, A. A.; dos: Autor, A. A., & Autor, B. B.; de 3 a 20: Autor, A. A., Autor, B. B., Autor, C. C., …, & Autor final, Z. Z. (incluye todos); 21 o más: autores 1–19, …, Último autor';
 const completeManuscriptAuthorRule = 'Conserva la lista completa y ordenada de autores conforme a los límites del elemento autor de APA.';
-const completeReviewers = 'Revisor, A. A.; Revisor, A. A., & Revisor, B. B.; o Revisor, A. A., Revisor, B. B., & Revisor, C. C.';
+const completeReviewers = 'Un revisor: Revisor, A. A.; dos: Revisor, A. A., & Revisor, B. B.; de 3 a 20: Revisor, A. A., Revisor, B. B., Revisor, C. C., …, & Revisor final, Z. Z. (incluye todos); 21 o más: revisores 1–19, …, Último revisor';
 
 export const reviewUnpublishedCases: Record<ReviewUnpublishedCaseId, Apa7VerifiedReviewUnpublishedCase> = {
   'review-film-in-journal': {

@@ -151,7 +151,7 @@ export const peruLegalCases: Record<PeruLegalCaseId, PeruLegalCase> = {
     authorityNote: 'La sección 11.8 usa formato APA ordinario; Indecopi permite verificar solicitudes y publicaciones de patentes.',
     requiredMetadata: ['inventor o inventores', 'año de concesión', 'título', 'tipo y número de patente', 'oficina'],
     optionalMetadata: ['solicitante o titular', 'fecha de publicación', 'URL oficial'],
-    referenceTemplate: 'Inventor, A. A.; Inventor, A. A., & Inventor, B. B.; o lista completa: Inventor, A. A., Inventor, B. B., & Inventor, C. C. (Año de concesión). Título de la patente (Patente peruana N.º XXXXX). Indecopi. URL oficial',
+    referenceTemplate: 'Un inventor: Inventor, A. A.; dos: Inventor, A. A., & Inventor, B. B.; de 3 a 20: Inventor, A. A., Inventor, B. B., Inventor, C. C., …, & Inventor final, Z. Z. (incluye todos); 21 o más: inventores 1–19, …, Último inventor. (Año de concesión). Título de la patente (Patente peruana N.º XXXXX). Indecopi. URL oficial',
     parentheticalCitation: '(Inventor, Año); (Inventor & Inventor, Año); (Primer inventor et al., Año) con tres o más inventores',
     narrativeCitation: 'Inventor (Año); Inventor e Inventor (Año); Primer inventor et al. (Año) con tres o más inventores',
     directQuoteLocator: 'Reivindicación, párrafo o página estable del documento de patente.',

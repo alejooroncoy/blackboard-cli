@@ -51,40 +51,41 @@ const base = {
   ],
 };
 
-const completeAuthorList = 'Autor, A. A.; Autor, A. A., & Autor, B. B.; o Autor, A. A., Autor, B. B., & Autor, C. C.';
+const completeAuthorList = 'Un autor: Autor, A. A.; dos: Autor, A. A., & Autor, B. B.; de 3 a 20: Autor, A. A., Autor, B. B., Autor, C. C., …, & Autor final, Z. Z. (incluye todos); 21 o más: autores 1–19, …, Último autor';
 const completeAuthorRule = 'Conserva la lista completa y ordenada de autores conforme a los límites del elemento autor de APA.';
+const completePeriodicalEditors = 'Un editor: Editor, A. A. (Ed.); dos: Editor, A. A., & Editor, B. B. (Eds.); de 3 a 20: Editor, A. A., Editor, B. B., Editor, C. C., …, & Editor final, Z. Z. (Eds.; incluye todos); 21 o más: editores 1–19, …, Último editor (Eds.)';
 
 export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   'journal-doi': {
     ...base, id: 'journal-doi', label: 'Artículo de revista científica con DOI', manualExample: 1, manualPrintedPages: '323',
     requiredMetadata: ['autores', 'año', 'título del artículo', 'revista', 'volumen', 'número si existe', 'páginas o eLocator', 'DOI verificado'],
-    referenceTemplate: `${completeAuthorList} (Año). Título del artículo. Título de la revista, volumen(número), páginas. https://doi.org/xxxxx`,
+    referenceTemplate: `${completeAuthorList} (Año). Título del artículo. Título de la revista, volumen(número, solo si existe), páginas. https://doi.org/xxxxx`,
     parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
     rules: [completeAuthorRule, 'El DOI se expresa como URL https://doi.org/...', 'Se omiten los elementos que realmente no existen.'],
   },
   'journal-no-doi-public-url': {
     ...base, id: 'journal-no-doi-public-url', label: 'Artículo sin DOI con URL pública ajena a una base de datos', manualExample: 2, manualPrintedPages: '323',
     requiredMetadata: ['autores', 'año', 'título', 'revista', 'volumen', 'número si existe', 'páginas o eLocator', 'URL pública'],
-    referenceTemplate: `${completeAuthorList} (Año). Título del artículo. Título de la revista, volumen(número), páginas. URL`,
-    rules: [completeAuthorRule, 'Incluye la URL del artículo únicamente cuando es recuperable públicamente y no es la URL de una base de datos.'],
+    referenceTemplate: `${completeAuthorList} (Año). Título del artículo. Título de la revista, volumen(número, solo si existe), páginas. URL`,
+    rules: [completeAuthorRule, 'Omite por completo el paréntesis del número cuando la revista no lo tenga.', 'Incluye la URL del artículo únicamente cuando es recuperable públicamente y no es la URL de una base de datos.'],
   },
   'journal-no-doi-database-or-print': {
     ...base, id: 'journal-no-doi-database-or-print', label: 'Artículo sin DOI de una base académica común o impreso', manualExample: 3, manualPrintedPages: '323',
     requiredMetadata: ['autores', 'año de publicación', 'título', 'revista científica', 'volumen/número/páginas si existen'],
-    referenceTemplate: `${completeAuthorList} (Año). Título del artículo. Título de la revista científica, volumen(número), páginas.`,
-    rules: [completeAuthorRule, 'Usa solo el año para un artículo de revista científica, aunque el número muestre mes o estación.', 'No incluye el nombre de la base de datos ni su URL.'],
+    referenceTemplate: `${completeAuthorList} (Año). Título del artículo. Título de la revista científica. Añade volumen, número y páginas únicamente cuando existan.`,
+    rules: [completeAuthorRule, 'Usa solo el año para un artículo de revista científica, aunque el número muestre mes o estación.', 'Omite volumen, número y páginas individualmente cuando la publicación no los proporcione.', 'No incluye el nombre de la base de datos ni su URL.'],
   },
   'journal-21-plus-authors': {
     ...base, id: 'journal-21-plus-authors', label: 'Artículo con 21 o más autores', manualExample: 4, manualPrintedPages: '323',
     requiredMetadata: ['lista completa y ordenada de autores', 'año', 'título', 'revista', 'volumen/número', 'páginas o eLocator', 'DOI/URL si corresponde'],
-    referenceTemplate: 'Autores 1-19, ... Último autor. (Año). Título. Revista, volumen(número), páginas. DOI/URL',
+    referenceTemplate: 'Autores 1-19, ... Último autor. (Año). Título. Revista, volumen(número), páginas. Añade DOI/URL solo si corresponde.',
     parentheticalCitation: '(Primer autor et al., Año)', narrativeCitation: 'Primer autor et al. (Año)',
-    rules: ['En la referencia incluye los primeros 19 autores, puntos suspensivos y el último autor.', 'No coloca & antes del último autor después de los puntos suspensivos.'],
+    rules: ['En la referencia incluye los primeros 19 autores, puntos suspensivos y el último autor.', 'No coloca & antes del último autor después de los puntos suspensivos.', 'Omite DOI o URL cuando la fuente no tenga un localizador aplicable.'],
   },
   'journal-individual-group-authors': {
     ...base, id: 'journal-individual-group-authors', label: 'Artículo con autores personales y grupales', manualExample: 5, manualPrintedPages: '323',
     requiredMetadata: ['lista completa de autores personales en orden', 'nombre exacto del autor grupal', 'año', 'título', 'revista', 'volumen/número', 'páginas', 'DOI/URL'],
-    referenceTemplate: 'Autor personal, A. A., Autor personal, B. B., & Nombre exacto del grupo. (Año). Título. Revista, volumen(número), páginas. DOI/URL',
+    referenceTemplate: 'Uno o dos responsables: conserva sus nombres en orden y usa & antes del último. De 3 a 20: incluye la lista completa en el orden acreditado, por ejemplo Autor personal, A. A., Autor personal, B. B., & Nombre exacto del grupo. Con 21 o más: responsables 1–19, …, Último responsable. (Año). Título. Revista, volumen(número), páginas. DOI/URL',
     parentheticalCitation: '(Autor personal & Nombre del grupo, Año) cuando hay dos autores totales; (Primer autor et al., Año) cuando hay tres o más autores personales y grupales en total', narrativeCitation: 'Autor personal y Nombre del grupo (Año) cuando hay dos autores totales; Primer autor et al. (Año) cuando hay tres o más autores personales y grupales en total',
     rules: ['Conserva todos los autores personales en su orden y después el nombre exacto del grupo.', 'Calcula la cita por el número total de autores personales y grupales.'],
   },
@@ -130,7 +131,7 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   'journal-special-section-issue': {
     ...base, id: 'journal-special-section-issue', label: 'Sección especial o edición especial', manualExample: 12, manualPrintedPages: '325',
     requiredMetadata: ['editores', 'año', 'título', 'tipo sección/edición', 'revista', 'volumen/número', 'páginas si es sección'],
-    referenceTemplate: 'Editor, A. A. (Ed.), o Editor, A. A., Editor, B. B., & Editor, C. C. (Eds.). (Año). Título [Sección especial o Edición especial]. Revista, volumen(número), páginas si corresponde.',
+    referenceTemplate: `${completePeriodicalEditors}. (Año). Título [Sección especial o Edición especial]. Revista, volumen(número), páginas solo si corresponde.`,
     parentheticalCitation: '(Editor, Año); (Editor & Editor, Año); (Primer editor et al., Año) con tres o más editores', narrativeCitation: 'Editor (Año); Editor y Editor (Año); Primer editor et al. (Año) con tres o más editores',
     rules: ['Incluye la lista completa de editores y usa (Ed.) para uno o (Eds.) para varios.', 'Incluye páginas para una sección especial, no para una edición especial completa.', 'Un artículo individual dentro del especial usa el formato normal de artículo.'],
   },
@@ -149,8 +150,8 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   'magazine-article': {
     ...base, id: 'magazine-article', label: 'Artículo de revista o magazine', manualExample: 15, manualPrintedPages: '326',
     requiredMetadata: ['autor', 'fecha disponible', 'título', 'revista', 'volumen/número/páginas si existen', 'DOI/URL si corresponde'],
-    referenceTemplate: 'Autor, A. A. (Año), (Año, mes o estación) o (Año, día de mes), según la fecha publicada. Título. Revista, volumen(número), páginas. DOI/URL',
-    rules: ['Usa la precisión de fecha publicada por la revista: año, año y mes/estación, o fecha completa.', 'No inventes mes ni día y omite los demás elementos inexistentes.'],
+    referenceTemplate: 'Autor, A. A. (Año), (Año, mes o estación) o (Año, día de mes), según la fecha publicada. Título. Revista. Añade volumen, número, páginas y DOI/URL únicamente cuando existan y correspondan.',
+    rules: ['Usa la precisión de fecha publicada por la revista: año, año y mes/estación, o fecha completa.', 'No inventes mes ni día y omite individualmente volumen, número, páginas y localizador cuando sean inexistentes.'],
   },
   'newspaper-article': {
     ...base, id: 'newspaper-article', label: 'Artículo de periódico', manualExample: 16, manualPrintedPages: '326',
@@ -174,13 +175,14 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   'periodical-editorial': {
     ...base, id: 'periodical-editorial', label: 'Editorial de una publicación periódica', manualExample: 19, manualPrintedPages: '326-327',
     requiredMetadata: ['autor si está firmado', 'año o fecha', 'título', 'tipo de publicación periódica', 'volumen/número/páginas si existen', 'DOI/URL si corresponde'],
-    referenceTemplate: 'Con firma: Autor, A. A. (Año). Título [Editorial]. Publicación, volumen(número), páginas. DOI/URL. Sin firma: Título [Editorial]. (Año). Publicación, volumen(número), páginas. DOI/URL',
+    referenceTemplate: 'Con firma: Autor, A. A. (Año). Título [Editorial]. Publicación. Sin firma: Título [Editorial]. (Año). Publicación. En ambas formas, añade volumen, número, páginas y DOI/URL únicamente cuando existan y correspondan.',
     parentheticalCitation: 'Con firma: (Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores. Sin firma: (“Título abreviado”, Año)',
     narrativeCitation: 'Con firma: Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores. Sin firma: “Título abreviado” (Año)',
     rules: [
       'Usa el formato correspondiente al tipo de publicación periódica donde apareció.',
       'Añade [Editorial] después del título, salvo que la palabra Editorial ya forme parte del título.',
       'Si el editorial no está firmado, aplica las reglas de obra sin autor: el título pasa a la posición de autor y gobierna la cita en el texto.',
+      'Omite individualmente volumen, número, páginas y localizador cuando la publicación no los proporcione.',
     ],
   },
 };

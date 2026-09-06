@@ -1,10 +1,48 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { registerAcademicTools as registerAcademicToolsWithAuthorization } from '../src/providers/academic/apa7-mcp-tools.js';
+import { audiovisualAudioCases } from '../src/providers/academic/apa7-audiovisual-audio-cases.js';
+import { bookCases } from '../src/providers/academic/apa7-book-cases.js';
+import { chapterEntryCases } from '../src/providers/academic/apa7-chapter-entry-cases.js';
+import { dataSoftwareTestCases } from '../src/providers/academic/apa7-data-software-test-cases.js';
+import { periodicalCases } from '../src/providers/academic/apa7-periodical-cases.js';
+import { peruLegalCases } from '../src/providers/academic/apa7-peru-legal-cases.js';
+import { reportConferenceThesisCases } from '../src/providers/academic/apa7-report-conference-thesis-cases.js';
+import { reviewUnpublishedCases } from '../src/providers/academic/apa7-review-unpublished-cases.js';
+import { visualSocialWebCases } from '../src/providers/academic/apa7-visual-social-web-cases.js';
 
 function registerAcademicTools(server: any, options: { authorize: () => boolean | Promise<boolean> } = { authorize: () => true }) {
   return registerAcademicToolsWithAuthorization(server, options);
 }
+
+test('APA 7 case contracts guard optional metadata and every author cardinality', () => {
+  const cases: any[] = Object.values({
+    ...bookCases,
+    ...chapterEntryCases,
+    ...periodicalCases,
+    ...reportConferenceThesisCases,
+    ...reviewUnpublishedCases,
+    ...dataSoftwareTestCases,
+    ...audiovisualAudioCases,
+    ...visualSocialWebCases,
+    ...peruLegalCases,
+  });
+
+  for (const item of cases) {
+    const metadata = item.requiredMetadata.join(' ');
+    const contract = `${metadata} ${item.rules.join(' ')}`;
+    if (/lista completa|incluye todos|conserva todos|todos los autores|todos los ponentes/i.test(contract)
+      && /tres o más/.test(item.parentheticalCitation)) {
+      assert.match(item.referenceTemplate, /de 3 a 20:/i, item.id);
+      assert.match(item.referenceTemplate, /21 o más:.*1–19.*Último/i, item.id);
+    }
+
+    if (/si existe|si existen|si corresponde|si aplica|si se conoce|si difiere|solo si/i.test(metadata)) {
+      const optionalGuard = `${item.referenceTemplate} ${item.rules.join(' ')}`;
+      assert.match(optionalGuard, /solo si|si no |cuando |omite|omít|sin |únicamente|de lo contrario/i, item.id);
+    }
+  }
+});
 
 test('APA 7 guidance exposes a journal template when the host authorizes access', async () => {
   const tools = new Map<string, any>();
@@ -890,7 +928,9 @@ test('APA 7 guidance covers reports, conferences and theses through example 66',
   }
   for (const id of ['conference-session', 'conference-paper-presentation', 'conference-poster-presentation']) {
     const presentation = JSON.parse((await handler({ topic: 'reference', caseId: id })).content[0].text).case;
-    assert.match(presentation.referenceTemplate, /, B\. B\.; o |, & Autor, B\. B\.; o /, id);
+    assert.match(presentation.referenceTemplate, /dos:.*&/, id);
+    assert.match(presentation.referenceTemplate, /de 3 a 20:.*incluye todos/, id);
+    assert.match(presentation.referenceTemplate, /21 o más:.*1–19.*Último/, id);
   }
 });
 
@@ -992,7 +1032,8 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   assert.match(interview.referenceTemplate, /Archivo físico sin URL/);
   assert.match(interview.rules.join(' '), /omite URL e institución\/museo/);
   assert.match(podcast.referenceTemplate, /Año único; Año inicial–Año final; o Año inicial–presente/);
-  assert.match(podcast.referenceTemplate, /Responsable, T\. T\. \(Anfitriones o Productores ejecutivos\)/);
+  assert.match(podcast.referenceTemplate, /Responsable, T\. T\., …, & Responsable final/);
+  assert.match(podcast.referenceTemplate, /21 o más:.*1–19.*Último responsable/);
   assert.match(podcast.rules.join(' '), /comenzó y terminó ese año/);
   assert.match(song.referenceTemplate, /solo cuando exista un año original verificado/);
   assert.match(song.rules.join(' '), /canción moderna o sin año original verificado/);
@@ -1001,29 +1042,34 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   const podcastEpisode = JSON.parse((await handler({ topic: 'reference', caseId: 'podcast-episode' })).content[0].text).case;
   assert.match(podcastEpisode.requiredMetadata.join(' '), /lista completa/);
   assert.match(podcastEpisode.parentheticalCitation, /Responsable & Responsable/);
-  assert.match(podcastEpisode.referenceTemplate, /Responsable, T\. T\. \(Anfitriones o Productores ejecutivos\)/);
+  assert.match(podcastEpisode.referenceTemplate, /Responsable, T\. T\., …, & Responsable final/);
+  assert.match(podcastEpisode.referenceTemplate, /21 o más:.*1–19.*Último responsable/);
   assert.match(podcastEpisode.narrativeCitation, /et al\./);
   assert.match(episode.parentheticalCitation, /\(Guionista & Director, Año\)/);
   assert.match(episode.parentheticalCitation, /tres o más responsables acreditados/);
   assert.match(episode.narrativeCitation, /Guionista y Director \(Año\)/);
   assert.match(episode.referenceTemplate, /Productores ejecutivos/);
-  assert.match(episode.referenceTemplate, /R\. Productor \(Productores ejecutivos\)/);
+  assert.match(episode.referenceTemplate, /R\. Productor, …, & Z\. Productor final/);
+  assert.match(episode.referenceTemplate, /21 o más:.*1–19.*Último productor/);
   assert.match(episode.referenceTemplate, /Añade URL solo si existe un localizador público específico/);
   assert.match(episode.rules.join(' '), /Omite la URL para una emisión o versión de streaming ordinaria/);
   assert.match(episode.rules.join(' '), /lista completa de productores ejecutivos/);
   assert.match(series.parentheticalCitation, /tres o más productores/);
   assert.match(series.referenceTemplate, /Productores ejecutivos/);
-  assert.match(series.referenceTemplate, /Productor, R\. R\. \(Productores ejecutivos\)/);
+  assert.match(series.referenceTemplate, /Productor, R\. R\., …, & Productor final/);
+  assert.match(series.referenceTemplate, /21 o más:.*1–19.*Último productor/);
   assert.match(series.rules.join(' '), /Incluye la lista completa/);
   assert.match(series.referenceTemplate, /Año único; Año inicial–Año final; o Año inicial–presente/);
   assert.match(series.rules.join(' '), /comenzó y terminó en ese mismo año/);
   assert.match(film.parentheticalCitation, /Director & Director/);
-  assert.match(film.referenceTemplate, /Director, F\. F\. \(Directores\)/);
+  assert.match(film.referenceTemplate, /Director, F\. F\., …, & Director final/);
+  assert.match(film.referenceTemplate, /21 o más:.*1–19.*Último director/);
   assert.match(film.rules.join(' '), /lista completa de directores/);
   assert.match(film.referenceTemplate, /Añade URL solo cuando corresponda/);
   assert.match(film.rules.join(' '), /Omite la URL para una versión física o de streaming ordinario/);
   const translatedFilm = JSON.parse((await handler({ topic: 'reference', caseId: 'film-other-language' })).content[0].text).case;
-  assert.match(translatedFilm.referenceTemplate, /Director, F\. F\. \(Directores\)/);
+  assert.match(translatedFilm.referenceTemplate, /Director, F\. F\., …, & Director final/);
+  assert.match(translatedFilm.referenceTemplate, /21 o más:.*1–19.*Último director/);
   assert.match(episode.referenceTemplate, /Responsable, R\. R\. \(Guionista y Director\)/);
   assert.match(episode.rules.join(' '), /una sola vez con ambos roles/);
   assert.match(film.parentheticalCitation, /tres o más directores/);

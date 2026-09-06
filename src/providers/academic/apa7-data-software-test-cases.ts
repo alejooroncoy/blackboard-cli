@@ -43,7 +43,7 @@ const shared = {
 const dataBase = { ...shared, manualSection: '10.9' as const };
 const softwareBase = { ...shared, manualSection: '10.10' as const };
 const testBase = { ...shared, manualSection: '10.11' as const };
-const completePersonalAuthors = 'Autor, A. A.; Autor, A. A., & Autor, B. B.; o Autor, A. A., Autor, B. B., & Autor, C. C.';
+const completePersonalAuthors = 'Un autor: Autor, A. A.; dos: Autor, A. A., & Autor, B. B.; de 3 a 20: Autor, A. A., Autor, B. B., Autor, C. C., …, & Autor final, Z. Z. (incluye todos); 21 o más: autores 1–19, …, Último autor';
 const completePersonalAuthorRule = 'Conserva la lista completa y ordenada de autores personales conforme a los límites del elemento autor de APA; usa el nombre completo si la autora es una entidad.';
 
 export const dataSoftwareTestCases: Record<DataSoftwareTestCaseId, Apa7VerifiedDataSoftwareTestCase> = {

@@ -52,7 +52,7 @@ const shared = {
 const visualBase = { ...shared, manualSection: '10.14' as const };
 const socialBase = { ...shared, manualSection: '10.15' as const };
 const webBase = { ...shared, manualSection: '10.16' as const };
-const completeVisualAuthors = 'Autor, A. A.; Autor, A. A., & Autor, B. B.; o Autor, A. A., Autor, B. B., & Autor, C. C.';
+const completeVisualAuthors = 'Un autor: Autor, A. A.; dos: Autor, A. A., & Autor, B. B.; de 3 a 20: Autor, A. A., Autor, B. B., Autor, C. C., …, & Autor final, Z. Z. (incluye todos); 21 o más: autores 1–19, …, Último autor';
 
 export const visualSocialWebCases: Record<VisualSocialWebCaseId, Apa7VerifiedVisualSocialWebCase> = {
   'artwork-museum-or-museum-site': {
