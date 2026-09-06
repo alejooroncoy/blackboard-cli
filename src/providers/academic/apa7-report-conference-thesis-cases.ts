@@ -145,9 +145,9 @@ export const reportConferenceThesisCases: Record<ReportConferenceThesisCaseId, A
   'symposium-contribution': {
     ...conferenceBase, id: 'symposium-contribution', label: 'Contribución en un simposio', manualExample: 63, manualPrintedPages: '339',
     requiredMetadata: ['autores de la contribución', 'fechas del congreso', 'título de la contribución', 'coordinadores', 'título del simposio', 'congreso', 'ubicación', 'DOI/URL si existe'],
-    referenceTemplate: 'Autor, A. A. (Año, día–día de mes). Título de la contribución. En C. Coordinador (Coordinador), Título del simposio [Simposio]. Nombre del congreso, Ciudad, región, país. DOI/URL',
+    referenceTemplate: 'Autor, A. A. (Año, día–día de mes). Título de la contribución. En C. Coordinador (Coordinador), o C. Coordinador, & D. Coordinador (Coordinadores), Título del simposio [Simposio]. Nombre del congreso, Ciudad, región, país. DOI/URL',
     parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
-    rules: ['Distingue autores de la contribución de coordinadores del simposio.', 'Las actas publicadas formalmente se referencian como artículo, libro editado o capítulo, según su publicación.'],
+    rules: ['Distingue autores de la contribución de coordinadores del simposio.', 'Incluye la lista completa de coordinadores y usa el rol plural cuando haya más de uno.', 'Las actas publicadas formalmente se referencian como artículo, libro editado o capítulo, según su publicación.'],
   },
   'thesis-unpublished': {
     ...thesisBase, id: 'thesis-unpublished', label: 'Disertación o tesis inédita', manualExample: 64, manualPrintedPages: '340',

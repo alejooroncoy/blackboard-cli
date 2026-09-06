@@ -719,6 +719,15 @@ test('APA 7 guidance covers all 12 chapter and reference-entry examples', async 
   assert.match(reprint.case.parentheticalCitation, /Año original\/Año reimpresión/);
 });
 
+test('APA 7 chapter containers preserve multiple editors', async () => {
+  let handler: any;
+  registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
+  for (const caseId of ['chapter-edited-doi', 'chapter-edited-no-doi-database-or-print', 'chapter-electronic-public-url', 'chapter-other-language', 'chapter-translated-republication', 'chapter-reprinted-from-journal', 'chapter-reprinted-from-book', 'chapter-multivolume-work']) {
+    const chapter = JSON.parse((await handler({ topic: 'reference', caseId })).content[0].text).case;
+    assert.match(chapter.referenceTemplate, /\(Eds\.\)/, caseId);
+  }
+});
+
 test('APA 7 guidance covers reports, conferences and theses through example 66', async () => {
   let handler: any;
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
@@ -751,6 +760,16 @@ test('APA 7 guidance covers reports, conferences and theses through example 66',
   assert.match(symposium.parentheticalCitation, /tres o más autores/);
   assert.match(symposium.referenceFormatting.italicize.join(' '), /título del simposio contenedor/);
   assert.match(symposium.referenceFormatting.italicize.join(' '), /no el título de la contribución/);
+  assert.match(symposium.referenceTemplate, /\(Coordinadores\)/);
+  assert.match(symposium.rules.join(' '), /lista completa de coordinadores/);
+});
+
+test('APA 7 special periodical issues preserve multiple editors', async () => {
+  let handler: any;
+  registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
+  const special = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-special-section-issue' })).content[0].text).case;
+  assert.match(special.referenceTemplate, /\(Eds\.\)/);
+  assert.match(special.rules.join(' '), /lista completa de editores/);
 });
 
 test('APA 7 guidance covers reviews and unpublished or informally published works', async () => {

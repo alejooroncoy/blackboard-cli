@@ -127,9 +127,9 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   'journal-special-section-issue': {
     ...base, id: 'journal-special-section-issue', label: 'Sección especial o edición especial', manualExample: 12, manualPrintedPages: '325',
     requiredMetadata: ['editores', 'año', 'título', 'tipo sección/edición', 'revista', 'volumen/número', 'páginas si es sección'],
-    referenceTemplate: 'Editor, A. A. (Ed.). (Año). Título [Sección especial o Edición especial]. Revista, volumen(número), páginas si corresponde.',
+    referenceTemplate: 'Editor, A. A. (Ed.), o Editor, A. A., Editor, B. B., & Editor, C. C. (Eds.). (Año). Título [Sección especial o Edición especial]. Revista, volumen(número), páginas si corresponde.',
     parentheticalCitation: '(Editor, Año); (Editor & Editor, Año); (Primer editor et al., Año) con tres o más editores', narrativeCitation: 'Editor (Año); Editor y Editor (Año); Primer editor et al. (Año) con tres o más editores',
-    rules: ['Incluye páginas para una sección especial, no para una edición especial completa.', 'Un artículo individual dentro del especial usa el formato normal de artículo.'],
+    rules: ['Incluye la lista completa de editores y usa (Ed.) para uno o (Eds.) para varios.', 'Incluye páginas para una sección especial, no para una edición especial completa.', 'Un artículo individual dentro del especial usa el formato normal de artículo.'],
   },
   'journal-cochrane': {
     ...base, id: 'journal-cochrane', label: 'Artículo de Cochrane Database of Systematic Reviews', manualExample: 13, manualPrintedPages: '325',
