@@ -111,9 +111,9 @@ export const visualSocialWebCases: Record<VisualSocialWebCaseId, Apa7VerifiedVis
   },
   'facebook-post': {
     ...socialBase, id: 'facebook-post', label: 'Publicación de Facebook', manualExample: 105, manualPrintedPages: '355',
-    requiredMetadata: ['autor o entidad', 'fecha completa', 'primeras 20 palabras', 'descripción de medios o enlaces', 'tipo de publicación', 'URL'],
-    referenceTemplate: 'Autor o entidad. (Año, día de mes). Primeras 20 palabras [Descripción de imagen, infografía, video o enlace] [Actualización de estado]. Facebook. URL',
-    rules: ['El formato puede adaptarse a otras plataformas de publicaciones.', 'Identifica entre corchetes imágenes, videos, miniaturas o contenido compartido.', 'Conserva los emojis cuando sea posible.'],
+    requiredMetadata: ['autor o entidad', 'fecha completa', 'primeras 20 palabras', 'descripción de medios o enlaces solo si existen', 'tipo de publicación', 'URL'],
+    referenceTemplate: 'Solo texto: Autor o entidad. (Año, día de mes). Primeras 20 palabras [Actualización de estado]. Facebook. URL. Con imagen, infografía, video o enlace: Autor o entidad. (Año, día de mes). Primeras 20 palabras [Descripción del medio o enlace] [Actualización de estado]. Facebook. URL',
+    rules: ['El formato puede adaptarse a otras plataformas de publicaciones.', 'Identifica entre corchetes imágenes, videos, miniaturas o contenido compartido solo cuando realmente están presentes; para texto solo, omite toda esa descripción adicional.', 'Conserva los emojis cuando sea posible.'],
   },
   'facebook-page': {
     ...socialBase, id: 'facebook-page', label: 'Página de Facebook', manualExample: 106, manualPrintedPages: '355-356',

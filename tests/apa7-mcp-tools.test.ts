@@ -1143,6 +1143,7 @@ test('APA 7 guidance covers visual, social and web works through example 114', a
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
   const map = JSON.parse((await handler({ topic: 'reference', caseId: 'map' })).content[0].text).case;
   const tweet = JSON.parse((await handler({ topic: 'reference', caseId: 'tweet' })).content[0].text).case;
+  const facebook = JSON.parse((await handler({ topic: 'reference', caseId: 'facebook-post' })).content[0].text).case;
   const news = JSON.parse((await handler({ topic: 'reference', caseId: 'webpage-news-site' })).content[0].text).case;
   const changing = JSON.parse((await handler({ topic: 'reference', caseId: 'webpage-retrieval-date' })).content[0].text).case;
   const infographic = JSON.parse((await handler({ topic: 'citation', caseId: 'infographic' })).content[0].text).case;
@@ -1158,6 +1159,9 @@ test('APA 7 guidance covers visual, social and web works through example 114', a
   assert.match(tweet.rules.join(' '), /Cada emoji cuenta como una palabra/);
   assert.match(tweet.referenceTemplate, /Plataforma verificada/);
   assert.match(tweet.rules.join(' '), /solo cuando esa sea la plataforma real/);
+  assert.match(facebook.referenceTemplate, /Solo texto:.*\[Actualización de estado\]/);
+  assert.match(facebook.referenceTemplate, /Con imagen, infografía, video o enlace:/);
+  assert.match(facebook.rules.join(' '), /para texto solo, omite toda esa descripción adicional/);
   assert.match(news.rules.join(' '), /no son ediciones de un periódico/);
   assert.match(changing.rules.join(' '), /no existe versión archivada/);
   assert.match(infographic.parentheticalCitation, /tres o más autores/);
