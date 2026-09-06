@@ -858,6 +858,8 @@ test('APA 7 guidance covers all 12 chapter and reference-entry examples', async 
   const translated = JSON.parse((await handler({ topic: 'citation', caseId: 'chapter-translated-republication' })).content[0].text).case;
   assert.match(translated.parentheticalCitation, /Autor & Autor/);
   assert.match(translated.parentheticalCitation, /Año original\/Año reedición/);
+  assert.match(translated.referenceTemplate, /dos: T\. Traductor, U\. Traductor, Trads\./);
+  assert.match(translated.referenceTemplate, /21 o más: traductores 1–19/);
 
   const wikipedia = JSON.parse((await handler({ topic: 'citation', caseId: 'wikipedia-entry' })).content[0].text);
   assert.match(wikipedia.case.rules.join(' '), /revisión archivada/);
@@ -932,6 +934,7 @@ test('APA 7 guidance covers reports, conferences and theses through example 66',
   assert.match(organization.parentheticalCitation, /tres o más entidades autoras/);
   assert.match(organization.referenceTemplate, /dos: Entidad autora, & Entidad autora/);
   assert.match(organization.referenceTemplate, /de 3 a 20: Entidad autora, Entidad autora, Entidad autora/);
+  assert.match(organization.referenceTemplate, /Con número:.*Sin número:.*Impreso o base académica común sin localizador:/);
   assert.match(organization.referenceTemplate, /21 o más: entidades autoras 1–19/);
   assert.match(organization.rules.join(' '), /todas las agencias coautoras/);
   for (const id of ['report-individual-authors-in-organization', 'report-series']) {

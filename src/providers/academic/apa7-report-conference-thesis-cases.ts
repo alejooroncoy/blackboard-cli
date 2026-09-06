@@ -59,9 +59,9 @@ export const reportConferenceThesisCases: Record<ReportConferenceThesisCaseId, A
   'report-government-or-organization': {
     ...reportBase, id: 'report-government-or-organization', label: 'Reporte de agencia gubernamental u otra organización', manualExample: 50, manualPrintedPages: '335-336',
     requiredMetadata: ['autor o autores grupales exactos', 'año', 'título', 'número de reporte si existe', 'organismo superior/editorial si corresponde', 'URL/DOI'],
-    referenceTemplate: `${completeGroupAuthors}. (Año). Título del reporte (N.º de reporte si existe). Organismo superior si no figura en el autor. URL/DOI`,
+    referenceTemplate: `${completeGroupAuthors}. (Año). Con número: Título del reporte (N.º de reporte x). Organismo superior si no figura en el autor. Añade DOI/URL solo si existe. Sin número: Título del reporte. Organismo superior si no figura en el autor. Impreso o base académica común sin localizador: termina en el organismo superior o en el título.`,
     parentheticalCitation: '(Entidad, Año); (Entidad & Entidad, Año); (Primera entidad et al., Año) con tres o más entidades autoras', narrativeCitation: 'Entidad (Año); Entidad y Entidad (Año); Primera entidad et al. (Año) con tres o más entidades autoras',
-    rules: ['Incluye todas las agencias coautoras en el orden acreditado.', 'Si autor y editorial son la misma entidad, omite la editorial.', 'Si un organismo superior no aparece en el nombre del autor grupal, inclúyelo como fuente.', 'Une dos agencias autoras con &; separa tres o más con comas y & antes de la última.'],
+    rules: ['Incluye todas las agencias coautoras en el orden acreditado.', 'Si autor y editorial son la misma entidad, omite la editorial.', 'Si un organismo superior no aparece en el nombre del autor grupal, inclúyelo como fuente.', 'Une dos agencias autoras con &; separa tres o más con comas y & antes de la última.', 'Omite el paréntesis de número cuando el reporte no tiene uno y el DOI/URL cuando no existe un localizador aplicable.'],
   },
   'report-individual-authors-in-organization': {
     ...reportBase, id: 'report-individual-authors-in-organization', label: 'Reporte de autores individuales en una organización', manualExample: 51, manualPrintedPages: '336',
