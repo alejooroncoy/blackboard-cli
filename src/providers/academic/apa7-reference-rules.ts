@@ -176,7 +176,7 @@ export const referenceRules: Record<ReferenceRuleId, Apa7VerifiedReferenceRule> 
   'date-definition': verified({
     id: 'date-definition', label: 'Definición de fecha', manualSection: '9.13', manualPrintedPages: '295',
     whenToUse: 'Para identificar la fecha de publicación aplicable a la obra.',
-    rules: ['La fecha puede ser año, fecha exacta, año y mes, año y estación, o rango.', 'Para libros usa la fecha de derechos de autor de la edición consultada.', 'Para artículos usa el año del volumen.', 'En páginas web no uses automáticamente el copyright general del pie; debe corresponder al contenido citado.', 'Una fecha de última actualización sirve solo si es atribuible al contenido específico.'],
+    rules: ['La fecha puede ser año, fecha exacta, año y mes, año y estación, o rango.', 'Para libros usa la fecha de derechos de autor de la edición consultada.', 'Para artículos de revista científica usa solo el año del volumen; conserva el mes, estación o día publicado en magazines y periódicos.', 'En páginas web no uses automáticamente el copyright general del pie; debe corresponder al contenido citado.', 'Una fecha de última actualización sirve solo si es atribuible al contenido específico.'],
     citationImpact: ['La cita en el texto normalmente utiliza solo el año de esa fecha.'],
     referencePattern: 'Autor. (Fecha de publicación pertinente). Título. Fuente.',
   }),

@@ -146,8 +146,8 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   'magazine-article': {
     ...base, id: 'magazine-article', label: 'Artículo de revista o magazine', manualExample: 15, manualPrintedPages: '326',
     requiredMetadata: ['autor', 'fecha disponible', 'título', 'revista', 'volumen/número/páginas si existen', 'DOI/URL si corresponde'],
-    referenceTemplate: 'Autor, A. A. (Año, día de mes). Título. Revista, volumen(número), páginas. DOI/URL',
-    rules: ['Usa la precisión de fecha publicada por la revista y omite elementos inexistentes.'],
+    referenceTemplate: 'Autor, A. A. (Año), (Año, mes o estación) o (Año, día de mes), según la fecha publicada. Título. Revista, volumen(número), páginas. DOI/URL',
+    rules: ['Usa la precisión de fecha publicada por la revista: año, año y mes/estación, o fecha completa.', 'No inventes mes ni día y omite los demás elementos inexistentes.'],
   },
   'newspaper-article': {
     ...base, id: 'newspaper-article', label: 'Artículo de periódico', manualExample: 16, manualPrintedPages: '326',

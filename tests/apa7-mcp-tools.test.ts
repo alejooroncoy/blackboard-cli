@@ -890,7 +890,8 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   assert.match(ted.rules.join(' '), /En YouTube/);
   assert.match(webinar.rules.join(' '), /comunicación personal/);
   assert.match(interview.rules.join(' '), /persona entrevistada/);
-  assert.match(podcast.referenceTemplate, /Año inicial–presente o Año inicial–Año final/);
+  assert.match(podcast.referenceTemplate, /Año único; Año inicial–Año final; o Año inicial–presente/);
+  assert.match(podcast.rules.join(' '), /comenzó y terminó ese año/);
   assert.match(song.referenceTemplate, /solo cuando exista un año original verificado/);
   assert.match(song.rules.join(' '), /canción moderna o sin año original verificado/);
   assert.match(podcast.requiredMetadata.join(' '), /lista completa/);
@@ -941,6 +942,14 @@ test('APA 7 guidance covers visual, social and web works through example 114', a
   assert.match(slides.parentheticalCitation, /tres o más autores/);
   assert.match(individualWebpage.referenceTemplate, /\(Año\), \(Año, mes\) o \(Año, día de mes\)/);
   assert.match(individualWebpage.rules.join(' '), /No inventes el mes ni el día/);
+});
+
+test('APA 7 magazine dates preserve the precision actually published', async () => {
+  let handler: any;
+  registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
+  const magazine = JSON.parse((await handler({ topic: 'reference', caseId: 'magazine-article' })).content[0].text).case;
+  assert.match(magazine.referenceTemplate, /\(Año\), \(Año, mes o estación\) o \(Año, día de mes\)/);
+  assert.match(magazine.rules.join(' '), /No inventes mes ni día/);
 });
 
 test('APA 7 guidance exposes verified citation rules 8.1 through 8.36', async () => {
@@ -1137,9 +1146,12 @@ test('APA 7 date rules limit retrieval dates to changing unarchived works', asyn
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
   const retrieval = JSON.parse((await handler({ topic: 'reference', referenceRuleId: 'retrieval-date' })).content[0].text).referenceRule;
   const noDate = JSON.parse((await handler({ topic: 'reference', referenceRuleId: 'no-date' })).content[0].text).referenceRule;
+  const dateDefinition = JSON.parse((await handler({ topic: 'reference', referenceRuleId: 'date-definition' })).content[0].text).referenceRule;
   assert.match(retrieval.rules.join(' '), /La mayoría de referencias no lleva/);
   assert.match(retrieval.rules.join(' '), /versiones estables archivadas/);
   assert.match(noDate.referencePattern, /\(s\. f\.\)/);
+  assert.match(dateDefinition.rules.join(' '), /artículos de revista científica usa solo el año/);
+  assert.match(dateDefinition.rules.join(' '), /magazines y periódicos/);
 });
 
 test('APA 7 title rules distinguish independent works from parts of a whole', async () => {

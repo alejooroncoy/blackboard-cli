@@ -21,7 +21,7 @@ Las guías resumidas pueden simplificar o adaptar reglas para español. Si difie
 1. Identifica la intención: `aprender`, `cita en el texto`, `referencia`, `revisión`, `formato`, `tabla/figura` o `fuente de Blackboard`.
 2. Pide solo los datos que falten y que cambien el resultado. Para una referencia: tipo de fuente, autor o entidad, fecha, título, contenedor/editorial o revista, DOI/URL y, cuando corresponda, volumen, número, páginas o número de informe.
 3. Si la solicitud trata de una tarea o material de curso, primero usa las herramientas Blackboard para ubicar el curso y explorar el contenido de forma recursiva. Descarga y lee la rúbrica, plantilla o instrucciones antes de asumir que APA es el único criterio.
-4. Determina si la fuente es recuperable por el lector. Las comunicaciones personales y materiales no recuperables se citan en el texto, pero no van en referencias.
+4. Clasifica primero la fuente. Las comunicaciones personales reales se citan solo en el texto; un manuscrito no publicado sí puede llevar referencia, y las palabras de participantes de la investigación se presentan según las reglas de reporte del estudio, no como comunicación personal. Para otros materiales no recuperables, aplica el tratamiento específico de su categoría antes de decidir si llevan referencia.
 5. Entrega el resultado en este orden: formato solicitado listo para copiar; desglose breve de los campos; advertencias o datos por confirmar; y una mini-explicación de la regla si la persona está aprendiendo.
 6. Al revisar un texto, distingue siempre entre `cumple`, `corregir` y `no verificable con la información disponible`. Nunca atribuyas a la fuente algo que no esté en ella.
 
