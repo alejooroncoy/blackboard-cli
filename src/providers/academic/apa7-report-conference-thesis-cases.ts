@@ -65,10 +65,10 @@ export const reportConferenceThesisCases: Record<ReportConferenceThesisCaseId, A
   },
   'report-individual-authors-in-organization': {
     ...reportBase, id: 'report-individual-authors-in-organization', label: 'Reporte de autores individuales en una organización', manualExample: 51, manualPrintedPages: '336',
-    requiredMetadata: ['autores personales', 'año', 'título', 'agencia u organización editora', 'URL/DOI'],
-    referenceTemplate: `${completeContributionAuthors} (Año). Título del reporte. Agencia u organización. URL/DOI`,
+    requiredMetadata: ['autores personales', 'año', 'título', 'agencia u organización editora', 'DOI o URL pública si corresponde'],
+    referenceTemplate: `${completeContributionAuthors} (Año). Título del reporte. Agencia u organización. Con DOI: añade DOI al final. Con URL pública sin DOI: añade URL al final. Impreso o base académica común sin localizador: termina en la organización.`,
     parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
-    rules: ['Incluye la lista completa de autores personales en el orden acreditado; la organización aparece como fuente.'],
+    rules: ['Incluye la lista completa de autores personales en el orden acreditado; la organización aparece como fuente.', 'Prefiere DOI; usa URL pública si no hay DOI y omite ambos en una versión impresa o base académica común sin localizador.'],
   },
   'report-series': {
     ...reportBase, id: 'report-series', label: 'Reporte de autores individuales publicado en una serie', manualExample: 52, manualPrintedPages: '336',

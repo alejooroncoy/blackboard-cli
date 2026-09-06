@@ -93,9 +93,9 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   },
   'journal-elocator': {
     ...base, id: 'journal-elocator', label: 'Artículo con eLocator', manualExample: 6, manualPrintedPages: '324',
-    requiredMetadata: ['autores', 'año', 'título', 'revista', 'volumen/número', 'eLocator', 'DOI/URL'],
-    referenceTemplate: `${completeAuthorList} (Año). Título. Revista, volumen(número), Artículo eLocator. DOI/URL`,
-    rules: [completeAuthorRule, 'Escribe Artículo antes del eLocator y no inventa un rango de páginas.'],
+    requiredMetadata: ['autores', 'año', 'título', 'revista', 'volumen/número', 'eLocator', 'DOI o URL pública si corresponde'],
+    referenceTemplate: `${completeAuthorList} (Año). Título. Revista, volumen(número), Artículo eLocator. Con DOI: añade DOI al final. Con URL pública sin DOI: añade URL al final. Impreso o base académica común sin localizador: termina en el eLocator.`,
+    rules: [completeAuthorRule, 'Escribe Artículo antes del eLocator y no inventa un rango de páginas.', 'Prefiere DOI; usa URL pública si no hay DOI y omite ambos en una versión impresa o base académica común sin localizador.'],
   },
   'journal-advance-online': {
     ...base, id: 'journal-advance-online', label: 'Artículo publicado anticipadamente en línea', manualExample: 7, manualPrintedPages: '324',

@@ -76,10 +76,10 @@ export const chapterEntryCases: Record<ChapterEntryCaseId, Apa7VerifiedChapterEn
   },
   'chapter-translated-republication': {
     ...base, id: 'chapter-translated-republication', label: 'Capítulo reeditado en traducción', manualExample: 42, manualPrintedPages: '333',
-    requiredMetadata: ['autor', 'año original', 'año de reedición', 'título', 'traductores del capítulo', 'editores', 'libro', 'páginas', 'editorial'],
-    referenceTemplate: `${completeChapterAuthors} (Año reedición). Título del capítulo (${titlePositionChapterTranslators}). En ${completeChapterEditors}, Título del libro (pp. xx-xx). Editorial. (Obra original publicada en Año original)`,
+    requiredMetadata: ['autor', 'año original', 'año de reedición', 'título', 'traductores del capítulo', 'editores', 'libro', 'edición si existe', 'volumen si existe', 'páginas', 'editorial'],
+    referenceTemplate: `${completeChapterAuthors} (Año reedición). Título del capítulo (${titlePositionChapterTranslators}). En ${completeChapterEditors}, Título del libro (edición y volumen: edición, Vol. x, pp. xx-xx; solo edición: edición, pp. xx-xx; solo volumen: Vol. x, pp. xx-xx; sin ambos: pp. xx-xx). Editorial. (Obra original publicada en Año original)`,
     parentheticalCitation: '(Autor, Año original/Año reedición); (Autor & Autor, Año original/Año reedición); (Primer autor et al., Año original/Año reedición) con tres o más autores', narrativeCitation: 'Autor (Año original/Año reedición); Autor y Autor (Año original/Año reedición); Primer autor et al. (Año original/Año reedición) con tres o más autores',
-    rules: ['Conserva la lista completa de traductores acreditados y usa (Trad.) para uno o (Trads.) para varios.', 'La cita de la versión consultada conserva el año original y el de la reedición.'],
+    rules: ['Conserva la lista completa de traductores acreditados y usa (Trad.) para uno o (Trads.) para varios.', 'Incluye edición y volumen solo cuando existan.', 'La cita de la versión consultada conserva el año original y el de la reedición.'],
   },
   'chapter-reprinted-from-journal': {
     ...base, id: 'chapter-reprinted-from-journal', label: 'Capítulo reimpreso de un artículo de revista científica', manualExample: 43, manualPrintedPages: '333',
