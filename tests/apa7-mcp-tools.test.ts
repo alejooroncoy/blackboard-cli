@@ -969,6 +969,7 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   assert.match(episode.parentheticalCitation, /tres o más responsables acreditados/);
   assert.match(episode.narrativeCitation, /Guionista y Director \(Año\)/);
   assert.match(episode.referenceTemplate, /Productores ejecutivos/);
+  assert.match(episode.referenceTemplate, /R\. Productor \(Productores ejecutivos\)/);
   assert.match(episode.rules.join(' '), /lista completa de productores ejecutivos/);
   assert.match(series.parentheticalCitation, /tres o más productores/);
   assert.match(series.referenceTemplate, /Productores ejecutivos/);
@@ -1008,6 +1009,8 @@ test('APA 7 guidance covers visual, social and web works through example 114', a
   assert.match(infographic.parentheticalCitation, /tres o más autores/);
   assert.match(slides.parentheticalCitation, /Autor & Autor/);
   assert.match(slides.parentheticalCitation, /tres o más autores/);
+  assert.match(slides.referenceTemplate, /\(Año\), \(Año, mes\) o \(Año, día de mes\)/);
+  assert.match(slides.rules.join(' '), /no inventes mes ni día/);
   assert.match(individualWebpage.referenceTemplate, /\(Año\), \(Año, mes\) o \(Año, día de mes\)/);
   assert.match(individualWebpage.rules.join(' '), /No inventes el mes ni el día/);
   const groupWebpage = JSON.parse((await handler({ topic: 'reference', caseId: 'webpage-group-author' })).content[0].text).case;
@@ -1164,6 +1167,8 @@ test('APA 7 source rules choose DOI over URL and omit common databases', async (
   const periodical = JSON.parse((await handler({ topic: 'reference', referenceRuleId: 'periodical-source' })).content[0].text).referenceRule;
   assert.match(ids.rules.join(' '), /incluye solo DOI/);
   assert.match(ids.rules.join(' '), /ISBN e ISSN no se incluyen/);
+  assert.match(ids.rules.join(' '), /localizador oficial actualizado/);
+  assert.match(ids.rules.join(' '), /solo cuando la obra realmente carece de una fuente recuperable/);
   assert.match(database.rules.join(' '), /Omítela para obras ampliamente disponibles/);
   assert.match(database.refuseWhen.join(' '), /sesión, token/);
   assert.match(periodical.rules.join(' '), /coma que lo sigue también va en cursiva/);

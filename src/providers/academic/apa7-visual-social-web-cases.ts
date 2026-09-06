@@ -91,9 +91,9 @@ export const visualSocialWebCases: Record<VisualSocialWebCaseId, Apa7VerifiedVis
   'slides-or-lecture-notes': {
     ...visualBase, id: 'slides-or-lecture-notes', label: 'Diapositivas de PowerPoint o notas de conferencia', manualExample: 102, manualPrintedPages: '353',
     requiredMetadata: ['autores', 'fecha', 'título o descripción', 'tipo de material', 'departamento/universidad o sitio/plataforma', 'URL accesible'],
-    referenceTemplate: `${completeVisualAuthors} (Año, día de mes). Título o [Descripción] [Diapositivas de PowerPoint o Notas de conferencia]. Departamento, Universidad o Plataforma. URL`,
+    referenceTemplate: `${completeVisualAuthors} (Año), (Año, mes) o (Año, día de mes), según la fecha publicada. Título o [Descripción] [Diapositivas de PowerPoint o Notas de conferencia]. Departamento, Universidad o Plataforma. URL`,
     parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
-    rules: ['Conserva la lista completa y ordenada de autores personales.', 'Si el recurso está en un LMS o intranet, úsalo solo para un público con acceso.', 'Para sitios con inicio de sesión, usa la URL de la página de acceso.'],
+    rules: ['Conserva la lista completa y ordenada de autores personales.', 'Usa solo la precisión de fecha realmente publicada; no inventes mes ni día.', 'Si el recurso está en un LMS o intranet, úsalo solo para un público con acceso.', 'Para sitios con inicio de sesión, usa la URL de la página de acceso.'],
   },
   tweet: {
     ...socialBase, id: 'tweet', label: 'Tweet o publicación equivalente', manualExample: 103, manualPrintedPages: '354-355',
