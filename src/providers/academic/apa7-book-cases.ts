@@ -106,8 +106,8 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   'book-other-language': {
     ...base, id: 'book-other-language', label: 'Libro en otro idioma', manualExample: 27, manualPrintedPages: '329',
     requiredMetadata: ['autores', 'año', 'título original', 'traducción del título si el idioma difiere', 'volumen/edición si existe', 'editorial', 'DOI o URL pública si corresponde'],
-    referenceTemplate: `${completeAuthorList} (Año). Título original [Traducción del título, solo si el idioma difiere] (volumen/edición, solo si existe). Editorial. Con DOI: añade DOI al final. Con URL pública sin DOI: añade URL al final. Impreso o base académica común sin localizador: termina en la editorial.`,
-    rules: [completeAuthorRule, 'Añade la traducción del título entre corchetes cuando el idioma difiere del trabajo; omite los corchetes si no corresponde.', 'Omite por completo el paréntesis de volumen o edición cuando ninguno existe.', 'Prefiere DOI; usa URL pública si no hay DOI y omite ambos en una versión impresa o base académica común sin localizador.'],
+    referenceTemplate: `${completeAuthorList} (Año). Título original [Traducción del título, solo si el idioma difiere] (volumen/edición, solo si existe). Editorial. Con DOI: añade https://doi.org/xxxxx al final. Con URL pública sin DOI: añade URL al final. Impreso o base académica común sin localizador: termina en la editorial.`,
+    rules: [completeAuthorRule, 'Añade la traducción del título entre corchetes cuando el idioma difiere del trabajo; omite los corchetes si no corresponde.', 'Omite por completo el paréntesis de volumen o edición cuando ninguno existe.', 'Prefiere DOI y exprésalo como URL completa https://doi.org/...; usa URL pública si no hay DOI y omite ambos en una versión impresa o base académica común sin localizador.'],
   },
   'book-translated-republication': {
     ...base, id: 'book-translated-republication', label: 'Libro reeditado en traducción', manualExample: 28, manualPrintedPages: '329',

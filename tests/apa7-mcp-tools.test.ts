@@ -808,6 +808,7 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(dictionary.case.referenceTemplate, /Con DOI\/URL:.*Impreso o base académica común sin localizador:/);
   assert.match(dictionary.case.rules.join(' '), /Distingue el autor grupal de los editores/);
   const foreignBook = JSON.parse((await handler({ topic: 'reference', caseId: 'book-other-language' })).content[0].text).case;
+  assert.match(foreignBook.referenceTemplate, /Con DOI: añade https:\/\/doi\.org\/xxxxx/);
   assert.match(foreignBook.referenceTemplate, /Con DOI:.*Con URL pública sin DOI:.*sin localizador/);
   assert.match(foreignBook.rules.join(' '), /Prefiere DOI/);
   const anthology = JSON.parse((await handler({ topic: 'reference', caseId: 'anthology' })).content[0].text).case;
@@ -909,6 +910,10 @@ test('APA 7 standard journals preserve every credited author', async () => {
   const translated = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-translated-republication' })).content[0].text).case;
   assert.match(translated.referenceTemplate, /dos: A\. Traductor & B\. Traductor, Trads\./);
   assert.match(translated.referenceTemplate, /21 o más: traductores 1–19/);
+  assert.match(translated.requiredMetadata.join(' '), /volumen\/número\/páginas o eLocator si existen/);
+  assert.match(translated.referenceTemplate, /Sin volumen: Revista, \(número\), páginas o eLocator/);
+  assert.match(translated.referenceTemplate, /https:\/\/doi\.org\/xxxxx.*\(Obra original publicada en Año original\)/);
+  assert.match(translated.rules.join(' '), /nota de obra original publicada va siempre al final/);
   assert.match(translated.rules.join(' '), /lista completa de traductores acreditados/);
 });
 
