@@ -50,7 +50,7 @@ const referenceTemplates: Partial<Record<SourceType, string>> = {
   'newspaper-article': 'Autor, A. A.; Autor, A. A., & Autor, B. B.; o lista completa conforme a APA. (Año, día de mes). Título. *Periódico*, p. x o pp. xx–xx para versión impresa. URL para versión en línea',
   'video-webinar': 'Autor o entidad. (Año), (Año, mes) o (Año, día de mes), según la fecha publicada. *Título* [Video o seminario web grabado]. Plataforma. URL',
   podcast: 'Serie completa: Responsable, R. R. (Anfitrión o Productor ejecutivo). (Año único; Año inicial–Año final; o Año inicial–presente). *Título del pódcast* [Pódcast de audio o video]. Productora. URL si se conoce. Episodio: Responsable, R. R. (Anfitrión o Productor ejecutivo). (Año, día de mes). Título del episodio (N.º de episodio, solo si existe) [Episodio de pódcast]. En *Título del pódcast*. Productora. URL si se conoce.',
-  'social-media': 'Autor [@usuario]. (Año, día de mes). *Primeras 20 palabras del contenido* [Tipo de publicación]. Red social. URL',
+  'social-media': 'Publicación individual: Autor [@usuario]. (Año, día de mes). *Primeras 20 palabras del contenido* [Tipo de publicación]. Red social. URL. Perfil, página o historia destacada que cambia: Autor [@usuario]. (s. f.). *Título de la pestaña, página o historia* [Perfil, página o historia destacada]. Red social. Recuperado el día de mes de año, de URL.',
   software: 'Autor, autores o entidad responsable. (Año). *Nombre* (Versión, solo si existe) [Software]. Editor, desarrollador o tienda, solo si difiere del autor. URL si corresponde',
 };
 

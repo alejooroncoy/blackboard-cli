@@ -59,8 +59,11 @@ test('reference templates preserve APA italics with explicit Markdown notation',
   const chapter = JSON.parse((await handler({ topic: 'reference', sourceType: 'book-chapter' })).content[0].text);
   const thesis = JSON.parse((await handler({ topic: 'reference', sourceType: 'thesis' })).content[0].text);
   const podcast = JSON.parse((await handler({ topic: 'reference', sourceType: 'podcast' })).content[0].text);
+  const social = JSON.parse((await handler({ topic: 'reference', sourceType: 'social-media' })).content[0].text);
   assert.match(podcast.template, /Serie completa:.*Año inicial–Año final/);
   assert.match(podcast.template, /Episodio:.*N.º de episodio, solo si existe/);
+  assert.match(social.template, /Publicación individual:.*Perfil, página o historia destacada que cambia:/);
+  assert.match(social.template, /Recuperado el día de mes de año/);
   assert.match(software.template, /tienda, solo si difiere del autor/);
   assert.match(book.template, /omite DOI y URL/);
   assert.match(chapter.template, /DOI si existe.*URL pública.*omite DOI y URL/);
@@ -987,6 +990,8 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   assert.match(film.parentheticalCitation, /Director & Director/);
   assert.match(film.referenceTemplate, /Director, F\. F\. \(Directores\)/);
   assert.match(film.rules.join(' '), /lista completa de directores/);
+  assert.match(film.referenceTemplate, /Añade URL solo cuando corresponda/);
+  assert.match(film.rules.join(' '), /Omite la URL para una versión física o de streaming ordinario/);
   const translatedFilm = JSON.parse((await handler({ topic: 'reference', caseId: 'film-other-language' })).content[0].text).case;
   assert.match(translatedFilm.referenceTemplate, /Director, F\. F\. \(Directores\)/);
   assert.match(episode.referenceTemplate, /Responsable, R\. R\. \(Guionista y Director\)/);
