@@ -996,6 +996,11 @@ test('APA 7 guidance covers reports, conferences and theses through example 66',
   assert.ok(issueBrief);
   assert.match(issueBrief.referenceTemplate, /21 o más: autores 1–19/);
   assert.match(issueBrief.parentheticalCitation, /tres o más responsables/);
+  const policyBrief = cases.find(candidate => candidate.id === 'policy-brief');
+  assert.ok(policyBrief);
+  assert.match(policyBrief.requiredMetadata.join(' '), /autores personales o entidad/);
+  assert.match(policyBrief.referenceTemplate, /21 o más: autores 1–19/);
+  assert.match(policyBrief.parentheticalCitation, /tres o más responsables/);
   assert.match(organization.requiredMetadata.join(' '), /URL\/DOI si corresponde/);
   for (const id of ['conference-session', 'conference-paper-presentation', 'conference-poster-presentation', 'symposium-contribution']) {
     const conference = cases.find(candidate => candidate.id === id);
@@ -1427,6 +1432,8 @@ test('APA 7 periodical rules omit rather than invent missing publication data', 
   const missing = JSON.parse((await handler({ topic: 'reference', referenceRuleId: 'periodical-missing-information' })).content[0].text).referenceRule;
   const article = JSON.parse((await handler({ topic: 'reference', referenceRuleId: 'article-number' })).content[0].text).referenceRule;
   const cochrane = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-cochrane' })).content[0].text).case;
+  assert.match(cochrane.referenceTemplate, /https:\/\/doi\.org\/xxxxx/);
+  assert.match(cochrane.rules.join(' '), /DOI como URL completa/);
   const upToDate = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-uptodate' })).content[0].text).case;
   assert.match(missing.rules.join(' '), /Omite volumen, número, páginas/);
   assert.match(missing.refuseWhen.join(' '), /inventó volumen/);

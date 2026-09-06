@@ -140,8 +140,8 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   'journal-cochrane': {
     ...base, id: 'journal-cochrane', label: 'Artículo de Cochrane Database of Systematic Reviews', manualExample: 13, manualPrintedPages: '325',
     requiredMetadata: ['autores', 'año', 'título', 'número de edición', 'número de artículo CD', 'DOI'],
-    referenceTemplate: `${completeAuthorList} (Año). Título. Cochrane Database of Systematic Reviews, Año(número de edición), Artículo CDxxxxxx. DOI`,
-    rules: [completeAuthorRule, 'Se presenta como artículo de publicación periódica.', 'Conserva el número de edición y el identificador de artículo CD verificados.'],
+    referenceTemplate: `${completeAuthorList} (Año). Título. Cochrane Database of Systematic Reviews, Año(número de edición), Artículo CDxxxxxx. https://doi.org/xxxxx`,
+    rules: [completeAuthorRule, 'Se presenta como artículo de publicación periódica.', 'Conserva el número de edición y el identificador de artículo CD verificados.', 'Expresa el DOI como URL completa https://doi.org/...'],
   },
   'journal-uptodate': {
     ...base, id: 'journal-uptodate', label: 'Artículo de UpToDate', manualExample: 14, manualPrintedPages: '325-326',
