@@ -54,6 +54,7 @@ test('APA 7 quick reference never leaves a book URL or DOI as an unconditional p
   assert.match(quickReference, /Con DOI o URL pública:/);
   assert.match(quickReference, /impreso o en base académica común sin localizador:/);
   assert.match(quickReference, /Artículo científico \| Con DOI:.*sin DOI con URL pública:.*impreso o base académica común sin localizador:/);
+  assert.match(quickReference, /Artículo con eLocator.*https:\/\/doi\.org\/xxxxx/);
   assert.match(quickReference, /\(\*Título abreviado\*, 2024\).*página web/);
 });
 
@@ -1119,8 +1120,12 @@ test('APA 7 guidance covers datasets, software and tests through example 83', as
   assert.match(dataset.referenceTemplate, /Título del conjunto \(Identificador\); Título del conjunto \(Versión x\); o Título del conjunto \(Identificador; Versión x\)/);
   assert.match(dataset.rules.join(' '), /omite todo el paréntesis si no existe ninguno/);
   assert.match(dataset.requiredMetadata.join(' '), /organización publicadora\/archivo si difiere del autor/);
+  assert.match(dataset.referenceTemplate, /Con DOI: https:\/\/doi\.org\/xxxxx/);
+  assert.match(dataset.rules.join(' '), /Prefiere DOI/);
   const foreignJournal = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-other-language' })).content[0].text).case;
-  assert.match(foreignJournal.referenceTemplate, /Con DOI:.*Sin DOI con URL pública:.*Impreso o base académica común sin localizador:/);
+  assert.match(foreignJournal.referenceTemplate, /Sin volumen: Revista, \(número\), páginas o eLocator/);
+  assert.match(foreignJournal.requiredMetadata.join(' '), /volumen\/número\/páginas o eLocator si existen/);
+  assert.match(foreignJournal.rules.join(' '), /Omite volumen, número y páginas\/eLocator individualmente/);
   assert.match(foreignJournal.requiredMetadata.join(' '), /DOI\/URL si corresponde/);
   assert.match(software.rules.join(' '), /distribución limitada/);
   assert.match(software.referenceTemplate, /solo si difiere del autor/);
@@ -1139,6 +1144,8 @@ test('APA 7 guidance covers datasets, software and tests through example 83', as
   assert.match(equipment.rules.join(' '), /si no existe, omite todo el paréntesis/);
   assert.match(testRecord.rules.join(' '), /información descriptiva o administrativa única/);
   assert.match(testRecord.referenceTemplate, /Sigla\/código, solo si existe/);
+  assert.match(testRecord.referenceTemplate, /Con DOI: https:\/\/doi\.org\/xxxxx/);
+  assert.match(testRecord.rules.join(' '), /usa URL pública solo si no existe DOI/);
   assert.match(testRecord.rules.join(' '), /Omite por completo el paréntesis de sigla o código/);
   assert.match(testRecord.parentheticalCitation, /tres o más autores/);
   assert.match(mobileApp.referenceTemplate, /Tienda o desarrollador verificado, solo si difiere del autor/);
@@ -1147,7 +1154,8 @@ test('APA 7 guidance covers datasets, software and tests through example 83', as
   const manual = JSON.parse((await handler({ topic: 'citation', caseId: 'test-manual' })).content[0].text).case;
   assert.match(manual.parentheticalCitation, /tres o más autores/);
   assert.match(manual.referenceTemplate, /\(edición, solo desde la segunda\)/);
-  assert.match(manual.referenceTemplate, /Con DOI\/URL/);
+  assert.match(manual.referenceTemplate, /Con DOI: añade https:\/\/doi\.org\/xxxxx/);
+  assert.match(manual.rules.join(' '), /usa URL pública solo si no existe DOI/);
   assert.match(manual.referenceTemplate, /Impreso o base académica común sin localizador/);
   assert.match(manual.rules.join(' '), /omítela para la primera/);
   for (const item of [dataset, software, testRecord, manual]) {

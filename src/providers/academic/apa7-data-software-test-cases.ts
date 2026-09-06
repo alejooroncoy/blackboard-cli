@@ -49,9 +49,9 @@ const completePersonalAuthorRule = 'Conserva la lista completa y ordenada de aut
 export const dataSoftwareTestCases: Record<DataSoftwareTestCaseId, Apa7VerifiedDataSoftwareTestCase> = {
   'dataset-published': {
     ...dataBase, id: 'dataset-published', label: 'Conjunto de datos publicado', manualExample: 75, manualPrintedPages: '344',
-    requiredMetadata: ['autores o entidad', 'año de publicación', 'título', 'identificador y versión si existen', 'descripción del conjunto', 'organización publicadora/archivo si difiere del autor', 'DOI/URL'],
-    referenceTemplate: `${completePersonalAuthors} o Entidad autora. (Año). Elige una sola forma de título: Título del conjunto; Título del conjunto (Identificador); Título del conjunto (Versión x); o Título del conjunto (Identificador; Versión x), seguido sin punto por [Conjunto de datos y libro de códigos, si corresponde]. Organización o archivo, solo si difiere del autor. DOI/URL`,
-    rules: [completePersonalAuthorRule, 'Cita el conjunto cuando realizas análisis secundarios de datos públicos o archivas datos propios presentados por primera vez.', 'Incluye entre paréntesis únicamente el identificador y/o la versión que realmente existan; omite todo el paréntesis si no existe ninguno.', 'Incluye fecha de recuperación solo si el conjunto está diseñado para cambiar con el tiempo.'],
+    requiredMetadata: ['autores o entidad', 'año de publicación', 'título', 'identificador y versión si existen', 'descripción del conjunto', 'organización publicadora/archivo si difiere del autor', 'DOI o URL pública'],
+    referenceTemplate: `${completePersonalAuthors} o Entidad autora. (Año). Elige una sola forma de título: Título del conjunto; Título del conjunto (Identificador); Título del conjunto (Versión x); o Título del conjunto (Identificador; Versión x), seguido sin punto por [Conjunto de datos y libro de códigos, si corresponde]. Organización o archivo, solo si difiere del autor. Con DOI: https://doi.org/xxxxx. Con URL pública sin DOI: URL.`,
+    rules: [completePersonalAuthorRule, 'Prefiere DOI y exprésalo como URL completa https://doi.org/...; usa URL pública solo si no existe DOI.', 'Cita el conjunto cuando realizas análisis secundarios de datos públicos o archivas datos propios presentados por primera vez.', 'Incluye entre paréntesis únicamente el identificador y/o la versión que realmente existan; omite todo el paréntesis si no existe ninguno.', 'Incluye fecha de recuperación solo si el conjunto está diseñado para cambiar con el tiempo.'],
   },
   'raw-data-unpublished': {
     ...dataBase, id: 'raw-data-unpublished', label: 'Datos brutos no publicados', manualExample: 76, manualPrintedPages: '344',
@@ -86,9 +86,9 @@ export const dataSoftwareTestCases: Record<DataSoftwareTestCaseId, Apa7VerifiedD
   'test-manual': {
     ...testBase, id: 'test-manual', label: 'Manual de una prueba, escala o inventario', manualExample: 81, manualPrintedPages: '346',
     requiredMetadata: ['autores del manual', 'año', 'título completo', 'edición si existe', 'editorial', 'DOI/URL si corresponde'],
-    referenceTemplate: `${completePersonalAuthors} (Año). Título del manual de la prueba (edición, solo desde la segunda). Editorial. Con DOI/URL: añade el localizador al final. Impreso o base académica común sin localizador: termina en la editorial.`,
+    referenceTemplate: `${completePersonalAuthors} (Año). Título del manual de la prueba (edición, solo desde la segunda). Editorial. Con DOI: añade https://doi.org/xxxxx al final. Con URL pública sin DOI: añade URL al final. Impreso o base académica común sin localizador: termina en la editorial.`,
     parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
-    rules: [completePersonalAuthorRule, 'Incluye la edición entre paréntesis después del título desde la segunda; omítela para la primera.', 'Añade DOI/URL solo cuando sea aplicable; en una versión impresa o base académica común sin localizador, termina en la editorial.', 'Prioriza la literatura de apoyo: si existe un manual, cita el manual y no la prueba por separado.', 'Usa el formato de libro de autor o editado que corresponda.'],
+    rules: [completePersonalAuthorRule, 'Incluye la edición entre paréntesis después del título desde la segunda; omítela para la primera.', 'Prefiere DOI y exprésalo como URL completa https://doi.org/...; usa URL pública solo si no existe DOI; en una versión impresa o base académica común sin localizador, termina en la editorial.', 'Prioriza la literatura de apoyo: si existe un manual, cita el manual y no la prueba por separado.', 'Usa el formato de libro de autor o editado que corresponda.'],
   },
   'test-itself': {
     ...testBase, id: 'test-itself', label: 'Prueba, escala o inventario en sí mismo', manualExample: 82, manualPrintedPages: '346-347',
@@ -100,9 +100,9 @@ export const dataSoftwareTestCases: Record<DataSoftwareTestCaseId, Apa7VerifiedD
   'test-database-record': {
     ...testBase, id: 'test-database-record', label: 'Registro de base de datos para una prueba', manualExample: 83, manualPrintedPages: '347',
     requiredMetadata: ['autores', 'año', 'nombre de la prueba', 'sigla/código si existe', 'descripción de registro', 'base de datos de pruebas', 'DOI/URL'],
-    referenceTemplate: `${completePersonalAuthors} (Año). Nombre de la prueba (Sigla/código, solo si existe) [Registro de base de datos]. Base de datos de pruebas. DOI/URL`,
+    referenceTemplate: `${completePersonalAuthors} (Año). Nombre de la prueba (Sigla/código, solo si existe) [Registro de base de datos]. Base de datos de pruebas. Con DOI: https://doi.org/xxxxx. Con URL pública sin DOI: URL.`,
     parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
-    rules: [completePersonalAuthorRule, 'Omite por completo el paréntesis de sigla o código cuando ese dato no exista.', 'Cita el registro solo cuando utilizas información descriptiva o administrativa única de ese registro.', 'Si no usas información única del registro, cita la literatura de apoyo disponible.', 'El nombre de la base se incluye para registros, no por el mero hecho de que la prueba pueda encontrarse allí.'],
+    rules: [completePersonalAuthorRule, 'Prefiere DOI y exprésalo como URL completa https://doi.org/...; usa URL pública solo si no existe DOI.', 'Omite por completo el paréntesis de sigla o código cuando ese dato no exista.', 'Cita el registro solo cuando utilizas información descriptiva o administrativa única de ese registro.', 'Si no usas información única del registro, cita la literatura de apoyo disponible.', 'El nombre de la base se incluye para registros, no por el mero hecho de que la prueba pueda encontrarse allí.'],
   },
 };
 

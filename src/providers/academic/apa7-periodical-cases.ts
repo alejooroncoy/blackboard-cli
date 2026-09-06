@@ -112,9 +112,9 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   },
   'journal-other-language': {
     ...base, id: 'journal-other-language', label: 'Artículo publicado en otro idioma', manualExample: 9, manualPrintedPages: '324',
-    requiredMetadata: ['autores', 'año', 'título original', 'traducción del título al idioma del trabajo si corresponde', 'revista', 'volumen/número/páginas', 'DOI/URL si corresponde'],
-    referenceTemplate: `${completeAuthorList} (Año). Título original [Traducción del título]. Revista, volumen(número), páginas. Con DOI: añade https://doi.org/xxxxx. Sin DOI con URL pública: añade la URL. Impreso o base académica común sin localizador: termina en las páginas o eLocator.`,
-    rules: [completeAuthorRule, 'La traducción entre corchetes se añade cuando el idioma del artículo difiere del idioma del trabajo.', 'Incluye DOI o URL únicamente cuando exista un localizador aplicable; omite ambos en impreso o base académica común.'],
+    requiredMetadata: ['autores', 'año', 'título original', 'traducción del título al idioma del trabajo si corresponde', 'revista', 'volumen/número/páginas o eLocator si existen', 'DOI/URL si corresponde'],
+    referenceTemplate: `${completeAuthorList} (Año). Título original [Traducción del título]. Con volumen, número y páginas/eLocator: Revista, volumen(número), páginas o eLocator. Sin número: Revista, volumen, páginas o eLocator. Sin volumen: Revista, (número), páginas o eLocator. Sin volumen ni número: Revista, páginas o eLocator; omite también páginas/eLocator si no existen. Con DOI: añade https://doi.org/xxxxx. Sin DOI con URL pública: añade la URL. Impreso o base académica común sin localizador: termina en los datos periódicos disponibles.`,
+    rules: [completeAuthorRule, 'La traducción entre corchetes se añade cuando el idioma del artículo difiere del idioma del trabajo.', 'Omite volumen, número y páginas/eLocator individualmente cuando no existan.', 'Incluye DOI o URL únicamente cuando exista un localizador aplicable; omite ambos en impreso o base académica común.'],
   },
   'journal-translated-republication': {
     ...base, id: 'journal-translated-republication', label: 'Artículo reeditado en traducción', manualExample: 10, manualPrintedPages: '324',
