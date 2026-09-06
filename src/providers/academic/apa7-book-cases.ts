@@ -132,7 +132,7 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   },
   'book-in-series': {
     ...base, id: 'book-in-series', label: 'Libro perteneciente a una serie', manualExample: 31, manualPrintedPages: '329-330',
-    requiredMetadata: ['autor', 'año', 'título', 'edición', 'editorial', 'DOI o URL pública si corresponde'],
+    requiredMetadata: ['autor', 'año', 'título', 'edición, solo desde la segunda', 'editorial', 'DOI o URL pública si corresponde'],
     referenceTemplate: `${completeAuthorList} (Año). Título del libro (edición, solo desde la segunda). Editorial. Con DOI: añade DOI al final. Con URL pública sin DOI: añade URL al final. Impreso o base académica común sin localizador: termina en la editorial.`,
     rules: ['Omite todo el paréntesis de edición para la primera edición.', 'Prefiere DOI; usa URL pública si no hay DOI y omite ambos en una versión impresa o base académica común sin localizador.', 'No incluye el título de una serie de obras conceptualmente relacionadas.'],
   },

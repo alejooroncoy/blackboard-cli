@@ -73,7 +73,7 @@ export const dataSoftwareTestCases: Record<DataSoftwareTestCaseId, Apa7VerifiedD
   },
   'mobile-application': {
     ...softwareBase, id: 'mobile-application', label: 'Aplicación móvil', manualExample: 79, manualPrintedPages: '346',
-    requiredMetadata: ['autor o desarrollador', 'año de la versión', 'nombre', 'versión', 'tienda o desarrollador', 'URL'],
+    requiredMetadata: ['autor o desarrollador', 'año de la versión', 'nombre', 'versión', 'tienda o desarrollador si difiere del autor', 'URL'],
     referenceTemplate: `${completePersonalAuthors} o Entidad autora. (Año). Nombre de la aplicación (Versión x) [Aplicación móvil]. Tienda o desarrollador verificado, solo si difiere del autor. URL`,
     rules: ['Usa como fuente la tienda cuando allí se distribuye la aplicación o el desarrollador cuando la distribuye directamente; si coincide con el autor, omite ese elemento.', 'Usa el año de publicación de la versión consultada.', 'No confunde una aplicación completa con contenido publicado dentro de una red social.'],
   },

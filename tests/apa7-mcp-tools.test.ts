@@ -774,6 +774,8 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   const authoredWithEditor = JSON.parse((await handler({ topic: 'reference', caseId: 'book-author-editor-on-cover' })).content[0].text).case;
   assert.match(authoredWithEditor.requiredMetadata.join(' '), /edición desde la segunda/);
   assert.match(authoredWithEditor.referenceTemplate, /\(E\. Editor, Ed\.; edición, solo desde la segunda\)/);
+  const seriesBook = JSON.parse((await handler({ topic: 'reference', caseId: 'book-in-series' })).content[0].text).case;
+  assert.match(seriesBook.requiredMetadata.join(' '), /edición, solo desde la segunda/);
   const dictionary = JSON.parse((await handler({ topic: 'reference', caseId: 'dictionary-thesaurus-encyclopedia' })).content[0].text);
   assert.match(dictionary.case.rules.join(' '), /fecha de recuperación/);
   assert.match(dictionary.case.requiredMetadata.join(' '), /edición\/versión si existe/);
@@ -899,6 +901,8 @@ test('APA 7 guidance covers all 12 chapter and reference-entry examples', async 
   const wikipedia = JSON.parse((await handler({ topic: 'citation', caseId: 'wikipedia-entry' })).content[0].text);
   assert.match(wikipedia.case.rules.join(' '), /revisión archivada/);
   assert.match(wikipedia.case.referenceTemplate, /Recuperado el día de mes de año, de URL actual/);
+  assert.match(wikipedia.case.requiredMetadata.join(' '), /fecha de la revisión consultada si hay URL permanente/);
+  assert.match(wikipedia.case.parentheticalCitation, /s\. f\.\) sin revisión permanente/);
   const individualReferenceEntry = JSON.parse((await handler({ topic: 'reference', caseId: 'reference-entry-individual-author' })).content[0].text).case;
   assert.match(individualReferenceEntry.requiredMetadata.join(' '), /edición o versión si existe/);
   assert.match(individualReferenceEntry.referenceTemplate, /Primera edición o sin edición declarada/);
@@ -1089,6 +1093,7 @@ test('APA 7 guidance covers datasets, software and tests through example 83', as
   assert.match(foreignJournal.requiredMetadata.join(' '), /DOI\/URL si corresponde/);
   assert.match(software.rules.join(' '), /distribución limitada/);
   assert.match(software.referenceTemplate, /solo si difiere del autor/);
+  assert.match(mobileApp.requiredMetadata.join(' '), /tienda o desarrollador si difiere del autor/);
   assert.match(mobileAppEntry.requiredMetadata.join(' '), /desarrollador o tienda si difiere del autor/);
   assert.match(mobileAppEntry.referenceTemplate, /Desarrollador o tienda, solo si difiere del autor/);
   assert.match(mobileAppEntry.rules.join(' '), /coincide con el autor, omite ese elemento/);

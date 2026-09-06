@@ -123,9 +123,9 @@ export const chapterEntryCases: Record<ChapterEntryCaseId, Apa7VerifiedChapterEn
   },
   'wikipedia-entry': {
     ...base, id: 'wikipedia-entry', label: 'Entrada de Wikipedia', manualExample: 49, manualPrintedPages: '335',
-    requiredMetadata: ['título exacto de la entrada', 'fecha de la revisión consultada', 'URL permanente de esa revisión o, si no existe, URL actual y fecha de recuperación'],
+    requiredMetadata: ['título exacto de la entrada', 'fecha de la revisión consultada si hay URL permanente', 'URL permanente de esa revisión o, si no existe, URL actual y fecha de recuperación'],
     referenceTemplate: 'Con revisión permanente: Título de la entrada. (Año, día de mes). En Wikipedia. URL permanente de la revisión archivada. Sin revisión permanente: Título de la entrada. (s. f.). En Wikipedia. Recuperado el día de mes de año, de URL actual',
-    parentheticalCitation: '(“Título de la entrada”, Año)', narrativeCitation: '“Título de la entrada” (Año)',
+    parentheticalCitation: '(“Título de la entrada”, Año) con revisión permanente; (“Título de la entrada”, s. f.) sin revisión permanente', narrativeCitation: '“Título de la entrada” (Año) con revisión permanente; “Título de la entrada” (s. f.) sin revisión permanente',
     rules: ['Cita una revisión archivada para que el lector recupere la versión consultada.', 'Si no hay enlace permanente a una versión, usa la URL actual y añade fecha de recuperación.', 'El título ocupa la posición de autor y en el texto se abrevia si resulta necesario.'],
   },
 };
