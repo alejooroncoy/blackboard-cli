@@ -117,14 +117,14 @@ export const chapterEntryCases: Record<ChapterEntryCaseId, Apa7VerifiedChapterEn
   },
   'reference-entry-individual-author': {
     ...base, id: 'reference-entry-individual-author', label: 'Entrada de obra de consulta con autor individual', manualExample: 48, manualPrintedPages: '334',
-    requiredMetadata: ['autor de la entrada', 'año', 'título de la entrada', 'editor', 'obra de consulta', 'edición o versión', 'editorial', 'URL'],
-    referenceTemplate: `${completeChapterAuthors} (Año). Título de la entrada. En ${completeChapterEditors}, Obra de consulta (edición o versión). Editorial. URL`,
-    rules: ['Se estructura como capítulo de libro editado.', 'Una versión archivada estable no necesita fecha de recuperación.'],
+    requiredMetadata: ['autor de la entrada', 'año', 'título de la entrada', 'editor', 'obra de consulta', 'edición o versión si existe', 'editorial', 'URL'],
+    referenceTemplate: `${completeChapterAuthors} (Año). Título de la entrada. En ${completeChapterEditors}, Con edición o versión: Obra de consulta (edición o versión). Editorial. URL. Primera edición o sin edición declarada: Obra de consulta. Editorial. URL`,
+    rules: ['Se estructura como capítulo de libro editado.', 'Omite la edición o versión cuando es primera o no se declara.', 'Una versión archivada estable no necesita fecha de recuperación.'],
   },
   'wikipedia-entry': {
     ...base, id: 'wikipedia-entry', label: 'Entrada de Wikipedia', manualExample: 49, manualPrintedPages: '335',
     requiredMetadata: ['título exacto de la entrada', 'fecha de la revisión consultada', 'URL permanente de esa revisión o, si no existe, URL actual y fecha de recuperación'],
-    referenceTemplate: 'Título de la entrada. (Año, día de mes). En Wikipedia. URL permanente de la revisión archivada',
+    referenceTemplate: 'Con revisión permanente: Título de la entrada. (Año, día de mes). En Wikipedia. URL permanente de la revisión archivada. Sin revisión permanente: Título de la entrada. (s. f.). En Wikipedia. Recuperado el día de mes de año, de URL actual',
     parentheticalCitation: '(“Título de la entrada”, Año)', narrativeCitation: '“Título de la entrada” (Año)',
     rules: ['Cita una revisión archivada para que el lector recupere la versión consultada.', 'Si no hay enlace permanente a una versión, usa la URL actual y añade fecha de recuperación.', 'El título ocupa la posición de autor y en el texto se abrevia si resulta necesario.'],
   },

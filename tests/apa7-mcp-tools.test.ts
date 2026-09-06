@@ -865,6 +865,9 @@ test('APA 7 standard journals preserve every credited author', async () => {
     assert.match(article.referenceTemplate, /Autor, C\. C\./, caseId);
     assert.match(article.rules.join(' '), /lista completa y ordenada de autores/, caseId);
   }
+  const advanceOnline = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-advance-online' })).content[0].text).case;
+  assert.match(advanceOnline.requiredMetadata.join(' '), /DOI o URL pública si corresponde/);
+  assert.match(advanceOnline.referenceTemplate, /Con URL pública sin DOI/);
   const translated = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-translated-republication' })).content[0].text).case;
   assert.match(translated.referenceTemplate, /dos: A\. Traductor & B\. Traductor, Trads\./);
   assert.match(translated.referenceTemplate, /21 o más: traductores 1–19/);
@@ -893,6 +896,10 @@ test('APA 7 guidance covers all 12 chapter and reference-entry examples', async 
 
   const wikipedia = JSON.parse((await handler({ topic: 'citation', caseId: 'wikipedia-entry' })).content[0].text);
   assert.match(wikipedia.case.rules.join(' '), /revisión archivada/);
+  assert.match(wikipedia.case.referenceTemplate, /Recuperado el día de mes de año, de URL actual/);
+  const individualReferenceEntry = JSON.parse((await handler({ topic: 'reference', caseId: 'reference-entry-individual-author' })).content[0].text).case;
+  assert.match(individualReferenceEntry.requiredMetadata.join(' '), /edición o versión si existe/);
+  assert.match(individualReferenceEntry.referenceTemplate, /Primera edición o sin edición declarada/);
   const reprint = JSON.parse((await handler({ topic: 'reference', caseId: 'chapter-reprinted-from-journal' })).content[0].text);
   assert.match(reprint.case.parentheticalCitation, /Año original\/Año reimpresión/);
 });
@@ -969,6 +976,7 @@ test('APA 7 guidance covers reports, conferences and theses through example 66',
   assert.match(organization.referenceTemplate, /dos: Entidad autora, & Entidad autora/);
   assert.match(organization.referenceTemplate, /de 3 a 20: Entidad autora, Entidad autora, Entidad autora/);
   assert.match(organization.referenceTemplate, /Con número:.*Sin número:.*Impreso o base académica común sin localizador:/);
+  assert.match(organization.requiredMetadata.join(' '), /URL\/DOI si corresponde/);
   for (const id of ['conference-session', 'conference-paper-presentation', 'conference-poster-presentation', 'symposium-contribution']) {
     const conference = cases.find(candidate => candidate.id === id);
     assert.ok(conference);
