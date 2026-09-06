@@ -786,6 +786,7 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(translated.case.parentheticalCitation, /tres o más autores/);
   assert.match(translated.case.referenceTemplate, /dos: T\. Traductor & U\. Traductor, Trads\./);
   assert.match(translated.case.referenceTemplate, /21 o más: traductores 1–19/);
+  assert.match(translated.case.referenceTemplate, /https:\/\/doi\.org\/xxxxx.*\(Obra original publicada en Año original\)/);
   assert.match(translated.case.rules.join(' '), /lista completa de traductores acreditados/);
   const authored = JSON.parse((await handler({ topic: 'citation', caseId: 'book-author-doi' })).content[0].text);
   assert.match(authored.case.parentheticalCitation, /Autor & Autor/);
@@ -873,7 +874,7 @@ test('APA 7 authored books preserve every credited author', async () => {
     assert.match(authored.rules.join(' '), /lista completa de autores/, caseId);
   }
   const republished = JSON.parse((await handler({ topic: 'reference', caseId: 'book-republished' })).content[0].text).case;
-  assert.match(republished.referenceTemplate, /\(Obra original publicada en Año original\)\. Añade DOI\/URL solo si corresponde al final/);
+  assert.match(republished.referenceTemplate, /https:\/\/doi\.org\/xxxxx.*\(Obra original publicada en Año original\)/);
 });
 
 test('APA 7 electronic books omit audiobook-only fields unless applicable', async () => {
@@ -910,6 +911,7 @@ test('APA 7 standard journals preserve every credited author', async () => {
   const translated = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-translated-republication' })).content[0].text).case;
   assert.match(translated.referenceTemplate, /dos: A\. Traductor & B\. Traductor, Trads\./);
   assert.match(translated.referenceTemplate, /21 o más: traductores 1–19/);
+  assert.match(translated.referenceTemplate, /https:\/\/doi\.org\/xxxxx.*\(Obra original publicada en Año original\)/);
   assert.match(translated.requiredMetadata.join(' '), /volumen\/número\/páginas o eLocator si existen/);
   assert.match(translated.referenceTemplate, /Sin volumen: Revista, \(número\), páginas o eLocator/);
   assert.match(translated.referenceTemplate, /https:\/\/doi\.org\/xxxxx.*\(Obra original publicada en Año original\)/);
@@ -977,6 +979,7 @@ test('APA 7 edited chapters preserve every credited chapter author', async () =>
     assert.match(chapter.referenceTemplate, /21 o más:.*1–19.*Último/i, caseId);
   }
   const foreignChapter = JSON.parse((await handler({ topic: 'reference', caseId: 'chapter-other-language' })).content[0].text).case;
+  assert.match(foreignChapter.referenceTemplate, /Con DOI: añade https:\/\/doi\.org\/xxxxx/);
   assert.match(foreignChapter.referenceTemplate, /Con DOI:.*Con URL pública sin DOI:.*sin localizador/);
   assert.match(foreignChapter.rules.join(' '), /Prefiere DOI/);
 });
