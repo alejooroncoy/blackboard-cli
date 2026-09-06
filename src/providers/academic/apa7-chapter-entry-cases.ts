@@ -70,9 +70,9 @@ export const chapterEntryCases: Record<ChapterEntryCaseId, Apa7VerifiedChapterEn
   },
   'chapter-other-language': {
     ...base, id: 'chapter-other-language', label: 'Capítulo de libro editado en otro idioma', manualExample: 41, manualPrintedPages: '333',
-    requiredMetadata: ['autor', 'año', 'título original del capítulo', 'traducción del título', 'editores', 'libro', 'páginas', 'editorial', 'DOI/URL'],
-    referenceTemplate: `${completeChapterAuthors} (Año). Título original del capítulo [Traducción del título]. En ${completeChapterEditors}, Título del libro (pp. xx-xx). Editorial. DOI/URL`,
-    rules: [completeChapterAuthorRule, 'Añade entre corchetes la traducción del título del capítulo cuando su idioma difiere del idioma del trabajo.'],
+    requiredMetadata: ['autor', 'año', 'título original del capítulo', 'traducción del título', 'editores', 'libro', 'páginas', 'editorial', 'DOI o URL pública si corresponde'],
+    referenceTemplate: `${completeChapterAuthors} (Año). Título original del capítulo [Traducción del título]. En ${completeChapterEditors}, Título del libro (pp. xx-xx). Editorial. Con DOI: añade DOI al final. Con URL pública sin DOI: añade URL al final. Impreso o base académica común sin localizador: termina en la editorial.`,
+    rules: [completeChapterAuthorRule, 'Añade entre corchetes la traducción del título del capítulo cuando su idioma difiere del idioma del trabajo.', 'Prefiere DOI; usa URL pública si no hay DOI y omite ambos en una versión impresa o base académica común sin localizador.'],
   },
   'chapter-translated-republication': {
     ...base, id: 'chapter-translated-republication', label: 'Capítulo reeditado en traducción', manualExample: 42, manualPrintedPages: '333',

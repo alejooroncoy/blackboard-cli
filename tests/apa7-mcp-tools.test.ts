@@ -107,6 +107,8 @@ test('reference templates preserve APA italics with explicit Markdown notation',
   const software = JSON.parse((await handler({ topic: 'reference', sourceType: 'software' })).content[0].text);
   const book = JSON.parse((await handler({ topic: 'reference', sourceType: 'book' })).content[0].text);
   const chapter = JSON.parse((await handler({ topic: 'reference', sourceType: 'book-chapter' })).content[0].text);
+  assert.match(chapter.template, /E\. Editor & F\. Editor \(Eds\.\)/);
+  assert.doesNotMatch(chapter.template, /E\. Editor, & F\. Editor/);
   const thesis = JSON.parse((await handler({ topic: 'reference', sourceType: 'thesis' })).content[0].text);
   const podcast = JSON.parse((await handler({ topic: 'reference', sourceType: 'podcast' })).content[0].text);
   const social = JSON.parse((await handler({ topic: 'reference', sourceType: 'social-media' })).content[0].text);
@@ -769,6 +771,9 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   const edited = JSON.parse((await handler({ topic: 'citation', caseId: 'book-edited-doi-multiple-publishers' })).content[0].text);
   assert.match(edited.case.parentheticalCitation, /Editor & Editor/);
   assert.match(edited.case.parentheticalCitation, /tres o más editores/);
+  const authoredWithEditor = JSON.parse((await handler({ topic: 'reference', caseId: 'book-author-editor-on-cover' })).content[0].text).case;
+  assert.match(authoredWithEditor.requiredMetadata.join(' '), /edición desde la segunda/);
+  assert.match(authoredWithEditor.referenceTemplate, /\(E\. Editor, Ed\.; edición, solo desde la segunda\)/);
   const dictionary = JSON.parse((await handler({ topic: 'reference', caseId: 'dictionary-thesaurus-encyclopedia' })).content[0].text);
   assert.match(dictionary.case.rules.join(' '), /fecha de recuperación/);
   assert.match(dictionary.case.referenceTemplate, /\(Ed\.\).*\(Eds\.\)/);
@@ -919,6 +924,9 @@ test('APA 7 edited chapters preserve every credited chapter author', async () =>
     assert.match(chapter.referenceTemplate, /de 3 a 20:/i, caseId);
     assert.match(chapter.referenceTemplate, /21 o más:.*1–19.*Último/i, caseId);
   }
+  const foreignChapter = JSON.parse((await handler({ topic: 'reference', caseId: 'chapter-other-language' })).content[0].text).case;
+  assert.match(foreignChapter.referenceTemplate, /Con DOI:.*Con URL pública sin DOI:.*sin localizador/);
+  assert.match(foreignChapter.rules.join(' '), /Prefiere DOI/);
 });
 
 test('APA 7 anthology work makes an earlier publication date optional', async () => {
