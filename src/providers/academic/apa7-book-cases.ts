@@ -78,9 +78,9 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   },
   'book-author-editor-on-cover': {
     ...base, id: 'book-author-editor-on-cover', label: 'Libro de autor con editor acreditado en portada', manualExample: 23, manualPrintedPages: '328',
-    requiredMetadata: ['autor', 'año', 'título', 'editor acreditado', 'edición desde la segunda', 'editorial'],
-    referenceTemplate: `${completeAuthorList} (Año). Título del libro (E. Editor, Ed.; edición, solo desde la segunda). Editorial.`,
-    rules: ['El autor, no el editor, determina la cita.', 'El editor aparece entre paréntesis después del título.', 'Incluye la edición desde la segunda en el mismo paréntesis, después del editor; omite únicamente ese segmento para la primera.'],
+    requiredMetadata: ['autor', 'año', 'título', 'editor acreditado', 'edición desde la segunda', 'editorial', 'DOI o URL pública si corresponde'],
+    referenceTemplate: `${completeAuthorList} (Año). Título del libro (E. Editor, Ed.; edición, solo desde la segunda). Editorial. Con DOI: añade DOI al final. Con URL pública sin DOI: añade URL al final. Impreso o base académica común sin localizador: termina en la editorial.`,
+    rules: ['El autor, no el editor, determina la cita.', 'El editor aparece entre paréntesis después del título.', 'Incluye la edición desde la segunda en el mismo paréntesis, después del editor; omite únicamente ese segmento para la primera.', 'Prefiere DOI; usa URL pública si no hay DOI y omite ambos en una versión impresa o base académica común sin localizador.'],
   },
   'book-edited-doi-multiple-publishers': {
     ...base, id: 'book-edited-doi-multiple-publishers', label: 'Libro editado con DOI y varias editoriales', manualExample: 24, manualPrintedPages: '328',

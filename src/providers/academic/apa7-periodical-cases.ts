@@ -118,10 +118,10 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   },
   'journal-translated-republication': {
     ...base, id: 'journal-translated-republication', label: 'Artículo reeditado en traducción', manualExample: 10, manualPrintedPages: '324',
-    requiredMetadata: ['autor', 'año de reedición', 'año original', 'título', 'traductores', 'revista', 'volumen/número/páginas', 'DOI/URL'],
-    referenceTemplate: `${completeAuthorList} (Año reedición). Título (${titlePositionTranslators}). Revista, volumen(número), páginas. (Obra original publicada en Año original). DOI/URL`,
+    requiredMetadata: ['autor', 'año de reedición', 'año original', 'título', 'traductores', 'revista', 'volumen/número/páginas', 'DOI o URL pública si corresponde'],
+    referenceTemplate: `${completeAuthorList} (Año reedición). Título (${titlePositionTranslators}). Revista, volumen(número), páginas. (Obra original publicada en Año original). Con DOI: añade DOI al final. Con URL pública sin DOI: añade URL al final. Impreso o base académica común sin localizador: termina en la nota de obra original.`,
     parentheticalCitation: '(Autor, Año original/Año reedición); (Autor & Autor, Año original/Año reedición); (Primer autor et al., Año original/Año reedición) con tres o más autores', narrativeCitation: 'Autor (Año original/Año reedición); Autor y Autor (Año original/Año reedición); Primer autor et al. (Año original/Año reedición) con tres o más autores',
-    rules: ['Conserva la lista completa de traductores acreditados y usa (Trad.) para uno o (Trads.) para varios.', 'Los dos años son obligatorios para la citación de la reedición consultada.'],
+    rules: ['Conserva la lista completa de traductores acreditados y usa (Trad.) para uno o (Trads.) para varios.', 'Los dos años son obligatorios para la citación de la reedición consultada.', 'Prefiere DOI; usa URL pública si no hay DOI y omite ambos en una versión impresa o base académica común sin localizador.'],
   },
   'journal-reprint': {
     ...base, id: 'journal-reprint', label: 'Artículo reimpreso de otra fuente', manualExample: 11, manualPrintedPages: '324-325',

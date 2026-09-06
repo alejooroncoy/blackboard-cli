@@ -61,7 +61,7 @@ export const reviewUnpublishedCases: Record<ReviewUnpublishedCaseId, Apa7Verifie
   'review-tv-episode-on-website': {
     ...reviewBase, id: 'review-tv-episode-on-website', label: 'Reseña de episodio de televisión publicada en sitio web', manualExample: 69, manualPrintedPages: '341',
     requiredMetadata: ['revisor', 'fecha completa', 'título de la reseña', 'episodio', 'lista completa de guionistas/director u otros responsables en orden', 'sitio', 'URL'],
-    referenceTemplate: `${completeReviewers} (Año, día de mes). Título de la reseña [Reseña del episodio de serie de TV “Título del episodio”, de un guionista y director: G. Guionista (Guionista) & D. Director (Director); de 3 a 20 responsables combinados: G. Guionista (Guionista), H. Guionista (Guionista), …, & D. Director (Director; incluye todos); 21 o más: responsables 1–19, …, D. Director (Director)]. Nombre del sitio. URL`,
+    referenceTemplate: `${completeReviewers} (Año, día de mes). Título de la reseña [Reseña del episodio de serie de TV “Título del episodio”, de una persona con ambos roles: R. Responsable (Guionista y Director); de dos responsables distintos: G. Guionista (Guionista) & D. Director (Director); de 3 a 20 responsables combinados: G. Guionista (Guionista), H. Guionista (Guionista), …, & D. Director (Director; incluye todos); 21 o más: responsables 1–19, …, D. Director (Director)]. Nombre del sitio. URL`,
     rules: ['Usa el formato de página web.', 'En la descripción de la obra conserva la lista completa de guionistas, director y otros responsables en el orden acreditado; conserva el rol de cada persona y usa un único & antes del último responsable.', 'El título del programa se escribe como título dentro de la descripción.'],
   },
   'manuscript-unpublished': {

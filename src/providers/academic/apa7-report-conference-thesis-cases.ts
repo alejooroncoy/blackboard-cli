@@ -86,10 +86,10 @@ export const reportConferenceThesisCases: Record<ReportConferenceThesisCaseId, A
   },
   'annual-report': {
     ...reportBase, id: 'annual-report', label: 'Reporte anual', manualExample: 54, manualPrintedPages: '336-337',
-    requiredMetadata: ['entidad autora', 'año', 'título del reporte anual', 'URL/DOI'],
-    referenceTemplate: 'Entidad. (Año). Título del reporte anual. URL/DOI',
+    requiredMetadata: ['entidad autora', 'año', 'título del reporte anual', 'DOI o URL pública si corresponde'],
+    referenceTemplate: 'Entidad. (Año). Título del reporte anual. Con DOI: añade DOI al final. Con URL pública sin DOI: añade URL al final. Impreso o base académica común sin localizador: termina en el título.',
     parentheticalCitation: '(Entidad, Año)', narrativeCitation: 'Entidad (Año)',
-    rules: ['Omite la editorial cuando es idéntica a la entidad autora.'],
+    rules: ['Omite la editorial cuando es idéntica a la entidad autora.', 'Prefiere DOI; usa URL pública si no hay DOI y omite ambos en una versión impresa o base académica común sin localizador.'],
   },
   'code-of-ethics': {
     ...reportBase, id: 'code-of-ethics', label: 'Código de ética', manualExample: 55, manualPrintedPages: '337',
