@@ -51,16 +51,16 @@ export const audiovisualAudioCases: Record<AudiovisualAudioCaseId, Apa7VerifiedA
   'film-or-video': {
     ...audiovisualBase, id: 'film-or-video', label: 'Película o video', manualExample: 84, manualPrintedPages: '348-349',
     requiredMetadata: ['director o lista completa de directores, u otro rol equivalente verificable', 'año de la versión', 'título', 'descripción película/video y edición especial si importa', 'productora(s)', 'URL si corresponde'],
-    referenceTemplate: 'Director, D. D. (Director) o Director, D. D., & Director, D. D. (Directores). (Año). Título [Película; información especial de versión si es necesaria]. Productora 1; Productora 2. URL',
+    referenceTemplate: 'Director, D. D. (Director); Director, D. D., & Director, E. E. (Directores); o lista completa: Director, D. D., Director, E. E., & Director, F. F. (Directores). (Año). Título [Película; información especial de versión si es necesaria]. Productora 1; Productora 2. URL',
     parentheticalCitation: '(Director, Año); (Director & Director, Año); (Primer director et al., Año) con tres o más directores', narrativeCitation: 'Director (Año); Director y Director (Año); Primer director et al. (Año) con tres o más directores',
-    rules: ['El director ocupa la posición de autor; si es desconocido puede acreditarse un rol equivalente que facilite recuperar la obra.', 'No indica cine, DVD o streaming por defecto; añade detalles solo si la versión concreta es relevante.', 'Una cita textual de una obra audiovisual usa marca de tiempo real.'],
+    rules: ['El director ocupa la posición de autor; si es desconocido puede acreditarse un rol equivalente que facilite recuperar la obra.', 'Conserva la lista completa de directores conforme a los límites del elemento autor de APA y usa el rol plural para varios.', 'No indica cine, DVD o streaming por defecto; añade detalles solo si la versión concreta es relevante.', 'Una cita textual de una obra audiovisual usa marca de tiempo real.'],
   },
   'film-other-language': {
     ...audiovisualBase, id: 'film-other-language', label: 'Película o video en otro idioma', manualExample: 85, manualPrintedPages: '349',
     requiredMetadata: ['director o lista completa de directores', 'año', 'título original', 'traducción del título', 'descripción', 'productora(s)'],
-    referenceTemplate: 'Director, D. D. (Director) o Director, D. D., & Director, D. D. (Directores). (Año). Título original [Traducción del título] [Película]. Productora.',
+    referenceTemplate: 'Director, D. D. (Director); Director, D. D., & Director, E. E. (Directores); o lista completa: Director, D. D., Director, E. E., & Director, F. F. (Directores). (Año). Título original [Traducción del título] [Película]. Productora.',
     parentheticalCitation: '(Director, Año); (Director & Director, Año); (Primer director et al., Año) con tres o más directores', narrativeCitation: 'Director (Año); Director y Director (Año); Primer director et al. (Año) con tres o más directores',
-    rules: ['Añade entre corchetes la traducción del título cuando el idioma difiere del idioma del trabajo.'],
+    rules: ['Conserva la lista completa de directores conforme a los límites del elemento autor de APA y usa el rol plural para varios.', 'Añade entre corchetes la traducción del título cuando el idioma difiere del idioma del trabajo.'],
   },
   'television-series': {
     ...audiovisualBase, id: 'television-series', label: 'Serie de televisión completa', manualExample: 86, manualPrintedPages: '349',
@@ -72,9 +72,9 @@ export const audiovisualAudioCases: Record<AudiovisualAudioCaseId, Apa7VerifiedA
   'television-episode-or-webisode': {
     ...audiovisualBase, id: 'television-episode-or-webisode', label: 'Episodio de televisión o webisodio', manualExample: 87, manualPrintedPages: '349',
     requiredMetadata: ['guionistas', 'director del episodio', 'fecha completa', 'título', 'temporada y episodio', 'productores ejecutivos', 'serie', 'productora(s)', 'URL si corresponde'],
-    referenceTemplate: 'Guionista(s), G. G. (Guionista[s]), & Director, D. D. (Director). (Año, día de mes). Título (Temporada x, Episodio y) [Episodio de serie de TV]. En P. Productor (Productor ejecutivo), o P. Productor, & Q. Productor (Productores ejecutivos), Título de la serie. Productora(s). URL',
+    referenceTemplate: 'Una persona con ambos roles: Responsable, R. R. (Guionista y Director). Personas distintas: Guionista(s), G. G. (Guionista[s]), & Director, D. D. (Director). (Año, día de mes). Título (Temporada x, Episodio y) [Episodio de serie de TV]. En P. Productor (Productor ejecutivo), o P. Productor, & Q. Productor (Productores ejecutivos), Título de la serie. Productora(s). URL',
     parentheticalCitation: '(Responsable, Año) si una persona ocupa todos los roles; (Guionista & Director, Año) con dos responsables; (Primer responsable et al., Año) con tres o más responsables acreditados', narrativeCitation: 'Responsable (Año) si una persona ocupa todos los roles; Guionista y Director (Año) con dos responsables; Primer responsable et al. (Año) con tres o más responsables acreditados',
-    rules: ['Incluye guionista(s) y director del episodio con sus roles.', 'Incluye la lista completa de productores ejecutivos de la serie y usa el rol plural cuando corresponda.', 'Incluye temporada y episodio entre paréntesis después del título.', 'Distingue responsables del episodio de productores ejecutivos de la serie.'],
+    rules: ['Si una persona desempeña guion y dirección, escríbela una sola vez con ambos roles; si son personas distintas, incluye cada responsable con su rol.', 'Incluye la lista completa de productores ejecutivos de la serie y usa el rol plural cuando corresponda.', 'Incluye temporada y episodio entre paréntesis después del título.', 'Distingue responsables del episodio de productores ejecutivos de la serie.'],
   },
   'ted-talk': {
     ...audiovisualBase, id: 'ted-talk', label: 'Charla TED', manualExample: 88, manualPrintedPages: '349-350',

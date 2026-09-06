@@ -461,6 +461,8 @@ test('Peruvian legal profiles reject common hallucinations and preserve official
   const treaty = JSON.parse((await handler({ topic: 'legal', peruLegalCaseId: 'peru-treaty' })).content[0].text).legalCase;
   assert.match(law.referenceTemplate, /Diario Oficial El Peruano/);
   assert.match(law.rules.join(' '), /texto único ordenado/);
+  assert.match(law.parentheticalCitation, /para la norma completa/);
+  assert.match(law.parentheticalCitation, /disposición específica verificada/);
   assert.match(tc.parentheticalCitation, /fundamento X/);
   assert.match(tc.rules.join(' '), /Distingue sentencia, auto y resolución/);
   assert.match(patent.rules.join(' '), /año de concesión, no de solicitud/);
@@ -685,12 +687,16 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(dictionary.case.rules.join(' '), /fecha de recuperación/);
   const religious = JSON.parse((await handler({ topic: 'citation', caseId: 'religious-work' })).content[0].text).case;
   const multivolume = JSON.parse((await handler({ topic: 'reference', caseId: 'book-multivolume-single-volume' })).content[0].text).case;
+  const ancient = JSON.parse((await handler({ topic: 'citation', caseId: 'ancient-greek-roman-work' })).content[0].text).case;
   assert.match(religious.parentheticalCitation, /\(\*Título\*,/);
   assert.match(religious.narrativeCitation, /^\*Título\*/);
   assert.match(religious.parentheticalCitation, /Año versión\) si no corresponde un año original/);
   assert.match(religious.rules.join(' '), /No inventes un año original/);
   assert.match(multivolume.referenceTemplate, /\(Ed\.\).*\(Eds\.\)/);
   assert.match(multivolume.rules.join(' '), /lista completa en posición de autor/);
+  assert.match(ancient.parentheticalCitation, /fecha original es exacta/);
+  assert.match(ancient.parentheticalCitation, /ca\. Año original.*si es aproximada/);
+  assert.match(ancient.rules.join(' '), /omítelo ante una fecha exacta verificada/);
 });
 
 test('APA 7 edited works preserve the complete editor list and plural role', async () => {
@@ -881,6 +887,12 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   assert.match(series.referenceTemplate, /Productores ejecutivos/);
   assert.match(series.rules.join(' '), /Incluye la lista completa/);
   assert.match(film.parentheticalCitation, /Director & Director/);
+  assert.match(film.referenceTemplate, /Director, F\. F\. \(Directores\)/);
+  assert.match(film.rules.join(' '), /lista completa de directores/);
+  const translatedFilm = JSON.parse((await handler({ topic: 'reference', caseId: 'film-other-language' })).content[0].text).case;
+  assert.match(translatedFilm.referenceTemplate, /Director, F\. F\. \(Directores\)/);
+  assert.match(episode.referenceTemplate, /Responsable, R\. R\. \(Guionista y Director\)/);
+  assert.match(episode.rules.join(' '), /una sola vez con ambos roles/);
   assert.match(film.parentheticalCitation, /tres o más directores/);
 });
 

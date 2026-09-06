@@ -160,9 +160,9 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   'ancient-greek-roman-work': {
     ...base, id: 'ancient-greek-roman-work', label: 'Obra griega o romana antigua', manualExample: 36, manualPrintedPages: '331',
     requiredMetadata: ['autor clásico', 'año de la versión consultada', 'título', 'traductor/editor', 'editorial/URL', 'fecha original o aproximada'],
-    referenceTemplate: 'Autor. (Año versión). Título (T. Traductor, Trad.). Editorial/URL. (Obra original publicada ca. Año antiguo)',
-    parentheticalCitation: '(Autor, ca. Año original/Año versión)', narrativeCitation: 'Autor (ca. Año original/Año versión)',
-    rules: ['Usa ca. únicamente cuando la fecha original es aproximada.', 'Las partes canónicas requieren su localizador propio en la cita.'],
+    referenceTemplate: 'Autor. (Año versión). Título (T. Traductor, Trad.). Editorial/URL. (Obra original publicada en Año antiguo exacto) o (Obra original publicada ca. Año antiguo aproximado)',
+    parentheticalCitation: '(Autor, Año original/Año versión) si la fecha original es exacta; (Autor, ca. Año original/Año versión) si es aproximada', narrativeCitation: 'Autor (Año original/Año versión) si la fecha original es exacta; Autor (ca. Año original/Año versión) si es aproximada',
+    rules: ['Usa ca. únicamente cuando la fecha original es aproximada; omítelo ante una fecha exacta verificada.', 'Las partes canónicas requieren su localizador propio en la cita.'],
   },
   'shakespeare-work': {
     ...base, id: 'shakespeare-work', label: 'Obra de Shakespeare u otra obra clásica con edición moderna', manualExample: 37, manualPrintedPages: '331',
