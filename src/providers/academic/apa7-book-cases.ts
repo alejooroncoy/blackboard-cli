@@ -119,7 +119,7 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   'book-republished': {
     ...base, id: 'book-republished', label: 'Libro, libro electrónico o audiolibro reeditado', manualExample: 29, manualPrintedPages: '329',
     requiredMetadata: ['autor', 'año original', 'año de reedición', 'título', 'editor/traductor/narrador si aplica', 'formato si aplica', 'editorial', 'DOI/URL si corresponde'],
-    referenceTemplate: `${completeAuthorList} (Año reedición). Título (responsable, función, solo si se acredita) [Formato, solo si aplica]. Editorial. Añade DOI/URL solo si corresponde. (Obra original publicada en Año original)`,
+    referenceTemplate: `${completeAuthorList} (Año reedición). Título (responsable, función, solo si se acredita) [Formato, solo si aplica]. Editorial. (Obra original publicada en Año original). Añade DOI/URL solo si corresponde al final.`,
     parentheticalCitation: '(Autor, Año original/Año reedición); (Autor & Autor, Año original/Año reedición); (Primer autor et al., Año original/Año reedición) con tres o más autores', narrativeCitation: 'Autor (Año original/Año reedición); Autor y Autor (Año original/Año reedición); Primer autor et al. (Año original/Año reedición) con tres o más autores',
     rules: ['Describe la versión efectivamente consultada.', 'Omite el paréntesis de responsable, los corchetes de formato y el localizador cuando esos elementos no correspondan.', 'Un audiolibro publicado en año diferente se trata como reedición.'],
   },

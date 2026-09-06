@@ -824,6 +824,8 @@ test('APA 7 authored books preserve every credited author', async () => {
     assert.match(authored.referenceTemplate, /Autor, C\. C\./, caseId);
     assert.match(authored.rules.join(' '), /lista completa de autores/, caseId);
   }
+  const republished = JSON.parse((await handler({ topic: 'reference', caseId: 'book-republished' })).content[0].text).case;
+  assert.match(republished.referenceTemplate, /\(Obra original publicada en Año original\)\. Añade DOI\/URL solo si corresponde al final/);
 });
 
 test('APA 7 electronic books omit audiobook-only fields unless applicable', async () => {
@@ -929,6 +931,7 @@ test('APA 7 guidance covers reports, conferences and theses through example 66',
   assert.equal(catalogue.availableVerifiedCases.length, 114);
   assert.match(cases.find(item => item.id === 'grant-award').rules.join(' '), /solicitud de subvención no recuperable/);
   assert.match(cases.find(item => item.id === 'symposium-contribution').rules.join(' '), /actas publicadas/);
+  assert.match(cases.find(item => item.id === 'symposium-contribution').referenceTemplate, /C\. Coordinador & D\. Coordinador \(Coordinadores\)/);
   assert.match(cases.find(item => item.id === 'thesis-database').referenceTemplate, /Nombre de la base de datos/);
 
   for (const id of ['report-series', 'conference-session', 'conference-paper-presentation', 'conference-poster-presentation']) {
