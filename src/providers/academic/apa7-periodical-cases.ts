@@ -60,21 +60,21 @@ const titlePositionTranslators = 'Un traductor: A. Traductor, Trad.; dos: A. Tra
 export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   'journal-doi': {
     ...base, id: 'journal-doi', label: 'Artículo de revista científica con DOI', manualExample: 1, manualPrintedPages: '323',
-    requiredMetadata: ['autores', 'año', 'título del artículo', 'revista', 'volumen', 'número si existe', 'páginas o eLocator', 'DOI verificado'],
-    referenceTemplate: `${completeAuthorList} (Año). Título del artículo. Título de la revista, volumen(número, solo si existe), páginas. https://doi.org/xxxxx`,
+    requiredMetadata: ['autores', 'año', 'título del artículo', 'revista', 'volumen/número/páginas o eLocator si existen', 'DOI verificado'],
+    referenceTemplate: `${completeAuthorList} (Año). Título del artículo. Con volumen, número y páginas/eLocator: Título de la revista, volumen(número), páginas o eLocator. Sin número: Título de la revista, volumen, páginas o eLocator. Sin volumen: Título de la revista, (número), páginas o eLocator. Sin volumen ni número: Título de la revista, páginas o eLocator; omite también páginas/eLocator si no existen. https://doi.org/xxxxx`,
     parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
     rules: [completeAuthorRule, 'El DOI se expresa como URL https://doi.org/...', 'Se omiten los elementos que realmente no existen.'],
   },
   'journal-no-doi-public-url': {
     ...base, id: 'journal-no-doi-public-url', label: 'Artículo sin DOI con URL pública ajena a una base de datos', manualExample: 2, manualPrintedPages: '323',
-    requiredMetadata: ['autores', 'año', 'título', 'revista', 'volumen', 'número si existe', 'páginas o eLocator', 'URL pública'],
-    referenceTemplate: `${completeAuthorList} (Año). Título del artículo. Título de la revista, volumen(número, solo si existe), páginas. URL`,
+    requiredMetadata: ['autores', 'año', 'título', 'revista', 'volumen/número/páginas o eLocator si existen', 'URL pública'],
+    referenceTemplate: `${completeAuthorList} (Año). Título del artículo. Con volumen, número y páginas/eLocator: Título de la revista, volumen(número), páginas o eLocator. Sin número: Título de la revista, volumen, páginas o eLocator. Sin volumen: Título de la revista, (número), páginas o eLocator. Sin volumen ni número: Título de la revista, páginas o eLocator; omite también páginas/eLocator si no existen. URL`,
     rules: [completeAuthorRule, 'Omite por completo el paréntesis del número cuando la revista no lo tenga.', 'Incluye la URL del artículo únicamente cuando es recuperable públicamente y no es la URL de una base de datos.'],
   },
   'journal-no-doi-database-or-print': {
     ...base, id: 'journal-no-doi-database-or-print', label: 'Artículo sin DOI de una base académica común o impreso', manualExample: 3, manualPrintedPages: '323',
     requiredMetadata: ['autores', 'año de publicación', 'título', 'revista científica', 'volumen/número/páginas si existen'],
-    referenceTemplate: `${completeAuthorList} (Año). Título del artículo. Título de la revista científica, volumen(número), páginas; sin número: Título de la revista científica, volumen, páginas; sin volumen: Título de la revista científica, número, páginas; sin volumen ni número: Título de la revista científica, páginas; omite también las páginas si no existen.`,
+    referenceTemplate: `${completeAuthorList} (Año). Título del artículo. Título de la revista científica, volumen(número), páginas; sin número: Título de la revista científica, volumen, páginas; sin volumen: Título de la revista científica, (número), páginas; sin volumen ni número: Título de la revista científica, páginas; omite también las páginas si no existen.`,
     rules: [completeAuthorRule, 'Usa solo el año para un artículo de revista científica, aunque el número muestre mes o estación.', 'Omite volumen, número y páginas individualmente cuando la publicación no los proporcione.', 'No incluye el nombre de la base de datos ni su URL.'],
   },
   'journal-21-plus-authors': {
@@ -152,7 +152,7 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   'magazine-article': {
     ...base, id: 'magazine-article', label: 'Artículo de revista o magazine', manualExample: 15, manualPrintedPages: '326',
     requiredMetadata: ['autor', 'fecha disponible', 'título', 'revista', 'volumen/número/páginas si existen', 'DOI/URL si corresponde'],
-    referenceTemplate: `${completeAuthorList} (Año), (Año, mes o estación) o (Año, día de mes), según la fecha publicada. Título. Con volumen, número y páginas: Revista, volumen(número), páginas. Solo volumen y páginas: Revista, volumen, páginas. Solo número y páginas: Revista, número, páginas. Solo páginas: Revista, páginas. Añade DOI/URL únicamente al final cuando corresponda.`,
+    referenceTemplate: `${completeAuthorList} (Año), (Año, mes o estación) o (Año, día de mes), según la fecha publicada. Título. Con volumen, número y páginas: Revista, volumen(número), páginas. Solo volumen y páginas: Revista, volumen, páginas. Solo número y páginas: Revista, (número), páginas. Solo páginas: Revista, páginas. Añade DOI/URL únicamente al final cuando corresponda.`,
     rules: ['Usa la precisión de fecha publicada por la revista: año, año y mes/estación, o fecha completa.', 'No inventes mes ni día y omite individualmente volumen, número, páginas y localizador cuando sean inexistentes.'],
   },
   'newspaper-article': {
@@ -177,7 +177,7 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   'periodical-editorial': {
     ...base, id: 'periodical-editorial', label: 'Editorial de una publicación periódica', manualExample: 19, manualPrintedPages: '326-327',
     requiredMetadata: ['autor si está firmado', 'año o fecha', 'título', 'tipo de publicación periódica', 'volumen/número/páginas si existen', 'DOI/URL si corresponde'],
-    referenceTemplate: `Con firma: ${completeAuthorList} (Año). Título [Editorial]. Publicación. Sin firma: Título [Editorial]. (Año). Publicación. En ambas formas, añade volumen, número, páginas y DOI/URL únicamente cuando existan y correspondan.`,
+    referenceTemplate: `Con firma: ${completeAuthorList} (Año), (Año, mes o estación) o (Año, día de mes), según la fecha publicada. Título [Editorial]. Publicación. Sin firma: Título [Editorial]. (Año), (Año, mes o estación) o (Año, día de mes), según la fecha publicada. Publicación. En ambas formas, añade volumen, número, páginas y DOI/URL únicamente cuando existan y correspondan.`,
     parentheticalCitation: 'Con firma: (Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores. Sin firma: (“Título abreviado”, Año)',
     narrativeCitation: 'Con firma: Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores. Sin firma: “Título abreviado” (Año)',
     rules: [

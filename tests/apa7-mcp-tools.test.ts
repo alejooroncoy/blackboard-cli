@@ -721,7 +721,7 @@ test('APA 7 guidance distinguishes signed and unsigned editorials', async () => 
   const editorial = JSON.parse((await handler({ topic: 'reference', caseId: 'periodical-editorial' })).content[0].text);
   assert.equal(editorial.case.manualExample, 19);
   assert.match(editorial.case.referenceTemplate, /\[Editorial\]/);
-  assert.match(editorial.case.referenceTemplate, /Sin firma: Título \[Editorial\]\. \(Año\)/);
+  assert.match(editorial.case.referenceTemplate, /Sin firma: Título \[Editorial\]\. \(Año\), \(Año, mes o estación\) o \(Año, día de mes\)/);
   assert.match(editorial.case.parentheticalCitation, /Sin firma: \(“Título abreviado”, Año\)/);
   assert.match(editorial.case.rules.join(' '), /no está firmado/);
 });
@@ -734,10 +734,13 @@ test('APA 7 guidance uses ampersand in a two-author parenthetical citation and r
   assert.match(result.case.parentheticalCitation, /\(Autor & Autor, Año\)/);
   assert.match(result.case.narrativeCitation, /Autor y Autor \(Año\)/);
   assert.match(result.case.parentheticalCitation, /tres o más autores/);
+  assert.match(result.case.requiredMetadata.join(' '), /volumen\/número\/páginas o eLocator si existen/);
+  assert.match(result.case.referenceTemplate, /Sin volumen: Título de la revista, \(número\), páginas o eLocator/);
 
   const noDoi = JSON.parse((await handler({ topic: 'citation', caseId: 'journal-no-doi-public-url' })).content[0].text);
   assert.match(noDoi.case.parentheticalCitation, /\(Autor & Autor, Año\)/);
   assert.match(noDoi.case.parentheticalCitation, /tres o más autores/);
+  assert.match(noDoi.case.referenceTemplate, /Sin volumen: Título de la revista, \(número\), páginas o eLocator/);
 
   const mixedAuthors = JSON.parse((await handler({ topic: 'citation', caseId: 'journal-individual-group-authors' })).content[0].text);
   assert.match(mixedAuthors.case.referenceTemplate, /Autor personal, B\. B\./);
