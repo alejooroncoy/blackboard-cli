@@ -760,6 +760,9 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.equal(bookCases.length, 18);
 
   const translated = JSON.parse((await handler({ topic: 'citation', caseId: 'book-translated-republication' })).content[0].text);
+  const diagnostic = JSON.parse((await handler({ topic: 'reference', caseId: 'diagnostic-manual' })).content[0].text).case;
+  assert.match(translated.case.requiredMetadata.join(' '), /edición, solo desde la segunda/);
+  assert.match(diagnostic.requiredMetadata.join(' '), /edición, solo desde la segunda/);
   assert.match(translated.case.parentheticalCitation, /Año original\/Año reedición/);
   assert.match(translated.case.parentheticalCitation, /tres o más autores/);
   assert.match(translated.case.referenceTemplate, /dos: T\. Traductor & U\. Traductor, Trads\./);
@@ -982,6 +985,7 @@ test('APA 7 guidance covers reports, conferences and theses through example 66',
   assert.match(organization.referenceTemplate, /dos: Entidad autora, & Entidad autora/);
   assert.match(organization.referenceTemplate, /de 3 a 20: Entidad autora, Entidad autora, Entidad autora/);
   assert.match(organization.referenceTemplate, /Con número:.*Sin número:.*Impreso o base académica común sin localizador:/);
+  assert.match(organization.referenceTemplate, /Con DOI:.*Con URL pública sin DOI:/);
   assert.match(organization.requiredMetadata.join(' '), /URL\/DOI si corresponde/);
   for (const id of ['conference-session', 'conference-paper-presentation', 'conference-poster-presentation', 'symposium-contribution']) {
     const conference = cases.find(candidate => candidate.id === id);
@@ -1088,6 +1092,7 @@ test('APA 7 guidance covers datasets, software and tests through example 83', as
   assert.match(dataset.referenceTemplate, /Identificador; Versión x\), seguido sin punto por \[Conjunto de datos/);
   assert.match(dataset.referenceTemplate, /Título del conjunto \(Identificador\); Título del conjunto \(Versión x\); o Título del conjunto \(Identificador; Versión x\)/);
   assert.match(dataset.rules.join(' '), /omite todo el paréntesis si no existe ninguno/);
+  assert.match(dataset.requiredMetadata.join(' '), /organización publicadora\/archivo si difiere del autor/);
   const foreignJournal = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-other-language' })).content[0].text).case;
   assert.match(foreignJournal.referenceTemplate, /Con DOI:.*Sin DOI con URL pública:.*Impreso o base académica común sin localizador:/);
   assert.match(foreignJournal.requiredMetadata.join(' '), /DOI\/URL si corresponde/);
@@ -1228,6 +1233,8 @@ test('APA 7 guidance covers visual, social and web works through example 114', a
   assert.match(news.rules.join(' '), /no son ediciones de un periódico/);
   assert.match(changing.rules.join(' '), /no existe versión archivada/);
   assert.match(infographic.parentheticalCitation, /tres o más autores/);
+  assert.match(infographic.requiredMetadata.join(' '), /sitio si difiere del autor/);
+  assert.match(infographic.referenceTemplate, /Sitio, solo si difiere del autor/);
   assert.match(slides.parentheticalCitation, /Autor & Autor/);
   assert.match(slides.parentheticalCitation, /tres o más autores/);
   assert.match(slides.referenceTemplate, /\(Año\), \(Año, mes\) o \(Año, día de mes\)/);

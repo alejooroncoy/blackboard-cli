@@ -69,10 +69,10 @@ export const visualSocialWebCases: Record<VisualSocialWebCaseId, Apa7VerifiedVis
   },
   infographic: {
     ...visualBase, id: 'infographic', label: 'Infografía', manualExample: 99, manualPrintedPages: '353',
-    requiredMetadata: ['autores o entidad', 'año', 'título', 'descripción infografía', 'sitio', 'URL'],
-    referenceTemplate: `${completeVisualAuthors} o Entidad autora. (Año). Título [Infografía]. Sitio. URL`,
+    requiredMetadata: ['autores o entidad', 'año', 'título', 'descripción infografía', 'sitio si difiere del autor', 'URL'],
+    referenceTemplate: `${completeVisualAuthors} o Entidad autora. (Año). Título [Infografía]. Sitio, solo si difiere del autor. URL`,
     parentheticalCitation: '(Autor o entidad, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor o entidad (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
-    rules: ['Conserva la lista completa y ordenada de autores personales, o el nombre completo de la entidad autora.', 'Reproducir una infografía puede exigir permiso o atribución de derechos además de la referencia.'],
+    rules: ['Conserva la lista completa y ordenada de autores personales, o el nombre completo de la entidad autora.', 'Omite el sitio cuando coincide con el autor.', 'Reproducir una infografía puede exigir permiso o atribución de derechos además de la referencia.'],
   },
   map: {
     ...visualBase, id: 'map', label: 'Mapa estático o dinámico', manualExample: 100, manualPrintedPages: '353',

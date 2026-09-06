@@ -111,7 +111,7 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   },
   'book-translated-republication': {
     ...base, id: 'book-translated-republication', label: 'Libro reeditado en traducción', manualExample: 28, manualPrintedPages: '329',
-    requiredMetadata: ['autores', 'año original', 'año de reedición', 'título', 'traductores', 'edición', 'editorial', 'DOI o URL pública si corresponde'],
+    requiredMetadata: ['autores', 'año original', 'año de reedición', 'título', 'traductores', 'edición, solo desde la segunda', 'editorial', 'DOI o URL pública si corresponde'],
     referenceTemplate: `${completeAuthorList} (Año reedición). Título (${titlePositionTranslators}; edición, solo desde la segunda). Editorial. (Obra original publicada en Año original). Con DOI: añade DOI al final. Con URL pública sin DOI: añade URL al final. Impreso o base académica común sin localizador: termina en la nota de obra original.`,
     parentheticalCitation: '(Autor, Año original/Año reedición); (Autor & Autor, Año original/Año reedición); (Primer autor et al., Año original/Año reedición) con tres o más autores', narrativeCitation: 'Autor (Año original/Año reedición); Autor y Autor (Año original/Año reedición); Primer autor et al. (Año original/Año reedición) con tres o más autores',
     rules: [completeAuthorRule, 'Conserva la lista completa de traductores acreditados y usa (Trad.) para uno o (Trads.) para varios.', 'Conserva ambos años en la cita.', 'Prefiere DOI; usa URL pública si no hay DOI y omite ambos en una versión impresa o base académica común sin localizador.'],
@@ -138,7 +138,7 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   },
   'diagnostic-manual': {
     ...base, id: 'diagnostic-manual', label: 'Manual de diagnóstico (DSM, CIE)', manualExample: 32, manualPrintedPages: '330',
-    requiredMetadata: ['autor grupal', 'año', 'título completo', 'edición', 'abreviatura si se usará', 'DOI o URL pública si corresponde'],
+    requiredMetadata: ['autor grupal', 'año', 'título completo', 'edición, solo desde la segunda', 'abreviatura si se usará', 'DOI o URL pública si corresponde'],
     referenceTemplate: 'Entidad. (Año). Título completo del manual (edición, solo desde la segunda). Con DOI: añade DOI al final. Con URL pública sin DOI: añade URL al final. Impreso o base académica común sin localizador: termina después del título/edición.',
     parentheticalCitation: '(Entidad, Año)', narrativeCitation: 'Entidad (Año)',
     rules: ['Si autor y editorial son iguales, omite la editorial.', 'La edición se incluye desde la segunda; omite todo el paréntesis para la primera.', 'Prefiere DOI; usa URL pública si no hay DOI y omite ambos en una versión impresa o base académica común sin localizador.', 'Título, edición y abreviatura pueden introducirse en la primera mención del texto, pero no se abrevian en referencias.', 'Después de introducir el manual, repite la cita solo cuando sustenta directamente una afirmación.'],
