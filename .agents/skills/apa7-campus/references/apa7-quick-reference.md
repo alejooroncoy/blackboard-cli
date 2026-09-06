@@ -59,7 +59,7 @@ Usa cursiva donde se indica mediante asteriscos. Ajusta mayúsculas, edición, n
 | Tesis en repositorio | `Apellido, A. A. (Año). *Título* [Tesis de licenciatura/maestría/doctoral, Universidad]. Repositorio. URL` |
 | Artículo de periódico en línea | `Apellido, A. A. (Año, día de mes). Título. *Periódico*. URL` |
 | Video de YouTube | `Autor, A. A. [Canal]. (Año, día de mes). *Título* [Video]. YouTube. URL` |
-| Webinar recuperable | `Autor/Entidad. (Año, día de mes). *Título* [Seminario web grabado]. Plataforma. URL` |
+| Webinar recuperable | `Autor/Entidad. (Año). *Título* [Seminario web grabado]. Plataforma. URL` |
 | Podcast | `Apellido, A. A. (Host). (Año, día de mes). Título del episodio (N.º de episodio) [Episodio de pódcast]. En *Título del pódcast*. Productora. URL` |
 | Publicación en red social | `Autor [@usuario]. (Año, día de mes). *Contenido hasta las primeras 20 palabras* [Tipo de publicación]. Red. URL` |
 | Software/app | `Autor o entidad. (Año). *Nombre* (Versión) [Software móvil/de computadora]. Editor, desarrollador o tienda, solo si difiere del autor. URL` |

@@ -55,6 +55,7 @@ test('APA 7 quick reference never leaves a book URL or DOI as an unconditional p
   assert.match(quickReference, /impreso o en base académica común sin localizador:/);
   assert.match(quickReference, /Artículo científico \| Con DOI:.*sin DOI con URL pública:.*impreso o base académica común sin localizador:/);
   assert.match(quickReference, /Artículo con eLocator.*https:\/\/doi\.org\/xxxxx/);
+  assert.match(quickReference, /Webinar recuperable.*\(Año\).*\[Seminario web grabado\]/);
   assert.match(quickReference, /\(\*Título abreviado\*, 2024\).*página web/);
 });
 
@@ -760,6 +761,9 @@ test('APA 7 guidance uses ampersand in a two-author parenthetical citation and r
   assert.match(mixedAuthors.case.narrativeCitation, /Primer responsable acreditado et al\./);
   assert.match(mixedAuthors.case.rules.join(' '), /número total de autores/);
   assert.match(mixedAuthors.case.rules.join(' '), /exactamente en el orden acreditado/);
+  assert.match(mixedAuthors.case.requiredMetadata.join(' '), /volumen\/número\/páginas o eLocator si existen/);
+  assert.match(mixedAuthors.case.referenceTemplate, /Sin volumen: Revista, \(número\), páginas o eLocator/);
+  assert.match(mixedAuthors.case.rules.join(' '), /Omite volumen, número y páginas\/eLocator individualmente/);
 });
 
 test('APA 7 guidance covers all 18 verified book and reference-work examples', async () => {
