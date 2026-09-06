@@ -53,6 +53,7 @@ const base = {
 const completeAuthorList = 'Un autor: Autor, A. A.; dos: Autor, A. A., & Autor, B. B.; de 3 a 20: Autor, A. A., Autor, B. B., Autor, C. C., …, & Autor final, Z. Z. (incluye todos); 21 o más: autores 1–19, …, Último autor';
 const completeAuthorRule = 'Incluye la lista completa de autores en el orden acreditado conforme a los límites del elemento autor de APA.';
 const completeEditorList = 'Un editor: Editor, E. E. (Ed.); dos: Editor, E. E., & Editor, F. F. (Eds.); de 3 a 20: Editor, E. E., Editor, F. F., Editor, G. G., …, & Editor final, Z. Z. (Eds.; incluye todos); 21 o más: editores 1–19, …, Último editor (Eds.)';
+const completeTranslatorList = 'Un traductor: T. Traductor (Trad.); dos: T. Traductor & U. Traductor (Trads.); de 3 a 20: T. Traductor, U. Traductor, V. Traductor, …, & Traductor final (Trads.; incluye todos); 21 o más: traductores 1–19, …, Último traductor (Trads.)';
 
 export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   'book-author-doi': {
@@ -109,9 +110,9 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   'book-translated-republication': {
     ...base, id: 'book-translated-republication', label: 'Libro reeditado en traducción', manualExample: 28, manualPrintedPages: '329',
     requiredMetadata: ['autores', 'año original', 'año de reedición', 'título', 'traductores', 'edición', 'editorial'],
-    referenceTemplate: `${completeAuthorList} (Año reedición). Título (T. Traductor, Trad.; edición). Editorial. (Obra original publicada en Año original)`,
+    referenceTemplate: `${completeAuthorList} (Año reedición). Título (${completeTranslatorList}; edición, solo desde la segunda). Editorial. (Obra original publicada en Año original)`,
     parentheticalCitation: '(Autor, Año original/Año reedición); (Autor & Autor, Año original/Año reedición); (Primer autor et al., Año original/Año reedición) con tres o más autores', narrativeCitation: 'Autor (Año original/Año reedición); Autor y Autor (Año original/Año reedición); Primer autor et al. (Año original/Año reedición) con tres o más autores',
-    rules: [completeAuthorRule, 'Conserva ambos años en la cita.'],
+    rules: [completeAuthorRule, 'Conserva la lista completa de traductores acreditados y usa (Trad.) para uno o (Trads.) para varios.', 'Conserva ambos años en la cita.'],
   },
   'book-republished': {
     ...base, id: 'book-republished', label: 'Libro, libro electrónico o audiolibro reeditado', manualExample: 29, manualPrintedPages: '329',
@@ -164,9 +165,9 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   'ancient-greek-roman-work': {
     ...base, id: 'ancient-greek-roman-work', label: 'Obra griega o romana antigua', manualExample: 36, manualPrintedPages: '331',
     requiredMetadata: ['autor clásico', 'año de la versión consultada', 'título', 'traductor/editor', 'editorial/URL', 'fecha original o aproximada'],
-    referenceTemplate: 'Autor. (Año versión). Título (T. Traductor, Trad.). Editorial/URL. (Obra original publicada en Año antiguo exacto) o (Obra original publicada ca. Año antiguo aproximado)',
+    referenceTemplate: 'Con traductor: Autor. (Año versión). Título (T. Traductor, Trad.). Editorial/URL. Con editor: Autor. (Año versión). Título (E. Editor, Ed.). Editorial/URL. (Obra original publicada en Año antiguo exacto) o (Obra original publicada ca. Año antiguo aproximado)',
     parentheticalCitation: '(Autor, Año original/Año versión) si la fecha original es exacta; (Autor, ca. Año original/Año versión) si es aproximada', narrativeCitation: 'Autor (Año original/Año versión) si la fecha original es exacta; Autor (ca. Año original/Año versión) si es aproximada',
-    rules: ['Usa ca. únicamente cuando la fecha original es aproximada; omítelo ante una fecha exacta verificada.', 'Las partes canónicas requieren su localizador propio en la cita.'],
+    rules: ['Usa (Trad.) si la edición acredita un traductor o (Ed.) si acredita un editor; no cambies el rol acreditado.', 'Usa ca. únicamente cuando la fecha original es aproximada; omítelo ante una fecha exacta verificada.', 'Las partes canónicas requieren su localizador propio en la cita.'],
   },
   'shakespeare-work': {
     ...base, id: 'shakespeare-work', label: 'Obra de Shakespeare u otra obra clásica con edición moderna', manualExample: 37, manualPrintedPages: '331',

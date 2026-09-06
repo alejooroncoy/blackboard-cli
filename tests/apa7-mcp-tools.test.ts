@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import { registerAcademicTools as registerAcademicToolsWithAuthorization } from '../src/providers/academic/apa7-mcp-tools.js';
 import { audiovisualAudioCases } from '../src/providers/academic/apa7-audiovisual-audio-cases.js';
@@ -46,6 +47,12 @@ test('APA 7 case contracts guard optional metadata and every author cardinality'
       assert.match(item.referenceTemplate, /URL oficial, solo si existe/i, item.id);
     }
   }
+});
+
+test('APA 7 quick reference never leaves a book URL or DOI as an unconditional placeholder', async () => {
+  const quickReference = await readFile('.agents/skills/apa7-campus/references/apa7-quick-reference.md', 'utf8');
+  assert.match(quickReference, /Con DOI o URL pública:/);
+  assert.match(quickReference, /impreso o en base académica común sin localizador:/);
 });
 
 test('APA 7 guidance exposes a journal template when the host authorizes access', async () => {
@@ -750,6 +757,9 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   const translated = JSON.parse((await handler({ topic: 'citation', caseId: 'book-translated-republication' })).content[0].text);
   assert.match(translated.case.parentheticalCitation, /Año original\/Año reedición/);
   assert.match(translated.case.parentheticalCitation, /tres o más autores/);
+  assert.match(translated.case.referenceTemplate, /dos: T\. Traductor & U\. Traductor \(Trads\.\)/);
+  assert.match(translated.case.referenceTemplate, /21 o más: traductores 1–19/);
+  assert.match(translated.case.rules.join(' '), /lista completa de traductores acreditados/);
   const authored = JSON.parse((await handler({ topic: 'citation', caseId: 'book-author-doi' })).content[0].text);
   assert.match(authored.case.parentheticalCitation, /Autor & Autor/);
   assert.match(authored.case.parentheticalCitation, /tres o más autores/);
@@ -778,6 +788,8 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(stableEntry.referenceTemplate, /Entrada que cambia continuamente sin archivo:.*Recuperado/);
   assert.match(ancient.parentheticalCitation, /fecha original es exacta/);
   assert.match(ancient.parentheticalCitation, /ca\. Año original.*si es aproximada/);
+  assert.match(ancient.referenceTemplate, /Con traductor:.*Con editor:/);
+  assert.match(ancient.rules.join(' '), /\(Trad\.\).*\(Ed\.\)/);
   assert.match(ancient.rules.join(' '), /omítelo ante una fecha exacta verificada/);
 });
 
