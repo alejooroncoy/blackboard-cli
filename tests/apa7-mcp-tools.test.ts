@@ -733,6 +733,8 @@ test('APA 7 guidance distinguishes signed and unsigned editorials', async () => 
   assert.equal(editorial.case.manualExample, 19);
   assert.match(editorial.case.referenceTemplate, /\[Editorial\]/);
   assert.match(editorial.case.referenceTemplate, /Sin firma: Título \[Editorial\]\. \(Año\), \(Año, mes o estación\) o \(Año, día de mes\)/);
+  assert.match(editorial.case.referenceTemplate, /con volumen, número y páginas: Publicación, volumen\(número\), páginas/);
+  assert.match(editorial.case.referenceTemplate, /Sin volumen: Publicación, \(número\), páginas/);
   assert.match(editorial.case.parentheticalCitation, /Sin firma: \(“Título abreviado”, Año\)/);
   assert.match(editorial.case.rules.join(' '), /no está firmado/);
 });
@@ -895,6 +897,11 @@ test('APA 7 standard journals preserve every credited author', async () => {
   assert.match(advanceOnline.requiredMetadata.join(' '), /DOI o URL pública si corresponde/);
   assert.match(advanceOnline.referenceTemplate, /Con DOI: añade https:\/\/doi\.org\/xxxxx/);
   assert.match(advanceOnline.referenceTemplate, /Con URL pública sin DOI/);
+  const eLocator = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-elocator' })).content[0].text).case;
+  assert.match(eLocator.requiredMetadata.join(' '), /volumen\/número si existen/);
+  assert.match(eLocator.referenceTemplate, /Sin volumen: Revista, \(número\), Artículo eLocator/);
+  assert.match(eLocator.referenceTemplate, /Sin volumen ni número: Revista, Artículo eLocator/);
+  assert.match(eLocator.rules.join(' '), /Omite volumen y número individualmente/);
   const twentyOneAuthors = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-21-plus-authors' })).content[0].text).case;
   assert.match(twentyOneAuthors.requiredMetadata.join(' '), /volumen\/número\/páginas o eLocator si existen/);
   assert.match(twentyOneAuthors.referenceTemplate, /Sin volumen: Revista, \(número\), páginas o eLocator/);

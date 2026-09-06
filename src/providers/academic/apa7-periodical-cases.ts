@@ -93,9 +93,9 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   },
   'journal-elocator': {
     ...base, id: 'journal-elocator', label: 'Artículo con eLocator', manualExample: 6, manualPrintedPages: '324',
-    requiredMetadata: ['autores', 'año', 'título', 'revista', 'volumen/número', 'eLocator', 'DOI o URL pública si corresponde'],
-    referenceTemplate: `${completeAuthorList} (Año). Título. Revista, volumen(número), Artículo eLocator. Con DOI: añade DOI al final. Con URL pública sin DOI: añade URL al final. Impreso o base académica común sin localizador: termina en el eLocator.`,
-    rules: [completeAuthorRule, 'Escribe Artículo antes del eLocator y no inventa un rango de páginas.', 'Prefiere DOI; usa URL pública si no hay DOI y omite ambos en una versión impresa o base académica común sin localizador.'],
+    requiredMetadata: ['autores', 'año', 'título', 'revista', 'volumen/número si existen', 'eLocator', 'DOI o URL pública si corresponde'],
+    referenceTemplate: `${completeAuthorList} (Año). Título. Con volumen y número: Revista, volumen(número), Artículo eLocator. Sin número: Revista, volumen, Artículo eLocator. Sin volumen: Revista, (número), Artículo eLocator. Sin volumen ni número: Revista, Artículo eLocator. Con DOI: añade https://doi.org/xxxxx al final. Con URL pública sin DOI: añade URL al final. Impreso o base académica común sin localizador: termina en el eLocator.`,
+    rules: [completeAuthorRule, 'Escribe Artículo antes del eLocator y no inventa un rango de páginas.', 'Omite volumen y número individualmente cuando no existan.', 'Prefiere DOI y exprésalo como URL completa https://doi.org/...; usa URL pública si no hay DOI y omite ambos en una versión impresa o base académica común sin localizador.'],
   },
   'journal-advance-online': {
     ...base, id: 'journal-advance-online', label: 'Artículo publicado anticipadamente en línea', manualExample: 7, manualPrintedPages: '324',
@@ -177,7 +177,7 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   'periodical-editorial': {
     ...base, id: 'periodical-editorial', label: 'Editorial de una publicación periódica', manualExample: 19, manualPrintedPages: '326-327',
     requiredMetadata: ['autor si está firmado', 'año o fecha', 'título', 'tipo de publicación periódica', 'volumen/número/páginas si existen', 'DOI/URL si corresponde'],
-    referenceTemplate: `Con firma: ${completeAuthorList} (Año), (Año, mes o estación) o (Año, día de mes), según la fecha publicada. Título [Editorial]. Publicación. Sin firma: Título [Editorial]. (Año), (Año, mes o estación) o (Año, día de mes), según la fecha publicada. Publicación. En ambas formas, añade volumen, número, páginas y DOI/URL únicamente cuando existan y correspondan.`,
+    referenceTemplate: `Con firma: ${completeAuthorList} (Año), (Año, mes o estación) o (Año, día de mes), según la fecha publicada. Título [Editorial]. Sin firma: Título [Editorial]. (Año), (Año, mes o estación) o (Año, día de mes), según la fecha publicada. En ambas formas, con volumen, número y páginas: Publicación, volumen(número), páginas. Sin número: Publicación, volumen, páginas. Sin volumen: Publicación, (número), páginas. Solo páginas: Publicación, páginas. Sin datos periódicos: Publicación. Con DOI: añade https://doi.org/xxxxx al final. Sin DOI con URL pública: añade URL. Sin localizador: termina en los datos periódicos disponibles.`,
     parentheticalCitation: 'Con firma: (Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores. Sin firma: (“Título abreviado”, Año)',
     narrativeCitation: 'Con firma: Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores. Sin firma: “Título abreviado” (Año)',
     rules: [
