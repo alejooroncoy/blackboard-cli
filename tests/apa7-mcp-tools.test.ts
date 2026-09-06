@@ -81,6 +81,14 @@ test('APA 7 guidance exposes a journal template when the host authorizes access'
   assert.match(content.safety, /No inventes/);
 });
 
+test('APA 7 generic video and webinar guidance keeps their verified date formats separate', async () => {
+  let handler: any;
+  registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
+  const result = JSON.parse((await handler({ topic: 'reference', sourceType: 'video-webinar' })).content[0].text);
+  assert.match(result.template, /Video en línea:.*\(Año, día de mes\).*fecha completa publicada/);
+  assert.match(result.template, /Seminario web grabado:.*\(Año\).*solo el año aunque se conozcan mes y día/);
+});
+
 test('reference templates preserve APA italics with explicit Markdown notation', async () => {
   let handler: any;
   registerAcademicTools({
@@ -883,6 +891,10 @@ test('APA 7 standard journals preserve every credited author', async () => {
   assert.match(advanceOnline.requiredMetadata.join(' '), /DOI o URL pública si corresponde/);
   assert.match(advanceOnline.referenceTemplate, /Con DOI: añade https:\/\/doi\.org\/xxxxx/);
   assert.match(advanceOnline.referenceTemplate, /Con URL pública sin DOI/);
+  const twentyOneAuthors = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-21-plus-authors' })).content[0].text).case;
+  assert.match(twentyOneAuthors.requiredMetadata.join(' '), /volumen\/número\/páginas o eLocator si existen/);
+  assert.match(twentyOneAuthors.referenceTemplate, /Sin volumen: Revista, \(número\), páginas o eLocator/);
+  assert.match(twentyOneAuthors.rules.join(' '), /Omite volumen, número y páginas\/eLocator individualmente/);
   const translated = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-translated-republication' })).content[0].text).case;
   assert.match(translated.referenceTemplate, /dos: A\. Traductor & B\. Traductor, Trads\./);
   assert.match(translated.referenceTemplate, /21 o más: traductores 1–19/);

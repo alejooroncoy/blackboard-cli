@@ -79,10 +79,10 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   },
   'journal-21-plus-authors': {
     ...base, id: 'journal-21-plus-authors', label: 'Artículo con 21 o más autores', manualExample: 4, manualPrintedPages: '323',
-    requiredMetadata: ['lista completa y ordenada de autores', 'año', 'título', 'revista', 'volumen/número', 'páginas o eLocator', 'DOI/URL si corresponde'],
-    referenceTemplate: 'Autores 1-19, ... Último autor. (Año). Título. Revista, volumen(número), páginas. Añade DOI/URL solo si corresponde.',
+    requiredMetadata: ['lista completa y ordenada de autores', 'año', 'título', 'revista', 'volumen/número/páginas o eLocator si existen', 'DOI/URL si corresponde'],
+    referenceTemplate: 'Autores 1-19, ... Último autor. (Año). Título. Con volumen, número y páginas/eLocator: Revista, volumen(número), páginas o eLocator. Sin número: Revista, volumen, páginas o eLocator. Sin volumen: Revista, (número), páginas o eLocator. Sin volumen ni número: Revista, páginas o eLocator; omite también páginas/eLocator si no existen. Con DOI: añade https://doi.org/xxxxx. Sin DOI con URL pública: añade URL. Impreso o base académica común sin localizador: termina en los datos periódicos disponibles.',
     parentheticalCitation: '(Primer autor et al., Año)', narrativeCitation: 'Primer autor et al. (Año)',
-    rules: ['En la referencia incluye los primeros 19 autores, puntos suspensivos y el último autor.', 'No coloca & antes del último autor después de los puntos suspensivos.', 'Omite DOI o URL cuando la fuente no tenga un localizador aplicable.'],
+    rules: ['En la referencia incluye los primeros 19 autores, puntos suspensivos y el último autor.', 'No coloca & antes del último autor después de los puntos suspensivos.', 'Omite volumen, número y páginas/eLocator individualmente cuando no existan.', 'Prefiere DOI y exprésalo como URL completa https://doi.org/...; omite DOI o URL cuando la fuente no tenga un localizador aplicable.'],
   },
   'journal-individual-group-authors': {
     ...base, id: 'journal-individual-group-authors', label: 'Artículo con autores personales y grupales', manualExample: 5, manualPrintedPages: '323',
