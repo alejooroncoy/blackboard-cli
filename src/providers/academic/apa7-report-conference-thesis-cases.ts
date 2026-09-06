@@ -51,6 +51,7 @@ const shared = {
 const reportBase = { ...shared, manualSection: '10.4' as const };
 const conferenceBase = { ...shared, manualSection: '10.5' as const };
 const completeContributionAuthors = 'Autor, A. A.; Autor, A. A., & Autor, B. B.; o Autor, A. A., Autor, B. B., & Autor, C. C.';
+const completeSessionContributors = 'Ponente, A. A.; Ponente, A. A., & Ponente, B. B.; o Ponente, A. A., Ponente, B. B., & Ponente, C. C.';
 const thesisBase = { ...shared, manualSection: '10.6' as const, parentheticalCitation: '(Autor, Año)', narrativeCitation: 'Autor (Año)' };
 
 export const reportConferenceThesisCases: Record<ReportConferenceThesisCaseId, Apa7VerifiedReportConferenceThesisCase> = {
@@ -125,21 +126,21 @@ export const reportConferenceThesisCases: Record<ReportConferenceThesisCaseId, A
   'conference-session': {
     ...conferenceBase, id: 'conference-session', label: 'Sesión de congreso', manualExample: 60, manualPrintedPages: '338',
     requiredMetadata: ['todos los ponentes/contribuyentes', 'fechas completas del congreso', 'título', 'nombre del congreso', 'ubicación', 'DOI/URL si existe'],
-    referenceTemplate: 'Ponente, A. A., Ponente, B. B., & Ponente, C. C. (Año, día–día de mes). Título [Sesión de congreso]. Nombre del congreso, Ciudad, región, país. DOI/URL',
+    referenceTemplate: `${completeSessionContributors} (Año, día–día de mes). Título [Sesión de congreso]. Nombre del congreso, Ciudad, región, país. DOI/URL`,
     parentheticalCitation: '(Ponente, Año); (Ponente & Ponente, Año); (Primer ponente et al., Año) con tres o más ponentes', narrativeCitation: 'Ponente (Año); Ponente y Ponente (Año); Primer ponente et al. (Año) con tres o más ponentes',
     rules: ['Incluye la lista completa de personas acreditadas como contribuyentes, aunque no hayan estado físicamente presentes.', 'Usa las fechas del congreso completo y una ubicación verificable.'],
   },
   'conference-paper-presentation': {
     ...conferenceBase, id: 'conference-paper-presentation', label: 'Presentación de escrito', manualExample: 61, manualPrintedPages: '338',
     requiredMetadata: ['todos los autores', 'fechas completas del congreso', 'título', 'nombre del congreso', 'ubicación', 'DOI/URL si existe'],
-    referenceTemplate: 'Autor, A. A., Autor, B. B., & Autor, C. C. (Año, día de mes–día de mes). Título [Presentación de escrito]. Nombre del congreso, Ciudad, región, país. DOI/URL',
+    referenceTemplate: `${completeContributionAuthors} (Año, día de mes–día de mes). Título [Presentación de escrito]. Nombre del congreso, Ciudad, región, país. DOI/URL`,
     parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
     rules: ['Incluye la lista completa de autores acreditados.', 'La etiqueta entre corchetes debe coincidir con la forma en que el congreso describió la presentación.'],
   },
   'conference-poster-presentation': {
     ...conferenceBase, id: 'conference-poster-presentation', label: 'Presentación de cartel', manualExample: 62, manualPrintedPages: '339',
     requiredMetadata: ['autores', 'fechas completas del congreso', 'título', 'nombre del congreso', 'ubicación', 'DOI/URL si existe'],
-    referenceTemplate: 'Autor, A. A., Autor, B. B., & Autor, C. C. (Año, día–día de mes). Título [Presentación de cartel]. Nombre del congreso, Ciudad, región, país. DOI/URL',
+    referenceTemplate: `${completeContributionAuthors} (Año, día–día de mes). Título [Presentación de cartel]. Nombre del congreso, Ciudad, región, país. DOI/URL`,
     parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
     rules: ['Incluye la lista completa de autores acreditados.', 'No usa el formato de artículo salvo que el trabajo esté publicado formalmente en actas o revista.'],
   },

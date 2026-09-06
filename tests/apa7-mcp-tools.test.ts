@@ -49,6 +49,8 @@ test('reference templates preserve APA italics with explicit Markdown notation',
   const report = JSON.parse((await handler({ topic: 'reference', sourceType: 'report' })).content[0].text);
   assert.match(report.template, /solo si difiere del autor/);
   const webpage = JSON.parse((await handler({ topic: 'reference', sourceType: 'webpage' })).content[0].text);
+  assert.match(webpage.template, /\(Año\), \(Año, mes\), \(Año, día de mes\) o \(s\. f\.\)/);
+  assert.match(webpage.template, /No inventes mes ni día/);
   assert.match(webpage.template, /sitio, solo si difiere del autor/);
   const software = JSON.parse((await handler({ topic: 'reference', sourceType: 'software' })).content[0].text);
   assert.match(software.template, /tienda, solo si difiere del autor/);
@@ -853,6 +855,10 @@ test('APA 7 guidance covers reports, conferences and theses through example 66',
     assert.match(presentation.referenceTemplate, /Autor, B\. B\./, id);
     assert.match(presentation.rules.join(' '), /lista completa de autores acreditados/, id);
   }
+  for (const id of ['conference-session', 'conference-paper-presentation', 'conference-poster-presentation']) {
+    const presentation = JSON.parse((await handler({ topic: 'reference', caseId: id })).content[0].text).case;
+    assert.match(presentation.referenceTemplate, /, B\. B\.; o |, & Autor, B\. B\.; o /, id);
+  }
 });
 
 test('APA 7 special periodical issues preserve multiple editors', async () => {
@@ -961,6 +967,7 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   assert.match(episode.rules.join(' '), /lista completa de productores ejecutivos/);
   assert.match(series.parentheticalCitation, /tres o más productores/);
   assert.match(series.referenceTemplate, /Productores ejecutivos/);
+  assert.match(series.referenceTemplate, /Productor, R\. R\. \(Productores ejecutivos\)/);
   assert.match(series.rules.join(' '), /Incluye la lista completa/);
   assert.match(series.referenceTemplate, /Año único; Año inicial–Año final; o Año inicial–presente/);
   assert.match(series.rules.join(' '), /comenzó y terminó en ese mismo año/);

@@ -44,7 +44,7 @@ const referenceTemplates: Partial<Record<SourceType, string>> = {
   book: 'Apellido, A. A. (Año). *Título del libro*. Editorial. URL o DOI',
   'book-chapter': 'Apellido, A. A. (Año). Título del capítulo. En A. Editor (Ed.), *Título del libro* (pp. xx-xx). Editorial.',
   'journal-article': 'Autor, A. A.; Autor, A. A., & Autor, B. B.; o lista completa conforme a APA. (Año). Título del artículo. *Revista, volumen*(número), xx-xx. Añade https://doi.org/xxxxx si existe DOI; de lo contrario, una URL pública ajena a una base de datos si existe; si es impreso o proviene de una base académica común, omite DOI y URL.',
-  webpage: 'Autor o entidad. (Año, día de mes). *Título de la página*. Nombre del sitio, solo si difiere del autor. URL',
+  webpage: 'Autor o entidad. (Año), (Año, mes), (Año, día de mes) o (s. f.), según la fecha realmente publicada. *Título de la página*. Nombre del sitio, solo si difiere del autor. URL. No inventes mes ni día.',
   report: 'Entidad o Apellido, A. A. (Año). *Título del informe* (N.º de informe xxx). Editorial o entidad, solo si difiere del autor. URL',
   thesis: 'Apellido, A. A. (Año). *Título* [Tesis de licenciatura/maestría/doctoral, Universidad]. Repositorio. URL',
   'newspaper-article': 'Apellido, A. A. (Año, día de mes). Título. *Periódico*, p. x o pp. xx–xx para versión impresa. URL para versión en línea',
