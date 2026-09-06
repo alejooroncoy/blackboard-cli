@@ -43,13 +43,15 @@ const shared = {
 const dataBase = { ...shared, manualSection: '10.9' as const };
 const softwareBase = { ...shared, manualSection: '10.10' as const };
 const testBase = { ...shared, manualSection: '10.11' as const };
+const completePersonalAuthors = 'Autor, A. A.; Autor, A. A., & Autor, B. B.; o Autor, A. A., Autor, B. B., & Autor, C. C.';
+const completePersonalAuthorRule = 'Conserva la lista completa y ordenada de autores personales conforme a los límites del elemento autor de APA; usa el nombre completo si la autora es una entidad.';
 
 export const dataSoftwareTestCases: Record<DataSoftwareTestCaseId, Apa7VerifiedDataSoftwareTestCase> = {
   'dataset-published': {
     ...dataBase, id: 'dataset-published', label: 'Conjunto de datos publicado', manualExample: 75, manualPrintedPages: '344',
     requiredMetadata: ['autores o entidad', 'año de publicación', 'título', 'identificador y versión si existen', 'descripción del conjunto', 'organización publicadora/archivo', 'DOI/URL'],
-    referenceTemplate: 'Autor, A. A. (Año). Título del conjunto (Identificador; Versión x) [Conjunto de datos y libro de códigos, si corresponde]. Organización o archivo, solo si difiere del autor. DOI/URL',
-    rules: ['Cita el conjunto cuando realizas análisis secundarios de datos públicos o archivas datos propios presentados por primera vez.', 'La versión va entre paréntesis después del título.', 'Incluye fecha de recuperación solo si el conjunto está diseñado para cambiar con el tiempo.'],
+    referenceTemplate: `${completePersonalAuthors} o Entidad autora. (Año). Título del conjunto (Identificador; Versión x) [Conjunto de datos y libro de códigos, si corresponde]. Organización o archivo, solo si difiere del autor. DOI/URL`,
+    rules: [completePersonalAuthorRule, 'Cita el conjunto cuando realizas análisis secundarios de datos públicos o archivas datos propios presentados por primera vez.', 'La versión va entre paréntesis después del título.', 'Incluye fecha de recuperación solo si el conjunto está diseñado para cambiar con el tiempo.'],
   },
   'raw-data-unpublished': {
     ...dataBase, id: 'raw-data-unpublished', label: 'Datos brutos no publicados', manualExample: 76, manualPrintedPages: '344',
@@ -60,8 +62,8 @@ export const dataSoftwareTestCases: Record<DataSoftwareTestCaseId, Apa7VerifiedD
   'specialized-software': {
     ...softwareBase, id: 'specialized-software', label: 'Software especializado o de distribución limitada', manualExample: 77, manualPrintedPages: '345',
     requiredMetadata: ['autores o entidad', 'año de la versión', 'título', 'versión', 'desarrollador/editor si difiere', 'URL'],
-    referenceTemplate: 'Autor, A. A. (Año). Título (Versión x) [Software]. Desarrollador, solo si difiere del autor. URL',
-    rules: ['Referencia software especializado o de distribución limitada y cualquier software que se haya parafraseado o citado.', 'El título va en cursiva en referencias, no cuando se menciona en el texto.', 'Si autor y desarrollador son iguales, omite el desarrollador.'],
+    referenceTemplate: `${completePersonalAuthors} o Entidad autora. (Año). Título (Versión x) [Software]. Desarrollador, solo si difiere del autor. URL`,
+    rules: [completePersonalAuthorRule, 'Referencia software especializado o de distribución limitada y cualquier software que se haya parafraseado o citado.', 'El título va en cursiva en referencias, no cuando se menciona en el texto.', 'Si autor y desarrollador son iguales, omite el desarrollador.'],
   },
   'apparatus-or-equipment': {
     ...softwareBase, id: 'apparatus-or-equipment', label: 'Aparato o equipo', manualExample: 78, manualPrintedPages: '345-346',
@@ -84,9 +86,9 @@ export const dataSoftwareTestCases: Record<DataSoftwareTestCaseId, Apa7VerifiedD
   'test-manual': {
     ...testBase, id: 'test-manual', label: 'Manual de una prueba, escala o inventario', manualExample: 81, manualPrintedPages: '346',
     requiredMetadata: ['autores del manual', 'año', 'título completo', 'edición si existe', 'editorial', 'DOI/URL si corresponde'],
-    referenceTemplate: 'Autor, A. A. (Año). Título del manual de la prueba. Editorial. DOI/URL',
+    referenceTemplate: `${completePersonalAuthors} (Año). Título del manual de la prueba. Editorial. DOI/URL`,
     parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
-    rules: ['Prioriza la literatura de apoyo: si existe un manual, cita el manual y no la prueba por separado.', 'Usa el formato de libro de autor o editado que corresponda.'],
+    rules: [completePersonalAuthorRule, 'Prioriza la literatura de apoyo: si existe un manual, cita el manual y no la prueba por separado.', 'Usa el formato de libro de autor o editado que corresponda.'],
   },
   'test-itself': {
     ...testBase, id: 'test-itself', label: 'Prueba, escala o inventario en sí mismo', manualExample: 82, manualPrintedPages: '346-347',
@@ -98,9 +100,9 @@ export const dataSoftwareTestCases: Record<DataSoftwareTestCaseId, Apa7VerifiedD
   'test-database-record': {
     ...testBase, id: 'test-database-record', label: 'Registro de base de datos para una prueba', manualExample: 83, manualPrintedPages: '347',
     requiredMetadata: ['autores', 'año', 'nombre de la prueba', 'sigla/código si existe', 'descripción de registro', 'base de datos de pruebas', 'DOI/URL'],
-    referenceTemplate: 'Autor, A. A. (Año). Nombre de la prueba (Sigla/código) [Registro de base de datos]. Base de datos de pruebas. DOI/URL',
+    referenceTemplate: `${completePersonalAuthors} (Año). Nombre de la prueba (Sigla/código) [Registro de base de datos]. Base de datos de pruebas. DOI/URL`,
     parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
-    rules: ['Cita el registro solo cuando utilizas información descriptiva o administrativa única de ese registro.', 'Si no usas información única del registro, cita la literatura de apoyo disponible.', 'El nombre de la base se incluye para registros, no por el mero hecho de que la prueba pueda encontrarse allí.'],
+    rules: [completePersonalAuthorRule, 'Cita el registro solo cuando utilizas información descriptiva o administrativa única de ese registro.', 'Si no usas información única del registro, cita la literatura de apoyo disponible.', 'El nombre de la base se incluye para registros, no por el mero hecho de que la prueba pueda encontrarse allí.'],
   },
 };
 

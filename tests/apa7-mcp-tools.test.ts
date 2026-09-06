@@ -722,6 +722,16 @@ test('APA 7 authored books preserve every credited author', async () => {
   }
 });
 
+test('APA 7 standard journals preserve every credited author', async () => {
+  let handler: any;
+  registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
+  for (const caseId of ['journal-doi', 'journal-no-doi-public-url', 'journal-no-doi-database-or-print', 'journal-elocator', 'journal-advance-online', 'journal-in-press', 'journal-other-language', 'journal-cochrane']) {
+    const article = JSON.parse((await handler({ topic: 'reference', caseId })).content[0].text).case;
+    assert.match(article.referenceTemplate, /Autor, C\. C\./, caseId);
+    assert.match(article.rules.join(' '), /lista completa y ordenada de autores/, caseId);
+  }
+});
+
 test('APA 7 guidance covers all 12 chapter and reference-entry examples', async () => {
   let handler: any;
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
@@ -752,6 +762,16 @@ test('APA 7 chapter containers preserve multiple editors', async () => {
   for (const caseId of ['chapter-edited-doi', 'chapter-edited-no-doi-database-or-print', 'chapter-electronic-public-url', 'chapter-other-language', 'chapter-translated-republication', 'chapter-reprinted-from-journal', 'chapter-reprinted-from-book', 'chapter-multivolume-work']) {
     const chapter = JSON.parse((await handler({ topic: 'reference', caseId })).content[0].text).case;
     assert.match(chapter.referenceTemplate, /\(Eds\.\)/, caseId);
+  }
+});
+
+test('APA 7 edited chapters preserve every credited chapter author', async () => {
+  let handler: any;
+  registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
+  for (const caseId of ['chapter-edited-doi', 'chapter-edited-no-doi-database-or-print', 'chapter-electronic-public-url', 'chapter-reprinted-from-journal']) {
+    const chapter = JSON.parse((await handler({ topic: 'reference', caseId })).content[0].text).case;
+    assert.match(chapter.referenceTemplate, /Autor, C\. C\./, caseId);
+    assert.match(chapter.rules.join(' '), /lista completa y ordenada de autores del capítulo/, caseId);
   }
 });
 
@@ -873,6 +893,10 @@ test('APA 7 guidance covers datasets, software and tests through example 83', as
   assert.match(software.parentheticalCitation, /Autor|Entidad/);
   const manual = JSON.parse((await handler({ topic: 'citation', caseId: 'test-manual' })).content[0].text).case;
   assert.match(manual.parentheticalCitation, /tres o más autores/);
+  for (const item of [dataset, software, testRecord, manual]) {
+    assert.match(item.referenceTemplate, /Autor, C\. C\./);
+    assert.match(item.rules.join(' '), /lista completa y ordenada de autores personales/);
+  }
 });
 
 test('APA 7 guidance covers audiovisual and audio works through example 96', async () => {

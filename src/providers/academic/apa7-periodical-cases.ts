@@ -51,25 +51,28 @@ const base = {
   ],
 };
 
+const completeAuthorList = 'Autor, A. A.; Autor, A. A., & Autor, B. B.; o Autor, A. A., Autor, B. B., & Autor, C. C.';
+const completeAuthorRule = 'Conserva la lista completa y ordenada de autores conforme a los límites del elemento autor de APA.';
+
 export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   'journal-doi': {
     ...base, id: 'journal-doi', label: 'Artículo de revista científica con DOI', manualExample: 1, manualPrintedPages: '323',
     requiredMetadata: ['autores', 'año', 'título del artículo', 'revista', 'volumen', 'número si existe', 'páginas o eLocator', 'DOI verificado'],
-    referenceTemplate: 'Autor, A. A., & Autor, B. B. (Año). Título del artículo. Título de la revista, volumen(número), páginas. https://doi.org/xxxxx',
+    referenceTemplate: `${completeAuthorList} (Año). Título del artículo. Título de la revista, volumen(número), páginas. https://doi.org/xxxxx`,
     parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
-    rules: ['El DOI se expresa como URL https://doi.org/...', 'Se omiten los elementos que realmente no existen.'],
+    rules: [completeAuthorRule, 'El DOI se expresa como URL https://doi.org/...', 'Se omiten los elementos que realmente no existen.'],
   },
   'journal-no-doi-public-url': {
     ...base, id: 'journal-no-doi-public-url', label: 'Artículo sin DOI con URL pública ajena a una base de datos', manualExample: 2, manualPrintedPages: '323',
     requiredMetadata: ['autores', 'año', 'título', 'revista', 'volumen', 'número si existe', 'páginas o eLocator', 'URL pública'],
-    referenceTemplate: 'Autor, A. A. (Año). Título del artículo. Título de la revista, volumen(número), páginas. URL',
-    rules: ['Incluye la URL del artículo únicamente cuando es recuperable públicamente y no es la URL de una base de datos.'],
+    referenceTemplate: `${completeAuthorList} (Año). Título del artículo. Título de la revista, volumen(número), páginas. URL`,
+    rules: [completeAuthorRule, 'Incluye la URL del artículo únicamente cuando es recuperable públicamente y no es la URL de una base de datos.'],
   },
   'journal-no-doi-database-or-print': {
     ...base, id: 'journal-no-doi-database-or-print', label: 'Artículo sin DOI de una base académica común o impreso', manualExample: 3, manualPrintedPages: '323',
     requiredMetadata: ['autores', 'año de publicación', 'título', 'revista científica', 'volumen/número/páginas si existen'],
-    referenceTemplate: 'Autor, A. A. (Año). Título del artículo. Título de la revista científica, volumen(número), páginas.',
-    rules: ['Usa solo el año para un artículo de revista científica, aunque el número muestre mes o estación.', 'No incluye el nombre de la base de datos ni su URL.'],
+    referenceTemplate: `${completeAuthorList} (Año). Título del artículo. Título de la revista científica, volumen(número), páginas.`,
+    rules: [completeAuthorRule, 'Usa solo el año para un artículo de revista científica, aunque el número muestre mes o estación.', 'No incluye el nombre de la base de datos ni su URL.'],
   },
   'journal-21-plus-authors': {
     ...base, id: 'journal-21-plus-authors', label: 'Artículo con 21 o más autores', manualExample: 4, manualPrintedPages: '323',
@@ -88,27 +91,27 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   'journal-elocator': {
     ...base, id: 'journal-elocator', label: 'Artículo con eLocator', manualExample: 6, manualPrintedPages: '324',
     requiredMetadata: ['autores', 'año', 'título', 'revista', 'volumen/número', 'eLocator', 'DOI/URL'],
-    referenceTemplate: 'Autor, A. A. (Año). Título. Revista, volumen(número), Artículo eLocator. DOI/URL',
-    rules: ['Escribe Artículo antes del eLocator y no inventa un rango de páginas.'],
+    referenceTemplate: `${completeAuthorList} (Año). Título. Revista, volumen(número), Artículo eLocator. DOI/URL`,
+    rules: [completeAuthorRule, 'Escribe Artículo antes del eLocator y no inventa un rango de páginas.'],
   },
   'journal-advance-online': {
     ...base, id: 'journal-advance-online', label: 'Artículo publicado anticipadamente en línea', manualExample: 7, manualPrintedPages: '324',
     requiredMetadata: ['autores', 'año', 'título', 'revista', 'estado de publicación anticipada', 'DOI'],
-    referenceTemplate: 'Autor, A. A. (Año). Título. Revista. Publicación anticipada en línea. DOI',
-    rules: ['Debe sustituirse por la referencia de la versión final cuando esta exista.'],
+    referenceTemplate: `${completeAuthorList} (Año). Título. Revista. Publicación anticipada en línea. DOI`,
+    rules: [completeAuthorRule, 'Debe sustituirse por la referencia de la versión final cuando esta exista.'],
   },
   'journal-in-press': {
     ...base, id: 'journal-in-press', label: 'Artículo en prensa', manualExample: 8, manualPrintedPages: '324',
     requiredMetadata: ['autores', 'título', 'revista', 'confirmación de aceptación/en prensa'],
-    referenceTemplate: 'Autor, A. A. (en prensa). Título. Revista.',
+    referenceTemplate: `${completeAuthorList} (en prensa). Título. Revista.`,
     parentheticalCitation: '(Autor, en prensa); (Autor & Autor, en prensa); (Primer autor et al., en prensa) con tres o más autores', narrativeCitation: 'Autor (en prensa); Autor y Autor (en prensa); Primer autor et al. (en prensa) con tres o más autores',
-    rules: ['No inventa año, volumen, número ni páginas todavía no publicados.'],
+    rules: [completeAuthorRule, 'No inventa año, volumen, número ni páginas todavía no publicados.'],
   },
   'journal-other-language': {
     ...base, id: 'journal-other-language', label: 'Artículo publicado en otro idioma', manualExample: 9, manualPrintedPages: '324',
     requiredMetadata: ['autores', 'año', 'título original', 'traducción del título al idioma del trabajo si corresponde', 'revista', 'volumen/número/páginas', 'DOI/URL'],
-    referenceTemplate: 'Autor, A. A. (Año). Título original [Traducción del título]. Revista, volumen(número), páginas. DOI/URL',
-    rules: ['La traducción entre corchetes se añade cuando el idioma del artículo difiere del idioma del trabajo.'],
+    referenceTemplate: `${completeAuthorList} (Año). Título original [Traducción del título]. Revista, volumen(número), páginas. DOI/URL`,
+    rules: [completeAuthorRule, 'La traducción entre corchetes se añade cuando el idioma del artículo difiere del idioma del trabajo.'],
   },
   'journal-translated-republication': {
     ...base, id: 'journal-translated-republication', label: 'Artículo reeditado en traducción', manualExample: 10, manualPrintedPages: '324',
@@ -134,8 +137,8 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   'journal-cochrane': {
     ...base, id: 'journal-cochrane', label: 'Artículo de Cochrane Database of Systematic Reviews', manualExample: 13, manualPrintedPages: '325',
     requiredMetadata: ['autores', 'año', 'título', 'número de edición', 'número de artículo CD', 'DOI'],
-    referenceTemplate: 'Autor, A. A. (Año). Título. Cochrane Database of Systematic Reviews, Año(número de edición), Artículo CDxxxxxx. DOI',
-    rules: ['Se presenta como artículo de publicación periódica.', 'Conserva el número de edición y el identificador de artículo CD verificados.'],
+    referenceTemplate: `${completeAuthorList} (Año). Título. Cochrane Database of Systematic Reviews, Año(número de edición), Artículo CDxxxxxx. DOI`,
+    rules: [completeAuthorRule, 'Se presenta como artículo de publicación periódica.', 'Conserva el número de edición y el identificador de artículo CD verificados.'],
   },
   'journal-uptodate': {
     ...base, id: 'journal-uptodate', label: 'Artículo de UpToDate', manualExample: 14, manualPrintedPages: '325-326',

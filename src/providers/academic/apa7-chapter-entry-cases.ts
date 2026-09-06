@@ -44,24 +44,27 @@ const base = {
   ],
 };
 
+const completeChapterAuthors = 'Autor, A. A.; Autor, A. A., & Autor, B. B.; o Autor, A. A., Autor, B. B., & Autor, C. C.';
+const completeChapterAuthorRule = 'Conserva la lista completa y ordenada de autores del capítulo conforme a los límites del elemento autor de APA.';
+
 export const chapterEntryCases: Record<ChapterEntryCaseId, Apa7VerifiedChapterEntryCase> = {
   'chapter-edited-doi': {
     ...base, id: 'chapter-edited-doi', label: 'Capítulo de libro editado con DOI', manualExample: 38, manualPrintedPages: '332',
     requiredMetadata: ['autores del capítulo', 'año', 'título del capítulo', 'editores', 'título del libro', 'edición/volumen si existen', 'páginas', 'editorial', 'DOI'],
-    referenceTemplate: 'Autor, A. A. (Año). Título del capítulo. En E. E. Editor (Ed.), o E. E. Editor, F. F. Editor, & G. G. Editor (Eds.), Título del libro (edición, pp. xx-xx). Editorial. https://doi.org/xxxxx',
-    rules: ['El autor del capítulo, no el editor del libro, gobierna la cita.', 'El DOI se expresa como URL.'],
+    referenceTemplate: `${completeChapterAuthors} (Año). Título del capítulo. En E. E. Editor (Ed.), o E. E. Editor, F. F. Editor, & G. G. Editor (Eds.), Título del libro (edición, pp. xx-xx). Editorial. https://doi.org/xxxxx`,
+    rules: [completeChapterAuthorRule, 'El autor del capítulo, no el editor del libro, gobierna la cita.', 'El DOI se expresa como URL.'],
   },
   'chapter-edited-no-doi-database-or-print': {
     ...base, id: 'chapter-edited-no-doi-database-or-print', label: 'Capítulo sin DOI de base académica común o impreso', manualExample: 39, manualPrintedPages: '332-333',
     requiredMetadata: ['autores del capítulo', 'año', 'título', 'editores', 'libro', 'edición/volumen si existen', 'páginas', 'editorial'],
-    referenceTemplate: 'Autor, A. A. (Año). Título del capítulo. En E. E. Editor (Ed.), o E. E. Editor, F. F. Editor, & G. G. Editor (Eds.), Título del libro (edición, pp. xx-xx). Editorial.',
-    rules: ['No incluye el nombre ni la URL de una base de datos académica común.'],
+    referenceTemplate: `${completeChapterAuthors} (Año). Título del capítulo. En E. E. Editor (Ed.), o E. E. Editor, F. F. Editor, & G. G. Editor (Eds.), Título del libro (edición, pp. xx-xx). Editorial.`,
+    rules: [completeChapterAuthorRule, 'No incluye el nombre ni la URL de una base de datos académica común.'],
   },
   'chapter-electronic-public-url': {
     ...base, id: 'chapter-electronic-public-url', label: 'Capítulo electrónico o de audiolibro sin DOI con URL pública', manualExample: 40, manualPrintedPages: '333',
     requiredMetadata: ['autores del capítulo', 'año', 'título', 'editores', 'libro', 'edición', 'páginas', 'editorial', 'URL pública'],
-    referenceTemplate: 'Autor, A. A. (Año). Título del capítulo. En E. E. Editor (Ed.), o E. E. Editor, F. F. Editor, & G. G. Editor (Eds.), Título del libro (edición, pp. xx-xx). Editorial. URL',
-    rules: ['Incluye la URL cuando no pertenece a una base de datos.', 'No añade plataforma o dispositivo; trata los detalles especiales de audiolibro solo cuando sean relevantes.'],
+    referenceTemplate: `${completeChapterAuthors} (Año). Título del capítulo. En E. E. Editor (Ed.), o E. E. Editor, F. F. Editor, & G. G. Editor (Eds.), Título del libro (edición, pp. xx-xx). Editorial. URL`,
+    rules: [completeChapterAuthorRule, 'Incluye la URL cuando no pertenece a una base de datos.', 'No añade plataforma o dispositivo; trata los detalles especiales de audiolibro solo cuando sean relevantes.'],
   },
   'chapter-other-language': {
     ...base, id: 'chapter-other-language', label: 'Capítulo de libro editado en otro idioma', manualExample: 41, manualPrintedPages: '333',
@@ -79,9 +82,9 @@ export const chapterEntryCases: Record<ChapterEntryCaseId, Apa7VerifiedChapterEn
   'chapter-reprinted-from-journal': {
     ...base, id: 'chapter-reprinted-from-journal', label: 'Capítulo reimpreso de un artículo de revista científica', manualExample: 43, manualPrintedPages: '333',
     requiredMetadata: ['autores', 'año de reimpresión', 'título', 'editores y libro de la reimpresión', 'páginas de la reimpresión', 'editorial', 'año y datos completos del artículo original'],
-    referenceTemplate: 'Autor, A. A. (Año reimpresión). Título. En E. Editor (Ed.), o E. Editor, F. Editor, & G. Editor (Eds.), Libro de la reimpresión (pp. xx-xx). Editorial. (Reimpreso de “Título del artículo”, Año original, Revista, volumen[número], páginas, DOI/URL)',
+    referenceTemplate: `${completeChapterAuthors} (Año reimpresión). Título. En E. Editor (Ed.), o E. Editor, F. Editor, & G. Editor (Eds.), Libro de la reimpresión (pp. xx-xx). Editorial. (Reimpreso de “Título del artículo”, Año original, Revista, volumen[número], páginas, DOI/URL)`,
     parentheticalCitation: '(Autor, Año original/Año reimpresión); (Autor & Autor, Año original/Año reimpresión); (Primer autor et al., Año original/Año reimpresión) con tres o más autores', narrativeCitation: 'Autor (Año original/Año reimpresión); Autor y Autor (Año original/Año reimpresión); Primer autor et al. (Año original/Año reimpresión) con tres o más autores',
-    rules: ['Describe primero la versión reimpresa utilizada y después el artículo original.', 'El número de la revista original va entre corchetes para evitar paréntesis anidados.'],
+    rules: [completeChapterAuthorRule, 'Describe primero la versión reimpresa utilizada y después el artículo original.', 'El número de la revista original va entre corchetes para evitar paréntesis anidados.'],
   },
   'chapter-reprinted-from-book': {
     ...base, id: 'chapter-reprinted-from-book', label: 'Capítulo reimpreso de otro libro', manualExample: 44, manualPrintedPages: '334',
