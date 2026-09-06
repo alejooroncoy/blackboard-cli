@@ -464,6 +464,7 @@ test('Peruvian legal profiles reject common hallucinations and preserve official
   assert.match(law.parentheticalCitation, /para la norma completa/);
   assert.match(law.parentheticalCitation, /disposición específica verificada/);
   assert.match(tc.parentheticalCitation, /fundamento X/);
+  assert.match(tc.parentheticalCitation, /para la decisión completa/);
   assert.match(tc.rules.join(' '), /Distingue sentencia, auto y resolución/);
   assert.match(patent.rules.join(' '), /año de concesión, no de solicitud/);
   assert.match(patent.parentheticalCitation, /Inventor & Inventor/);
@@ -685,6 +686,8 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(edited.case.parentheticalCitation, /tres o más editores/);
   const dictionary = JSON.parse((await handler({ topic: 'reference', caseId: 'dictionary-thesaurus-encyclopedia' })).content[0].text);
   assert.match(dictionary.case.rules.join(' '), /fecha de recuperación/);
+  assert.match(dictionary.case.referenceTemplate, /\(Ed\.\).*\(Eds\.\)/);
+  assert.match(dictionary.case.rules.join(' '), /Distingue el autor grupal de los editores/);
   const religious = JSON.parse((await handler({ topic: 'citation', caseId: 'religious-work' })).content[0].text).case;
   const multivolume = JSON.parse((await handler({ topic: 'reference', caseId: 'book-multivolume-single-volume' })).content[0].text).case;
   const ancient = JSON.parse((await handler({ topic: 'citation', caseId: 'ancient-greek-roman-work' })).content[0].text).case;
@@ -778,6 +781,14 @@ test('APA 7 guidance covers reports, conferences and theses through example 66',
   assert.ok(organization);
   assert.match(organization.parentheticalCitation, /Entidad & Entidad/);
   assert.match(organization.parentheticalCitation, /tres o más entidades autoras/);
+  assert.match(organization.referenceTemplate, /Entidad autora, Entidad autora, & Entidad autora/);
+  assert.match(organization.rules.join(' '), /todas las agencias coautoras/);
+  for (const id of ['report-individual-authors-in-organization', 'report-series']) {
+    const report = cases.find(candidate => candidate.id === id);
+    assert.ok(report);
+    assert.match(report.referenceTemplate, /Autor, C\. C\./, id);
+    assert.match(report.rules.join(' '), /lista completa de autores/, id);
+  }
   const symposium = cases.find(candidate => candidate.id === 'symposium-contribution');
   assert.ok(symposium);
   assert.match(symposium.parentheticalCitation, /tres o más autores/);

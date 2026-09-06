@@ -139,9 +139,9 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   'dictionary-thesaurus-encyclopedia': {
     ...base, id: 'dictionary-thesaurus-encyclopedia', label: 'Diccionario, tesauro o enciclopedia completos', manualExample: 33, manualPrintedPages: '330-331',
     requiredMetadata: ['autor grupal o editor', 'fecha o s. f.', 'título', 'edición/versión', 'editorial si corresponde', 'URL', 'fecha de recuperación si cambia sin archivo'],
-    referenceTemplate: 'Autor/Editor. (Fecha o s. f.). Título de la obra (edición/versión). Editorial. Recuperado el día de mes de año, de URL si cambia sin archivo',
+    referenceTemplate: 'Autor grupal. (Fecha o s. f.). Título de la obra (edición/versión). Editorial. URL; si se acredita a editores: Editor, E. E. (Ed.), o Editor, E. E., & Editor, F. F. (Eds.). (Fecha o s. f.). Título y demás elementos. Añade fecha de recuperación solo si cambia sin archivo.',
     parentheticalCitation: '(Autor/Editor, Fecha); (Autor/Editor & Autor/Editor, Fecha); (Primer autor/editor et al., Fecha) con tres o más responsables', narrativeCitation: 'Autor/Editor (Fecha); Autor/Editor y Autor/Editor (Fecha); Primer autor/editor et al. (Fecha) con tres o más responsables',
-    rules: ['Usa s. f. y fecha de recuperación para obras actualizadas continuamente sin versiones archivadas.', 'Omite fecha de recuperación para versiones estables o archivadas.'],
+    rules: ['Distingue el autor grupal de los editores; para estos últimos incluye la lista completa y añade (Ed.) o (Eds.).', 'Usa s. f. y fecha de recuperación para obras actualizadas continuamente sin versiones archivadas.', 'Omite fecha de recuperación para versiones estables o archivadas.'],
   },
   anthology: {
     ...base, id: 'anthology', label: 'Antología completa', manualExample: 34, manualPrintedPages: '331',
