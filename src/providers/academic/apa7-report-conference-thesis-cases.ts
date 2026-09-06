@@ -93,10 +93,10 @@ export const reportConferenceThesisCases: Record<ReportConferenceThesisCaseId, A
   },
   'code-of-ethics': {
     ...reportBase, id: 'code-of-ethics', label: 'Código de ética', manualExample: 55, manualPrintedPages: '337',
-    requiredMetadata: ['entidad autora', 'año o fecha de la versión', 'título exacto', 'URL'],
-    referenceTemplate: 'Entidad. (Año). Título del código de ética. URL',
+    requiredMetadata: ['entidad autora', 'año o fecha de la versión', 'título exacto', 'DOI o URL pública si corresponde'],
+    referenceTemplate: 'Entidad. (Año). Título del código de ética. Con DOI: añade DOI al final. Con URL pública sin DOI: añade URL al final. Impreso o base académica común sin localizador: termina en el título.',
     parentheticalCitation: '(Entidad, Año)', narrativeCitation: 'Entidad (Año)',
-    rules: ['No repite la entidad como editorial cuando autor y editorial coinciden.', 'Usa la fecha correspondiente a la versión consultada.'],
+    rules: ['No repite la entidad como editorial cuando autor y editorial coinciden.', 'Usa la fecha correspondiente a la versión consultada.', 'Prefiere DOI; usa URL pública si no hay DOI y omite ambos en una versión impresa o base académica común sin localizador.'],
   },
   'grant-award': {
     ...reportBase, id: 'grant-award', label: 'Subvención concedida', manualExample: 56, manualPrintedPages: '337',

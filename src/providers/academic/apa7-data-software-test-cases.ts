@@ -93,7 +93,7 @@ export const dataSoftwareTestCases: Record<DataSoftwareTestCaseId, Apa7VerifiedD
   'test-itself': {
     ...testBase, id: 'test-itself', label: 'Prueba, escala o inventario en sí mismo', manualExample: 82, manualPrintedPages: '346-347',
     requiredMetadata: ['autor o entidad', 'año o s. f.', 'nombre exacto de la prueba', 'URL o fuente recuperable'],
-    referenceTemplate: 'Autor o entidad. (Año o s. f.). Título de la prueba. URL',
+    referenceTemplate: 'Autor o entidad. (Año o s. f.). Título de la prueba [Prueba]. URL',
     parentheticalCitation: '(Autor o entidad, Año o s. f.)', narrativeCitation: 'Autor o entidad (Año o s. f.)',
     rules: ['Cita la prueba misma solo si no existe manual ni otra literatura de apoyo.', 'En el texto, el nombre de la prueba usa mayúsculas de título y tipografía normal, no cursiva.'],
   },
