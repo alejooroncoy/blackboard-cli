@@ -30,7 +30,7 @@ Esta ficha guía la respuesta, pero no reemplaza las instrucciones del docente n
 | Dos autores | `Apellido y Apellido (2024)`; `(Apellido & Apellido, 2024)` |
 | Tres o más autores | `Apellido et al. (2024)`; `(Apellido et al., 2024)` |
 | Autor corporativo | `(Organización, 2024)`; la primera mención puede introducir una sigla útil |
-| Sin autor | `("Título abreviado", 2024)` para artículo/página; título en cursiva para obra independiente |
+| Sin autor | `("Título abreviado", 2024)` para artículo; `(*Título abreviado*, 2024)` para página web u otra obra independiente |
 | Sin fecha | `(Apellido, s. f.)` |
 | Dos fuentes en un paréntesis | `(Apellido, 2020; Apellido, 2024)` en orden alfabético |
 | Mismo autor, años distintos | `(Apellido, 2019, 2024)` |

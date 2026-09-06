@@ -85,9 +85,9 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   'book-edited-doi-multiple-publishers': {
     ...base, id: 'book-edited-doi-multiple-publishers', label: 'Libro editado con DOI y varias editoriales', manualExample: 24, manualPrintedPages: '328',
     requiredMetadata: ['editores', 'año', 'título', 'edición desde la segunda', 'editoriales en orden', 'DOI'],
-    referenceTemplate: `${completeEditorList}. (Año). Título del libro (edición, solo desde la segunda). Editorial 1; Editorial 2. DOI`,
+    referenceTemplate: `${completeEditorList}. (Año). Título del libro (edición, solo desde la segunda). Editorial 1; Editorial 2. https://doi.org/xxxxx`,
     parentheticalCitation: '(Editor, Año); (Editor & Editor, Año); (Primer editor et al., Año) con tres o más editores', narrativeCitation: 'Editor (Año); Editor y Editor (Año); Primer editor et al. (Año) con tres o más editores',
-    rules: ['Incluye la lista completa de editores y usa (Ed.) para uno o (Eds.) para varios.', 'Incluye la edición desde la segunda; omite todo el paréntesis para la primera.', 'Separa editoriales con punto y coma y conserva su orden.'],
+    rules: ['Incluye la lista completa de editores y usa (Ed.) para uno o (Eds.) para varios.', 'Incluye la edición desde la segunda; omite todo el paréntesis para la primera.', 'Separa editoriales con punto y coma y conserva su orden.', 'Expresa el DOI como URL completa https://doi.org/...'],
   },
   'book-edited-no-doi-database-or-print': {
     ...base, id: 'book-edited-no-doi-database-or-print', label: 'Libro editado sin DOI, de base académica común o impreso', manualExample: 25, manualPrintedPages: '328',

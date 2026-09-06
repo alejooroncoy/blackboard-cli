@@ -54,6 +54,7 @@ test('APA 7 quick reference never leaves a book URL or DOI as an unconditional p
   assert.match(quickReference, /Con DOI o URL pública:/);
   assert.match(quickReference, /impreso o en base académica común sin localizador:/);
   assert.match(quickReference, /Artículo científico \| Con DOI:.*sin DOI con URL pública:.*impreso o base académica común sin localizador:/);
+  assert.match(quickReference, /\(\*Título abreviado\*, 2024\).*página web/);
 });
 
 test('APA 7 guidance exposes a journal template when the host authorizes access', async () => {
@@ -777,6 +778,8 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   const edited = JSON.parse((await handler({ topic: 'citation', caseId: 'book-edited-doi-multiple-publishers' })).content[0].text);
   assert.match(edited.case.parentheticalCitation, /Editor & Editor/);
   assert.match(edited.case.parentheticalCitation, /tres o más editores/);
+  assert.match(edited.case.referenceTemplate, /https:\/\/doi\.org\/xxxxx/);
+  assert.match(edited.case.rules.join(' '), /DOI como URL completa/);
   const authoredWithEditor = JSON.parse((await handler({ topic: 'reference', caseId: 'book-author-editor-on-cover' })).content[0].text).case;
   assert.match(authoredWithEditor.requiredMetadata.join(' '), /edición desde la segunda/);
   assert.match(authoredWithEditor.referenceTemplate, /\(E\. Editor, Ed\.; edición, solo desde la segunda\)/);
