@@ -1000,6 +1000,8 @@ test('APA 7 guidance covers reports, conferences and theses through example 66',
   assert.ok(policyBrief);
   assert.match(policyBrief.requiredMetadata.join(' '), /autores personales o entidad/);
   assert.match(policyBrief.referenceTemplate, /21 o más: autores 1–19/);
+  assert.doesNotMatch(policyBrief.referenceTemplate, /Entidad autora\. Autor o entidad/);
+  assert.match(policyBrief.referenceTemplate, /Entidad autora: Entidad autora\. \(Año\)/);
   assert.match(policyBrief.parentheticalCitation, /tres o más responsables/);
   assert.match(organization.requiredMetadata.join(' '), /URL\/DOI si corresponde/);
   for (const id of ['conference-session', 'conference-paper-presentation', 'conference-poster-presentation', 'symposium-contribution']) {

@@ -115,7 +115,7 @@ export const reportConferenceThesisCases: Record<ReportConferenceThesisCaseId, A
   'policy-brief': {
     ...reportBase, id: 'policy-brief', label: 'Informe de políticas', manualExample: 58, manualPrintedPages: '337',
     requiredMetadata: ['autores personales o entidad', 'año', 'título', 'organización', 'DOI o URL pública si corresponde'],
-    referenceTemplate: `Autores personales: ${completeContributionAuthors}; entidad: Entidad autora. Autor o entidad. (Año). Título [Informe de políticas]. Organización. Con DOI: añade DOI al final. Con URL pública sin DOI: añade URL al final. Impreso o base académica común sin localizador: termina en la organización.`,
+    referenceTemplate: `Autores personales: ${completeContributionAuthors} (Año). Título [Informe de políticas]. Organización. Entidad autora: Entidad autora. (Año). Título [Informe de políticas]. Organización. En ambos casos, con DOI: añade DOI al final; con URL pública sin DOI: añade URL al final; impreso o base académica común sin localizador termina en la organización.`,
     parentheticalCitation: '(Autor o entidad, Año); (Autor o entidad & Autor o entidad, Año); (Primer autor o entidad et al., Año) con tres o más responsables', narrativeCitation: 'Autor o entidad (Año); Autor o entidad y Autor o entidad (Año); Primer autor o entidad et al. (Año) con tres o más responsables',
     rules: ['Incluye la lista completa de autores personales en el orden acreditado o la entidad autora.', 'La descripción [Informe de políticas] aparece inmediatamente después del título.'],
   },
