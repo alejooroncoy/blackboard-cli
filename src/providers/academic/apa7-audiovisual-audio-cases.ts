@@ -107,7 +107,7 @@ export const audiovisualAudioCases: Record<AudiovisualAudioCaseId, Apa7VerifiedA
   'song-or-track': {
     ...audioBase, id: 'song-or-track', label: 'Canción o pista', manualExample: 92, manualPrintedPages: '351',
     requiredMetadata: ['compositor clásico o artista de grabación', 'año', 'título de la canción', 'intérprete si difiere', 'álbum si existe', 'discográfica(s)', 'año original si corresponde', 'URL solo si es único medio'],
-    referenceTemplate: 'Autor musical. (Año). Título de la canción [Canción; grabada por Intérprete si corresponde]. En Título del álbum, si existe. Discográfica(s). Añade (Obra original publicada en Año original) solo cuando exista un año original verificado. Añade URL al final solo si es el único medio de recuperación.',
+    referenceTemplate: 'Autor musical. (Año). Título de la canción [Canción; grabada por Intérprete si corresponde]. En Título del álbum, si existe. Discográfica(s). Añade URL solo si es el único medio de recuperación. Añade (Obra original publicada en Año original) al final solo cuando exista un año original verificado.',
     parentheticalCitation: '(Autor musical, Año original/Año versión o Año)', narrativeCitation: 'Autor musical (Año original/Año versión o Año)',
     rules: ['Omite el elemento álbum cuando la canción no pertenece a uno.', 'No añadas una nota de publicación original a una canción moderna o sin año original verificado.', 'Usa URL solo cuando esa ubicación es el único medio de recuperación.'],
   },
