@@ -99,9 +99,9 @@ export const chapterEntryCases: Record<ChapterEntryCaseId, Apa7VerifiedChapterEn
   'work-in-anthology': {
     ...base, id: 'work-in-anthology', label: 'Obra individual incluida en una antología', manualExample: 46, manualPrintedPages: '334',
     requiredMetadata: ['autor de la obra', 'año de la antología', 'título de la obra', 'editor de la antología', 'título de la antología', 'páginas', 'editorial', 'DOI/URL', 'año original si ya se publicó'],
-    referenceTemplate: 'Autor, A. A. (Año antología). Título de la obra. En E. Editor (Ed.), Título de la antología (pp. xx-xx). Editorial. DOI/URL (Obra original publicada en Año original)',
-    parentheticalCitation: '(Autor, Año original/Año antología); (Autor & Autor, Año original/Año antología); (Primer autor et al., Año original/Año antología) con tres o más autores', narrativeCitation: 'Autor (Año original/Año antología); Autor y Autor (Año original/Año antología); Primer autor et al. (Año original/Año antología) con tres o más autores',
-    rules: ['Si la obra se publicó antes en otro lugar, se trata como reedición, no como reimpresión.'],
+    referenceTemplate: 'Autor, A. A. (Año antología). Título de la obra. En E. Editor (Ed.), Título de la antología (pp. xx-xx). Editorial. DOI/URL. Añade (Obra original publicada en Año original) solo si hubo una publicación anterior verificada.',
+    parentheticalCitation: '(Autor, Año antología), (Autor & Autor, Año antología) o (Primer autor et al., Año antología) si no hubo publicación anterior; usa Año original/Año antología cuando ambos están verificados', narrativeCitation: 'Autor (Año antología), Autor y Autor (Año antología) o Primer autor et al. (Año antología) si no hubo publicación anterior; usa Año original/Año antología cuando ambos están verificados',
+    rules: ['No inventes un año original cuando la obra apareció por primera vez en la antología.', 'Si la obra se publicó antes en otro lugar, se trata como reedición, no como reimpresión.'],
   },
   'reference-entry-group-author': {
     ...base, id: 'reference-entry-group-author', label: 'Entrada de diccionario, tesauro o enciclopedia con autor grupal', manualExample: 47, manualPrintedPages: '334',

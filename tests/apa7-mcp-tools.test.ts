@@ -684,10 +684,13 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   const dictionary = JSON.parse((await handler({ topic: 'reference', caseId: 'dictionary-thesaurus-encyclopedia' })).content[0].text);
   assert.match(dictionary.case.rules.join(' '), /fecha de recuperación/);
   const religious = JSON.parse((await handler({ topic: 'citation', caseId: 'religious-work' })).content[0].text).case;
+  const multivolume = JSON.parse((await handler({ topic: 'reference', caseId: 'book-multivolume-single-volume' })).content[0].text).case;
   assert.match(religious.parentheticalCitation, /\(\*Título\*,/);
   assert.match(religious.narrativeCitation, /^\*Título\*/);
   assert.match(religious.parentheticalCitation, /Año versión\) si no corresponde un año original/);
   assert.match(religious.rules.join(' '), /No inventes un año original/);
+  assert.match(multivolume.referenceTemplate, /\(Ed\.\).*\(Eds\.\)/);
+  assert.match(multivolume.rules.join(' '), /lista completa en posición de autor/);
 });
 
 test('APA 7 edited works preserve the complete editor list and plural role', async () => {
@@ -731,6 +734,15 @@ test('APA 7 chapter containers preserve multiple editors', async () => {
     const chapter = JSON.parse((await handler({ topic: 'reference', caseId })).content[0].text).case;
     assert.match(chapter.referenceTemplate, /\(Eds\.\)/, caseId);
   }
+});
+
+test('APA 7 anthology work makes an earlier publication date optional', async () => {
+  let handler: any;
+  registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
+  const work = JSON.parse((await handler({ topic: 'reference', caseId: 'work-in-anthology' })).content[0].text).case;
+  assert.match(work.parentheticalCitation, /Año antología\).*si no hubo publicación anterior/);
+  assert.match(work.referenceTemplate, /solo si hubo una publicación anterior verificada/);
+  assert.match(work.rules.join(' '), /No inventes un año original/);
 });
 
 test('APA 7 guidance covers reports, conferences and theses through example 66', async () => {
@@ -843,6 +855,7 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   const webinar = JSON.parse((await handler({ topic: 'reference', caseId: 'recorded-webinar' })).content[0].text).case;
   const interview = JSON.parse((await handler({ topic: 'reference', caseId: 'archived-radio-interview' })).content[0].text).case;
   const podcast = JSON.parse((await handler({ topic: 'reference', caseId: 'podcast-series' })).content[0].text).case;
+  const song = JSON.parse((await handler({ topic: 'reference', caseId: 'song-or-track' })).content[0].text).case;
   const episode = JSON.parse((await handler({ topic: 'citation', caseId: 'television-episode-or-webisode' })).content[0].text).case;
   const series = JSON.parse((await handler({ topic: 'citation', caseId: 'television-series' })).content[0].text).case;
   const film = JSON.parse((await handler({ topic: 'citation', caseId: 'film-or-video' })).content[0].text).case;
@@ -851,6 +864,8 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   assert.match(webinar.rules.join(' '), /comunicación personal/);
   assert.match(interview.rules.join(' '), /persona entrevistada/);
   assert.match(podcast.referenceTemplate, /Año inicial–presente o Año inicial–Año final/);
+  assert.match(song.referenceTemplate, /solo cuando exista un año original verificado/);
+  assert.match(song.rules.join(' '), /canción moderna o sin año original verificado/);
   assert.match(podcast.requiredMetadata.join(' '), /lista completa/);
   assert.match(podcast.parentheticalCitation, /tres o más responsables/);
   const podcastEpisode = JSON.parse((await handler({ topic: 'reference', caseId: 'podcast-episode' })).content[0].text).case;
