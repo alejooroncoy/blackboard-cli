@@ -95,6 +95,11 @@ function referenceFormattingForCase(id: VerifiedCaseId) {
     encoding,
     italicize: ['título del informe, proyecto, comunicado, contribución de congreso, tesis o disertación que funciona como obra independiente'],
   };
+  if (id === 'review-tv-episode-on-website') return {
+    encoding,
+    italicize: ['título de la reseña que funciona como página web independiente'],
+    doNotItalicize: ['nombre del sitio', 'título del episodio citado dentro de la descripción entre corchetes'],
+  };
   if (id in reviewUnpublishedCases) return {
     encoding,
     italicize: ['título y volumen de la publicación contenedora', 'título de la obra reseñada o del manuscrito independiente cuando corresponda'],

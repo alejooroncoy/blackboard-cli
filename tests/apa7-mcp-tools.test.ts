@@ -90,6 +90,9 @@ test('APA 7 case formatting distinguishes blog and untitled visual works', async
   const blog = JSON.parse((await handler({ topic: 'reference', caseId: 'blog-post' })).content[0].text).case.referenceFormatting;
   assert.match(blog.italicize.join(' '), /título de la entrada/);
   assert.match(blog.doNotItalicize.join(' '), /nombre del blog/);
+  const websiteReview = JSON.parse((await handler({ topic: 'reference', caseId: 'review-tv-episode-on-website' })).content[0].text).case.referenceFormatting;
+  assert.match(websiteReview.italicize.join(' '), /título de la reseña/);
+  assert.match(websiteReview.doNotItalicize.join(' '), /título del episodio/);
 
   for (const caseId of ['artwork-museum-or-museum-site', 'clip-art-or-stock-image', 'map', 'photograph', 'slides-or-lecture-notes']) {
     const formatting = JSON.parse((await handler({ topic: 'reference', caseId })).content[0].text).case.referenceFormatting;
@@ -766,6 +769,15 @@ test('APA 7 guidance covers reviews and unpublished or informally published work
   assert.match(eric.referenceTemplate, /documento ERIC/);
 });
 
+test('APA 7 newspaper book reviews distinguish print pages from online URLs', async () => {
+  let handler: any;
+  registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
+  const review = JSON.parse((await handler({ topic: 'reference', caseId: 'review-book-in-newspaper' })).content[0].text).case;
+  assert.match(review.referenceTemplate, /p\. x o pp\. xx–xx para versión impresa/);
+  assert.match(review.referenceTemplate, /URL para versión en línea/);
+  assert.match(review.rules.join(' '), /incluye la página o el intervalo/);
+});
+
 test('APA 7 guidance covers datasets, software and tests through example 83', async () => {
   let handler: any;
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
@@ -981,6 +993,8 @@ test('APA 7 source rules choose DOI over URL and omit common databases', async (
   assert.match(database.rules.join(' '), /Omítela para obras ampliamente disponibles/);
   assert.match(database.refuseWhen.join(' '), /sesión, token/);
   assert.match(periodical.rules.join(' '), /coma que lo sigue también va en cursiva/);
+  assert.match(periodical.rules.join(' '), /Excepción para blogs/);
+  assert.match(periodical.rules.join(' '), /nombre del blog.*queda en redonda/);
 });
 
 test('APA 7 periodical rules omit rather than invent missing publication data', async () => {

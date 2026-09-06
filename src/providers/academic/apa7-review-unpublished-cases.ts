@@ -52,8 +52,8 @@ export const reviewUnpublishedCases: Record<ReviewUnpublishedCaseId, Apa7Verifie
   'review-book-in-newspaper': {
     ...reviewBase, id: 'review-book-in-newspaper', label: 'Reseña de libro publicada en periódico', manualExample: 68, manualPrintedPages: '341',
     requiredMetadata: ['revisor', 'fecha completa', 'título de la reseña', 'título y autor del libro', 'periódico', 'URL o página'],
-    referenceTemplate: 'Revisor, A. A. (Año, día de mes). Título de la reseña [Reseña del libro Título, de A. Autor]. Periódico. URL',
-    rules: ['Usa el formato de periódico.', 'No añade una designación de rol después del autor de un libro reseñado.'],
+    referenceTemplate: 'Revisor, A. A. (Año, día de mes). Título de la reseña [Reseña del libro Título, de A. Autor]. Periódico, p. x o pp. xx–xx para versión impresa. URL para versión en línea',
+    rules: ['Usa el formato de periódico.', 'En la versión impresa incluye la página o el intervalo de páginas y omite la URL; en la versión en línea incluye la URL y omite las páginas si no existen.', 'No añade una designación de rol después del autor de un libro reseñado.'],
   },
   'review-tv-episode-on-website': {
     ...reviewBase, id: 'review-tv-episode-on-website', label: 'Reseña de episodio de televisión publicada en sitio web', manualExample: 69, manualPrintedPages: '341',
