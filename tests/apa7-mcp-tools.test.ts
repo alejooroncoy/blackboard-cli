@@ -1075,6 +1075,9 @@ test('APA 7 episode reviews preserve every credited contributor and role', async
   assert.match(review.referenceTemplate, /de 3 a 20 responsables combinados/);
   assert.match(review.referenceTemplate, /21 o más: responsables 1–19/);
   assert.match(review.rules.join(' '), /lista completa de guionistas, director y otros responsables/);
+  const episode = JSON.parse((await handler({ topic: 'reference', caseId: 'television-episode-or-webisode' })).content[0].text).case;
+  assert.match(episode.requiredMetadata.join(' '), /temporada y episodio si se publican/);
+  assert.match(episode.referenceTemplate, /Sin numeración publicada: Título \[Episodio de serie de TV\]/);
 });
 
 test('APA 7 guidance covers datasets, software and tests through example 83', async () => {
