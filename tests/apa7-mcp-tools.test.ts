@@ -880,7 +880,7 @@ test('APA 7 chapter containers preserve multiple editors', async () => {
   }
   for (const caseId of ['chapter-edited-doi', 'chapter-edited-no-doi-database-or-print', 'chapter-electronic-public-url']) {
     const chapter = JSON.parse((await handler({ topic: 'reference', caseId })).content[0].text).case;
-    assert.match(chapter.referenceTemplate, /E\. E\. Editor, & F\. F\. Editor \(Eds\.\)/, caseId);
+  assert.match(chapter.referenceTemplate, /E\. E\. Editor & F\. F\. Editor \(Eds\.\)/, caseId);
     assert.match(chapter.referenceTemplate, /edición y volumen: edición, Vol\. x, pp\. xx-xx; solo edición: edición, pp\. xx-xx; solo volumen: Vol\. x, pp\. xx-xx/, caseId);
   }
 });
@@ -1031,8 +1031,11 @@ test('APA 7 guidance covers datasets, software and tests through example 83', as
   assert.match(dataset.rules.join(' '), /análisis secundarios/);
   assert.match(dataset.referenceTemplate, /solo si difiere del autor/);
   assert.match(dataset.referenceTemplate, /Elige una sola forma de título/);
+  assert.match(dataset.referenceTemplate, /Identificador; Versión x\), seguido sin punto por \[Conjunto de datos/);
   assert.match(dataset.referenceTemplate, /Título del conjunto \(Identificador\); Título del conjunto \(Versión x\); o Título del conjunto \(Identificador; Versión x\)/);
   assert.match(dataset.rules.join(' '), /omite todo el paréntesis si no existe ninguno/);
+  const foreignJournal = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-other-language' })).content[0].text).case;
+  assert.match(foreignJournal.referenceTemplate, /Con DOI:.*Sin DOI con URL pública:.*Impreso o base académica común sin localizador:/);
   assert.match(software.rules.join(' '), /distribución limitada/);
   assert.match(software.referenceTemplate, /solo si difiere del autor/);
   assert.match(software.parentheticalCitation, /Autor & Autor/);

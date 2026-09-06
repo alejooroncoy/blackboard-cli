@@ -46,7 +46,7 @@ const base = {
 
 const completeChapterAuthors = 'Un autor: Autor, A. A.; dos: Autor, A. A., & Autor, B. B.; de 3 a 20: Autor, A. A., Autor, B. B., Autor, C. C., …, & Autor final, Z. Z. (incluye todos); 21 o más: autores 1–19, …, Último autor';
 const completeChapterAuthorRule = 'Conserva la lista completa y ordenada de autores del capítulo conforme a los límites del elemento autor de APA.';
-const completeChapterEditors = 'un editor: E. E. Editor (Ed.); dos: E. E. Editor, & F. F. Editor (Eds.); de 3 a 20: E. E. Editor, F. F. Editor, G. G. Editor, …, & Z. Z. Editor final (Eds.; incluye todos); 21 o más: editores 1–19, …, Último editor (Eds.)';
+const completeChapterEditors = 'un editor: E. E. Editor (Ed.); dos: E. E. Editor & F. F. Editor (Eds.); de 3 a 20: E. E. Editor, F. F. Editor, G. G. Editor, …, & Z. Z. Editor final (Eds.; incluye todos); 21 o más: editores 1–19, …, Último editor (Eds.)';
 const titlePositionChapterTranslators = 'Un traductor: T. Traductor, Trad.; dos: T. Traductor & U. Traductor, Trads.; de 3 a 20: T. Traductor, U. Traductor, V. Traductor, …, & Traductor final, Trads.; 21 o más: traductores 1–19, …, Último traductor, Trads.';
 
 export const chapterEntryCases: Record<ChapterEntryCaseId, Apa7VerifiedChapterEntryCase> = {
