@@ -46,24 +46,25 @@ const base = {
 
 const completeChapterAuthors = 'Autor, A. A.; Autor, A. A., & Autor, B. B.; o Autor, A. A., Autor, B. B., & Autor, C. C.';
 const completeChapterAuthorRule = 'Conserva la lista completa y ordenada de autores del capítulo conforme a los límites del elemento autor de APA.';
+const completeChapterEditors = 'E. E. Editor (Ed.); E. E. Editor, & F. F. Editor (Eds.); o E. E. Editor, F. F. Editor, & G. G. Editor (Eds.; conserva la lista completa si hay más)';
 
 export const chapterEntryCases: Record<ChapterEntryCaseId, Apa7VerifiedChapterEntryCase> = {
   'chapter-edited-doi': {
     ...base, id: 'chapter-edited-doi', label: 'Capítulo de libro editado con DOI', manualExample: 38, manualPrintedPages: '332',
     requiredMetadata: ['autores del capítulo', 'año', 'título del capítulo', 'editores', 'título del libro', 'edición/volumen si existen', 'páginas', 'editorial', 'DOI'],
-    referenceTemplate: `${completeChapterAuthors} (Año). Título del capítulo. En E. E. Editor (Ed.), o E. E. Editor, F. F. Editor, & G. G. Editor (Eds.), Título del libro (edición, pp. xx-xx). Editorial. https://doi.org/xxxxx`,
+    referenceTemplate: `${completeChapterAuthors} (Año). Título del capítulo. En ${completeChapterEditors}, Título del libro (edición, pp. xx-xx). Editorial. https://doi.org/xxxxx`,
     rules: [completeChapterAuthorRule, 'El autor del capítulo, no el editor del libro, gobierna la cita.', 'El DOI se expresa como URL.'],
   },
   'chapter-edited-no-doi-database-or-print': {
     ...base, id: 'chapter-edited-no-doi-database-or-print', label: 'Capítulo sin DOI de base académica común o impreso', manualExample: 39, manualPrintedPages: '332-333',
     requiredMetadata: ['autores del capítulo', 'año', 'título', 'editores', 'libro', 'edición/volumen si existen', 'páginas', 'editorial'],
-    referenceTemplate: `${completeChapterAuthors} (Año). Título del capítulo. En E. E. Editor (Ed.), o E. E. Editor, F. F. Editor, & G. G. Editor (Eds.), Título del libro (edición, pp. xx-xx). Editorial.`,
+    referenceTemplate: `${completeChapterAuthors} (Año). Título del capítulo. En ${completeChapterEditors}, Título del libro (edición, pp. xx-xx). Editorial.`,
     rules: [completeChapterAuthorRule, 'No incluye el nombre ni la URL de una base de datos académica común.'],
   },
   'chapter-electronic-public-url': {
     ...base, id: 'chapter-electronic-public-url', label: 'Capítulo electrónico o de audiolibro sin DOI con URL pública', manualExample: 40, manualPrintedPages: '333',
     requiredMetadata: ['autores del capítulo', 'año', 'título', 'editores', 'libro', 'edición', 'páginas', 'editorial', 'URL pública'],
-    referenceTemplate: `${completeChapterAuthors} (Año). Título del capítulo. En E. E. Editor (Ed.), o E. E. Editor, F. F. Editor, & G. G. Editor (Eds.), Título del libro (edición, pp. xx-xx). Editorial. URL`,
+    referenceTemplate: `${completeChapterAuthors} (Año). Título del capítulo. En ${completeChapterEditors}, Título del libro (edición, pp. xx-xx). Editorial. URL`,
     rules: [completeChapterAuthorRule, 'Incluye la URL cuando no pertenece a una base de datos.', 'No añade plataforma o dispositivo; trata los detalles especiales de audiolibro solo cuando sean relevantes.'],
   },
   'chapter-other-language': {

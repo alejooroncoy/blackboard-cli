@@ -724,6 +724,8 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(religious.parentheticalCitation, /\(\*Título\*,/);
   assert.match(religious.narrativeCitation, /^\*Título\*/);
   assert.match(religious.parentheticalCitation, /Año versión\) si no corresponde un año original/);
+  assert.match(religious.referenceTemplate, /con traductor:.*con edición:.*con ambos:/);
+  assert.match(religious.rules.join(' '), /Omite el traductor, la edición o todo el paréntesis/);
   assert.match(religious.rules.join(' '), /No inventes un año original/);
   assert.match(multivolume.referenceTemplate, /\(Ed\.\).*\(Eds\.\)/);
   assert.match(multivolume.referenceTemplate, /Autor, C\. C\./);
@@ -806,6 +808,10 @@ test('APA 7 chapter containers preserve multiple editors', async () => {
     const chapter = JSON.parse((await handler({ topic: 'reference', caseId })).content[0].text).case;
     assert.match(chapter.referenceTemplate, /\(Eds\.\)/, caseId);
   }
+  for (const caseId of ['chapter-edited-doi', 'chapter-edited-no-doi-database-or-print', 'chapter-electronic-public-url']) {
+    const chapter = JSON.parse((await handler({ topic: 'reference', caseId })).content[0].text).case;
+    assert.match(chapter.referenceTemplate, /E\. E\. Editor, & F\. F\. Editor \(Eds\.\)/, caseId);
+  }
 });
 
 test('APA 7 edited chapters preserve every credited chapter author', async () => {
@@ -868,6 +874,7 @@ test('APA 7 guidance covers reports, conferences and theses through example 66',
   assert.match(symposium.referenceFormatting.italicize.join(' '), /título del simposio contenedor/);
   assert.match(symposium.referenceFormatting.italicize.join(' '), /no el título de la contribución/);
   assert.match(symposium.referenceTemplate, /\(Coordinadores\)/);
+  assert.match(symposium.referenceTemplate, /C\. Coordinador, D\. Coordinador, & E\. Coordinador/);
   assert.match(symposium.rules.join(' '), /lista completa de coordinadores/);
   assert.match(symposium.referenceTemplate, /Autor, C\. C\./);
   assert.match(symposium.rules.join(' '), /lista completa y ordenada de autores de la contribución/);
@@ -951,6 +958,8 @@ test('APA 7 guidance covers datasets, software and tests through example 83', as
   assert.match(equipment.referenceTemplate, /Modelo x, solo si existe/);
   assert.match(equipment.rules.join(' '), /si no existe, omite todo el paréntesis/);
   assert.match(testRecord.rules.join(' '), /información descriptiva o administrativa única/);
+  assert.match(testRecord.referenceTemplate, /Sigla\/código, solo si existe/);
+  assert.match(testRecord.rules.join(' '), /Omite por completo el paréntesis de sigla o código/);
   assert.match(testRecord.parentheticalCitation, /tres o más autores/);
   assert.match(mobileApp.referenceTemplate, /Tienda o desarrollador verificado, solo si difiere del autor/);
   assert.match(mobileApp.rules.join(' '), /desarrollador cuando la distribuye directamente/);

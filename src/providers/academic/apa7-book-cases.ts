@@ -156,9 +156,9 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   'religious-work': {
     ...base, id: 'religious-work', label: 'Obra religiosa', manualExample: 35, manualPrintedPages: '331',
     requiredMetadata: ['título de la obra', 'año de versión', 'traductores/edición si existen', 'editorial o URL', 'año original si corresponde'],
-    referenceTemplate: 'Título de la obra. (Año de versión). (Traductor, Trad.; edición). Editorial/URL. Añade (Obra original publicada en Año original) solo cuando ese año se conoce y corresponde.',
+    referenceTemplate: 'Título de la obra. (Año de versión). Editorial/URL; con traductor: Título de la obra. (Año de versión). (T. Traductor, Trad.). Editorial/URL; con edición: Título de la obra. (Año de versión). (2.ª ed.). Editorial/URL; con ambos: Título de la obra. (Año de versión). (T. Traductor, Trad.; 2.ª ed.). Editorial/URL. Añade (Obra original publicada en Año original) solo cuando ese año se conoce y corresponde.',
     parentheticalCitation: '(*Título*, Año versión) si no corresponde un año original; (*Título*, Año original/Año versión) cuando ambos años están verificados', narrativeCitation: '*Título* (Año versión) si no corresponde un año original; *Título* (Año original/Año versión) cuando ambos años están verificados',
-    rules: ['El título ocupa la posición de autor cuando no hay autor.', 'No inventes un año original: usa solo el año de la versión cuando el original sea desconocido o inaplicable.', 'Para libro, versículo o pasaje se añade el localizador canónico en el texto.'],
+    rules: ['El título ocupa la posición de autor cuando no hay autor.', 'Omite el traductor, la edición o todo el paréntesis cuando esos datos no existan.', 'No inventes un año original: usa solo el año de la versión cuando el original sea desconocido o inaplicable.', 'Para libro, versículo o pasaje se añade el localizador canónico en el texto.'],
   },
   'ancient-greek-roman-work': {
     ...base, id: 'ancient-greek-roman-work', label: 'Obra griega o romana antigua', manualExample: 36, manualPrintedPages: '331',
