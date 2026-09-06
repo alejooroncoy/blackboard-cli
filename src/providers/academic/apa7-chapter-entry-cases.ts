@@ -109,9 +109,9 @@ export const chapterEntryCases: Record<ChapterEntryCaseId, Apa7VerifiedChapterEn
   'reference-entry-group-author': {
     ...base, id: 'reference-entry-group-author', label: 'Entrada de diccionario, tesauro o enciclopedia con autor grupal', manualExample: 47, manualPrintedPages: '334',
     requiredMetadata: ['autor grupal', 'fecha o s. f.', 'título de entrada', 'obra de consulta', 'URL', 'fecha de recuperación si cambia sin archivo'],
-    referenceTemplate: 'Autor grupal. (Fecha o s. f.). Título de la entrada. En Obra de consulta. Recuperado el día de mes de año, de URL si cambia sin archivo',
+    referenceTemplate: 'Entrada estable o archivada: Autor grupal. (Fecha). Título de la entrada. En Obra de consulta. URL. Entrada que cambia continuamente sin archivo: Autor grupal. (s. f.). Título de la entrada. En Obra de consulta. Recuperado el día de mes de año, de URL',
     parentheticalCitation: '(Autor grupal, Año o s. f.)', narrativeCitation: 'Autor grupal (Año o s. f.)',
-    rules: ['Usa s. f. y fecha de recuperación cuando la entrada cambia continuamente y no se archivan versiones.', 'No repite como editorial una entidad que ya figura como autor.'],
+    rules: ['Usa s. f. y fecha de recuperación cuando la entrada cambia continuamente y no se archivan versiones.', 'Una entrada estable o archivada conserva la URL sin fecha de recuperación.', 'No repite como editorial una entidad que ya figura como autor.'],
   },
   'reference-entry-individual-author': {
     ...base, id: 'reference-entry-individual-author', label: 'Entrada de obra de consulta con autor individual', manualExample: 48, manualPrintedPages: '334',

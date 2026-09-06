@@ -151,11 +151,11 @@ export const peruLegalCases: Record<PeruLegalCaseId, PeruLegalCase> = {
     authorityNote: 'La sección 11.8 usa formato APA ordinario; Indecopi permite verificar solicitudes y publicaciones de patentes.',
     requiredMetadata: ['inventor o inventores', 'año de concesión', 'título', 'tipo y número de patente', 'oficina'],
     optionalMetadata: ['solicitante o titular', 'fecha de publicación', 'URL oficial'],
-    referenceTemplate: 'Inventor, A. A. (Año de concesión). Título de la patente (Patente peruana N.º XXXXX). Indecopi. URL oficial',
+    referenceTemplate: 'Inventor, A. A.; Inventor, A. A., & Inventor, B. B.; o lista completa: Inventor, A. A., Inventor, B. B., & Inventor, C. C. (Año de concesión). Título de la patente (Patente peruana N.º XXXXX). Indecopi. URL oficial',
     parentheticalCitation: '(Inventor, Año); (Inventor & Inventor, Año); (Primer inventor et al., Año) con tres o más inventores',
     narrativeCitation: 'Inventor (Año); Inventor e Inventor (Año); Primer inventor et al. (Año) con tres o más inventores',
     directQuoteLocator: 'Reivindicación, párrafo o página estable del documento de patente.',
-    rules: ['Usa año de concesión, no de solicitud.', 'No confundas número de expediente, solicitud, publicación y patente concedida.', 'Con tres o más inventores, la cita usa primer inventor et al.; la referencia conserva la regla de autores APA.'],
+    rules: ['Conserva la lista completa y ordenada de inventores conforme a los límites del elemento autor de APA.', 'Usa año de concesión, no de solicitud.', 'No confundas número de expediente, solicitud, publicación y patente concedida.', 'Con tres o más inventores, la cita usa primer inventor et al.; la referencia conserva la regla de autores APA.'],
     officialVerification: [{ label: 'Indecopi: Gaceta Electrónica de Propiedad Industrial', url: 'https://www.gob.pe/15748-buscar-publicaciones-en-la-gaceta-electronica-de-propiedad-industrial' }],
   }),
   'peru-treaty': legalCase({

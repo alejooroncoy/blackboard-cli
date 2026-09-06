@@ -471,6 +471,8 @@ test('Peruvian legal profiles reject common hallucinations and preserve official
   assert.match(patent.rules.join(' '), /año de concesión, no de solicitud/);
   assert.match(patent.parentheticalCitation, /Inventor & Inventor/);
   assert.match(patent.parentheticalCitation, /tres o más inventores/);
+  assert.match(patent.referenceTemplate, /Inventor, C\. C\./);
+  assert.match(patent.rules.join(' '), /lista completa y ordenada de inventores/);
   assert.match(treaty.rules.join(' '), /firma, aprobación, ratificación y entrada en vigor/);
 });
 
@@ -699,6 +701,9 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(religious.rules.join(' '), /No inventes un año original/);
   assert.match(multivolume.referenceTemplate, /\(Ed\.\).*\(Eds\.\)/);
   assert.match(multivolume.rules.join(' '), /lista completa en posición de autor/);
+  const stableEntry = JSON.parse((await handler({ topic: 'reference', caseId: 'reference-entry-group-author' })).content[0].text).case;
+  assert.match(stableEntry.referenceTemplate, /Entrada estable o archivada:.*URL/);
+  assert.match(stableEntry.referenceTemplate, /Entrada que cambia continuamente sin archivo:.*Recuperado/);
   assert.match(ancient.parentheticalCitation, /fecha original es exacta/);
   assert.match(ancient.parentheticalCitation, /ca\. Año original.*si es aproximada/);
   assert.match(ancient.rules.join(' '), /omítelo ante una fecha exacta verificada/);
@@ -836,6 +841,8 @@ test('APA 7 guidance covers reports, conferences and theses through example 66',
   assert.match(symposium.referenceFormatting.italicize.join(' '), /no el título de la contribución/);
   assert.match(symposium.referenceTemplate, /\(Coordinadores\)/);
   assert.match(symposium.rules.join(' '), /lista completa de coordinadores/);
+  assert.match(symposium.referenceTemplate, /Autor, C\. C\./);
+  assert.match(symposium.rules.join(' '), /lista completa y ordenada de autores de la contribución/);
   const session = cases.find(candidate => candidate.id === 'conference-session');
   assert.ok(session);
   assert.match(session.referenceTemplate, /Ponente, B\. B\./);
@@ -912,6 +919,8 @@ test('APA 7 guidance covers datasets, software and tests through example 83', as
   assert.match(software.parentheticalCitation, /Autor|Entidad/);
   const manual = JSON.parse((await handler({ topic: 'citation', caseId: 'test-manual' })).content[0].text).case;
   assert.match(manual.parentheticalCitation, /tres o más autores/);
+  assert.match(manual.referenceTemplate, /\(edición, desde la segunda\)/);
+  assert.match(manual.rules.join(' '), /omítela para la primera/);
   for (const item of [dataset, software, testRecord, manual]) {
     assert.match(item.referenceTemplate, /Autor, C\. C\./);
     assert.match(item.rules.join(' '), /lista completa y ordenada de autores personales/);
@@ -934,6 +943,7 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   assert.match(webinar.rules.join(' '), /comunicación personal/);
   assert.match(interview.rules.join(' '), /persona entrevistada/);
   assert.match(podcast.referenceTemplate, /Año único; Año inicial–Año final; o Año inicial–presente/);
+  assert.match(podcast.referenceTemplate, /Responsable, T\. T\. \(Anfitriones o Productores ejecutivos\)/);
   assert.match(podcast.rules.join(' '), /comenzó y terminó ese año/);
   assert.match(song.referenceTemplate, /solo cuando exista un año original verificado/);
   assert.match(song.rules.join(' '), /canción moderna o sin año original verificado/);
@@ -942,6 +952,7 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   const podcastEpisode = JSON.parse((await handler({ topic: 'reference', caseId: 'podcast-episode' })).content[0].text).case;
   assert.match(podcastEpisode.requiredMetadata.join(' '), /lista completa/);
   assert.match(podcastEpisode.parentheticalCitation, /Responsable & Responsable/);
+  assert.match(podcastEpisode.referenceTemplate, /Responsable, T\. T\. \(Anfitriones o Productores ejecutivos\)/);
   assert.match(podcastEpisode.narrativeCitation, /et al\./);
   assert.match(episode.parentheticalCitation, /\(Guionista & Director, Año\)/);
   assert.match(episode.parentheticalCitation, /tres o más responsables acreditados/);

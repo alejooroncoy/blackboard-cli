@@ -86,9 +86,9 @@ export const dataSoftwareTestCases: Record<DataSoftwareTestCaseId, Apa7VerifiedD
   'test-manual': {
     ...testBase, id: 'test-manual', label: 'Manual de una prueba, escala o inventario', manualExample: 81, manualPrintedPages: '346',
     requiredMetadata: ['autores del manual', 'año', 'título completo', 'edición si existe', 'editorial', 'DOI/URL si corresponde'],
-    referenceTemplate: `${completePersonalAuthors} (Año). Título del manual de la prueba. Editorial. DOI/URL`,
+    referenceTemplate: `${completePersonalAuthors} (Año). Título del manual de la prueba (edición, desde la segunda). Editorial. DOI/URL`,
     parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
-    rules: [completePersonalAuthorRule, 'Prioriza la literatura de apoyo: si existe un manual, cita el manual y no la prueba por separado.', 'Usa el formato de libro de autor o editado que corresponda.'],
+    rules: [completePersonalAuthorRule, 'Incluye la edición entre paréntesis después del título desde la segunda; omítela para la primera.', 'Prioriza la literatura de apoyo: si existe un manual, cita el manual y no la prueba por separado.', 'Usa el formato de libro de autor o editado que corresponda.'],
   },
   'test-itself': {
     ...testBase, id: 'test-itself', label: 'Prueba, escala o inventario en sí mismo', manualExample: 82, manualPrintedPages: '346-347',
