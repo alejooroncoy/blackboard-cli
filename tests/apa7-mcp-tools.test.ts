@@ -989,7 +989,7 @@ test('APA 7 anthology work makes an earlier publication date optional', async ()
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
   const work = JSON.parse((await handler({ topic: 'reference', caseId: 'work-in-anthology' })).content[0].text).case;
   assert.match(work.parentheticalCitation, /Año antología\).*si no hubo publicación anterior/);
-  assert.match(work.referenceTemplate, /solo si hubo una publicación anterior verificada\)\. Añade DOI\/URL solo si corresponde al final/);
+  assert.match(work.referenceTemplate, /https:\/\/doi\.org\/xxxxx.*finaliza con \(Obra original publicada en Año original\)/);
   assert.match(work.rules.join(' '), /No inventes un año original/);
 });
 

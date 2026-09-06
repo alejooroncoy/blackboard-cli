@@ -143,10 +143,10 @@ export const visualSocialWebCases: Record<VisualSocialWebCaseId, Apa7VerifiedVis
   },
   'webpage-news-site': {
     ...webBase, id: 'webpage-news-site', label: 'Página web de un sitio de noticias', manualExample: 110, manualPrintedPages: '357',
-    requiredMetadata: ['autor', 'fecha completa', 'título', 'sitio de noticias', 'URL'],
-    referenceTemplate: 'Autor, A. A. (Año, día de mes). Título de la página. Sitio de noticias. URL',
-    parentheticalCitation: '(Autor, Año)', narrativeCitation: 'Autor (Año)',
-    rules: ['Usa este caso para noticias de sitios como CNN, BBC o HuffPost que no son ediciones de un periódico.', 'Un artículo de revista o periódico en línea usa el caso periódico correspondiente.'],
+    requiredMetadata: ['autores o entidad', 'fecha completa', 'título', 'sitio de noticias', 'URL'],
+    referenceTemplate: 'Un autor: Autor, A. A. (Año, día de mes). Dos: Autor, A. A., & Autor, B. B. (Año, día de mes). De 3 a 20: incluye todos; 21 o más: autores 1–19, …, Último autor. Título de la página. Sitio de noticias. URL',
+    parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
+    rules: ['Conserva la lista completa y ordenada de autores personales conforme a los límites del elemento autor de APA.', 'Usa este caso para noticias de sitios como CNN, BBC o HuffPost que no son ediciones de un periódico.', 'Un artículo de revista o periódico en línea usa el caso periódico correspondiente.'],
   },
   'webpage-group-author': {
     ...webBase, id: 'webpage-group-author', label: 'Página web con autor grupal', manualExample: 111, manualPrintedPages: '357',
