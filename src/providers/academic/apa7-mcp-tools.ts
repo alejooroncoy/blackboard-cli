@@ -47,7 +47,7 @@ const referenceTemplates: Partial<Record<SourceType, string>> = {
   webpage: 'Autor o entidad. (Año, día de mes). *Título de la página*. Nombre del sitio, solo si difiere del autor. URL',
   report: 'Entidad o Apellido, A. A. (Año). *Título del informe* (N.º de informe xxx). Editorial o entidad, solo si difiere del autor. URL',
   thesis: 'Apellido, A. A. (Año). *Título* [Tesis de licenciatura/maestría/doctoral, Universidad]. Repositorio. URL',
-  'newspaper-article': 'Apellido, A. A. (Año, día de mes). Título. *Periódico*. URL',
+  'newspaper-article': 'Apellido, A. A. (Año, día de mes). Título. *Periódico*, p. x o pp. xx–xx para versión impresa. URL para versión en línea',
   'video-webinar': 'Autor o entidad. (Año, día de mes). *Título* [Video o seminario web grabado]. Plataforma. URL',
   podcast: 'Apellido, A. A. (Host). (Año, día de mes). Título del episodio (N.º de episodio) [Episodio de pódcast]. En *Título del pódcast*. Productora. URL',
   'social-media': 'Autor [@usuario]. (Año, día de mes). *Primeras 20 palabras del contenido* [Tipo de publicación]. Red social. URL',

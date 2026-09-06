@@ -131,16 +131,16 @@ export const reportConferenceThesisCases: Record<ReportConferenceThesisCaseId, A
   'conference-paper-presentation': {
     ...conferenceBase, id: 'conference-paper-presentation', label: 'Presentación de escrito', manualExample: 61, manualPrintedPages: '338',
     requiredMetadata: ['todos los autores', 'fechas completas del congreso', 'título', 'nombre del congreso', 'ubicación', 'DOI/URL si existe'],
-    referenceTemplate: 'Autor, A. A. (Año, día de mes–día de mes). Título [Presentación de escrito]. Nombre del congreso, Ciudad, región, país. DOI/URL',
+    referenceTemplate: 'Autor, A. A., Autor, B. B., & Autor, C. C. (Año, día de mes–día de mes). Título [Presentación de escrito]. Nombre del congreso, Ciudad, región, país. DOI/URL',
     parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
-    rules: ['La etiqueta entre corchetes debe coincidir con la forma en que el congreso describió la presentación.'],
+    rules: ['Incluye la lista completa de autores acreditados.', 'La etiqueta entre corchetes debe coincidir con la forma en que el congreso describió la presentación.'],
   },
   'conference-poster-presentation': {
     ...conferenceBase, id: 'conference-poster-presentation', label: 'Presentación de cartel', manualExample: 62, manualPrintedPages: '339',
     requiredMetadata: ['autores', 'fechas completas del congreso', 'título', 'nombre del congreso', 'ubicación', 'DOI/URL si existe'],
-    referenceTemplate: 'Autor, A. A. (Año, día–día de mes). Título [Presentación de cartel]. Nombre del congreso, Ciudad, región, país. DOI/URL',
+    referenceTemplate: 'Autor, A. A., Autor, B. B., & Autor, C. C. (Año, día–día de mes). Título [Presentación de cartel]. Nombre del congreso, Ciudad, región, país. DOI/URL',
     parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
-    rules: ['No usa el formato de artículo salvo que el trabajo esté publicado formalmente en actas o revista.'],
+    rules: ['Incluye la lista completa de autores acreditados.', 'No usa el formato de artículo salvo que el trabajo esté publicado formalmente en actas o revista.'],
   },
   'symposium-contribution': {
     ...conferenceBase, id: 'symposium-contribution', label: 'Contribución en un simposio', manualExample: 63, manualPrintedPages: '339',

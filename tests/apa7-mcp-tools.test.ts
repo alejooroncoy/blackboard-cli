@@ -766,6 +766,12 @@ test('APA 7 guidance covers reports, conferences and theses through example 66',
   assert.ok(session);
   assert.match(session.referenceTemplate, /Ponente, B\. B\./);
   assert.match(session.rules.join(' '), /lista completa de personas acreditadas/);
+  for (const id of ['conference-paper-presentation', 'conference-poster-presentation']) {
+    const presentation = cases.find(candidate => candidate.id === id);
+    assert.ok(presentation);
+    assert.match(presentation.referenceTemplate, /Autor, B\. B\./, id);
+    assert.match(presentation.rules.join(' '), /lista completa de autores acreditados/, id);
+  }
 });
 
 test('APA 7 special periodical issues preserve multiple editors', async () => {
@@ -849,6 +855,8 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   assert.match(episode.parentheticalCitation, /\(Guionista & Director, Año\)/);
   assert.match(episode.parentheticalCitation, /tres o más responsables acreditados/);
   assert.match(episode.narrativeCitation, /Guionista y Director \(Año\)/);
+  assert.match(episode.referenceTemplate, /Productores ejecutivos/);
+  assert.match(episode.rules.join(' '), /lista completa de productores ejecutivos/);
   assert.match(series.parentheticalCitation, /tres o más productores/);
   assert.match(series.referenceTemplate, /Productores ejecutivos/);
   assert.match(series.rules.join(' '), /Incluye la lista completa/);
@@ -1039,6 +1047,14 @@ test('APA 7 periodical rules omit rather than invent missing publication data', 
   assert.ok(cochrane.requiredMetadata.includes('número de artículo CD'));
   assert.match(upToDate.referenceTemplate, /En E\. Editor \(Ed\.\), UpToDate/);
   assert.ok(upToDate.requiredMetadata.includes('editor acreditado'));
+});
+
+test('APA 7 generic newspaper template distinguishes print pages from online URLs', async () => {
+  let handler: any;
+  registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
+  const newspaper = JSON.parse((await handler({ topic: 'reference', sourceType: 'newspaper-article' })).content[0].text);
+  assert.match(newspaper.template, /p\. x o pp\. xx–xx para versión impresa/);
+  assert.match(newspaper.template, /URL para versión en línea/);
 });
 
 test('APA 7 no-source rule produces an in-text personal communication only', async () => {
