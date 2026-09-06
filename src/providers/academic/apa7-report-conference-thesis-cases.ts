@@ -52,13 +52,14 @@ const reportBase = { ...shared, manualSection: '10.4' as const };
 const conferenceBase = { ...shared, manualSection: '10.5' as const };
 const completeContributionAuthors = 'Un autor: Autor, A. A.; dos: Autor, A. A., & Autor, B. B.; de 3 a 20: Autor, A. A., Autor, B. B., Autor, C. C., …, & Autor final, Z. Z. (incluye todos); 21 o más: autores 1–19, …, Último autor';
 const completeSessionContributors = 'Un ponente: Ponente, A. A.; dos: Ponente, A. A., & Ponente, B. B.; de 3 a 20: Ponente, A. A., Ponente, B. B., Ponente, C. C., …, & Ponente final, Z. Z. (incluye todos); 21 o más: ponentes 1–19, …, Último ponente';
+const completeGroupAuthors = 'Una entidad: Entidad autora; dos: Entidad autora & Entidad autora; de 3 a 20: Entidad autora, Entidad autora, Entidad autora, …, & Entidad autora final (incluye todas); 21 o más: entidades autoras 1–19, …, Última entidad autora';
 const thesisBase = { ...shared, manualSection: '10.6' as const, parentheticalCitation: '(Autor, Año)', narrativeCitation: 'Autor (Año)' };
 
 export const reportConferenceThesisCases: Record<ReportConferenceThesisCaseId, Apa7VerifiedReportConferenceThesisCase> = {
   'report-government-or-organization': {
     ...reportBase, id: 'report-government-or-organization', label: 'Reporte de agencia gubernamental u otra organización', manualExample: 50, manualPrintedPages: '335-336',
     requiredMetadata: ['autor o autores grupales exactos', 'año', 'título', 'número de reporte si existe', 'organismo superior/editorial si corresponde', 'URL/DOI'],
-    referenceTemplate: 'Entidad autora; Entidad autora & Entidad autora; o Entidad autora, Entidad autora, & Entidad autora. (Año). Título del reporte (N.º de reporte si existe). Organismo superior si no figura en el autor. URL/DOI',
+    referenceTemplate: `${completeGroupAuthors}. (Año). Título del reporte (N.º de reporte si existe). Organismo superior si no figura en el autor. URL/DOI`,
     parentheticalCitation: '(Entidad, Año); (Entidad & Entidad, Año); (Primera entidad et al., Año) con tres o más entidades autoras', narrativeCitation: 'Entidad (Año); Entidad y Entidad (Año); Primera entidad et al. (Año) con tres o más entidades autoras',
     rules: ['Incluye todas las agencias coautoras en el orden acreditado.', 'Si autor y editorial son la misma entidad, omite la editorial.', 'Si un organismo superior no aparece en el nombre del autor grupal, inclúyelo como fuente.', 'Une dos agencias autoras con &; separa tres o más con comas y & antes de la última.'],
   },

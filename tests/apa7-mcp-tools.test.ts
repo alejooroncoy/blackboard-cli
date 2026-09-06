@@ -790,6 +790,9 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(ancient.parentheticalCitation, /ca\. Año original.*si es aproximada/);
   assert.match(ancient.referenceTemplate, /Con traductor:.*Con editor:/);
   assert.match(ancient.rules.join(' '), /\(Trad\.\).*\(Ed\.\)/);
+  const shakespeare = JSON.parse((await handler({ topic: 'citation', caseId: 'shakespeare-work' })).content[0].text).case;
+  assert.match(shakespeare.referenceTemplate, /Con editor:.*Con traductor:/);
+  assert.match(shakespeare.rules.join(' '), /\(Ed\.\).*\(Trad\.\)/);
   assert.match(ancient.rules.join(' '), /omítelo ante una fecha exacta verificada/);
 });
 
@@ -829,6 +832,10 @@ test('APA 7 standard journals preserve every credited author', async () => {
     assert.match(article.referenceTemplate, /Autor, C\. C\./, caseId);
     assert.match(article.rules.join(' '), /lista completa y ordenada de autores/, caseId);
   }
+  const translated = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-translated-republication' })).content[0].text).case;
+  assert.match(translated.referenceTemplate, /dos: A\. Traductor & B\. Traductor \(Trads\.\)/);
+  assert.match(translated.referenceTemplate, /21 o más: traductores 1–19/);
+  assert.match(translated.rules.join(' '), /lista completa de traductores acreditados/);
 });
 
 test('APA 7 guidance covers all 12 chapter and reference-entry examples', async () => {
@@ -919,7 +926,8 @@ test('APA 7 guidance covers reports, conferences and theses through example 66',
   assert.ok(organization);
   assert.match(organization.parentheticalCitation, /Entidad & Entidad/);
   assert.match(organization.parentheticalCitation, /tres o más entidades autoras/);
-  assert.match(organization.referenceTemplate, /Entidad autora, Entidad autora, & Entidad autora/);
+  assert.match(organization.referenceTemplate, /de 3 a 20: Entidad autora, Entidad autora, Entidad autora/);
+  assert.match(organization.referenceTemplate, /21 o más: entidades autoras 1–19/);
   assert.match(organization.rules.join(' '), /todas las agencias coautoras/);
   for (const id of ['report-individual-authors-in-organization', 'report-series']) {
     const report = cases.find(candidate => candidate.id === id);
