@@ -24,7 +24,7 @@ campus assignments list --pending
 - Revisar tareas pendientes, fechas de entrega y notas.
 - Descargar archivos y carpetas completas de Blackboard.
 - Consultar anuncios, mensajes, contenidos y calificaciones.
-- Obtener guías y plantillas de citas, referencias y formato APA 7 en español.
+- En un host de Campus que registre la función y autorice el acceso, obtener guías y plantillas APA 7 en español. El servidor MCP local iniciado con `npx campus-cli ... mcp` no la registra.
 - Usarlo desde Claude, Cursor, Copilot, Codex u otro cliente compatible con MCP.
 - Automatizar consultas con `--json` o con llamadas directas a la API de Blackboard.
 

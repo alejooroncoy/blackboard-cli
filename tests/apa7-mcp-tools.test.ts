@@ -109,7 +109,7 @@ test('Peruvian legal profiles are honored from citation and reference topics', a
   }
 });
 
-test('APA 7 guidance fails closed when the host authentication check rejects access', async () => {
+test('APA 7 guidance reports entitlement denial without sending users through login again', async () => {
   let handler: any;
   registerAcademicTools({
     registerTool(_name: string, _config: unknown, registeredHandler: unknown) {
@@ -119,7 +119,7 @@ test('APA 7 guidance fails closed when the host authentication check rejects acc
 
   await assert.rejects(
     () => handler({ topic: 'citation' }),
-    /campus account login/,
+    /required entitlement.*Signing in again does not grant access/,
   );
 });
 
@@ -131,7 +131,7 @@ test('APA 7 guidance fails closed when an untyped host omits authorization', asy
     },
   });
 
-  await assert.rejects(() => handler({ topic: 'citation' }), /campus account login/);
+  await assert.rejects(() => handler({ topic: 'citation' }), /host has not configured authorization/);
 });
 
 test('personal communication guidance requests the caller\'s exact date', async () => {

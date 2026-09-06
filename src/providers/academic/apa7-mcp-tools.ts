@@ -401,8 +401,11 @@ export function registerAcademicTools(
     },
     annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
   }, async ({ topic, sourceType, caseId, citationRuleId, referenceRuleId, formatRuleId, reportingRuleId, writingStyleRuleId, biasFreeLanguageRuleId, mechanicsRuleId, tableFigureRuleId, legalRuleId, peruLegalCaseId, publicationRuleId, principlesEthicsRuleId }) => {
-    if (!options?.authorize || !(await options.authorize())) {
-      throw new Error('Not authenticated. Ask the user to run: campus account login');
+    if (!options?.authorize) {
+      throw new Error('APA 7 guidance unavailable: this host has not configured authorization.');
+    }
+    if (!(await options.authorize())) {
+      throw new Error('Not authorized for APA 7 guidance: this account does not have the required entitlement. Signing in again does not grant access; verify the Campus plan or contact support.');
     }
     const selectors = { sourceType, caseId, citationRuleId, referenceRuleId, formatRuleId, reportingRuleId, writingStyleRuleId, biasFreeLanguageRuleId, mechanicsRuleId, tableFigureRuleId, legalRuleId, peruLegalCaseId, publicationRuleId, principlesEthicsRuleId };
     validateSelectors(topic, selectors);
