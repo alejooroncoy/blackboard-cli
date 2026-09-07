@@ -1174,6 +1174,7 @@ test('APA 7 guidance covers datasets, software and tests through example 83', as
   const dataset = JSON.parse((await handler({ topic: 'reference', caseId: 'dataset-published' })).content[0].text).case;
   const software = JSON.parse((await handler({ topic: 'reference', caseId: 'specialized-software' })).content[0].text).case;
   const testRecord = JSON.parse((await handler({ topic: 'reference', caseId: 'test-database-record' })).content[0].text).case;
+  const testItself = JSON.parse((await handler({ topic: 'citation', caseId: 'test-itself' })).content[0].text).case;
   const mobileApp = JSON.parse((await handler({ topic: 'reference', caseId: 'mobile-application' })).content[0].text).case;
   const mobileAppEntry = JSON.parse((await handler({ topic: 'reference', caseId: 'mobile-app-reference-entry' })).content[0].text).case;
   assert.equal(dataset.manualExample, 75);
@@ -1216,6 +1217,8 @@ test('APA 7 guidance covers datasets, software and tests through example 83', as
   assert.match(testRecord.rules.join(' '), /usa URL pública solo si no existe DOI/);
   assert.match(testRecord.rules.join(' '), /Omite por completo el paréntesis de sigla o código/);
   assert.match(testRecord.parentheticalCitation, /tres o más autores/);
+  assert.match(testItself.parentheticalCitation, /tres o más autores/);
+  assert.match(testItself.narrativeCitation, /Autor y Autor/);
   assert.match(mobileApp.referenceTemplate, /Tienda o desarrollador verificado, solo si difiere del autor/);
   assert.match(mobileApp.rules.join(' '), /desarrollador cuando la distribuye directamente/);
   assert.match(software.parentheticalCitation, /Autor|Entidad/);

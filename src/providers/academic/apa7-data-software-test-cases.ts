@@ -92,10 +92,10 @@ export const dataSoftwareTestCases: Record<DataSoftwareTestCaseId, Apa7VerifiedD
   },
   'test-itself': {
     ...testBase, id: 'test-itself', label: 'Prueba, escala o inventario en sí mismo', manualExample: 82, manualPrintedPages: '346-347',
-    requiredMetadata: ['autor o entidad', 'año o s. f.', 'nombre exacto de la prueba', 'URL o fuente recuperable'],
-    referenceTemplate: 'Autor o entidad. (Año o s. f.). Título de la prueba [Prueba]. URL',
-    parentheticalCitation: '(Autor o entidad, Año o s. f.)', narrativeCitation: 'Autor o entidad (Año o s. f.)',
-    rules: ['Cita la prueba misma solo si no existe manual ni otra literatura de apoyo.', 'En el texto, el nombre de la prueba usa mayúsculas de título y tipografía normal, no cursiva.'],
+    requiredMetadata: ['autores o entidad', 'año o s. f.', 'nombre exacto de la prueba', 'URL o fuente recuperable'],
+    referenceTemplate: `${completePersonalAuthors} o Entidad autora. (Año o s. f.). Título de la prueba [Prueba]. URL`,
+    parentheticalCitation: '(Autor o entidad, Año o s. f.); (Autor & Autor, Año o s. f.); (Primer autor et al., Año o s. f.) con tres o más autores', narrativeCitation: 'Autor o entidad (Año o s. f.); Autor y Autor (Año o s. f.); Primer autor et al. (Año o s. f.) con tres o más autores',
+    rules: [completePersonalAuthorRule, 'Cita la prueba misma solo si no existe manual ni otra literatura de apoyo.', 'En el texto, el nombre de la prueba usa mayúsculas de título y tipografía normal, no cursiva.'],
   },
   'test-database-record': {
     ...testBase, id: 'test-database-record', label: 'Registro de base de datos para una prueba', manualExample: 83, manualPrintedPages: '347',
