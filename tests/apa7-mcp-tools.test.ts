@@ -1366,6 +1366,10 @@ test('APA 7 guidance covers visual, social and web works through example 114', a
   assert.match(facebook.referenceTemplate, /Con imagen, infografía, video o enlace:/);
   assert.match(facebook.rules.join(' '), /para texto solo, omite toda esa descripción adicional/);
   assert.match(news.rules.join(' '), /no son ediciones de un periódico/);
+  assert.match(news.referenceTemplate, /De 3 a 20:.*\(Año, día de mes; incluye todos\)/);
+  assert.match(news.referenceTemplate, /21 o más: autores 1–19, …, Último autor \(Año, día de mes\)/);
+  assert.match(news.referenceTemplate, /Entidad autora: Entidad\. \(Año, día de mes\)/);
+  assert.match(news.parentheticalCitation, /Entidad, Año/);
   assert.match(changing.rules.join(' '), /no existe versión archivada/);
   assert.match(infographic.parentheticalCitation, /tres o más autores/);
   assert.match(infographic.requiredMetadata.join(' '), /sitio si difiere del autor/);
@@ -1578,6 +1582,8 @@ test('APA 7 generic newspaper template distinguishes print pages from online URL
   const newspaper = JSON.parse((await handler({ topic: 'reference', sourceType: 'newspaper-article' })).content[0].text);
   assert.match(newspaper.template, /x o xx–xx para versión impresa/);
   assert.match(newspaper.template, /URL para versión en línea/);
+  assert.match(newspaper.template, /Sin autor acreditado: Título\. \(Año, día de mes\)/);
+  assert.match(newspaper.template, /\(“Título abreviado”, Año\)/);
 });
 
 test('APA 7 no-source rule produces an in-text personal communication only', async () => {
