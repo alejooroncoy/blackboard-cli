@@ -119,6 +119,9 @@ test('reference templates preserve APA italics with explicit Markdown notation',
   assert.match(journal.template, /“Título abreviado” \(Año\)/);
   const webpage = JSON.parse((await handler({ topic: 'reference', sourceType: 'webpage' })).content[0].text);
   assert.match(webpage.template, /\(Año\), \(Año, mes\), \(Año, día de mes\) o \(s\. f\.\)/);
+  assert.match(webpage.template, /Sin autor identificable: \*Título de la página\*\. \(Año\)/);
+  assert.match(webpage.template, /\(\*Título abreviado\*, Año\)/);
+  assert.match(webpage.template, /\*Título abreviado\* \(Año\)/);
   assert.match(webpage.template, /No inventes mes ni día/);
   assert.match(webpage.template, /sitio, solo si difiere del autor/);
   const software = JSON.parse((await handler({ topic: 'reference', sourceType: 'software' })).content[0].text);
@@ -913,6 +916,11 @@ test('APA 7 standard journals preserve every credited author', async () => {
   assert.match(inPress.requiredMetadata.join(' '), /DOI asignado, si existe/);
   assert.match(inPress.referenceTemplate, /Si ya tiene DOI asignado: https:\/\/doi\.org\/xxxxx/);
   assert.match(inPress.rules.join(' '), /no lo sustituye por datos periódicos aún no publicados/);
+  const reprint = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-reprint' })).content[0].text).case;
+  assert.match(reprint.referenceTemplate, /Reimpresión en libro: En .*Libro de la reimpresión \(pp\. xx-xx\)\. Editorial/);
+  assert.match(reprint.referenceTemplate, /Revista original, volumen\(número\), páginas o eLocator/);
+  assert.match(reprint.referenceTemplate, /con DOI: https:\/\/doi\.org\/xxxxx/);
+  assert.match(reprint.rules.join(' '), /editores, páginas y editorial/);
   const eLocator = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-elocator' })).content[0].text).case;
   assert.match(eLocator.requiredMetadata.join(' '), /volumen\/número si existen/);
   assert.match(eLocator.referenceTemplate, /Sin volumen: Revista, \(número\), Artículo eLocator/);

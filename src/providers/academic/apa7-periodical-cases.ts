@@ -125,10 +125,10 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   },
   'journal-reprint': {
     ...base, id: 'journal-reprint', label: 'Artículo reimpreso de otra fuente', manualExample: 11, manualPrintedPages: '324-325',
-    requiredMetadata: ['autor', 'año y fuente de la reimpresión consultada', 'título', 'datos completos de la publicación original'],
-    referenceTemplate: `${completeAuthorList} (Año reimpresión). Título. Fuente de la reimpresión. (Reimpreso de Título original, Año original, Fuente original)`,
+    requiredMetadata: ['autor', 'año de reimpresión', 'título', 'contenedor de la reimpresión: editores, libro, páginas y editorial si corresponde', 'año, revista, volumen/número, páginas o eLocator y DOI/URL si existe de la publicación original'],
+    referenceTemplate: `${completeAuthorList} (Año reimpresión). Título. Reimpresión en libro: En ${completePeriodicalEditors}, Libro de la reimpresión (pp. xx-xx). Editorial. Reimpresión en publicación periódica: Revista de la reimpresión, volumen(número), páginas o eLocator. (Reimpreso de “Título del artículo”, Año original, Revista original, volumen(número), páginas o eLocator; con DOI: https://doi.org/xxxxx; sin DOI con URL pública: URL; sin localizador: termina después de las páginas o eLocator)`,
     parentheticalCitation: '(Autor, Año original/Año reimpresión); (Autor & Autor, Año original/Año reimpresión); (Primer autor et al., Año original/Año reimpresión) con tres o más autores', narrativeCitation: 'Autor (Año original/Año reimpresión); Autor y Autor (Año original/Año reimpresión); Primer autor et al. (Año original/Año reimpresión) con tres o más autores',
-    rules: ['La referencia describe primero la versión realmente consultada.'],
+    rules: ['La referencia describe primero la versión realmente consultada y especifica su contenedor verificable: libro con editores, páginas y editorial, o publicación periódica con sus datos.', 'La nota de reimpresión identifica el artículo original con revista, volumen, número, páginas o eLocator y DOI/URL solo cuando exista un localizador aplicable.'],
   },
   'journal-special-section-issue': {
     ...base, id: 'journal-special-section-issue', label: 'Sección especial o edición especial', manualExample: 12, manualPrintedPages: '325',
