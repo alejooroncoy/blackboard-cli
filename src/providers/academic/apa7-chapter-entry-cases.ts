@@ -49,6 +49,11 @@ const completeChapterAuthorRule = 'Conserva la lista completa y ordenada de auto
 const completeChapterEditors = 'un editor: E. E. Editor (Ed.); dos: E. E. Editor & F. F. Editor (Eds.); de 3 a 20: E. E. Editor, F. F. Editor, G. G. Editor, …, & Z. Z. Editor final (Eds.; incluye todos); 21 o más: editores 1–19, …, Último editor (Eds.)';
 const titlePositionChapterTranslators = 'Un traductor: T. Traductor, Trad.; dos: T. Traductor & U. Traductor, Trads.; de 3 a 20: T. Traductor, U. Traductor, V. Traductor, …, & Traductor final, Trads.; 21 o más: traductores 1–19, …, Último traductor, Trads.';
 const titlePositionChapterNarrators = 'Un narrador: N. Narrador, Narr.; dos: N. Narrador & O. Narrador, Narrs.; de 3 a 20: N. Narrador, O. Narrador, P. Narrador, …, & Narrador final, Narrs.; 21 o más: narradores 1–19, …, Último narrador, Narrs.';
+const authorlessEntryRefuseWhen = [
+  'No se verificó el título exacto de la entrada o la revisión consultada.',
+  'Se infirieron fecha de revisión, edición, volumen o fecha de recuperación.',
+  'Se añadió un DOI, URL o base de datos inexistente.',
+];
 
 export const chapterEntryCases: Record<ChapterEntryCaseId, Apa7VerifiedChapterEntryCase> = {
   'chapter-edited-doi': {
@@ -86,9 +91,9 @@ Capítulo de audiolibro: ${completeChapterAuthors} (Año). Título del capítulo
   'chapter-reprinted-from-journal': {
     ...base, id: 'chapter-reprinted-from-journal', label: 'Capítulo reimpreso de un artículo de revista científica', manualExample: 43, manualPrintedPages: '333',
     requiredMetadata: ['autores', 'año de reimpresión', 'título', 'editores y libro de la reimpresión', 'páginas de la reimpresión', 'editorial', 'año y datos completos del artículo original'],
-    referenceTemplate: `${completeChapterAuthors} (Año reimpresión). Título. En ${completeChapterEditors}, Libro de la reimpresión (pp. xx-xx). Editorial. (Reimpreso de “Título del artículo”, Año original, Revista, volumen[número], páginas; con DOI: añade https://doi.org/xxxxx del artículo original; con URL pública sin DOI: añade URL; sin localizador: termina después de las páginas)`,
+    referenceTemplate: `${completeChapterAuthors} (Año reimpresión). Título. En ${completeChapterEditors}, Libro de la reimpresión (pp. xx-xx). Editorial. (Reimpreso de “Título del artículo”, Año original, Revista, volumen(número), páginas; con DOI: añade https://doi.org/xxxxx del artículo original; con URL pública sin DOI: añade URL; sin localizador: termina después de las páginas)`,
     parentheticalCitation: '(Autor, Año original/Año reimpresión); (Autor & Autor, Año original/Año reimpresión); (Primer autor et al., Año original/Año reimpresión) con tres o más autores', narrativeCitation: 'Autor (Año original/Año reimpresión); Autor y Autor (Año original/Año reimpresión); Primer autor et al. (Año original/Año reimpresión) con tres o más autores',
-    rules: [completeChapterAuthorRule, 'Describe primero la versión reimpresa utilizada y después el artículo original.', 'El número de la revista original va entre corchetes para evitar paréntesis anidados.'],
+    rules: [completeChapterAuthorRule, 'Describe primero la versión reimpresa utilizada y después el artículo original.', 'El número de la revista original va entre paréntesis inmediatamente después del volumen.'],
   },
   'chapter-reprinted-from-book': {
     ...base, id: 'chapter-reprinted-from-book', label: 'Capítulo reimpreso de otro libro', manualExample: 44, manualPrintedPages: '334',
@@ -125,6 +130,7 @@ Capítulo de audiolibro: ${completeChapterAuthors} (Año). Título del capítulo
   },
   'wikipedia-entry': {
     ...base, id: 'wikipedia-entry', label: 'Entrada de Wikipedia', manualExample: 49, manualPrintedPages: '335',
+    refuseWhen: authorlessEntryRefuseWhen,
     requiredMetadata: ['título exacto de la entrada', 'fecha de la revisión consultada si hay URL permanente', 'URL permanente de esa revisión o, si no existe, URL actual y fecha de recuperación'],
     referenceTemplate: 'Con revisión permanente: Título de la entrada. (Año, día de mes). En Wikipedia. URL permanente de la revisión archivada. Sin revisión permanente: Título de la entrada. (s. f.). En Wikipedia. Recuperado el día de mes de año, de URL actual',
     parentheticalCitation: '(“Título de la entrada”, Año) con revisión permanente; (“Título de la entrada”, s. f.) sin revisión permanente', narrativeCitation: '“Título de la entrada” (Año) con revisión permanente; “Título de la entrada” (s. f.) sin revisión permanente',

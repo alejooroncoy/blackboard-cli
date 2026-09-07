@@ -56,10 +56,16 @@ const completeAuthorRule = 'Conserva la lista completa y ordenada de autores con
 const completePeriodicalEditors = 'Un editor: Editor, A. A. (Ed.); dos: Editor, A. A., & Editor, B. B. (Eds.); de 3 a 20: Editor, A. A., Editor, B. B., Editor, C. C., …, & Editor final, Z. Z. (Eds.; incluye todos); 21 o más: editores 1–19, …, Último editor (Eds.)';
 const completeTranslatorList = 'Un traductor: A. Traductor (Trad.); dos: A. Traductor & B. Traductor (Trads.); de 3 a 20: A. Traductor, B. Traductor, C. Traductor, …, & Traductor final (Trads.; incluye todos); 21 o más: traductores 1–19, …, Último traductor (Trads.)';
 const titlePositionTranslators = 'Un traductor: A. Traductor, Trad.; dos: A. Traductor & B. Traductor, Trads.; de 3 a 20: A. Traductor, B. Traductor, C. Traductor, …, & Traductor final, Trads.; 21 o más: traductores 1–19, …, Último traductor, Trads.';
+const authorlessPeriodicalRefuseWhen = [
+  'No se verificó que la publicación no acredita autor o entidad.',
+  'La fecha, el título o la publicación fueron completados por conjetura.',
+  'Se presenta un DOI, URL, volumen, número, páginas o eLocator no encontrado en la fuente.',
+];
 
 export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   'journal-doi': {
     ...base, id: 'journal-doi', label: 'Artículo de revista científica con DOI', manualExample: 1, manualPrintedPages: '323',
+    refuseWhen: authorlessPeriodicalRefuseWhen,
     requiredMetadata: ['autores si se acreditan', 'año', 'título del artículo', 'revista', 'volumen/número/páginas o eLocator si existen', 'DOI verificado'],
     referenceTemplate: `Con autor: ${completeAuthorList} (Año). Título del artículo. Sin autor acreditado: Título del artículo. (Año). En ambos casos: Con volumen, número y páginas/eLocator: Título de la revista, volumen(número), páginas o eLocator. Sin número: Título de la revista, volumen, páginas o eLocator. Sin volumen: Título de la revista, (número), páginas o eLocator. Sin volumen ni número: Título de la revista, páginas o eLocator; omite también páginas/eLocator si no existen. https://doi.org/xxxxx`,
     parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores. Sin autor: (“Título abreviado”, Año)', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores. Sin autor: “Título abreviado” (Año)',
@@ -67,6 +73,7 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   },
   'journal-no-doi-public-url': {
     ...base, id: 'journal-no-doi-public-url', label: 'Artículo sin DOI con URL pública ajena a una base de datos', manualExample: 2, manualPrintedPages: '323',
+    refuseWhen: authorlessPeriodicalRefuseWhen,
     requiredMetadata: ['autores si se acreditan', 'año', 'título', 'revista', 'volumen/número/páginas o eLocator si existen', 'URL pública'],
     referenceTemplate: `Con autor: ${completeAuthorList} (Año). Título del artículo. Sin autor acreditado: Título del artículo. (Año). En ambos casos: Con volumen, número y páginas/eLocator: Título de la revista, volumen(número), páginas o eLocator. Sin número: Título de la revista, volumen, páginas o eLocator. Sin volumen: Título de la revista, (número), páginas o eLocator. Sin volumen ni número: Título de la revista, páginas o eLocator; omite también páginas/eLocator si no existen. URL`,
     parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores. Sin autor: (“Título abreviado”, Año)', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores. Sin autor: “Título abreviado” (Año)',
@@ -74,6 +81,7 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   },
   'journal-no-doi-database-or-print': {
     ...base, id: 'journal-no-doi-database-or-print', label: 'Artículo sin DOI de una base académica común o impreso', manualExample: 3, manualPrintedPages: '323',
+    refuseWhen: authorlessPeriodicalRefuseWhen,
     requiredMetadata: ['autores si se acreditan', 'año de publicación', 'título', 'revista científica', 'volumen/número/páginas si existen'],
     referenceTemplate: `Con autor: ${completeAuthorList} (Año). Título del artículo. Sin autor acreditado: Título del artículo. (Año). En ambos casos: Título de la revista científica, volumen(número), páginas; sin número: Título de la revista científica, volumen, páginas; sin volumen: Título de la revista científica, (número), páginas; sin volumen ni número: Título de la revista científica, páginas; omite también las páginas si no existen.`,
     parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores. Sin autor: (“Título abreviado”, Año)', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores. Sin autor: “Título abreviado” (Año)',
@@ -159,6 +167,7 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   },
   'newspaper-article': {
     ...base, id: 'newspaper-article', label: 'Artículo de periódico', manualExample: 16, manualPrintedPages: '326',
+    refuseWhen: authorlessPeriodicalRefuseWhen,
     requiredMetadata: ['autor si se acredita', 'fecha completa', 'título', 'periódico', 'página o URL según versión'],
     referenceTemplate: `Con autor: ${completeAuthorList} (Año, día de mes). Título. Periódico, p. x para una página o pp. xx–xx para varias páginas en impreso. URL si es en línea. Sin autor acreditado: Título. (Año, día de mes). Periódico, p. x para una página o pp. xx–xx para varias páginas en impreso. URL si es en línea.`,
     parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores. Sin autor: (“Título abreviado”, Año)', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores. Sin autor: “Título abreviado” (Año)',
@@ -179,6 +188,7 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   },
   'periodical-editorial': {
     ...base, id: 'periodical-editorial', label: 'Editorial de una publicación periódica', manualExample: 19, manualPrintedPages: '326-327',
+    refuseWhen: authorlessPeriodicalRefuseWhen,
     requiredMetadata: ['autor si está firmado', 'año o fecha', 'título', 'tipo de publicación periódica', 'volumen/número/páginas si existen', 'DOI/URL si corresponde'],
     referenceTemplate: `Con firma: ${completeAuthorList} (Año), (Año, mes o estación) o (Año, día de mes), según la fecha publicada. Título [Editorial]. Sin firma: Título [Editorial]. (Año), (Año, mes o estación) o (Año, día de mes), según la fecha publicada. En ambas formas, con volumen, número y páginas: Publicación, volumen(número), páginas. Sin número: Publicación, volumen, páginas. Sin volumen: Publicación, (número), páginas. Solo páginas: Publicación, páginas. Sin datos periódicos: Publicación. Con DOI: añade https://doi.org/xxxxx al final. Sin DOI con URL pública: añade URL. Sin localizador: termina en los datos periódicos disponibles.`,
     parentheticalCitation: 'Con firma: (Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores. Sin firma: (“Título abreviado”, Año)',

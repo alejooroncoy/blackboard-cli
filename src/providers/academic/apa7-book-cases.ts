@@ -57,6 +57,11 @@ const completeTranslatorList = 'Un traductor: T. Traductor (Trad.); dos: T. Trad
 const titlePositionEditors = 'Un editor: E. E. Editor, Ed.; dos: E. E. Editor & F. F. Editor, Eds.; de 3 a 20: E. E. Editor, F. F. Editor, G. G. Editor, …, & Z. Z. Editor final, Eds.; 21 o más: editores 1–19, …, Último editor, Eds.';
 const titlePositionTranslators = 'Un traductor: T. Traductor, Trad.; dos: T. Traductor & U. Traductor, Trads.; de 3 a 20: T. Traductor, U. Traductor, V. Traductor, …, & Traductor final, Trads.; 21 o más: traductores 1–19, …, Último traductor, Trads.';
 const titlePositionNarrators = 'Un narrador: N. Narrador, Narr.; dos: N. Narrador & O. Narrador, Narrs.; de 3 a 20: N. Narrador, O. Narrador, P. Narrador, …, & Narrador final, Narrs.; 21 o más: narradores 1–19, …, Último narrador, Narrs.';
+const authorlessBookRefuseWhen = [
+  'No se verificó el título, la versión o la fuente de la obra.',
+  'La edición, volumen, traducción, narración o fecha original fue inferida.',
+  'Se añadió una editorial, DOI, URL o fecha de recuperación inexistente.',
+];
 
 export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   'book-author-doi': {
@@ -161,6 +166,7 @@ Audiolibro: ${completeEditorList}. (Año). Título del libro (${titlePositionNar
   },
   'religious-work': {
     ...base, id: 'religious-work', label: 'Obra religiosa', manualExample: 35, manualPrintedPages: '331',
+    refuseWhen: authorlessBookRefuseWhen,
     requiredMetadata: ['título de la obra', 'año de versión', 'traductores/edición si existen', 'editorial o URL', 'año original si corresponde'],
     referenceTemplate: `Sin URL: Título de la obra. (Año de versión). Editorial. (Obra original publicada en Año original, solo si se conoce y corresponde). Con URL: Título de la obra. (Año de versión). Editorial. URL. (Obra original publicada en Año original, solo si se conoce y corresponde). Con traductor o traductores: añade (${titlePositionTranslators}) después del título; con edición: (2.ª ed.); con ambos: (${titlePositionTranslators}; 2.ª ed.).`,
     parentheticalCitation: '(*Título*, Año versión) si no corresponde un año original; (*Título*, Año original/Año versión) cuando ambos años están verificados', narrativeCitation: '*Título* (Año versión) si no corresponde un año original; *Título* (Año original/Año versión) cuando ambos años están verificados',

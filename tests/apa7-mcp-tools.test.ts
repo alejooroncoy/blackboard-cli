@@ -771,6 +771,7 @@ test('APA 7 guidance distinguishes signed and unsigned editorials', async () => 
   assert.match(editorial.case.referenceTemplate, /Sin volumen: Publicación, \(número\), páginas/);
   assert.match(editorial.case.parentheticalCitation, /Sin firma: \(“Título abreviado”, Año\)/);
   assert.match(editorial.case.rules.join(' '), /no está firmado/);
+  assert.doesNotMatch(editorial.case.refuseWhen.join(' '), /identidad del autor o entidad/);
 });
 
 test('APA 7 guidance uses ampersand in a two-author parenthetical citation and reference', async () => {
@@ -873,6 +874,7 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(ancient.referenceTemplate, /URL antes de esa nota final/);
   assert.match(religious.rules.join(' '), /Omite el traductor, la edición o todo el paréntesis/);
   assert.match(religious.rules.join(' '), /No inventes un año original/);
+  assert.doesNotMatch(religious.refuseWhen.join(' '), /autor, editor o entidad responsable/);
   assert.match(multivolume.referenceTemplate, /\(Ed\.\).*\(Eds\.\)/);
   assert.match(multivolume.referenceTemplate, /Autor, C\. C\./);
   assert.match(multivolume.rules.join(' '), /lista completa de autores/);
@@ -1020,6 +1022,10 @@ test('APA 7 guidance covers all 12 chapter and reference-entry examples', async 
   assert.match(wikipedia.case.referenceTemplate, /Recuperado el día de mes de año, de URL actual/);
   assert.match(wikipedia.case.requiredMetadata.join(' '), /fecha de la revisión consultada si hay URL permanente/);
   assert.match(wikipedia.case.parentheticalCitation, /s\. f\.\) sin revisión permanente/);
+  assert.doesNotMatch(wikipedia.case.refuseWhen.join(' '), /quién escribió el capítulo o la entrada/);
+  const reprintedJournalChapter = JSON.parse((await handler({ topic: 'reference', caseId: 'chapter-reprinted-from-journal' })).content[0].text).case;
+  assert.match(reprintedJournalChapter.referenceTemplate, /Revista, volumen\(número\), páginas/);
+  assert.doesNotMatch(reprintedJournalChapter.referenceTemplate, /volumen\[número\]/);
   const individualReferenceEntry = JSON.parse((await handler({ topic: 'reference', caseId: 'reference-entry-individual-author' })).content[0].text).case;
   assert.match(individualReferenceEntry.requiredMetadata.join(' '), /edición o versión si existe/);
   assert.match(individualReferenceEntry.referenceTemplate, /Primera edición o sin edición declarada/);
