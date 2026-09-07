@@ -139,7 +139,7 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   'diagnostic-manual': {
     ...base, id: 'diagnostic-manual', label: 'Manual de diagnóstico (DSM, CIE)', manualExample: 32, manualPrintedPages: '330',
     requiredMetadata: ['autor grupal', 'año', 'título completo', 'edición, solo desde la segunda', 'abreviatura si se usará', 'DOI o URL pública si corresponde'],
-    referenceTemplate: 'Entidad. (Año). Título completo del manual (edición, solo desde la segunda). Con DOI: añade DOI al final. Con URL pública sin DOI: añade URL al final. Impreso o base académica común sin localizador: termina después del título/edición.',
+    referenceTemplate: 'Entidad. (Año). Título completo del manual (edición, solo desde la segunda). Con DOI: añade https://doi.org/xxxxx al final. Con URL pública sin DOI: añade URL al final. Impreso o base académica común sin localizador: termina después del título/edición.',
     parentheticalCitation: '(Entidad, Año)', narrativeCitation: 'Entidad (Año)',
     rules: ['Si autor y editorial son iguales, omite la editorial.', 'La edición se incluye desde la segunda; omite todo el paréntesis para la primera.', 'Prefiere DOI; usa URL pública si no hay DOI y omite ambos en una versión impresa o base académica común sin localizador.', 'Título, edición y abreviatura pueden introducirse en la primera mención del texto, pero no se abrevian en referencias.', 'Después de introducir el manual, repite la cita solo cuando sustenta directamente una afirmación.'],
   },

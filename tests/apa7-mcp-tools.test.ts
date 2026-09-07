@@ -807,6 +807,7 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   const diagnostic = JSON.parse((await handler({ topic: 'reference', caseId: 'diagnostic-manual' })).content[0].text).case;
   assert.match(translated.case.requiredMetadata.join(' '), /edición, solo desde la segunda/);
   assert.match(diagnostic.requiredMetadata.join(' '), /edición, solo desde la segunda/);
+  assert.match(diagnostic.referenceTemplate, /Con DOI: añade https:\/\/doi\.org\/xxxxx al final/);
   assert.match(translated.case.parentheticalCitation, /Año original\/Año reedición/);
   assert.match(translated.case.parentheticalCitation, /tres o más autores/);
   assert.match(translated.case.referenceTemplate, /dos: T\. Traductor & U\. Traductor, Trads\./);
@@ -1279,6 +1280,9 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   assert.equal(ted.manualExample, 88);
   assert.match(ted.rules.join(' '), /En YouTube/);
   assert.match(webinar.rules.join(' '), /comunicación personal/);
+  assert.match(webinar.referenceTemplate, /Dos: Instructor, I\. I\., & Instructor, J\. J\./);
+  assert.match(webinar.referenceTemplate, /21 o más: instructores 1–19/);
+  assert.match(webinar.parentheticalCitation, /tres o más instructores/);
   assert.match(interview.rules.join(' '), /persona entrevistada/);
   assert.match(interview.referenceTemplate, /Archivo físico sin URL/);
   assert.match(interview.rules.join(' '), /omite URL e institución\/museo/);
