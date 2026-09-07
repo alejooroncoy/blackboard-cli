@@ -67,14 +67,16 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   },
   'journal-no-doi-public-url': {
     ...base, id: 'journal-no-doi-public-url', label: 'Artículo sin DOI con URL pública ajena a una base de datos', manualExample: 2, manualPrintedPages: '323',
-    requiredMetadata: ['autores', 'año', 'título', 'revista', 'volumen/número/páginas o eLocator si existen', 'URL pública'],
-    referenceTemplate: `${completeAuthorList} (Año). Título del artículo. Con volumen, número y páginas/eLocator: Título de la revista, volumen(número), páginas o eLocator. Sin número: Título de la revista, volumen, páginas o eLocator. Sin volumen: Título de la revista, (número), páginas o eLocator. Sin volumen ni número: Título de la revista, páginas o eLocator; omite también páginas/eLocator si no existen. URL`,
+    requiredMetadata: ['autores si se acreditan', 'año', 'título', 'revista', 'volumen/número/páginas o eLocator si existen', 'URL pública'],
+    referenceTemplate: `Con autor: ${completeAuthorList} (Año). Título del artículo. Sin autor acreditado: Título del artículo. (Año). En ambos casos: Con volumen, número y páginas/eLocator: Título de la revista, volumen(número), páginas o eLocator. Sin número: Título de la revista, volumen, páginas o eLocator. Sin volumen: Título de la revista, (número), páginas o eLocator. Sin volumen ni número: Título de la revista, páginas o eLocator; omite también páginas/eLocator si no existen. URL`,
+    parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores. Sin autor: (“Título abreviado”, Año)', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores. Sin autor: “Título abreviado” (Año)',
     rules: [completeAuthorRule, 'Omite por completo el paréntesis del número cuando la revista no lo tenga.', 'Incluye la URL del artículo únicamente cuando es recuperable públicamente y no es la URL de una base de datos.'],
   },
   'journal-no-doi-database-or-print': {
     ...base, id: 'journal-no-doi-database-or-print', label: 'Artículo sin DOI de una base académica común o impreso', manualExample: 3, manualPrintedPages: '323',
-    requiredMetadata: ['autores', 'año de publicación', 'título', 'revista científica', 'volumen/número/páginas si existen'],
-    referenceTemplate: `${completeAuthorList} (Año). Título del artículo. Título de la revista científica, volumen(número), páginas; sin número: Título de la revista científica, volumen, páginas; sin volumen: Título de la revista científica, (número), páginas; sin volumen ni número: Título de la revista científica, páginas; omite también las páginas si no existen.`,
+    requiredMetadata: ['autores si se acreditan', 'año de publicación', 'título', 'revista científica', 'volumen/número/páginas si existen'],
+    referenceTemplate: `Con autor: ${completeAuthorList} (Año). Título del artículo. Sin autor acreditado: Título del artículo. (Año). En ambos casos: Título de la revista científica, volumen(número), páginas; sin número: Título de la revista científica, volumen, páginas; sin volumen: Título de la revista científica, (número), páginas; sin volumen ni número: Título de la revista científica, páginas; omite también las páginas si no existen.`,
+    parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores. Sin autor: (“Título abreviado”, Año)', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores. Sin autor: “Título abreviado” (Año)',
     rules: [completeAuthorRule, 'Usa solo el año para un artículo de revista científica, aunque el número muestre mes o estación.', 'Omite volumen, número y páginas individualmente cuando la publicación no los proporcione.', 'No incluye el nombre de la base de datos ni su URL.'],
   },
   'journal-21-plus-authors': {

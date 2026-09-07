@@ -784,7 +784,13 @@ test('APA 7 guidance uses ampersand in a two-author parenthetical citation and r
   const noDoi = JSON.parse((await handler({ topic: 'citation', caseId: 'journal-no-doi-public-url' })).content[0].text);
   assert.match(noDoi.case.parentheticalCitation, /\(Autor & Autor, Año\)/);
   assert.match(noDoi.case.parentheticalCitation, /tres o más autores/);
+  assert.match(noDoi.case.referenceTemplate, /Sin autor acreditado: Título del artículo/);
+  assert.match(noDoi.case.parentheticalCitation, /Sin autor: \(“Título abreviado”, Año\)/);
   assert.match(noDoi.case.referenceTemplate, /Sin volumen: Título de la revista, \(número\), páginas o eLocator/);
+
+  const noDoiDatabaseOrPrint = JSON.parse((await handler({ topic: 'citation', caseId: 'journal-no-doi-database-or-print' })).content[0].text);
+  assert.match(noDoiDatabaseOrPrint.case.referenceTemplate, /Sin autor acreditado: Título del artículo/);
+  assert.match(noDoiDatabaseOrPrint.case.parentheticalCitation, /Sin autor: \(“Título abreviado”, Año\)/);
 
   const mixedAuthors = JSON.parse((await handler({ topic: 'citation', caseId: 'journal-individual-group-authors' })).content[0].text);
   assert.match(mixedAuthors.case.referenceTemplate, /Autor personal, B\. B\./);
@@ -995,6 +1001,10 @@ test('APA 7 guidance covers all 12 chapter and reference-entry examples', async 
   const chapter = JSON.parse((await handler({ topic: 'citation', caseId: 'chapter-edited-doi' })).content[0].text).case;
   assert.match(chapter.parentheticalCitation, /Autor & Autor/);
   assert.match(chapter.parentheticalCitation, /tres o más autores/);
+  const electronicChapter = JSON.parse((await handler({ topic: 'reference', caseId: 'chapter-electronic-public-url' })).content[0].text).case;
+  assert.match(electronicChapter.referenceTemplate, /dos: N\. Narrador & O\. Narrador, Narrs\./);
+  assert.match(electronicChapter.referenceTemplate, /21 o más: narradores 1–19/);
+  assert.doesNotMatch(electronicChapter.referenceTemplate, /URL\./);
   const translated = JSON.parse((await handler({ topic: 'citation', caseId: 'chapter-translated-republication' })).content[0].text).case;
   assert.match(translated.parentheticalCitation, /Autor & Autor/);
   assert.match(translated.parentheticalCitation, /Año original\/Año reedición/);

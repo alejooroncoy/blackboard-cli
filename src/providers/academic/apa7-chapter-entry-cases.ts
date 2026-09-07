@@ -48,6 +48,7 @@ const completeChapterAuthors = 'Un autor: Autor, A. A.; dos: Autor, A. A., & Aut
 const completeChapterAuthorRule = 'Conserva la lista completa y ordenada de autores del capítulo conforme a los límites del elemento autor de APA.';
 const completeChapterEditors = 'un editor: E. E. Editor (Ed.); dos: E. E. Editor & F. F. Editor (Eds.); de 3 a 20: E. E. Editor, F. F. Editor, G. G. Editor, …, & Z. Z. Editor final (Eds.; incluye todos); 21 o más: editores 1–19, …, Último editor (Eds.)';
 const titlePositionChapterTranslators = 'Un traductor: T. Traductor, Trad.; dos: T. Traductor & U. Traductor, Trads.; de 3 a 20: T. Traductor, U. Traductor, V. Traductor, …, & Traductor final, Trads.; 21 o más: traductores 1–19, …, Último traductor, Trads.';
+const titlePositionChapterNarrators = 'Un narrador: N. Narrador, Narr.; dos: N. Narrador & O. Narrador, Narrs.; de 3 a 20: N. Narrador, O. Narrador, P. Narrador, …, & Narrador final, Narrs.; 21 o más: narradores 1–19, …, Último narrador, Narrs.';
 
 export const chapterEntryCases: Record<ChapterEntryCaseId, Apa7VerifiedChapterEntryCase> = {
   'chapter-edited-doi': {
@@ -65,7 +66,8 @@ export const chapterEntryCases: Record<ChapterEntryCaseId, Apa7VerifiedChapterEn
   'chapter-electronic-public-url': {
     ...base, id: 'chapter-electronic-public-url', label: 'Capítulo electrónico o de audiolibro sin DOI con URL pública', manualExample: 40, manualPrintedPages: '333',
     requiredMetadata: ['autores del capítulo', 'año', 'título', 'editores', 'libro', 'edición si existe', 'volumen si existe', 'páginas solo para capítulo electrónico', 'editorial', 'URL pública', 'narrador solo para audiolibro'],
-    referenceTemplate: `Capítulo electrónico: ${completeChapterAuthors} (Año). Título del capítulo. En ${completeChapterEditors}, Título del libro (edición y volumen: edición, Vol. x, pp. xx-xx; solo edición: edición, pp. xx-xx; solo volumen: Vol. x, pp. xx-xx; sin ambos: pp. xx-xx). Editorial. URL. Capítulo de audiolibro: ${completeChapterAuthors} (Año). Título del capítulo. En ${completeChapterEditors}, Título del libro (N. Narrador, Narr.; edición si existe; Vol. x si existe) [Audiolibro]. Editorial. URL.`,
+    referenceTemplate: `Capítulo electrónico: ${completeChapterAuthors} (Año). Título del capítulo. En ${completeChapterEditors}, Título del libro (edición y volumen: edición, Vol. x, pp. xx-xx; solo edición: edición, pp. xx-xx; solo volumen: Vol. x, pp. xx-xx; sin ambos: pp. xx-xx). Editorial. URL
+Capítulo de audiolibro: ${completeChapterAuthors} (Año). Título del capítulo. En ${completeChapterEditors}, Título del libro (${titlePositionChapterNarrators}; edición si existe; Vol. x si existe) [Audiolibro]. Editorial. URL`,
     rules: [completeChapterAuthorRule, 'Incluye edición y volumen solo cuando existan.', 'Incluye narrador y [Audiolibro] únicamente cuando la versión consultada es un audiolibro; omite ambos en un capítulo electrónico ordinario.', 'Incluye la URL cuando no pertenece a una base de datos.'],
   },
   'chapter-other-language': {
