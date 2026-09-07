@@ -48,11 +48,17 @@ export interface Apa7VerifiedFormatRule {
 const verified = (rule: Omit<Apa7VerifiedFormatRule, 'status' | 'refuseWhen'> & { refuseWhen?: string[] }): Apa7VerifiedFormatRule => ({
   ...rule,
   status: 'verified',
-  refuseWhen: rule.refuseWhen ?? [
-    'No se confirmó si el trabajo es estudiantil o profesional.',
-    'La rúbrica o plantilla del curso exige una variante diferente.',
-    'Se pretende completar un dato institucional o personal por conjetura.',
-  ],
+  refuseWhen: rule.refuseWhen ?? (rule.audience === 'both'
+    ? [
+      'La rúbrica o plantilla del curso exige una variante diferente.',
+      'Se pretende presentar una regla general como si sustituyera una instrucción específica del curso.',
+      'Se pretende completar un dato institucional o personal por conjetura.',
+    ]
+    : [
+      'No se confirmó si el trabajo es estudiantil o profesional.',
+      'La rúbrica o plantilla del curso exige una variante diferente.',
+      'Se pretende completar un dato institucional o personal por conjetura.',
+    ]),
 });
 
 export const formatRules: Record<FormatRuleId, Apa7VerifiedFormatRule> = {

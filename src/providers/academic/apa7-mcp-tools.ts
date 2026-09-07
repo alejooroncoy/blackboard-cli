@@ -252,7 +252,14 @@ function guidanceFor(selectedTopic: z.infer<typeof topic>, selectedSourceType?: 
         return { ...base, citationRule: getCitationRule('personal-communication') };
       }
       if (selectedSourceType === 'software') {
-        return { ...base, citationRule: getCitationRule('general-mention-site-periodical-software') };
+        return {
+          ...base,
+          sourceTypeNote: 'Primero clasifica el uso: una mención general de software común no lleva cita autor-fecha; software especializado, directamente citado o del que se atribuye contenido requiere el caseId correspondiente.',
+          rules: [
+            'Para una mención general de software común, menciona nombre y versión si se conocen; no agregues cita autor-fecha ni referencia.',
+            'Para software especializado, directamente citado o parafraseado, usa el caso especializado y verifica autor o entidad, fecha, título, versión, fuente y URL si corresponde.',
+          ],
+        };
       }
       return {
         ...base,

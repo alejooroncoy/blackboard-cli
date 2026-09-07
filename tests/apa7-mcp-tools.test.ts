@@ -131,7 +131,7 @@ test('reference templates preserve APA italics with explicit Markdown notation',
   assert.match(webpage.template, /dos: Autor, A\. A\., & Autor, B\. B\./);
   assert.match(webpage.template, /21 o más: autores 1–19/);
   const software = JSON.parse((await handler({ topic: 'reference', sourceType: 'software' })).content[0].text);
-  const commonSoftwareCitation = JSON.parse((await handler({ topic: 'citation', sourceType: 'software' })).content[0].text);
+  const softwareCitation = JSON.parse((await handler({ topic: 'citation', sourceType: 'software' })).content[0].text);
   const book = JSON.parse((await handler({ topic: 'reference', sourceType: 'book' })).content[0].text);
   const chapter = JSON.parse((await handler({ topic: 'reference', sourceType: 'book-chapter' })).content[0].text);
   const unsignedNewspaper = JSON.parse((await handler({ topic: 'reference', sourceType: 'newspaper-article' })).content[0].text);
@@ -151,8 +151,9 @@ test('reference templates preserve APA italics with explicit Markdown notation',
   assert.match(software.template, /tienda, solo si difiere del autor/);
   assert.match(software.requiredMetadata.join(' '), /clasificación: mención general o software especializado/);
   assert.match(software.requiredMetadata.join(' '), /solo para software especializado o directamente citado/);
-  assert.equal(commonSoftwareCitation.citationRule.id, 'general-mention-site-periodical-software');
-  assert.match(commonSoftwareCitation.citationRule.referenceTreatment, /No lleva cita autor-fecha ni entrada en referencias/);
+  assert.match(softwareCitation.sourceTypeNote, /Primero clasifica el uso/);
+  assert.match(softwareCitation.rules.join(' '), /mención general de software común.*no agregues cita autor-fecha/);
+  assert.match(softwareCitation.rules.join(' '), /software especializado.*usa el caso especializado/);
   assert.match(book.template, /omite DOI y URL/);
   assert.ok(book.requiredMetadata.includes('autor o entidad si se acredita'));
   assert.ok(chapter.requiredMetadata.includes('autor o entidad si se acredita'));
@@ -727,6 +728,8 @@ test('APA 7 physical-format rules preserve allowed variants and exact heading le
   assert.match(typography.refuseWhen.join(' '), /No es correcto afirmar.*única/);
   assert.match(spacing.rules.join(' '), /tabla.*espacio sencillo, 1\.5 o doble/);
   assert.match(margins.rules.join(' '), /2\.54 cm/);
+  assert.doesNotMatch(spacing.refuseWhen.join(' '), /estudiantil o profesional/);
+  assert.doesNotMatch(margins.refuseWhen.join(' '), /estudiantil o profesional/);
   assert.match(headings.rules.join(' '), /Nivel 5/);
   assert.match(headings.rules.join(' '), /sin saltar niveles/);
 });
