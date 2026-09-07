@@ -1384,6 +1384,15 @@ test('APA 7 magazine dates preserve the precision actually published', async () 
   assert.match(magazine.rules.join(' '), /No inventes mes ni día/);
 });
 
+test('APA 7 newspaper articles cover unsigned sources', async () => {
+  let handler: any;
+  registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
+  const newspaper = JSON.parse((await handler({ topic: 'citation', caseId: 'newspaper-article' })).content[0].text).case;
+  assert.match(newspaper.referenceTemplate, /Sin autor acreditado: Título\./);
+  assert.match(newspaper.parentheticalCitation, /Sin autor: \(“Título abreviado”, Año\)/);
+  assert.match(newspaper.rules.join(' '), /comienza la referencia por el título/);
+});
+
 test('APA 7 guidance exposes verified citation rules 8.1 through 8.36', async () => {
   let handler: any;
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
