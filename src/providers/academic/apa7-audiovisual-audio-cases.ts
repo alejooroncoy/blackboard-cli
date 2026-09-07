@@ -100,7 +100,7 @@ export const audiovisualAudioCases: Record<AudiovisualAudioCaseId, Apa7VerifiedA
   'music-album': {
     ...audioBase, id: 'music-album', label: 'Álbum de música', manualExample: 91, manualPrintedPages: '350-351',
     requiredMetadata: ['compositor para obra clásica o artista de grabación para moderna', 'año de versión', 'título', 'intérprete si es clásica', 'discográfica', 'año original si es clásica', 'URL solo si es único medio'],
-    referenceTemplate: 'Clásica: Compositor. (Año versión). Título [Álbum grabado por Intérprete]. Discográfica. (Obra original publicada en Año). Moderna: Artista. (Año). Título [Álbum]. Discográfica. En cualquier variante, añade URL solo si es el único medio de recuperación.',
+    referenceTemplate: 'Clásica: Compositor. (Año versión). Título [Álbum grabado por Intérprete]. Discográfica. Añade URL solo si es el único medio de recuperación. Finaliza con (Obra original publicada en Año). Moderna: Artista. (Año). Título [Álbum]. Discográfica. Añade URL solo si es el único medio de recuperación.',
     parentheticalCitation: '(Compositor, Año original/Año versión) o (Artista, Año)', narrativeCitation: 'Compositor (Año original/Año versión) o Artista (Año)',
     rules: ['En música clásica, el compositor es autor y el intérprete se identifica después del título.', 'En música moderna, el artista que realizó la grabación es autor.', 'No indica Spotify, CD u otra plataforma salvo que identifique una versión relevante; añade URL solo cuando es el único medio de recuperación.'],
   },
