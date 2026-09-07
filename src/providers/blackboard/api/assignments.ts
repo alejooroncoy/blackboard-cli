@@ -171,11 +171,20 @@ export async function listGroupAttempts(
   courseId: string,
   columnId: string
 ): Promise<GroupAttempt[]> {
-  const r = await client.get(
-    `/learn/api/public/v1/courses/${courseId}/gradebook/columns/${columnId}/groupAttempts`,
+  const path = `/learn/api/public/v1/courses/${courseId}/gradebook/columns/${columnId}/groupAttempts`;
+  let page = await client.get(
+    path,
     { params: { limit: 20 } }
   );
-  return r.data.results ?? [];
+  const attempts: GroupAttempt[] = [];
+  while (true) {
+    attempts.push(...(page.data.results ?? []));
+    const nextPage = page.data.paging?.nextPage as string | undefined;
+    if (!nextPage) break;
+    if (!nextPage.startsWith(path)) throw new Error('Refusing an unexpected Blackboard group-attempt page');
+    page = await client.get(nextPage);
+  }
+  return attempts;
 }
 
 export async function getAssignment(
