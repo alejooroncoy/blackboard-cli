@@ -158,7 +158,7 @@ export const visualSocialWebCases: Record<VisualSocialWebCaseId, Apa7VerifiedVis
   'webpage-individual-author': {
     ...webBase, id: 'webpage-individual-author', label: 'Página web con autor individual', manualExample: 112, manualPrintedPages: '357',
     requiredMetadata: ['autores o entidad', 'fecha más específica disponible', 'título', 'sitio si difiere del autor', 'URL'],
-    referenceTemplate: 'Un autor: Autor, A. A. (Año), (Año, mes) o (Año, día de mes). Dos: Autor, A. A., & Autor, B. B. De 3 a 20: incluye todos; 21 o más: autores 1–19, …, Último autor. Título. Nombre del sitio, solo si difiere del autor. URL',
+    referenceTemplate: 'Un autor: Autor, A. A. (Año), (Año, mes) o (Año, día de mes). Dos: Autor, A. A., & Autor, B. B. (Año), (Año, mes) o (Año, día de mes). De 3 a 20: incluye todos, seguido de (Año), (Año, mes) o (Año, día de mes); 21 o más: autores 1–19, …, Último autor (Año), (Año, mes) o (Año, día de mes). Título. Nombre del sitio, solo si difiere del autor. URL',
     parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
     rules: ['Conserva la lista completa y ordenada de autores personales conforme a los límites del elemento autor de APA.', 'Usa la fecha más específica disponible: solo año, año y mes, o fecha completa.', 'No inventes el mes ni el día cuando la página no los publica.', 'Omite el nombre del sitio cuando coincide con el autor.', 'Comprueba autor en la propia página, en “Acerca de” o en reconocimientos antes de declararlo ausente.'],
   },

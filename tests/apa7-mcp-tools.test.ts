@@ -823,7 +823,7 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(religious.parentheticalCitation, /Año versión\) si no corresponde un año original/);
   assert.match(religious.referenceTemplate, /con traductor:.*con edición:.*con ambos:/i);
   assert.match(religious.referenceTemplate, /Obra original publicada.*URL\./);
-  assert.match(ancient.referenceTemplate, /nota antes de la URL final/);
+  assert.match(ancient.referenceTemplate, /URL antes de esa nota final/);
   assert.match(religious.rules.join(' '), /Omite el traductor, la edición o todo el paréntesis/);
   assert.match(religious.rules.join(' '), /No inventes un año original/);
   assert.match(multivolume.referenceTemplate, /\(Ed\.\).*\(Eds\.\)/);
@@ -1119,7 +1119,7 @@ test('APA 7 newspaper book reviews distinguish print pages from online URLs', as
   let handler: any;
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
   const review = JSON.parse((await handler({ topic: 'reference', caseId: 'review-book-in-newspaper' })).content[0].text).case;
-  assert.match(review.referenceTemplate, /p\. x o pp\. xx–xx para versión impresa/);
+  assert.match(review.referenceTemplate, /x o xx–xx para versión impresa/);
   assert.match(review.referenceTemplate, /URL para versión en línea/);
   assert.match(review.rules.join(' '), /incluye la página o el intervalo/);
 });
@@ -1500,7 +1500,7 @@ test('APA 7 generic newspaper template distinguishes print pages from online URL
   let handler: any;
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
   const newspaper = JSON.parse((await handler({ topic: 'reference', sourceType: 'newspaper-article' })).content[0].text);
-  assert.match(newspaper.template, /p\. x o pp\. xx–xx para versión impresa/);
+  assert.match(newspaper.template, /x o xx–xx para versión impresa/);
   assert.match(newspaper.template, /URL para versión en línea/);
 });
 
