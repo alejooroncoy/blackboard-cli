@@ -126,13 +126,24 @@ export async function getGradeColumns(
 export async function getGrades(
   client: AxiosInstance,
   courseId: string,
-  userId: string
+  userId: string,
+  opts: { limit?: number } = {}
 ): Promise<PaginatedResponse<any>> {
-  const r = await client.get(
-    `/learn/api/public/v1/courses/${courseId}/gradebook/users/${userId}`,
-    { params: { limit: 50 } }
-  );
-  return r.data;
+  const path = `/learn/api/public/v1/courses/${courseId}/gradebook/users/${userId}`;
+  let page = await client.get(path, { params: { limit: opts.limit ?? 50 } });
+  const results: any[] = [];
+
+  while (true) {
+    results.push(...(page.data.results ?? []));
+    const nextPage = page.data.paging?.nextPage as string | undefined;
+    if (!nextPage) break;
+    if (!nextPage.startsWith(path)) {
+      throw new Error('Refusing an unexpected Blackboard grades page');
+    }
+    page = await client.get(nextPage);
+  }
+
+  return { results, paging: page.data.paging };
 }
 
 export async function getCourseMemberships(

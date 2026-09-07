@@ -5,7 +5,7 @@ import path from 'path';
 import fs from 'fs';
 import { loadSession, isSessionValid } from '../auth/session.js';
 import { createClient } from '../api/client.js';
-import { getMe, getMyCourses } from '../api/courses.js';
+import { getMe, getMyCourses, getGrades } from '../api/courses.js';
 import {
   listPublishedAssignments,
   listAttempts,
@@ -124,11 +124,8 @@ export function assignmentsCommand(program: Command) {
         const loadCourseAssignments = async (id: string, name?: string) => {
           const [columns, gradesRes] = await Promise.all([
             listPublishedAssignments(client, id),
-            client
-              .get(`/learn/api/public/v1/courses/${id}/gradebook/users/${userId}`, {
-                params: { limit: 200 },
-              })
-              .then((r) => r.data.results as any[])
+            getGrades(client, id, userId!, { limit: 200 })
+              .then((grades) => grades.results)
               .catch(() => [] as any[]),
           ]);
           return { courseId: id, courseName: name ?? id, columns, gradesRes };

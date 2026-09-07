@@ -3,6 +3,7 @@ import { execFileSync } from 'node:child_process';
 import { test } from 'node:test';
 import { isPendingAssignment } from '../src/providers/blackboard/commands/assignments.js';
 import { listAssignments, listPublishedAssignments } from '../src/providers/blackboard/api/assignments.js';
+import { getGrades } from '../src/providers/blackboard/api/courses.js';
 
 test('assignments list accepts an optional courseId', () => {
   const output = execFileSync(
@@ -60,6 +61,29 @@ test('assignment listing follows every gradebook column page', async () => {
   const assignments = await listAssignments(client, '_course_1');
 
   assert.deepEqual(assignments.map((assignment) => assignment.id), ['_column_1', '_column_2']);
+});
+
+test('grade listing follows every student grade page', async () => {
+  const client = {
+    get: async (url: string) => {
+      if (url.endsWith('/gradebook/users/_student_1')) {
+        return {
+          data: {
+            results: [{ columnId: '_column_1' }],
+            paging: { nextPage: '/learn/api/public/v1/courses/_course_1/gradebook/users/_student_1?offset=200' },
+          },
+        };
+      }
+      if (url.endsWith('/gradebook/users/_student_1?offset=200')) {
+        return { data: { results: [{ columnId: '_column_2' }] } };
+      }
+      throw new Error(`Unexpected request: ${url}`);
+    },
+  } as any;
+
+  const grades = await getGrades(client, '_course_1', '_student_1', { limit: 200 });
+
+  assert.deepEqual(grades.results.map((grade) => grade.columnId), ['_column_1', '_column_2']);
 });
 
 test('published group assessment is listed when its gradebook column is restricted', async () => {
