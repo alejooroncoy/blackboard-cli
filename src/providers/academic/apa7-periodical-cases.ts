@@ -158,7 +158,7 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   'newspaper-article': {
     ...base, id: 'newspaper-article', label: 'Artículo de periódico', manualExample: 16, manualPrintedPages: '326',
     requiredMetadata: ['autor si se acredita', 'fecha completa', 'título', 'periódico', 'página o URL según versión'],
-    referenceTemplate: `Con autor: ${completeAuthorList} (Año, día de mes). Título. Periódico, página si es impreso. URL si es en línea. Sin autor acreditado: Título. (Año, día de mes). Periódico, página si es impreso. URL si es en línea.`,
+    referenceTemplate: `Con autor: ${completeAuthorList} (Año, día de mes). Título. Periódico, p. x para una página o pp. xx–xx para varias páginas en impreso. URL si es en línea. Sin autor acreditado: Título. (Año, día de mes). Periódico, p. x para una página o pp. xx–xx para varias páginas en impreso. URL si es en línea.`,
     parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores. Sin autor: (“Título abreviado”, Año)', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores. Sin autor: “Título abreviado” (Año)',
     rules: ['Sin autor acreditado, comienza la referencia por el título y usa título abreviado en la cita.', 'Un sitio web de noticias que no es un periódico se trata como página web, no como artículo de periódico.'],
   },

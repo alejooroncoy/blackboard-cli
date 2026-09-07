@@ -1189,7 +1189,7 @@ test('APA 7 newspaper book reviews distinguish print pages from online URLs', as
   let handler: any;
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
   const review = JSON.parse((await handler({ topic: 'reference', caseId: 'review-book-in-newspaper' })).content[0].text).case;
-  assert.match(review.referenceTemplate, /x o xx–xx para versión impresa/);
+  assert.match(review.referenceTemplate, /p\. x para una página o pp\. xx–xx para varias páginas en versión impresa/);
   assert.match(review.referenceTemplate, /URL para versión en línea/);
   assert.match(review.rules.join(' '), /incluye la página o el intervalo/);
 });
@@ -1418,6 +1418,7 @@ test('APA 7 newspaper articles cover unsigned sources', async () => {
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
   const newspaper = JSON.parse((await handler({ topic: 'citation', caseId: 'newspaper-article' })).content[0].text).case;
   assert.match(newspaper.referenceTemplate, /Sin autor acreditado: Título\./);
+  assert.match(newspaper.referenceTemplate, /p\. x para una página o pp\. xx–xx para varias páginas en impreso/);
   assert.match(newspaper.parentheticalCitation, /Sin autor: \(“Título abreviado”, Año\)/);
   assert.match(newspaper.rules.join(' '), /comienza la referencia por el título/);
 });
