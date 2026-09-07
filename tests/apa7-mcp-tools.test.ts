@@ -131,6 +131,7 @@ test('reference templates preserve APA italics with explicit Markdown notation',
   const software = JSON.parse((await handler({ topic: 'reference', sourceType: 'software' })).content[0].text);
   const book = JSON.parse((await handler({ topic: 'reference', sourceType: 'book' })).content[0].text);
   const chapter = JSON.parse((await handler({ topic: 'reference', sourceType: 'book-chapter' })).content[0].text);
+  const unsignedNewspaper = JSON.parse((await handler({ topic: 'reference', sourceType: 'newspaper-article' })).content[0].text);
   assert.match(chapter.template, /E\. Editor & F\. Editor \(Eds\.\)/);
   assert.doesNotMatch(chapter.template, /E\. Editor, & F\. Editor/);
   assert.match(chapter.template, /Sin autor acreditado: Título del capítulo\. \(Año\)/);
@@ -146,6 +147,9 @@ test('reference templates preserve APA italics with explicit Markdown notation',
   assert.match(social.template, /Recuperado el día de mes de año/);
   assert.match(software.template, /tienda, solo si difiere del autor/);
   assert.match(book.template, /omite DOI y URL/);
+  assert.ok(book.requiredMetadata.includes('autor o entidad si se acredita'));
+  assert.ok(chapter.requiredMetadata.includes('autor o entidad si se acredita'));
+  assert.ok(unsignedNewspaper.requiredMetadata.includes('autor o entidad si se acredita'));
   assert.match(book.template, /Sin autor con editor acreditado: Un editor: Editor, E\. E\. \(Ed\.\); dos: Editor, E\. E\., & Editor, F\. F\. \(Eds\.\)/);
   assert.match(book.template, /Primer editor et al\./);
   assert.match(book.template, /Sin autor ni editor acreditado: \*Título del libro\*\. \(Año\)\. Editorial/);

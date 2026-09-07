@@ -275,7 +275,9 @@ function guidanceFor(selectedTopic: z.infer<typeof topic>, selectedSourceType?: 
         ...base,
         requiredMetadata: selectedSourceType === 'personal-communication'
           ? ['Iniciales y apellido de la persona', 'fecha exacta', 'medio de comunicación']
-          : ['tipo de fuente', 'autor o entidad', 'fecha', 'título', 'fuente contenedora/editorial', 'DOI o URL si corresponde'],
+          : ['book', 'book-chapter', 'journal-article', 'webpage', 'newspaper-article'].includes(selectedSourceType ?? '')
+            ? ['tipo de fuente', 'autor o entidad si se acredita', 'fecha', 'título', 'fuente contenedora/editorial', 'DOI o URL si corresponde']
+            : ['tipo de fuente', 'autor o entidad', 'fecha', 'título', 'fuente contenedora/editorial', 'DOI o URL si corresponde'],
         template: selectedSourceType === 'personal-communication'
           ? 'No lleva referencia. Cita en texto: (A. Apellido, comunicación personal, [fecha exacta]).'
           : referenceTemplates[selectedSourceType ?? 'other'] ?? 'Clasifica primero el tipo real de obra. Patrón general: Autor. (Fecha). Título. Fuente. Añade DOI o URL solo cuando corresponda; omite el localizador si la categoría aplicable no lo requiere o no existe.',
