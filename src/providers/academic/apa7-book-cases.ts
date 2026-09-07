@@ -79,7 +79,8 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   'book-author-electronic-public-url': {
     ...base, id: 'book-author-electronic-public-url', label: 'Libro electrónico o audiolibro de autor sin DOI con URL pública', manualExample: 22, manualPrintedPages: '327-328',
     requiredMetadata: ['autores', 'año', 'título', 'edición desde la segunda', 'editorial', 'URL pública', 'narrador y formato solo si son relevantes'],
-    referenceTemplate: `Libro electrónico: ${completeAuthorList} (Año). Título del libro (edición, solo desde la segunda). Editorial. URL. Audiolibro: ${completeAuthorList} (Año). Título del libro (${titlePositionNarrators}; edición, solo desde la segunda) [Audiolibro]. Editorial. URL`,
+    referenceTemplate: `Libro electrónico: ${completeAuthorList} (Año). Título del libro (edición, solo desde la segunda). Editorial. URL
+Audiolibro: ${completeAuthorList} (Año). Título del libro (${titlePositionNarrators}; edición, solo desde la segunda) [Audiolibro]. Editorial. URL`,
     rules: [completeAuthorRule, 'No incluye plataforma o dispositivo cuando el contenido coincide con el libro.', 'Incluye la edición desde la segunda; omite todo el paréntesis de edición para la primera.', 'Incluye narrador y [Audiolibro] únicamente cuando la versión consultada es un audiolibro; omite ambos en un libro electrónico ordinario.'],
   },
   'book-author-editor-on-cover': {

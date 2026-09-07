@@ -90,7 +90,7 @@ function referenceFormattingForCase(id: VerifiedCaseId) {
   };
   if (id === 'chapter-reprinted-from-journal') return {
     encoding,
-    italicize: ['título del libro de la reimpresión consultada', 'nombre y volumen de la publicación periódica original; el número entre corchetes queda sin cursiva'],
+    italicize: ['título del libro de la reimpresión consultada', 'nombre y volumen de la publicación periódica original; el número entre paréntesis queda sin cursiva'],
   };
   if (id in periodicalCases) return {
     encoding,
@@ -279,6 +279,8 @@ function guidanceFor(selectedTopic: z.infer<typeof topic>, selectedSourceType?: 
         ...base,
         requiredMetadata: selectedSourceType === 'personal-communication'
           ? ['Iniciales y apellido de la persona', 'fecha exacta', 'medio de comunicación']
+          : selectedSourceType === 'software'
+            ? ['clasificación: mención general o software especializado/directamente citado', 'solo para software especializado o directamente citado: autor o entidad, fecha, título, versión si existe, fuente y URL si corresponde']
           : ['book', 'book-chapter', 'journal-article', 'webpage', 'newspaper-article'].includes(selectedSourceType ?? '')
             ? ['tipo de fuente', 'autor o entidad si se acredita', 'fecha', 'título', 'fuente contenedora/editorial', 'DOI o URL si corresponde']
             : ['tipo de fuente', 'autor o entidad', 'fecha', 'título', 'fuente contenedora/editorial', 'DOI o URL si corresponde'],

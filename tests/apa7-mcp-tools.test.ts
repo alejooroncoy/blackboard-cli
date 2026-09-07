@@ -149,6 +149,8 @@ test('reference templates preserve APA italics with explicit Markdown notation',
   assert.match(social.template, /Publicación individual:.*Perfil, página o historia destacada que cambia:/);
   assert.match(social.template, /Recuperado el día de mes de año/);
   assert.match(software.template, /tienda, solo si difiere del autor/);
+  assert.match(software.requiredMetadata.join(' '), /clasificación: mención general o software especializado/);
+  assert.match(software.requiredMetadata.join(' '), /solo para software especializado o directamente citado/);
   assert.equal(commonSoftwareCitation.citationRule.id, 'general-mention-site-periodical-software');
   assert.match(commonSoftwareCitation.citationRule.referenceTreatment, /No lleva cita autor-fecha ni entrada en referencias/);
   assert.match(book.template, /omite DOI y URL/);
@@ -942,11 +944,12 @@ test('APA 7 electronic books omit audiobook-only fields unless applicable', asyn
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
   const electronic = JSON.parse((await handler({ topic: 'reference', caseId: 'book-author-electronic-public-url' })).content[0].text).case;
   const editedElectronic = JSON.parse((await handler({ topic: 'reference', caseId: 'book-edited-electronic-public-url' })).content[0].text).case;
-  assert.match(electronic.referenceTemplate, /Libro electrónico:.*Editorial\. URL\. Audiolibro:/);
+  assert.match(electronic.referenceTemplate, /Libro electrónico:.*Editorial\. URL\nAudiolibro:/);
   assert.match(electronic.referenceTemplate, /Libro electrónico:.*\(edición, solo desde la segunda\)/);
   assert.match(electronic.referenceTemplate, /Audiolibro:.*N\. Narrador, Narr\.;.*edición, solo desde la segunda/);
   assert.match(electronic.referenceTemplate, /dos: N\. Narrador & O\. Narrador, Narrs\./);
   assert.match(electronic.rules.join(' '), /únicamente cuando la versión consultada es un audiolibro/);
+  assert.doesNotMatch(electronic.referenceTemplate, /URL\./);
   assert.match(editedElectronic.referenceTemplate, /Libro electrónico:.*Editorial\. URL\nAudiolibro:/);
   assert.match(editedElectronic.referenceTemplate, /Audiolibro:.*N\. Narrador, Narr\.;.*edición, solo desde la segunda/);
   assert.match(editedElectronic.referenceTemplate, /21 o más: narradores 1–19/);
@@ -978,7 +981,7 @@ test('APA 7 standard journals preserve every credited author', async () => {
   assert.match(reprint.referenceFormatting.italicize.join(' '), /título del libro de la reimpresión consultada/);
   const chapterReprint = JSON.parse((await handler({ topic: 'reference', caseId: 'chapter-reprinted-from-journal' })).content[0].text).case;
   assert.match(chapterReprint.referenceFormatting.italicize.join(' '), /publicación periódica original/);
-  assert.match(chapterReprint.referenceFormatting.italicize.join(' '), /número entre corchetes queda sin cursiva/);
+  assert.match(chapterReprint.referenceFormatting.italicize.join(' '), /número entre paréntesis queda sin cursiva/);
   assert.match(chapterReprint.referenceTemplate, /con DOI: añade https:\/\/doi\.org\/xxxxx del artículo original/);
   const eLocator = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-elocator' })).content[0].text).case;
   assert.match(eLocator.requiredMetadata.join(' '), /volumen\/número si existen/);
