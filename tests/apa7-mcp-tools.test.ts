@@ -56,6 +56,7 @@ test('APA 7 quick reference never leaves a book URL or DOI as an unconditional p
   assert.match(quickReference, /Artículo científico \| Con DOI:.*sin DOI con URL pública:.*impreso o base académica común sin localizador:/);
   assert.match(quickReference, /Artículo con eLocator.*https:\/\/doi\.org\/xxxxx/);
   assert.match(quickReference, /Webinar recuperable.*\(Año\).*\[Seminario web grabado\]/);
+  assert.match(quickReference, /Podcast.*N\.º de episodio, solo si existe/);
   assert.match(quickReference, /\(\*Título abreviado\*, 2024\).*página web/);
 });
 
