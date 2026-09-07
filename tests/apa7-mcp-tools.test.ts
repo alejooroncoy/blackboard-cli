@@ -138,10 +138,14 @@ test('reference templates preserve APA italics with explicit Markdown notation',
   const social = JSON.parse((await handler({ topic: 'reference', sourceType: 'social-media' })).content[0].text);
   assert.match(podcast.template, /Serie completa:.*Año inicial–Año final/);
   assert.match(podcast.template, /Episodio:.*N.º de episodio, solo si existe/);
+  assert.match(podcast.template, /dos: Responsable, R\. R\., & Responsable, S\. S\. \(Anfitriones o Productores ejecutivos\)/);
+  assert.match(podcast.template, /21 o más: responsables 1–19/);
   assert.match(social.template, /Publicación individual:.*Perfil, página o historia destacada que cambia:/);
   assert.match(social.template, /Recuperado el día de mes de año/);
   assert.match(software.template, /tienda, solo si difiere del autor/);
   assert.match(book.template, /omite DOI y URL/);
+  assert.match(book.template, /Sin autor con editor acreditado: Un editor: Editor, E\. E\. \(Ed\.\); dos: Editor, E\. E\., & Editor, F\. F\. \(Eds\.\)/);
+  assert.match(book.template, /Primer editor et al\./);
   assert.match(book.template, /Sin autor ni editor acreditado: \*Título del libro\*\. \(Año\)\. Editorial/);
   assert.match(book.template, /\(\*Título abreviado\*, Año\)/);
   assert.match(chapter.template, /DOI si existe.*URL pública.*omite DOI y URL/);
