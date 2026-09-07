@@ -1061,10 +1061,12 @@ test('APA 7 guidance covers reports, conferences and theses through example 66',
   assert.doesNotMatch(issueBrief.referenceTemplate, /Entidad autora\. Con número: Autor o entidad/);
   assert.match(issueBrief.referenceTemplate, /Entidad autora: Entidad autora\. \(Año\)/);
   assert.match(issueBrief.parentheticalCitation, /tres o más responsables/);
+  assert.match(issueBrief.referenceTemplate, /con DOI: añade https:\/\/doi\.org\/xxxxx al final/);
   const policyBrief = cases.find(candidate => candidate.id === 'policy-brief');
   assert.ok(policyBrief);
   assert.match(policyBrief.requiredMetadata.join(' '), /organización si difiere de la entidad autora/);
   assert.match(policyBrief.referenceTemplate, /21 o más: autores 1–19/);
+  assert.match(policyBrief.referenceTemplate, /con DOI: añade https:\/\/doi\.org\/xxxxx al final/);
   assert.doesNotMatch(policyBrief.referenceTemplate, /Entidad autora\. Autor o entidad/);
   assert.match(policyBrief.referenceTemplate, /Entidad autora: Entidad autora\. \(Año\)/);
   assert.match(policyBrief.parentheticalCitation, /tres o más responsables/);
