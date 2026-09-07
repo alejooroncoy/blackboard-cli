@@ -1218,6 +1218,7 @@ test('APA 7 guidance covers reviews and unpublished or informally published work
   const eric = JSON.parse((await handler({ topic: 'reference', caseId: 'informal-eric' })).content[0].text).case;
   assert.equal(review.manualExample, 67);
   assert.match(review.referenceTemplate, /Reseña de la película/);
+  assert.doesNotMatch(review.referenceTemplate, /(?:URL|https:\/\/doi\.org\/xxxxx)\./);
   assert.match(review.parentheticalCitation, /Revisor & Revisor/);
   assert.match(review.parentheticalCitation, /tres o más revisores/);
   assert.match(review.referenceTemplate, /Revisor, C\. C\./);
@@ -1233,6 +1234,7 @@ test('APA 7 guidance covers reviews and unpublished or informally published work
   }
   const preprint = JSON.parse((await handler({ topic: 'reference', caseId: 'informal-preprint-or-repository' })).content[0].text).case;
   assert.match(preprint.referenceTemplate, /Con DOI: https:\/\/doi\.org\/xxxxx/);
+  assert.doesNotMatch(preprint.referenceTemplate, /(?:URL|https:\/\/doi\.org\/xxxxx)\./);
   assert.match(preprint.rules.join(' '), /DOI como URL completa/);
 });
 

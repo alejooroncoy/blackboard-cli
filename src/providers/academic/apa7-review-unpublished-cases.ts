@@ -49,7 +49,7 @@ export const reviewUnpublishedCases: Record<ReviewUnpublishedCaseId, Apa7Verifie
   'review-film-in-journal': {
     ...reviewBase, id: 'review-film-in-journal', label: 'Reseña de película publicada en revista científica', manualExample: 67, manualPrintedPages: '341',
     requiredMetadata: ['autores de la reseña', 'año', 'título de la reseña', 'título de la película', 'director', 'revista', 'volumen/número/páginas o eLocator si existen', 'DOI o URL pública si corresponde'],
-    referenceTemplate: `${completeReviewers} (Año). Título de la reseña [Reseña de la película Título, de D. Director, Dir.]. Con volumen, número y páginas/eLocator: Revista, volumen(número), páginas o eLocator. Sin número: Revista, volumen, páginas o eLocator. Sin volumen: Revista, (número), páginas o eLocator. Sin volumen ni número: Revista, páginas o eLocator; omite también páginas/eLocator si no existen. Con DOI: añade https://doi.org/xxxxx. Con URL pública sin DOI: añade URL.`,
+    referenceTemplate: `${completeReviewers} (Año). Título de la reseña [Reseña de la película Título, de D. Director, Dir.]. Con volumen, número y páginas/eLocator: Revista, volumen(número), páginas o eLocator. Sin número: Revista, volumen, páginas o eLocator. Sin volumen: Revista, (número), páginas o eLocator. Sin volumen ni número: Revista, páginas o eLocator; omite también páginas/eLocator si no existen. Con DOI: añade https://doi.org/xxxxx\nCon URL pública sin DOI: añade URL`,
     rules: ['Conserva la lista completa y ordenada de revisores conforme a los límites del elemento autor de APA.', 'Usa el formato de revista científica porque allí se publicó la reseña.', 'La obra reseñada y su responsable se describen entre corchetes.', 'Prefiere DOI; usa URL pública si no hay DOI y omite ambos en una versión impresa o base académica común sin localizador.'],
   },
   'review-book-in-newspaper': {
@@ -85,7 +85,7 @@ export const reviewUnpublishedCases: Record<ReviewUnpublishedCaseId, Apa7Verifie
   'informal-preprint-or-repository': {
     ...unpublishedBase, id: 'informal-preprint-or-repository', label: 'Obra informal en archivo de preimpresión o repositorio', manualExample: 73, manualPrintedPages: '343',
     requiredMetadata: ['autores', 'año', 'título', 'nombre del archivo o repositorio', 'DOI/URL'],
-    referenceTemplate: `${completeManuscriptAuthors} (Año). Título. Nombre del archivo o repositorio. Con DOI: https://doi.org/xxxxx. Con URL pública sin DOI: URL.`,
+    referenceTemplate: `${completeManuscriptAuthors} (Año). Título. Nombre del archivo o repositorio. Con DOI: https://doi.org/xxxxx\nCon URL pública sin DOI: URL`,
     rules: [completeManuscriptAuthorRule, 'Expresa el DOI como URL completa https://doi.org/...; usa URL pública solo si no existe DOI.', 'Puede ser un preprint no revisado por pares o el manuscrito aceptado del autor; no presupone ninguno de los dos.', 'Cuando exista la versión final publicada, se prefiere y se actualiza la referencia.'],
   },
   'informal-eric': {
