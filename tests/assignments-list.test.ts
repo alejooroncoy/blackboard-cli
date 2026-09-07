@@ -3,7 +3,7 @@ import { execFileSync } from 'node:child_process';
 import { test } from 'node:test';
 import { isPendingAssignment } from '../src/providers/blackboard/commands/assignments.js';
 import { listAssignments, listPublishedAssignments } from '../src/providers/blackboard/api/assignments.js';
-import { getGrades } from '../src/providers/blackboard/api/courses.js';
+import { getGradeColumns, getGrades } from '../src/providers/blackboard/api/courses.js';
 
 test('assignments list accepts an optional courseId', () => {
   const output = execFileSync(
@@ -86,6 +86,27 @@ test('grade listing follows every student grade page', async () => {
   assert.deepEqual(grades.results.map((grade) => grade.columnId), ['_column_1', '_column_2']);
 });
 
+test('grade column listing follows every page', async () => {
+  const client = {
+    get: async (url: string) => {
+      if (url.endsWith('/gradebook/columns')) {
+        return {
+          data: {
+            results: [{ id: '_column_1' }],
+            paging: { nextPage: '/learn/api/public/v1/courses/_course_1/gradebook/columns?offset=50' },
+          },
+        };
+      }
+      if (url.endsWith('/gradebook/columns?offset=50')) return { data: { results: [{ id: '_column_2' }] } };
+      throw new Error(`Unexpected request: ${url}`);
+    },
+  } as any;
+
+  const columns = await getGradeColumns(client, '_course_1');
+
+  assert.deepEqual(columns.results.map((column) => column.id), ['_column_1', '_column_2']);
+});
+
 test('published group assessment is listed when its gradebook column is restricted', async () => {
   const requested: string[] = [];
   const client = {
@@ -115,6 +136,25 @@ test('published group assessment is listed when its gradebook column is restrict
     groupAttempts: [{ id: '_attempt_1', groupId: '_group_1', status: 'InProgress' }],
   }]);
   assert.equal(requested.filter((url) => url.includes('_restricted_column_1')).length, 1);
+});
+
+test('published group assessment discovery preserves a session-expired error', async () => {
+  const expired = Object.assign(new Error('Session expired. Run: campus login'), { code: 'SESSION_EXPIRED' });
+  const client = {
+    get: async (url: string) => {
+      if (url.endsWith('/gradebook/columns')) return { data: { results: [] } };
+      if (url.endsWith('/contents')) {
+        return { data: { results: [{
+          id: '_content_1', title: 'Actividad grupal', hasGradebookColumns: true,
+          availability: { available: 'Yes' }, contentHandler: { gradeColumnId: '_restricted_column_1' },
+        }] } };
+      }
+      if (url.endsWith('/gradebook/columns/_restricted_column_1/groupAttempts')) throw expired;
+      throw new Error(`Unexpected request: ${url}`);
+    },
+  } as any;
+
+  await assert.rejects(() => listPublishedAssignments(client, '_course_1'), { code: 'SESSION_EXPIRED' });
 });
 
 test('published assessment discovery follows content pages and ignores hidden folders', async () => {

@@ -155,7 +155,8 @@ export async function listPublishedAssignments(
   for (const assignment of restricted) {
     try {
       assignment.groupAttempts = await listGroupAttempts(client, courseId, assignment.id);
-    } catch {
+    } catch (err: any) {
+      if (err.response?.status !== 403) throw err;
       // Some Blackboard tenants deny this endpoint even when the item itself is visible.
       // Keep the assessment listed rather than hiding it again.
     }
