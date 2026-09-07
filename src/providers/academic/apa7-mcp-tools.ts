@@ -51,7 +51,7 @@ const referenceTemplates: Partial<Record<SourceType, string>> = {
   'video-webinar': 'Video en línea: Autor o entidad. (Año, día de mes). *Título* [Video]. Plataforma. URL; usa la fecha completa publicada. Seminario web grabado: Un instructor: Instructor, I. I.; dos: Instructor, I. I., & Instructor, J. J.; de 3 a 20: lista completa de instructores; 21 o más: instructores 1–19, …, Último instructor. (Año). *Título* [Seminario web]. Organización. URL. Citas: (Instructor, Año), (Instructor & Instructor, Año) o (Primer instructor et al., Año) para tres o más; usa solo el año aunque se conozcan mes y día. Un webinar no grabado se cita como comunicación personal.',
   podcast: 'Responsables para serie o episodio: Un responsable: Responsable, R. R. (Anfitrión o Productor ejecutivo); dos: Responsable, R. R., & Responsable, S. S. (Anfitriones o Productores ejecutivos); de 3 a 20: lista completa de responsables (rol plural); 21 o más: responsables 1–19, …, Último responsable (rol plural). Citas: (Responsable, Año), (Responsable & Responsable, Año) o (Primer responsable et al., Año) para tres o más; la narrativa usa las mismas formas sin paréntesis. Serie completa: responsables. (Año único; Año inicial–Año final; o Año inicial–presente). *Título del pódcast* [Pódcast de audio o video]. Productora. URL si se conoce. Episodio: responsables. (Año, día de mes). Título del episodio (N.º de episodio, solo si existe) [Episodio de pódcast]. En *Título del pódcast*. Productora. URL si se conoce.',
   'social-media': 'Publicación individual: Autor [@usuario]. (Año, día de mes). *Primeras 20 palabras del contenido* [Tipo de publicación]. Red social. URL. Perfil, página o historia destacada que cambia: Autor [@usuario]. (s. f.). *Título de la pestaña, página o historia* [Perfil, página o historia destacada]. Red social. Recuperado el día de mes de año, de URL.',
-  software: 'Autor, autores o entidad responsable. (Año). *Nombre* (Versión, solo si existe) [Software]. Editor, desarrollador o tienda, solo si difiere del autor. URL si corresponde',
+  software: 'Mención común de software o aplicación (p. ej., R o Microsoft Word): no lleva cita autor-fecha ni entrada en referencias. Software especializado, directamente citado o recuperable: Autor, autores o entidad responsable. (Año). *Nombre* (Versión, solo si existe) [Software]. Editor, desarrollador o tienda, solo si difiere del autor. URL si corresponde.',
 };
 
 const verifiedCaseId = z.union([periodicalCaseId, bookCaseId, chapterEntryCaseId, reportConferenceThesisCaseId, reviewUnpublishedCaseId, dataSoftwareTestCaseId, audiovisualAudioCaseId, visualSocialWebCaseId]);
@@ -81,7 +81,8 @@ function referenceFormattingForCase(id: VerifiedCaseId) {
   };
   if (id === 'journal-special-section-issue') return {
     encoding,
-    italicize: ['título de la sección o edición especial que funciona como obra independiente', 'nombre y volumen de la publicación periódica; el número entre paréntesis queda sin cursiva'],
+    italicize: ['nombre y volumen de la publicación periódica; el número entre paréntesis queda sin cursiva'],
+    doNotItalicize: ['título de la sección o edición especial'],
   };
   if (id === 'journal-reprint') return {
     encoding,
