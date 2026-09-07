@@ -1037,7 +1037,12 @@ test('APA 7 guidance covers reports, conferences and theses through example 66',
   ].map(async caseId => JSON.parse((await handler({ topic: 'reference', caseId })).content[0].text).case));
   assert.equal(cases.length, 17);
   assert.equal(catalogue.availableVerifiedCases.length, 114);
-  assert.match(cases.find(item => item.id === 'grant-award').rules.join(' '), /solicitud de subvención no recuperable/);
+  const grant = cases.find(item => item.id === 'grant-award');
+  assert.ok(grant);
+  assert.match(grant.rules.join(' '), /solicitud de subvención no recuperable/);
+  assert.match(grant.referenceTemplate, /dos: Autor, A\. A\., & Autor, B\. B\./);
+  assert.match(grant.referenceTemplate, /Investigadores principales/);
+  assert.match(grant.parentheticalCitation, /tres o más investigadores/);
   assert.match(cases.find(item => item.id === 'symposium-contribution').rules.join(' '), /actas publicadas/);
   assert.match(cases.find(item => item.id === 'symposium-contribution').referenceTemplate, /C\. Coordinador & D\. Coordinador \(Coordinadores\)/);
   assert.match(cases.find(item => item.id === 'thesis-database').referenceTemplate, /Nombre de la base de datos/);

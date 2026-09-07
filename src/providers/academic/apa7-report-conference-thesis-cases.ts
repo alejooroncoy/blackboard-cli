@@ -100,10 +100,10 @@ export const reportConferenceThesisCases: Record<ReportConferenceThesisCaseId, A
   },
   'grant-award': {
     ...reportBase, id: 'grant-award', label: 'Subvención concedida', manualExample: 56, manualPrintedPages: '337',
-    requiredMetadata: ['investigador principal', 'años inicial-final', 'título del proyecto', 'número de proyecto/subvención', 'entidad financiadora', 'URL recuperable'],
-    referenceTemplate: 'Autor, A. A. (Investigador principal). (Año inicial–Año final). Título del proyecto (Proyecto N.º xxx) [Subvención]. Entidad financiadora. URL',
-    parentheticalCitation: '(Autor, Año inicial–Año final)', narrativeCitation: 'Autor (Año inicial–Año final)',
-    rules: ['Incluye el rol de investigador principal tras el nombre.', 'Usa la terminología oficial —número de proyecto o de subvención— y colócala entre paréntesis.', 'Una solicitud de subvención no recuperable se describe en la metodología y no se incluye en referencias.'],
+    requiredMetadata: ['investigador o investigadores principales', 'años inicial-final', 'título del proyecto', 'número de proyecto/subvención', 'entidad financiadora', 'URL recuperable'],
+    referenceTemplate: `${completeContributionAuthors} (Investigador principal o Investigadores principales). (Año inicial–Año final). Título del proyecto (Proyecto N.º xxx) [Subvención]. Entidad financiadora. URL`,
+    parentheticalCitation: '(Autor, Año inicial–Año final); (Autor & Autor, Año inicial–Año final); (Primer autor et al., Año inicial–Año final) con tres o más investigadores', narrativeCitation: 'Autor (Año inicial–Año final); Autor y Autor (Año inicial–Año final); Primer autor et al. (Año inicial–Año final) con tres o más investigadores',
+    rules: ['Incluye la lista completa y ordenada de investigadores principales acreditados y usa el rol plural cuando haya más de uno.', 'Usa la terminología oficial —número de proyecto o de subvención— y colócala entre paréntesis.', 'Una solicitud de subvención no recuperable se describe en la metodología y no se incluye en referencias.'],
   },
   'issue-brief': {
     ...reportBase, id: 'issue-brief', label: 'Informe temático (issue brief)', manualExample: 57, manualPrintedPages: '337',
