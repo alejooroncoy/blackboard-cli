@@ -899,6 +899,10 @@ test('APA 7 standard journals preserve every credited author', async () => {
   assert.match(advanceOnline.requiredMetadata.join(' '), /DOI o URL pública si corresponde/);
   assert.match(advanceOnline.referenceTemplate, /Con DOI: añade https:\/\/doi\.org\/xxxxx/);
   assert.match(advanceOnline.referenceTemplate, /Con URL pública sin DOI/);
+  const inPress = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-in-press' })).content[0].text).case;
+  assert.match(inPress.requiredMetadata.join(' '), /DOI asignado, si existe/);
+  assert.match(inPress.referenceTemplate, /Si ya tiene DOI asignado: https:\/\/doi\.org\/xxxxx/);
+  assert.match(inPress.rules.join(' '), /no lo sustituye por datos periódicos aún no publicados/);
   const eLocator = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-elocator' })).content[0].text).case;
   assert.match(eLocator.requiredMetadata.join(' '), /volumen\/número si existen/);
   assert.match(eLocator.referenceTemplate, /Sin volumen: Revista, \(número\), Artículo eLocator/);

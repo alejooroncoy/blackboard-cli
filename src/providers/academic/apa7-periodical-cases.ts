@@ -105,10 +105,10 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   },
   'journal-in-press': {
     ...base, id: 'journal-in-press', label: 'Artículo en prensa', manualExample: 8, manualPrintedPages: '324',
-    requiredMetadata: ['autores', 'título', 'revista', 'confirmación de aceptación/en prensa'],
-    referenceTemplate: `${completeAuthorList} (en prensa). Título. Revista.`,
+    requiredMetadata: ['autores', 'título', 'revista', 'confirmación de aceptación/en prensa', 'DOI asignado, si existe'],
+    referenceTemplate: `${completeAuthorList} (en prensa). Título. Revista. Si ya tiene DOI asignado: https://doi.org/xxxxx`,
     parentheticalCitation: '(Autor, en prensa); (Autor & Autor, en prensa); (Primer autor et al., en prensa) con tres o más autores', narrativeCitation: 'Autor (en prensa); Autor y Autor (en prensa); Primer autor et al. (en prensa) con tres o más autores',
-    rules: [completeAuthorRule, 'No inventa año, volumen, número ni páginas todavía no publicados.'],
+    rules: [completeAuthorRule, 'No inventa año, volumen, número ni páginas todavía no publicados.', 'Incluye el DOI solo si ya fue asignado y lo conserva como URL completa https://doi.org/...; no lo sustituye por datos periódicos aún no publicados.'],
   },
   'journal-other-language': {
     ...base, id: 'journal-other-language', label: 'Artículo publicado en otro idioma', manualExample: 9, manualPrintedPages: '324',
