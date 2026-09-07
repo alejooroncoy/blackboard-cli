@@ -62,7 +62,7 @@ Usa cursiva donde se indica mediante asteriscos. Ajusta mayúsculas, edición, n
 | Webinar recuperable | `Autor/Entidad. (Año). *Título* [Seminario web grabado]. Plataforma. URL` |
 | Podcast | `Apellido, A. A. (Host). (Año, día de mes). Título del episodio (N.º de episodio, solo si existe) [Episodio de pódcast]. En *Título del pódcast*. Productora. URL` |
 | Publicación en red social | `Autor [@usuario]. (Año, día de mes). *Contenido hasta las primeras 20 palabras* [Tipo de publicación]. Red. URL` |
-| Software/app | `Autor o entidad. (Año). *Nombre* (Versión, solo si existe) [Software móvil/de computadora]. Editor, desarrollador o tienda, solo si difiere del autor. URL` |
+| Software/app | `Autor o entidad. (Año). *Nombre* (Versión, solo si existe) [Software móvil/de computadora]. Editor, desarrollador o tienda, solo si difiere del autor. URL, solo si el software es recuperable públicamente.` |
 
 ## Datos incompletos
 

@@ -1077,6 +1077,7 @@ test('APA 7 guidance covers reports, conferences and theses through example 66',
     const conference = cases.find(candidate => candidate.id === id);
     assert.ok(conference);
     assert.match(conference.referenceTemplate, /meses distintos: Año, día de mes–día de mes; años distintos: Año, día de mes–Año, día de mes/, id);
+    assert.match(conference.referenceTemplate, /Con DOI: añade https:\/\/doi\.org\/xxxxx al final/, id);
   }
   assert.match(organization.referenceTemplate, /21 o más: entidades autoras 1–19/);
   assert.match(organization.rules.join(' '), /todas las agencias coautoras/);
