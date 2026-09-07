@@ -58,9 +58,9 @@ const verified = (rule: Omit<Apa7VerifiedTableFigureRule, 'status' | 'refuseWhen
   ...rule,
   status: 'verified',
   refuseWhen: rule.refuseWhen ?? [
-    'No se determinó si el material es propio, reproducido o adaptado.',
-    'No se verificó la obra original de la que procede el material.',
-    'Se propone una atribución, referencia o permiso inventado.',
+    'Se presentó una convención de formato como si sustituyera la rúbrica o las instrucciones del curso.',
+    'Se inventó un número, título, nota, dato, atribución o permiso para completar la tabla o figura.',
+    'Se omitió clasificar la procedencia solo después de decidir reproducir o adaptar material ajeno.',
   ],
 });
 

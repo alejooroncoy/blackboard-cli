@@ -89,6 +89,7 @@ export const referenceRules: Record<ReferenceRuleId, Apa7VerifiedReferenceRule> 
     rules: ['Determina primero el grupo, después la categoría y finalmente el tipo de referencia.', 'Una categoría reúne varios tipos; por ejemplo, publicaciones periódicas incluye revista científica, magazine, periódico y blog.', 'Si no existe un ejemplo idéntico, elige el tipo más parecido y adapta sus cuatro elementos.', 'El modo de acceso o formato —en línea, impreso, PDF, DVD o préstamo— suele tener poca o ninguna repercusión en la categoría.'],
     citationImpact: ['Una vez identificada la autoría y fecha del tipo correcto, aplica la cita autor-fecha correspondiente.', 'No uses el nombre de la plataforma como autor por el solo hecho de haber recuperado allí la obra.'],
     referencePattern: 'Autor. (Fecha). Título. Fuente, ajustado según la categoría y el tipo real de obra.',
+    refuseWhen: ['Se eligió una categoría solo por el formato de acceso en lugar de la naturaleza de la obra.', 'Se inventó o mezcló información bibliográfica de fuentes distintas.', 'Se concluyó una categoría sin identificar título, responsables, fecha y fuente disponibles.'],
   }),
   'web-category-last-resort': verified({
     id: 'web-category-last-resort', label: 'Uso de la categoría páginas y sitios web', manualSection: '9.2', manualPrintedPages: '288',

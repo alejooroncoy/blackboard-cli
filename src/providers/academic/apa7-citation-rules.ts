@@ -55,16 +55,22 @@ export interface Apa7VerifiedCitationRule {
   refuseWhen: string[];
 }
 
-const guards = [
+const sourceDependentGuards = [
   'No se verificó la fuente original ni que el fragmento coincida con ella.',
   'Falta autor, año o un localizador real cuando la regla los exige.',
   'Se inventó una página, sección, párrafo, marca de tiempo o dato bibliográfico.',
 ];
 
+const mechanicsGuards = [
+  'Se aplicó una regla de cita a un tipo de fuente distinto sin verificar que corresponda.',
+  'Se confundió una instrucción de forma con la autorización para inventar autor, año o localizador.',
+  'Se afirmó que una convención de citación sustituye la consulta de la fuente cuando se atribuye contenido.',
+];
+
 const verified = (rule: Omit<Apa7VerifiedCitationRule, 'status' | 'refuseWhen'> & { refuseWhen?: string[] }): Apa7VerifiedCitationRule => ({
   ...rule,
   status: 'verified',
-  refuseWhen: rule.refuseWhen ?? guards,
+  refuseWhen: rule.refuseWhen ?? (Number(rule.manualSection.slice(2)) >= 23 ? sourceDependentGuards : mechanicsGuards),
 });
 
 export const citationRules: Record<CitationRuleId, Apa7VerifiedCitationRule> = {

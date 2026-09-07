@@ -647,6 +647,7 @@ test('APA 7 guidance covers table construction through section 7.21', async () =
   assert.match(notes.rules.join(' '), /nota general, notas específicas y nota de probabilidad/);
   assert.match(notes.permissionTreatment.join(' '), /no sustituye el permiso/);
   const confidence = JSON.parse((await handler({ topic: 'table-figure', tableFigureRuleId: 'table-confidence-intervals' })).content[0].text).tableFigureRule;
+  const tableNumber = JSON.parse((await handler({ topic: 'table-figure', tableFigureRuleId: 'table-number' })).content[0].text).tableFigureRule;
   const borders = JSON.parse((await handler({ topic: 'table-figure', tableFigureRuleId: 'table-borders-shading' })).content[0].text).tableFigureRule;
   const longWide = JSON.parse((await handler({ topic: 'table-figure', tableFigureRuleId: 'long-wide-tables' })).content[0].text).tableFigureRule;
   const relationships = JSON.parse((await handler({ topic: 'table-figure', tableFigureRuleId: 'table-relationships' })).content[0].text).tableFigureRule;
@@ -658,6 +659,7 @@ test('APA 7 guidance covers table construction through section 7.21', async () =
   assert.match(relationships.rules.join(' '), /no uses Tabla 1A y Tabla 1B/);
   assert.match(checklist.rules.join(' '), /p < \.001/);
   assert.match(samples.rules.join(' '), /datos cualitativos y métodos mixtos/);
+  assert.doesNotMatch(tableNumber.refuseWhen.join(' '), /material es propio, reproducido o adaptado|obra original/);
 });
 
 test('APA 7 guidance covers every figure section 7.22 through 7.36', async () => {
@@ -1498,6 +1500,10 @@ test('APA 7 guidance exposes verified citation rules 8.1 through 8.36', async ()
     assert.ok(result.citationRule.referenceTreatment, `missing reference treatment for ${citationRuleId}`);
     assert.ok(result.citationRule.refuseWhen.length >= 3, `missing refusal guards for ${citationRuleId}`);
   }
+  const authorCount = JSON.parse((await handler({ topic: 'citation', citationRuleId: 'number-of-authors' })).content[0].text).citationRule;
+  const generalSoftware = JSON.parse((await handler({ topic: 'citation', citationRuleId: 'general-mention-site-periodical-software' })).content[0].text).citationRule;
+  assert.doesNotMatch(authorCount.refuseWhen.join(' '), /fuente original ni que el fragmento/);
+  assert.doesNotMatch(generalSoftware.refuseWhen.join(' '), /fuente original ni que el fragmento/);
 });
 
 test('APA 7 guidance distinguishes recoverable, personal and participant interviews', async () => {
@@ -1589,6 +1595,8 @@ test('APA 7 guidance exposes verified reference-list rules 9.1 through 9.52', as
     assert.ok(result.referencePattern, `missing pattern for ${referenceRuleId}`);
     assert.ok(result.refuseWhen.length >= 3, `missing refusal guards for ${referenceRuleId}`);
   }
+  const category = JSON.parse((await handler({ topic: 'reference', referenceRuleId: 'determine-reference-category' })).content[0].text).referenceRule;
+  assert.doesNotMatch(category.refuseWhen.join(' '), /tipo real de obra antes de escoger/);
 });
 
 test('APA 7 reference rules preserve translations and original publication years', async () => {
