@@ -81,11 +81,24 @@ export async function listAssignments(
   client: AxiosInstance,
   courseId: string
 ): Promise<GradeColumn[]> {
-  const r = await client.get(`/learn/api/public/v2/courses/${courseId}/gradebook/columns`, {
+  const path = `/learn/api/public/v2/courses/${courseId}/gradebook/columns`;
+  let page = await client.get(path, {
     params: { limit: 100 },
   });
+  const columns: GradeColumn[] = [];
+
+  while (true) {
+    columns.push(...(page.data.results as GradeColumn[]));
+    const nextPage = page.data.paging?.nextPage as string | undefined;
+    if (!nextPage) break;
+    if (!nextPage.startsWith(path)) {
+      throw new Error('Refusing an unexpected Blackboard gradebook page');
+    }
+    page = await client.get(nextPage);
+  }
+
   // Only return Attempts and Manual columns (student-relevant)
-  return (r.data.results as GradeColumn[]).filter(
+  return columns.filter(
     (c) => c.grading?.type === 'Attempts' || c.grading?.type === 'Manual'
   );
 }

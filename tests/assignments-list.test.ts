@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { test } from 'node:test';
 import { isPendingAssignment } from '../src/providers/blackboard/commands/assignments.js';
-import { listPublishedAssignments } from '../src/providers/blackboard/api/assignments.js';
+import { listAssignments, listPublishedAssignments } from '../src/providers/blackboard/api/assignments.js';
 
 test('assignments list accepts an optional courseId', () => {
   const output = execFileSync(
@@ -37,6 +37,29 @@ test('pending filter includes only assignments without a score or submitted atte
   assert.equal(isPendingAssignment(null, 'NeedsGrading'), false);
   assert.equal(isPendingAssignment(null, 'Completed'), false);
   assert.equal(isPendingAssignment(null, 'InProgress'), true);
+});
+
+test('assignment listing follows every gradebook column page', async () => {
+  const client = {
+    get: async (url: string) => {
+      if (url.endsWith('/gradebook/columns')) {
+        return {
+          data: {
+            results: [{ id: '_column_1', name: 'First', grading: { type: 'Attempts' } }],
+            paging: { nextPage: '/learn/api/public/v2/courses/_course_1/gradebook/columns?offset=100' },
+          },
+        };
+      }
+      if (url.endsWith('/gradebook/columns?offset=100')) {
+        return { data: { results: [{ id: '_column_2', name: 'Second', grading: { type: 'Manual' } }] } };
+      }
+      throw new Error(`Unexpected request: ${url}`);
+    },
+  } as any;
+
+  const assignments = await listAssignments(client, '_course_1');
+
+  assert.deepEqual(assignments.map((assignment) => assignment.id), ['_column_1', '_column_2']);
 });
 
 test('published group assessment is listed when its gradebook column is restricted', async () => {
