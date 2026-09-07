@@ -120,6 +120,8 @@ test('reference templates preserve APA italics with explicit Markdown notation',
   const webpage = JSON.parse((await handler({ topic: 'reference', sourceType: 'webpage' })).content[0].text);
   assert.match(webpage.template, /\(Año\), \(Año, mes\), \(Año, día de mes\) o \(s\. f\.\)/);
   assert.match(webpage.template, /Sin autor identificable: \*Título de la página\*\. \(Año\)/);
+  assert.match(webpage.template, /Sin autor identificable:.*Nombre del sitio\. URL/);
+  assert.doesNotMatch(webpage.template, /Nombre del sitio, solo si difiere del título/);
   assert.match(webpage.template, /\(\*Título abreviado\*, Año\)/);
   assert.match(webpage.template, /\*Título abreviado\* \(Año\)/);
   assert.match(webpage.template, /No inventes mes ni día/);
@@ -138,6 +140,8 @@ test('reference templates preserve APA italics with explicit Markdown notation',
   assert.match(social.template, /Recuperado el día de mes de año/);
   assert.match(software.template, /tienda, solo si difiere del autor/);
   assert.match(book.template, /omite DOI y URL/);
+  assert.match(book.template, /Sin autor ni editor acreditado: \*Título del libro\*\. \(Año\)\. Editorial/);
+  assert.match(book.template, /\(\*Título abreviado\*, Año\)/);
   assert.match(chapter.template, /DOI si existe.*URL pública.*omite DOI y URL/);
   assert.match(chapter.template, /G\. Editor \(Eds\.\)/);
   assert.match(thesis.template, /Inédita:.*En base de datos:.*En repositorio:/);
@@ -921,6 +925,7 @@ test('APA 7 standard journals preserve every credited author', async () => {
   assert.match(reprint.referenceTemplate, /Revista original, volumen\(número\), páginas o eLocator/);
   assert.match(reprint.referenceTemplate, /con DOI: https:\/\/doi\.org\/xxxxx/);
   assert.match(reprint.rules.join(' '), /editores, páginas y editorial/);
+  assert.match(reprint.referenceFormatting.italicize.join(' '), /título del libro de la reimpresión consultada/);
   const eLocator = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-elocator' })).content[0].text).case;
   assert.match(eLocator.requiredMetadata.join(' '), /volumen\/número si existen/);
   assert.match(eLocator.referenceTemplate, /Sin volumen: Revista, \(número\), Artículo eLocator/);
