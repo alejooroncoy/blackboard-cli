@@ -849,6 +849,7 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(foreignBook.rules.join(' '), /Prefiere DOI/);
   const anthology = JSON.parse((await handler({ topic: 'reference', caseId: 'anthology' })).content[0].text).case;
   assert.match(anthology.referenceTemplate, /Con DOI\/URL:.*sin localizador/);
+  assert.match(anthology.referenceTemplate, /con DOI añade https:\/\/doi\.org\/xxxxx al final/);
   assert.match(anthology.rules.join(' '), /termina en la editorial/);
   const religious = JSON.parse((await handler({ topic: 'citation', caseId: 'religious-work' })).content[0].text).case;
   const multivolume = JSON.parse((await handler({ topic: 'reference', caseId: 'book-multivolume-single-volume' })).content[0].text).case;
@@ -867,8 +868,10 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(multivolume.referenceTemplate, /Autor, C\. C\./);
   assert.match(multivolume.rules.join(' '), /lista completa de autores/);
   assert.match(multivolume.rules.join(' '), /lista completa en posición de autor/);
+  assert.match(multivolume.referenceTemplate, /con DOI añade https:\/\/doi\.org\/xxxxx al final/);
   const multivolumeChapter = JSON.parse((await handler({ topic: 'reference', caseId: 'chapter-multivolume-work' })).content[0].text).case;
   assert.match(multivolumeChapter.referenceTemplate, /Con título propio:.*edición, solo si existe.*Sin título propio: Título general \(edición, solo si existe; Vol\. x, pp\. xx-xx\)/);
+  assert.match(multivolumeChapter.referenceTemplate, /con DOI añade https:\/\/doi\.org\/xxxxx al final/);
   const stableEntry = JSON.parse((await handler({ topic: 'reference', caseId: 'reference-entry-group-author' })).content[0].text).case;
   assert.match(stableEntry.referenceTemplate, /Entrada estable o archivada:.*URL/);
   assert.match(stableEntry.referenceTemplate, /Entrada que cambia continuamente sin archivo:.*Recuperado/);
@@ -1593,7 +1596,7 @@ test('APA 7 generic newspaper template distinguishes print pages from online URL
   let handler: any;
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
   const newspaper = JSON.parse((await handler({ topic: 'reference', sourceType: 'newspaper-article' })).content[0].text);
-  assert.match(newspaper.template, /x o xx–xx para versión impresa/);
+  assert.match(newspaper.template, /p\. x para una página o pp\. xx–xx para varias páginas en versión impresa/);
   assert.match(newspaper.template, /URL para versión en línea/);
   assert.match(newspaper.template, /Sin autor acreditado: Título\. \(Año, día de mes\)/);
   assert.match(newspaper.template, /\(“Título abreviado”, Año\)/);
