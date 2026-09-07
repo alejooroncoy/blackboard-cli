@@ -48,7 +48,7 @@ Usa cursiva donde se indica mediante asteriscos. Ajusta mayúsculas, edición, n
 
 | Tipo | Modelo |
 | --- | --- |
-| Libro | Con DOI o URL pública: `Apellido, A. A. (Año). *Título del libro*. Editorial. URL/DOI`; impreso o en base académica común sin localizador: `Apellido, A. A. (Año). *Título del libro*. Editorial.` |
+| Libro | Con DOI: `Apellido, A. A. (Año). *Título del libro*. Editorial. https://doi.org/xxxxx`; sin DOI con URL pública: termina con la URL; impreso o en base académica común sin localizador: `Apellido, A. A. (Año). *Título del libro*. Editorial.` |
 | Libro con edición | `Apellido, A. A. (Año). *Título del libro* (2.ª ed.). Editorial.` |
 | Capítulo de libro editado | `Apellido, A. A. (Año). Título del capítulo. En A. Editor (Ed.), *Título del libro* (pp. xx-xx). Editorial.` |
 | Artículo científico | Con DOI: `Apellido, A. A., & Apellido, B. B. (Año). Título del artículo. *Revista, volumen*(número), xx-xx. https://doi.org/xxxxx`; sin DOI con URL pública: termina con la URL; impreso o base académica común sin localizador: termina en las páginas o eLocator. |
