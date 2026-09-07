@@ -903,10 +903,14 @@ test('APA 7 electronic books omit audiobook-only fields unless applicable', asyn
   let handler: any;
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
   const electronic = JSON.parse((await handler({ topic: 'reference', caseId: 'book-author-electronic-public-url' })).content[0].text).case;
+  const editedElectronic = JSON.parse((await handler({ topic: 'reference', caseId: 'book-edited-electronic-public-url' })).content[0].text).case;
   assert.match(electronic.referenceTemplate, /Libro electrónico:.*Editorial\. URL\. Audiolibro:/);
   assert.match(electronic.referenceTemplate, /Libro electrónico:.*\(edición, solo desde la segunda\)/);
   assert.match(electronic.referenceTemplate, /Audiolibro:.*Narr\.; edición, solo desde la segunda/);
   assert.match(electronic.rules.join(' '), /únicamente cuando la versión consultada es un audiolibro/);
+  assert.match(editedElectronic.referenceTemplate, /Libro electrónico:.*Editorial\. URL\. Audiolibro:/);
+  assert.match(editedElectronic.referenceTemplate, /Audiolibro:.*Narr\.; edición, solo desde la segunda/);
+  assert.match(editedElectronic.requiredMetadata.join(' '), /narrador solo para audiolibro/);
 });
 
 test('APA 7 standard journals preserve every credited author', async () => {

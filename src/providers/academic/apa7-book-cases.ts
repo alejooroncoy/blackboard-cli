@@ -98,10 +98,10 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   },
   'book-edited-electronic-public-url': {
     ...base, id: 'book-edited-electronic-public-url', label: 'Libro electrónico o audiolibro editado sin DOI con URL pública', manualExample: 26, manualPrintedPages: '328',
-    requiredMetadata: ['editores', 'año', 'título', 'edición desde la segunda', 'editorial', 'URL pública', 'formato si corresponde'],
-    referenceTemplate: `${completeEditorList}. (Año). Título del libro (edición, solo desde la segunda) [Formato, solo si corresponde]. Editorial. URL`,
+    requiredMetadata: ['editores', 'año', 'título', 'edición desde la segunda', 'editorial', 'URL pública', 'narrador solo para audiolibro'],
+    referenceTemplate: `Libro electrónico: ${completeEditorList}. (Año). Título del libro (edición, solo desde la segunda). Editorial. URL. Audiolibro: ${completeEditorList}. (Año). Título del libro (N. Narrador, Narr.; edición, solo desde la segunda) [Audiolibro]. Editorial. URL.`,
     parentheticalCitation: '(Editor, Año); (Editor & Editor, Año); (Primer editor et al., Año) con tres o más editores', narrativeCitation: 'Editor (Año); Editor y Editor (Año); Primer editor et al. (Año) con tres o más editores',
-    rules: ['Incluye la lista completa de editores y usa (Ed.) para uno o (Eds.) para varios.', 'Incluye la edición desde la segunda; omite todo el paréntesis para la primera.', 'No incluye la URL de una base de datos académica común.'],
+    rules: ['Incluye la lista completa de editores y usa (Ed.) para uno o (Eds.) para varios.', 'Incluye la edición desde la segunda; omite todo el paréntesis para la primera.', 'Incluye narrador y [Audiolibro] únicamente cuando la versión consultada es un audiolibro; omite ambos en un libro electrónico ordinario.', 'No incluye la URL de una base de datos académica común.'],
   },
   'book-other-language': {
     ...base, id: 'book-other-language', label: 'Libro en otro idioma', manualExample: 27, manualPrintedPages: '329',
