@@ -144,6 +144,7 @@ test('published group assessment is listed when its gradebook column is restrict
     id: '_restricted_column_1', name: 'Actividad grupal', contentId: '_content_1',
     grading: { type: 'Attempts' }, gradebookAccess: 'restricted', hasAssociatedGroups: true,
     groupAttempts: [{ id: '_attempt_1', groupId: '_group_1', status: 'InProgress' }],
+    groupAttemptsAccess: 'available',
   }]);
   assert.equal(requested.filter((url) => url.includes('_restricted_column_1')).length, 1);
 });

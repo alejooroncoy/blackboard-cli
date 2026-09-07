@@ -23,6 +23,7 @@ export interface GradeColumn {
   gradebookAccess?: 'available' | 'restricted';
   hasAssociatedGroups?: boolean;
   groupAttempts?: GroupAttempt[];
+  groupAttemptsAccess?: 'available' | 'restricted';
 }
 
 export interface GroupAttempt {
@@ -155,8 +156,10 @@ export async function listPublishedAssignments(
   for (const assignment of restricted) {
     try {
       assignment.groupAttempts = await listGroupAttempts(client, courseId, assignment.id);
+      assignment.groupAttemptsAccess = 'available';
     } catch (err: any) {
       if (err.response?.status !== 403) throw err;
+      assignment.groupAttemptsAccess = 'restricted';
       // Some Blackboard tenants deny this endpoint even when the item itself is visible.
       // Keep the assessment listed rather than hiding it again.
     }

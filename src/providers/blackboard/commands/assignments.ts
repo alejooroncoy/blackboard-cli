@@ -42,14 +42,15 @@ function dueStatus(due?: string) {
   return chalk.gray(` (vence en ${days}d)`);
 }
 
-export function isPendingAssignment(grade: any, groupAttemptStatus?: string) {
+export function isPendingAssignment(grade: any, groupAttemptStatus?: string, groupAttemptStateKnown = true) {
   const submittedGroupAttempt = groupAttemptStatus === 'NeedsGrading'
     || groupAttemptStatus === 'Completed'
     || groupAttemptStatus === 'NeedsGradingAgain';
   return grade?.displayGrade?.score == null
     && grade?.score == null
     && grade?.status !== 'NeedsGrading'
-    && !submittedGroupAttempt;
+    && !submittedGroupAttempt
+    && groupAttemptStateKnown;
 }
 
 export function getCurrentGroupAttempt<T extends { created?: string; status?: string }>(groupAttempts?: T[]): T | undefined {
@@ -90,7 +91,7 @@ function formatAssignment(col: any, grade: any, opts: { pending?: boolean; cours
     gradeStr = chalk.yellow('entregada — pendiente de nota');
   }
 
-  if (opts.pending && !isPendingAssignment(grade, groupAttempt?.status)) return false;
+  if (opts.pending && !isPendingAssignment(grade, groupAttempt?.status, col.groupAttemptsAccess !== 'restricted')) return false;
 
   const coursePrefix = opts.courseName ? `${chalk.gray(`[${opts.courseName}] `)}` : '';
   console.log(
@@ -187,7 +188,7 @@ export function assignmentsCommand(program: Command) {
                 courseName: r.courseName,
                 assignments: r.columns.filter((col) => {
                   const grade = gradeMap.get(col.id) ?? null;
-                  return !opts.pending || isPendingAssignment(grade, getCurrentGroupAttempt(col.groupAttempts)?.status);
+                  return !opts.pending || isPendingAssignment(grade, getCurrentGroupAttempt(col.groupAttempts)?.status, col.groupAttemptsAccess !== 'restricted');
                 }),
               };
             });
@@ -230,7 +231,7 @@ export function assignmentsCommand(program: Command) {
           const gradeMap = new Map(gradesRes.map((g: any) => [g.columnId, g]));
           const filtered = columns.filter((col) => {
             const grade = gradeMap.get(col.id) ?? null;
-            return !opts.pending || isPendingAssignment(grade, getCurrentGroupAttempt(col.groupAttempts)?.status);
+            return !opts.pending || isPendingAssignment(grade, getCurrentGroupAttempt(col.groupAttempts)?.status, col.groupAttemptsAccess !== 'restricted');
           });
           console.log(JSON.stringify(filtered, null, 2));
           return;
