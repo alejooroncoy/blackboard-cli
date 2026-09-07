@@ -88,10 +88,13 @@ test('APA 7 generic video and webinar guidance keeps their verified date formats
   let handler: any;
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
   const result = JSON.parse((await handler({ topic: 'reference', sourceType: 'video-webinar' })).content[0].text);
-  assert.match(result.template, /Video en línea:.*\(Año, día de mes\).*fecha completa publicada/);
-  assert.match(result.template, /Seminario web grabado:.*\(Año\).*solo el año aunque se conozcan mes y día/);
+  assert.match(result.template, /Video en línea:.*\(Año, día de mes\)/);
+  assert.match(result.template, /El video en línea usa la fecha completa publicada/);
+  assert.match(result.template, /Seminario web grabado:.*\(Año\)/);
+  assert.match(result.template, /usa solo el año aunque se conozcan mes y día/);
   assert.match(result.template, /dos: Instructor, I\. I\., & Instructor, J\. J\./);
   assert.match(result.template, /21 o más: instructores 1–19/);
+  assert.doesNotMatch(result.template, /URL[.;]/);
 });
 
 test('reference templates preserve APA italics with explicit Markdown notation', async () => {
@@ -887,7 +890,8 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(religious.referenceTemplate, /con traductor o traductores:.*con edición:.*con ambos:/i);
   assert.match(religious.referenceTemplate, /dos: T\. Traductor & U\. Traductor, Trads\./);
   assert.match(religious.referenceTemplate, /21 o más: traductores 1–19/);
-  assert.match(religious.referenceTemplate, /Obra original publicada.*URL\./);
+  assert.match(religious.referenceTemplate, /URL \(Obra original publicada/);
+  assert.doesNotMatch(religious.referenceTemplate, /URL\./);
   assert.match(ancient.referenceTemplate, /URL antes de esa nota final/);
   assert.match(religious.rules.join(' '), /Omite el traductor, la edición o todo el paréntesis/);
   assert.match(religious.rules.join(' '), /No inventes un año original/);
@@ -1048,6 +1052,7 @@ test('APA 7 guidance covers all 12 chapter and reference-entry examples', async 
   const individualReferenceEntry = JSON.parse((await handler({ topic: 'reference', caseId: 'reference-entry-individual-author' })).content[0].text).case;
   assert.match(individualReferenceEntry.requiredMetadata.join(' '), /edición o versión si existe/);
   assert.match(individualReferenceEntry.referenceTemplate, /Primera edición o sin edición declarada/);
+  assert.doesNotMatch(individualReferenceEntry.referenceTemplate, /URL\./);
   const reprint = JSON.parse((await handler({ topic: 'reference', caseId: 'chapter-reprinted-from-journal' })).content[0].text);
   assert.match(reprint.case.parentheticalCitation, /Año original\/Año reimpresión/);
 });

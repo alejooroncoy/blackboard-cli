@@ -125,7 +125,8 @@ Capítulo de audiolibro: ${completeChapterAuthors} (Año). Título del capítulo
   'reference-entry-individual-author': {
     ...base, id: 'reference-entry-individual-author', label: 'Entrada de obra de consulta con autor individual', manualExample: 48, manualPrintedPages: '334',
     requiredMetadata: ['autor de la entrada', 'año', 'título de la entrada', 'editor', 'obra de consulta', 'edición o versión si existe', 'editorial', 'URL'],
-    referenceTemplate: `${completeChapterAuthors} (Año). Título de la entrada. En ${completeChapterEditors}, Con edición o versión: Obra de consulta (edición o versión). Editorial. URL. Primera edición o sin edición declarada: Obra de consulta. Editorial. URL`,
+    referenceTemplate: `${completeChapterAuthors} (Año). Título de la entrada. En ${completeChapterEditors}, Con edición o versión: Obra de consulta (edición o versión). Editorial. URL
+Primera edición o sin edición declarada: Obra de consulta. Editorial. URL`,
     rules: ['Se estructura como capítulo de libro editado.', 'Omite la edición o versión cuando es primera o no se declara.', 'Una versión archivada estable no necesita fecha de recuperación.'],
   },
   'wikipedia-entry': {
