@@ -215,7 +215,7 @@ test('APA 7 case formatting distinguishes blog and untitled visual works', async
     assert.match(formatting.doNotItalicize.join(' '), /descripción de medio o formato/, caseId);
   }
   const stockImage = JSON.parse((await handler({ topic: 'reference', caseId: 'clip-art-or-stock-image' })).content[0].text).case;
-  assert.match(stockImage.referenceTemplate, /Sin título:.*\[Descripción de la imagen de stock\]/);
+  assert.match(stockImage.referenceTemplate, /Imagen externa sin título:.*\[Descripción de la imagen de stock\]/);
   assert.match(stockImage.rules.join(' '), /no añade un segundo corchete/);
   assert.match(stockImage.referenceTemplate, /Clip art incluido y confirmado.*no requiere referencia/);
   assert.match(stockImage.parentheticalCitation, /no requiere cita autor-fecha/);
