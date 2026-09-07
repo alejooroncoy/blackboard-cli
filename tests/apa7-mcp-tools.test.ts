@@ -90,6 +90,8 @@ test('APA 7 generic video and webinar guidance keeps their verified date formats
   const result = JSON.parse((await handler({ topic: 'reference', sourceType: 'video-webinar' })).content[0].text);
   assert.match(result.template, /Video en línea:.*\(Año, día de mes\).*fecha completa publicada/);
   assert.match(result.template, /Seminario web grabado:.*\(Año\).*solo el año aunque se conozcan mes y día/);
+  assert.match(result.template, /dos: Instructor, I\. I\., & Instructor, J\. J\./);
+  assert.match(result.template, /21 o más: instructores 1–19/);
 });
 
 test('reference templates preserve APA italics with explicit Markdown notation', async () => {
@@ -839,6 +841,7 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(dictionary.case.referenceTemplate, /Sin edición\/versión:/);
   assert.match(dictionary.case.referenceTemplate, /\(Ed\.\).*\(Eds\.\)/);
   assert.match(dictionary.case.referenceTemplate, /Estable con DOI\/URL:.*Cambiante sin archivo:.*Recuperado el día de mes de año, de URL/);
+  assert.match(dictionary.case.referenceTemplate, /Con DOI: https:\/\/doi\.org\/xxxxx; con URL pública sin DOI: URL/);
   assert.match(dictionary.case.rules.join(' '), /Distingue el autor grupal de los editores/);
   const foreignBook = JSON.parse((await handler({ topic: 'reference', caseId: 'book-other-language' })).content[0].text).case;
   assert.match(foreignBook.referenceTemplate, /Con DOI: añade https:\/\/doi\.org\/xxxxx/);
@@ -952,6 +955,7 @@ test('APA 7 standard journals preserve every credited author', async () => {
   const chapterReprint = JSON.parse((await handler({ topic: 'reference', caseId: 'chapter-reprinted-from-journal' })).content[0].text).case;
   assert.match(chapterReprint.referenceFormatting.italicize.join(' '), /publicación periódica original/);
   assert.match(chapterReprint.referenceFormatting.italicize.join(' '), /número entre corchetes queda sin cursiva/);
+  assert.match(chapterReprint.referenceTemplate, /con DOI: añade https:\/\/doi\.org\/xxxxx del artículo original/);
   const eLocator = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-elocator' })).content[0].text).case;
   assert.match(eLocator.requiredMetadata.join(' '), /volumen\/número si existen/);
   assert.match(eLocator.referenceTemplate, /Sin volumen: Revista, \(número\), Artículo eLocator/);
@@ -1402,6 +1406,7 @@ test('APA 7 magazine dates preserve the precision actually published', async () 
   assert.match(magazine.referenceTemplate, /\(Año\), \(Año, mes o estación\) o \(Año, día de mes\)/);
   assert.match(magazine.referenceTemplate, /Revista, volumen\(número\), páginas/);
   assert.match(magazine.referenceTemplate, /Solo número y páginas/);
+  assert.match(magazine.referenceTemplate, /Con DOI: añade https:\/\/doi\.org\/xxxxx al final/);
   assert.match(magazine.rules.join(' '), /No inventes mes ni día/);
 });
 
