@@ -207,7 +207,7 @@ export const referenceRules: Record<ReferenceRuleId, Apa7VerifiedReferenceRule> 
   'no-date': verified({
     id: 'no-date', label: 'Obra sin fecha', manualSection: '9.17', manualPrintedPages: '297',
     whenToUse: 'Cuando la fecha de publicación es desconocida o no puede determinarse.',
-    rules: ['Escribe s. f. entre paréntesis, con punto tras cada letra y sin espacio entre ellas.', 'No confundas falta de fecha con fecha de recuperación.'],
+    rules: ['Escribe s. f. entre paréntesis, con punto tras cada letra y un espacio entre ambas abreviaturas.', 'No confundas falta de fecha con fecha de recuperación.'],
     citationImpact: ['Usa (Autor, s. f.) o Autor (s. f.).'],
     referencePattern: 'Autor. (s. f.). Título. Fuente.',
     refuseWhen: ['No se revisaron fecha de publicación, actualización o revisión del contenido.', 'Se reemplaza una fecha ausente por la fecha de acceso.', 'Se inventa un año aproximado sin indicación explícita de circa.'],

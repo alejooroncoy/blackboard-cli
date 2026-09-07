@@ -487,6 +487,7 @@ test('Mechanics guidance preserves quotation, DOI, statistical and list semantic
   assert.match(decimals.rules.join(' '), /no pueden superar 1/);
   assert.match(lists.citationTreatment.join(' '), /respalda solo ese elemento/);
   assert.match(italics.rules.join(' '), /coma después del título de una publicación periódica/);
+  assert.match(italics.rules.join(' '), /Usa comillas, no cursiva, para una letra, palabra, frase u oración/);
 });
 
 test('APA 7 guidance covers every publication-process section 12.1 through 12.24', async () => {
@@ -738,6 +739,9 @@ test('APA 7 physical-format rules preserve allowed variants and exact heading le
   assert.match(typography.refuseWhen.join(' '), /No es correcto afirmar.*única/);
   assert.match(spacing.rules.join(' '), /tabla.*espacio sencillo, 1\.5 o doble/);
   assert.match(margins.rules.join(' '), /2\.54 cm/);
+  const paperLength = JSON.parse((await handler({ topic: 'format', formatRuleId: 'paper-length' })).content[0].text).formatRule;
+  assert.match(paperLength.rules.join(' '), /notas de tablas y figuras/);
+  assert.match(paperLength.rules.join(' '), /excluye las palabras del cuerpo de una tabla/);
   assert.doesNotMatch(spacing.refuseWhen.join(' '), /estudiantil o profesional/);
   assert.doesNotMatch(margins.refuseWhen.join(' '), /estudiantil o profesional/);
   assert.match(headings.rules.join(' '), /Nivel 5/);
@@ -1698,6 +1702,7 @@ test('APA 7 date rules limit retrieval dates to changing unarchived works', asyn
   assert.match(retrieval.rules.join(' '), /La mayoría de referencias no lleva/);
   assert.match(retrieval.rules.join(' '), /versiones estables archivadas/);
   assert.match(noDate.referencePattern, /\(s\. f\.\)/);
+  assert.match(noDate.rules.join(' '), /un espacio entre ambas abreviaturas/);
   assert.match(dateDefinition.rules.join(' '), /artículos de revista científica usa solo el año/);
   assert.match(dateDefinition.rules.join(' '), /magazines y periódicos/);
 });
