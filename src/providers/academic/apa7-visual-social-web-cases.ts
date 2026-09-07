@@ -63,9 +63,11 @@ export const visualSocialWebCases: Record<VisualSocialWebCaseId, Apa7VerifiedVis
   },
   'clip-art-or-stock-image': {
     ...visualBase, id: 'clip-art-or-stock-image', label: 'Clip art o imagen de stock', manualExample: 98, manualPrintedPages: '352-353',
-    requiredMetadata: ['creador o entidad', 'año', 'título o descripción', 'tipo clip art/imagen de stock', 'sitio', 'URL'],
-    referenceTemplate: 'Con título: Autor o entidad. (Año). Título [Clip art o Imagen de stock]. Sitio. URL. Sin título: Autor o entidad. (Año). [Descripción de la imagen de stock]. Sitio. URL',
-    rules: ['Si no hay título, la descripción lo reemplaza en una sola expresión entre corchetes; no añade un segundo corchete de formato.', 'Este formato sirve para citar, no necesariamente para autorizar la reproducción.', 'Clip art incluido en programas como Microsoft Word o PowerPoint no requiere cita, permiso ni atribución.', 'Otras imágenes de stock pueden requerir permiso o atribución de derechos para reproducirse.'],
+    requiredMetadata: ['procedencia confirmada: clip art incluido en el programa o imagen externa', 'para imagen externa: creador o entidad, año, título o descripción, tipo, sitio y URL'],
+    referenceTemplate: 'Clip art incluido y confirmado en Word, PowerPoint u otro programa equivalente: no requiere referencia. Imagen externa con título: Autor o entidad. (Año). Título [Clip art o Imagen de stock]. Sitio. URL. Imagen externa sin título: Autor o entidad. (Año). [Descripción de la imagen de stock]. Sitio. URL',
+    parentheticalCitation: 'Clip art incluido y confirmado: no requiere cita autor-fecha. Imagen externa: (Autor o entidad, Año)', narrativeCitation: 'Clip art incluido y confirmado: no requiere cita narrativa. Imagen externa: Autor o entidad (Año)',
+    rules: ['Si no hay título, la descripción lo reemplaza en una sola expresión entre corchetes; no añade un segundo corchete de formato.', 'El clip art incluido y confirmado en programas como Microsoft Word o PowerPoint no requiere cita, permiso ni atribución ni datos bibliográficos.', 'Esta excepción no cubre una imagen descargada de internet, una imagen de stock externa ni material de terceros incorporado al programa.', 'Otras imágenes de stock pueden requerir permiso o atribución de derechos para reproducirse.'],
+    refuseWhen: ['No se confirmó la procedencia: clip art incluido o imagen externa.', 'Para una imagen externa no se verificó creador o entidad, fecha, título/descripción, sitio o URL.', 'Se pretende extender la excepción de clip art incluido a una imagen externa sin verificar su procedencia.'],
   },
   infographic: {
     ...visualBase, id: 'infographic', label: 'Infografía', manualExample: 99, manualPrintedPages: '353',
@@ -77,7 +79,7 @@ export const visualSocialWebCases: Record<VisualSocialWebCaseId, Apa7VerifiedVis
   map: {
     ...visualBase, id: 'map', label: 'Mapa estático o dinámico', manualExample: 100, manualPrintedPages: '353',
     requiredMetadata: ['autor o entidad', 'año o s. f.', 'título o descripción', 'descripción mapa', 'fuente/sitio', 'URL', 'fecha de recuperación si cambia'],
-    referenceTemplate: 'Mapa estático o archivado con título: Autor o entidad. (Año o s. f.). Título [Mapa]. Fuente. URL. Sin título: Autor o entidad. (Año o s. f.). [Mapa de descripción]. Fuente. URL. Mapa dinámico no archivado con título: Autor o entidad. (Año o s. f.). Título [Mapa]. Fuente. Recuperado el día de mes de año, de URL. Sin título: Autor o entidad. (Año o s. f.). [Mapa de descripción]. Fuente. Recuperado el día de mes de año, de URL',
+    referenceTemplate: 'Mapa estático o archivado con título: Autor o entidad. (Año o s. f.). Título [Mapa]. Fuente. URL\nMapa estático o archivado sin título: Autor o entidad. (Año o s. f.). [Mapa de descripción]. Fuente. URL\nMapa dinámico no archivado con título: Autor o entidad. (Año o s. f.). Título [Mapa]. Fuente. Recuperado el día de mes de año, de URL\nMapa dinámico no archivado sin título: Autor o entidad. (Año o s. f.). [Mapa de descripción]. Fuente. Recuperado el día de mes de año, de URL',
     parentheticalCitation: '(Autor o entidad, Año o s. f.)', narrativeCitation: 'Autor o entidad (Año o s. f.)',
     rules: ['Un mapa sin título usa una sola descripción combinada, como [Mapa de descripción]; un mapa dinámico no archivado además lleva fecha de recuperación.', 'Un mapa estático o archivado conserva la URL pero no necesita fecha de recuperación.'],
   },

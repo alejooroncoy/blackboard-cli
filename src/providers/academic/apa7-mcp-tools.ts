@@ -251,6 +251,9 @@ function guidanceFor(selectedTopic: z.infer<typeof topic>, selectedSourceType?: 
       if (selectedSourceType === 'personal-communication') {
         return { ...base, citationRule: getCitationRule('personal-communication') };
       }
+      if (selectedSourceType === 'software') {
+        return { ...base, citationRule: getCitationRule('general-mention-site-periodical-software') };
+      }
       return {
         ...base,
         sourceTypeNote: selectedSourceType

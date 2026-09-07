@@ -131,6 +131,7 @@ test('reference templates preserve APA italics with explicit Markdown notation',
   assert.match(webpage.template, /dos: Autor, A\. A\., & Autor, B\. B\./);
   assert.match(webpage.template, /21 o más: autores 1–19/);
   const software = JSON.parse((await handler({ topic: 'reference', sourceType: 'software' })).content[0].text);
+  const commonSoftwareCitation = JSON.parse((await handler({ topic: 'citation', sourceType: 'software' })).content[0].text);
   const book = JSON.parse((await handler({ topic: 'reference', sourceType: 'book' })).content[0].text);
   const chapter = JSON.parse((await handler({ topic: 'reference', sourceType: 'book-chapter' })).content[0].text);
   const unsignedNewspaper = JSON.parse((await handler({ topic: 'reference', sourceType: 'newspaper-article' })).content[0].text);
@@ -148,6 +149,8 @@ test('reference templates preserve APA italics with explicit Markdown notation',
   assert.match(social.template, /Publicación individual:.*Perfil, página o historia destacada que cambia:/);
   assert.match(social.template, /Recuperado el día de mes de año/);
   assert.match(software.template, /tienda, solo si difiere del autor/);
+  assert.equal(commonSoftwareCitation.citationRule.id, 'general-mention-site-periodical-software');
+  assert.match(commonSoftwareCitation.citationRule.referenceTreatment, /No lleva cita autor-fecha ni entrada en referencias/);
   assert.match(book.template, /omite DOI y URL/);
   assert.ok(book.requiredMetadata.includes('autor o entidad si se acredita'));
   assert.ok(chapter.requiredMetadata.includes('autor o entidad si se acredita'));
@@ -214,6 +217,10 @@ test('APA 7 case formatting distinguishes blog and untitled visual works', async
   const stockImage = JSON.parse((await handler({ topic: 'reference', caseId: 'clip-art-or-stock-image' })).content[0].text).case;
   assert.match(stockImage.referenceTemplate, /Sin título:.*\[Descripción de la imagen de stock\]/);
   assert.match(stockImage.rules.join(' '), /no añade un segundo corchete/);
+  assert.match(stockImage.referenceTemplate, /Clip art incluido y confirmado.*no requiere referencia/);
+  assert.match(stockImage.parentheticalCitation, /no requiere cita autor-fecha/);
+  assert.match(stockImage.requiredMetadata.join(' '), /procedencia confirmada/);
+  assert.match(stockImage.rules.join(' '), /ni datos bibliográficos/);
 });
 
 test('APA 7 guidance keeps unresolved placeholders out of final references', async () => {
@@ -1397,6 +1404,7 @@ test('APA 7 guidance covers visual, social and web works through example 114', a
   assert.match(map.referenceTemplate, /Mapa dinámico no archivado con título:.*Recuperado/);
   assert.match(map.referenceTemplate, /\[Mapa de descripción\]/);
   assert.doesNotMatch(map.referenceTemplate, /\[Descripción del mapa\] \[Mapa\]/);
+  assert.doesNotMatch(map.referenceTemplate, /URL\./);
   const photograph = JSON.parse((await handler({ topic: 'reference', caseId: 'photograph' })).content[0].text).case;
   assert.match(photograph.referenceTemplate, /\[Fotografía de descripción\]/);
   assert.doesNotMatch(photograph.referenceTemplate, /\[Descripción\] \[Fotografía\]/);
