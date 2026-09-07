@@ -7,7 +7,7 @@ import { loadSession, isSessionValid } from '../auth/session.js';
 import { createClient } from '../api/client.js';
 import { getMe, getMyCourses } from '../api/courses.js';
 import {
-  listAssignments,
+  listPublishedAssignments,
   listAttempts,
   getAttempt,
   uploadFile,
@@ -58,9 +58,14 @@ function formatAssignment(col: any, grade: any, opts: { pending?: boolean; cours
   const attemptsAllowed = col.grading?.attemptsAllowed === 0
     ? 'ilimitados'
     : `${col.grading?.attemptsAllowed ?? '?'} intento(s)`;
-  const type = col.grading?.type === 'Manual' ? chalk.gray('[manual]') : '';
+  const type = col.gradebookAccess === 'restricted'
+    ? chalk.yellow('[visible en contenido; notas restringidas]')
+    : col.grading?.type === 'Manual' ? chalk.gray('[manual]') : '';
 
-  let gradeStr = chalk.gray('sin entregar');
+  const groupAttempt = col.groupAttempts?.[0];
+  let gradeStr = col.gradebookAccess === 'restricted'
+    ? chalk.yellow(groupAttempt ? `grupo: ${groupAttempt.status}` : 'estado de entrega no disponible')
+    : chalk.gray('sin entregar');
   const score = getGradeScore(grade);
   if (score != null) {
     const pct = possible !== '?' ? Math.round((score / Number(possible)) * 100) : null;
@@ -80,6 +85,9 @@ function formatAssignment(col: any, grade: any, opts: { pending?: boolean; cours
     `    Nota: ${gradeStr}  ·  Máx: ${possible} pts  ·  ${attemptsAllowed}` +
     (due ? `  ·  Entrega: ${formatDate(due)}${dueStatus(due)}` : '')
   );
+  if (col.gradebookAccess === 'restricted' && !groupAttempt) {
+    console.log(chalk.yellow('    Blackboard la publica en el curso, pero no permite consultar su estado o nota por API.'));
+  }
   console.log('');
   return true;
 }
@@ -109,7 +117,7 @@ export function assignmentsCommand(program: Command) {
 
         const loadCourseAssignments = async (id: string, name?: string) => {
           const [columns, gradesRes] = await Promise.all([
-            listAssignments(client, id),
+            listPublishedAssignments(client, id),
             client
               .get(`/learn/api/public/v1/courses/${id}/gradebook/users/${userId}`, {
                 params: { limit: 200 },

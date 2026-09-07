@@ -2,6 +2,7 @@ import type { AxiosInstance } from 'axios';
 import fs from 'fs';
 import path from 'path';
 import FormData from 'form-data';
+import { getCourseContents } from './courses.js';
 
 export interface GradeColumn {
   id: string;
@@ -18,6 +19,29 @@ export interface GradeColumn {
   gradebookCategoryId?: string;
   scoreProviderHandle?: string;
   includeInCalculations?: boolean;
+  /** Blackboard published the item, but its gradebook endpoint denies student access. */
+  gradebookAccess?: 'available' | 'restricted';
+  hasAssociatedGroups?: boolean;
+  groupAttempts?: GroupAttempt[];
+}
+
+export interface GroupAttempt {
+  id: string;
+  groupId?: string;
+  userId?: string;
+  status: string;
+  readyToPost?: boolean;
+  created?: string;
+}
+
+interface CourseContentItem {
+  id: string;
+  title: string;
+  hasChildren?: boolean;
+  hasGradebookColumns?: boolean;
+  hasAssociatedGroups?: boolean;
+  availability?: { available?: string };
+  contentHandler?: { gradeColumnId?: string };
 }
 
 export interface Attempt {
@@ -64,6 +88,68 @@ export async function listAssignments(
   return (r.data.results as GradeColumn[]).filter(
     (c) => c.grading?.type === 'Attempts' || c.grading?.type === 'Manual'
   );
+}
+
+/**
+ * Includes published assessments that are missing from the student's gradebook
+ * response. This happens with some group assessments in Blackboard Ultra.
+ */
+export async function listPublishedAssignments(
+  client: AxiosInstance,
+  courseId: string
+): Promise<GradeColumn[]> {
+  const columns = await listAssignments(client, courseId);
+  const readableColumnIds = new Set(columns.map((column) => column.id));
+  const restricted: GradeColumn[] = [];
+  const visited = new Set<string>();
+  const parents: Array<string | undefined> = [undefined];
+
+  while (parents.length > 0) {
+    const parentId = parents.shift();
+    const page = await getCourseContents(client, courseId, parentId);
+
+    for (const item of page.results as CourseContentItem[]) {
+      if (visited.has(item.id)) continue;
+      visited.add(item.id);
+      if (item.hasChildren) parents.push(item.id);
+
+      const columnId = item.contentHandler?.gradeColumnId;
+      if (item.availability?.available === 'No' || !item.hasGradebookColumns || !columnId || readableColumnIds.has(columnId)) continue;
+
+      restricted.push({
+        id: columnId,
+        name: item.title,
+        contentId: item.id,
+        grading: { type: 'Attempts' },
+        gradebookAccess: 'restricted',
+        hasAssociatedGroups: item.hasAssociatedGroups,
+      });
+    }
+  }
+
+  for (const assignment of restricted) {
+    try {
+      assignment.groupAttempts = await listGroupAttempts(client, courseId, assignment.id);
+    } catch {
+      // Some Blackboard tenants deny this endpoint even when the item itself is visible.
+      // Keep the assessment listed rather than hiding it again.
+    }
+  }
+
+  return [...columns.map((column) => ({ ...column, gradebookAccess: 'available' as const })), ...restricted];
+}
+
+/** Returns the current student's group attempts when Blackboard exposes them. */
+export async function listGroupAttempts(
+  client: AxiosInstance,
+  courseId: string,
+  columnId: string
+): Promise<GroupAttempt[]> {
+  const r = await client.get(
+    `/learn/api/public/v1/courses/${courseId}/gradebook/columns/${columnId}/groupAttempts`,
+    { params: { limit: 20 } }
+  );
+  return r.data.results ?? [];
 }
 
 export async function getAssignment(

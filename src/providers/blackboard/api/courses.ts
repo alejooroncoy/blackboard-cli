@@ -45,7 +45,7 @@ export async function getCourseContents(
   const r = await client.get(path, {
     params: {
       limit: 100,
-      fields: 'id,parentId,title,body,created,modified,position,hasChildren,launchInNewWindow,availability,contentHandler',
+      fields: 'id,parentId,title,body,created,modified,position,hasChildren,hasGradebookColumns,hasAssociatedGroups,launchInNewWindow,availability,contentHandler',
     },
   });
   return r.data;
