@@ -126,6 +126,8 @@ test('reference templates preserve APA italics with explicit Markdown notation',
   assert.match(webpage.template, /\*Título abreviado\* \(Año\)/);
   assert.match(webpage.template, /No inventes mes ni día/);
   assert.match(webpage.template, /sitio, solo si difiere del autor/);
+  assert.match(webpage.template, /dos: Autor, A\. A\., & Autor, B\. B\./);
+  assert.match(webpage.template, /21 o más: autores 1–19/);
   const software = JSON.parse((await handler({ topic: 'reference', sourceType: 'software' })).content[0].text);
   const book = JSON.parse((await handler({ topic: 'reference', sourceType: 'book' })).content[0].text);
   const chapter = JSON.parse((await handler({ topic: 'reference', sourceType: 'book-chapter' })).content[0].text);
@@ -839,7 +841,9 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(religious.parentheticalCitation, /\(\*Título\*,/);
   assert.match(religious.narrativeCitation, /^\*Título\*/);
   assert.match(religious.parentheticalCitation, /Año versión\) si no corresponde un año original/);
-  assert.match(religious.referenceTemplate, /con traductor:.*con edición:.*con ambos:/i);
+  assert.match(religious.referenceTemplate, /con traductor o traductores:.*con edición:.*con ambos:/i);
+  assert.match(religious.referenceTemplate, /dos: T\. Traductor & U\. Traductor, Trads\./);
+  assert.match(religious.referenceTemplate, /21 o más: traductores 1–19/);
   assert.match(religious.referenceTemplate, /Obra original publicada.*URL\./);
   assert.match(ancient.referenceTemplate, /URL antes de esa nota final/);
   assert.match(religious.rules.join(' '), /Omite el traductor, la edición o todo el paréntesis/);
