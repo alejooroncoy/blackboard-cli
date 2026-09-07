@@ -64,9 +64,9 @@ export const chapterEntryCases: Record<ChapterEntryCaseId, Apa7VerifiedChapterEn
   },
   'chapter-electronic-public-url': {
     ...base, id: 'chapter-electronic-public-url', label: 'Capítulo electrónico o de audiolibro sin DOI con URL pública', manualExample: 40, manualPrintedPages: '333',
-    requiredMetadata: ['autores del capítulo', 'año', 'título', 'editores', 'libro', 'edición si existe', 'volumen si existe', 'páginas', 'editorial', 'URL pública'],
-    referenceTemplate: `${completeChapterAuthors} (Año). Título del capítulo. En ${completeChapterEditors}, Título del libro (edición y volumen: edición, Vol. x, pp. xx-xx; solo edición: edición, pp. xx-xx; solo volumen: Vol. x, pp. xx-xx; sin ambos: pp. xx-xx). Editorial. URL`,
-    rules: [completeChapterAuthorRule, 'Incluye edición y volumen solo cuando existan.', 'Incluye la URL cuando no pertenece a una base de datos.', 'No añade plataforma o dispositivo; trata los detalles especiales de audiolibro solo cuando sean relevantes.'],
+    requiredMetadata: ['autores del capítulo', 'año', 'título', 'editores', 'libro', 'edición si existe', 'volumen si existe', 'páginas', 'editorial', 'URL pública', 'narrador solo para audiolibro'],
+    referenceTemplate: `Capítulo electrónico: ${completeChapterAuthors} (Año). Título del capítulo. En ${completeChapterEditors}, Título del libro (edición y volumen: edición, Vol. x, pp. xx-xx; solo edición: edición, pp. xx-xx; solo volumen: Vol. x, pp. xx-xx; sin ambos: pp. xx-xx). Editorial. URL. Capítulo de audiolibro: ${completeChapterAuthors} (Año). Título del capítulo. En ${completeChapterEditors}, Título del libro (N. Narrador, Narr.; edición y volumen: edición, Vol. x, pp. xx-xx; solo edición: edición, pp. xx-xx; solo volumen: Vol. x, pp. xx-xx; sin ambos: pp. xx-xx) [Audiolibro]. Editorial. URL.`,
+    rules: [completeChapterAuthorRule, 'Incluye edición y volumen solo cuando existan.', 'Incluye narrador y [Audiolibro] únicamente cuando la versión consultada es un audiolibro; omite ambos en un capítulo electrónico ordinario.', 'Incluye la URL cuando no pertenece a una base de datos.'],
   },
   'chapter-other-language': {
     ...base, id: 'chapter-other-language', label: 'Capítulo de libro editado en otro idioma', manualExample: 41, manualPrintedPages: '333',

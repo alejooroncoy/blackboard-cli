@@ -56,6 +56,7 @@ const completeEditorList = 'Un editor: Editor, E. E. (Ed.); dos: Editor, E. E., 
 const completeTranslatorList = 'Un traductor: T. Traductor (Trad.); dos: T. Traductor & U. Traductor (Trads.); de 3 a 20: T. Traductor, U. Traductor, V. Traductor, …, & Traductor final (Trads.; incluye todos); 21 o más: traductores 1–19, …, Último traductor (Trads.)';
 const titlePositionEditors = 'Un editor: E. E. Editor, Ed.; dos: E. E. Editor & F. F. Editor, Eds.; de 3 a 20: E. E. Editor, F. F. Editor, G. G. Editor, …, & Z. Z. Editor final, Eds.; 21 o más: editores 1–19, …, Último editor, Eds.';
 const titlePositionTranslators = 'Un traductor: T. Traductor, Trad.; dos: T. Traductor & U. Traductor, Trads.; de 3 a 20: T. Traductor, U. Traductor, V. Traductor, …, & Traductor final, Trads.; 21 o más: traductores 1–19, …, Último traductor, Trads.';
+const titlePositionNarrators = 'Un narrador: N. Narrador, Narr.; dos: N. Narrador & O. Narrador, Narrs.; de 3 a 20: N. Narrador, O. Narrador, P. Narrador, …, & Narrador final, Narrs.; 21 o más: narradores 1–19, …, Último narrador, Narrs.';
 
 export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   'book-author-doi': {
@@ -73,7 +74,7 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   'book-author-electronic-public-url': {
     ...base, id: 'book-author-electronic-public-url', label: 'Libro electrónico o audiolibro de autor sin DOI con URL pública', manualExample: 22, manualPrintedPages: '327-328',
     requiredMetadata: ['autores', 'año', 'título', 'edición desde la segunda', 'editorial', 'URL pública', 'narrador y formato solo si son relevantes'],
-    referenceTemplate: `Libro electrónico: ${completeAuthorList} (Año). Título del libro (edición, solo desde la segunda). Editorial. URL. Audiolibro: ${completeAuthorList} (Año). Título del libro (N. Narrador, Narr.; edición, solo desde la segunda) [Audiolibro]. Editorial. URL`,
+    referenceTemplate: `Libro electrónico: ${completeAuthorList} (Año). Título del libro (edición, solo desde la segunda). Editorial. URL. Audiolibro: ${completeAuthorList} (Año). Título del libro (${titlePositionNarrators}; edición, solo desde la segunda) [Audiolibro]. Editorial. URL`,
     rules: [completeAuthorRule, 'No incluye plataforma o dispositivo cuando el contenido coincide con el libro.', 'Incluye la edición desde la segunda; omite todo el paréntesis de edición para la primera.', 'Incluye narrador y [Audiolibro] únicamente cuando la versión consultada es un audiolibro; omite ambos en un libro electrónico ordinario.'],
   },
   'book-author-editor-on-cover': {
@@ -99,7 +100,7 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   'book-edited-electronic-public-url': {
     ...base, id: 'book-edited-electronic-public-url', label: 'Libro electrónico o audiolibro editado sin DOI con URL pública', manualExample: 26, manualPrintedPages: '328',
     requiredMetadata: ['editores', 'año', 'título', 'edición desde la segunda', 'editorial', 'URL pública', 'narrador solo para audiolibro'],
-    referenceTemplate: `Libro electrónico: ${completeEditorList}. (Año). Título del libro (edición, solo desde la segunda). Editorial. URL. Audiolibro: ${completeEditorList}. (Año). Título del libro (N. Narrador, Narr.; edición, solo desde la segunda) [Audiolibro]. Editorial. URL.`,
+    referenceTemplate: `Libro electrónico: ${completeEditorList}. (Año). Título del libro (edición, solo desde la segunda). Editorial. URL. Audiolibro: ${completeEditorList}. (Año). Título del libro (${titlePositionNarrators}; edición, solo desde la segunda) [Audiolibro]. Editorial. URL.`,
     parentheticalCitation: '(Editor, Año); (Editor & Editor, Año); (Primer editor et al., Año) con tres o más editores', narrativeCitation: 'Editor (Año); Editor y Editor (Año); Primer editor et al. (Año) con tres o más editores',
     rules: ['Incluye la lista completa de editores y usa (Ed.) para uno o (Eds.) para varios.', 'Incluye la edición desde la segunda; omite todo el paréntesis para la primera.', 'Incluye narrador y [Audiolibro] únicamente cuando la versión consultada es un audiolibro; omite ambos en un libro electrónico ordinario.', 'No incluye la URL de una base de datos académica común.'],
   },

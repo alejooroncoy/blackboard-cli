@@ -926,10 +926,12 @@ test('APA 7 electronic books omit audiobook-only fields unless applicable', asyn
   const editedElectronic = JSON.parse((await handler({ topic: 'reference', caseId: 'book-edited-electronic-public-url' })).content[0].text).case;
   assert.match(electronic.referenceTemplate, /Libro electrónico:.*Editorial\. URL\. Audiolibro:/);
   assert.match(electronic.referenceTemplate, /Libro electrónico:.*\(edición, solo desde la segunda\)/);
-  assert.match(electronic.referenceTemplate, /Audiolibro:.*Narr\.; edición, solo desde la segunda/);
+  assert.match(electronic.referenceTemplate, /Audiolibro:.*N\. Narrador, Narr\.;.*edición, solo desde la segunda/);
+  assert.match(electronic.referenceTemplate, /dos: N\. Narrador & O\. Narrador, Narrs\./);
   assert.match(electronic.rules.join(' '), /únicamente cuando la versión consultada es un audiolibro/);
   assert.match(editedElectronic.referenceTemplate, /Libro electrónico:.*Editorial\. URL\. Audiolibro:/);
-  assert.match(editedElectronic.referenceTemplate, /Audiolibro:.*Narr\.; edición, solo desde la segunda/);
+  assert.match(editedElectronic.referenceTemplate, /Audiolibro:.*N\. Narrador, Narr\.;.*edición, solo desde la segunda/);
+  assert.match(editedElectronic.referenceTemplate, /21 o más: narradores 1–19/);
   assert.match(editedElectronic.requiredMetadata.join(' '), /narrador solo para audiolibro/);
 });
 
@@ -1135,6 +1137,11 @@ test('APA 7 guidance covers reports, conferences and theses through example 66',
   assert.ok(session);
   assert.match(session.referenceTemplate, /Ponente, B\. B\./);
   assert.match(session.rules.join(' '), /lista completa de personas acreditadas/);
+  const pressRelease = cases.find(candidate => candidate.id === 'press-release');
+  assert.ok(pressRelease);
+  assert.match(pressRelease.referenceTemplate, /Autores personales:.*dos: Autor, A\. A\., & Autor, B\. B\./);
+  assert.match(pressRelease.referenceTemplate, /Entidad autora: Entidad\./);
+  assert.match(pressRelease.parentheticalCitation, /tres o más autores/);
   for (const id of ['conference-paper-presentation', 'conference-poster-presentation']) {
     const presentation = cases.find(candidate => candidate.id === id);
     assert.ok(presentation);

@@ -122,9 +122,9 @@ export const reportConferenceThesisCases: Record<ReportConferenceThesisCaseId, A
   'press-release': {
     ...reportBase, id: 'press-release', label: 'Comunicado de prensa', manualExample: 59, manualPrintedPages: '337',
     requiredMetadata: ['entidad o autor', 'fecha completa', 'título', 'URL'],
-    referenceTemplate: 'Entidad. (Año, día de mes). Título [Comunicado de prensa]. URL',
-    parentheticalCitation: '(Entidad, Año)', narrativeCitation: 'Entidad (Año)',
-    rules: ['Incluye la fecha completa y la descripción [Comunicado de prensa].'],
+    referenceTemplate: `Autores personales: ${completeContributionAuthors} (Año, día de mes). Título [Comunicado de prensa]. URL. Entidad autora: Entidad. (Año, día de mes). Título [Comunicado de prensa]. URL.`,
+    parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores; (Entidad, Año) para entidad autora', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores; Entidad (Año) para entidad autora',
+    rules: ['Incluye la lista completa de autores personales acreditados o conserva la entidad autora literalmente.', 'Incluye la fecha completa y la descripción [Comunicado de prensa].'],
   },
   'conference-session': {
     ...conferenceBase, id: 'conference-session', label: 'Sesión de congreso', manualExample: 60, manualPrintedPages: '338',
