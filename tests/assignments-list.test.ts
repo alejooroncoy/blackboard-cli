@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { test } from 'node:test';
-import { isPendingAssignment } from '../src/providers/blackboard/commands/assignments.js';
+import { getCurrentGroupAttempt, isPendingAssignment } from '../src/providers/blackboard/commands/assignments.js';
 import { listAssignments, listPublishedAssignments } from '../src/providers/blackboard/api/assignments.js';
 import { getGradeColumns, getGrades } from '../src/providers/blackboard/api/courses.js';
 
@@ -38,6 +38,16 @@ test('pending filter includes only assignments without a score or submitted atte
   assert.equal(isPendingAssignment(null, 'NeedsGrading'), false);
   assert.equal(isPendingAssignment(null, 'Completed'), false);
   assert.equal(isPendingAssignment(null, 'InProgress'), true);
+});
+
+test('current group attempt is the most recently created one', () => {
+  const current = getCurrentGroupAttempt([
+    { created: '2026-09-01T10:00:00.000Z', status: 'InProgress' },
+    { created: '2026-09-02T10:00:00.000Z', status: 'NeedsGrading' },
+  ]);
+
+  assert.equal((current as any)?.status, 'NeedsGrading');
+  assert.equal(isPendingAssignment(null, (current as any)?.status), false);
 });
 
 test('assignment listing follows every gradebook column page', async () => {
