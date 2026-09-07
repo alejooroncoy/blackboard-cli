@@ -164,16 +164,16 @@ export const visualSocialWebCases: Record<VisualSocialWebCaseId, Apa7VerifiedVis
   },
   'webpage-no-date': {
     ...webBase, id: 'webpage-no-date', label: 'Página web sin fecha', manualExample: 113, manualPrintedPages: '358',
-    requiredMetadata: ['autor individual o grupal verificado', 'título', 'sitio si difiere', 'URL'],
-    referenceTemplate: 'Autor o entidad. (s. f.). Título. Nombre del sitio si difiere. URL',
-    parentheticalCitation: '(Autor o entidad, s. f.)', narrativeCitation: 'Autor o entidad (s. f.)',
+    requiredMetadata: ['autores o entidad verificados', 'título', 'sitio si difiere', 'URL'],
+    referenceTemplate: 'Un autor o entidad: Autor o entidad. (s. f.). Dos: Autor, A. A., & Autor, B. B. (s. f.). De 3 a 20: incluye todos, seguido de (s. f.); 21 o más: autores 1–19, …, Último autor (s. f.). Título. Nombre del sitio si difiere. URL',
+    parentheticalCitation: '(Autor o entidad, s. f.); (Autor & Autor, s. f.); (Primer autor et al., s. f.) con tres o más autores', narrativeCitation: 'Autor o entidad (s. f.); Autor y Autor (s. f.); Primer autor et al. (s. f.) con tres o más autores',
     rules: ['Usa s. f. solo después de comprobar que no existe fecha publicada, actualizada o revisada.', 'Los autores pueden estar identificados en agradecimientos o reconocimientos.', 'Si autor y sitio coinciden, omite el nombre del sitio.'],
   },
   'webpage-retrieval-date': {
     ...webBase, id: 'webpage-retrieval-date', label: 'Página web con fecha de recuperación', manualExample: 114, manualPrintedPages: '358',
-    requiredMetadata: ['autor o entidad', 'título', 'sitio si difiere', 'fecha de recuperación', 'URL', 'confirmación de que cambia y no está archivada'],
-    referenceTemplate: 'Autor o entidad. (s. f.). Título. Nombre del sitio si difiere. Recuperado el día de mes de año, de URL',
-    parentheticalCitation: '(Autor o entidad, s. f.)', narrativeCitation: 'Autor o entidad (s. f.)',
+    requiredMetadata: ['autores o entidad', 'título', 'sitio si difiere', 'fecha de recuperación', 'URL', 'confirmación de que cambia y no está archivada'],
+    referenceTemplate: 'Un autor o entidad: Autor o entidad. (s. f.). Dos: Autor, A. A., & Autor, B. B. (s. f.). De 3 a 20: incluye todos, seguido de (s. f.); 21 o más: autores 1–19, …, Último autor (s. f.). Título. Nombre del sitio si difiere. Recuperado el día de mes de año, de URL',
+    parentheticalCitation: '(Autor o entidad, s. f.); (Autor & Autor, s. f.); (Primer autor et al., s. f.) con tres o más autores', narrativeCitation: 'Autor o entidad (s. f.); Autor y Autor (s. f.); Primer autor et al. (s. f.) con tres o más autores',
     rules: ['Incluye fecha de recuperación solo cuando la página está diseñada para cambiar y no existe versión archivada.', 'Si autor y sitio coinciden, omite el sitio.'],
   },
 };

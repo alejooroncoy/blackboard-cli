@@ -806,7 +806,7 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(dictionary.case.requiredMetadata.join(' '), /edición\/versión si existe/);
   assert.match(dictionary.case.referenceTemplate, /Sin edición\/versión:/);
   assert.match(dictionary.case.referenceTemplate, /\(Ed\.\).*\(Eds\.\)/);
-  assert.match(dictionary.case.referenceTemplate, /Con DOI\/URL:.*Impreso o base académica común sin localizador:/);
+  assert.match(dictionary.case.referenceTemplate, /Estable con DOI\/URL:.*Cambiante sin archivo:.*Recuperado el día de mes de año, de URL/);
   assert.match(dictionary.case.rules.join(' '), /Distingue el autor grupal de los editores/);
   const foreignBook = JSON.parse((await handler({ topic: 'reference', caseId: 'book-other-language' })).content[0].text).case;
   assert.match(foreignBook.referenceTemplate, /Con DOI: añade https:\/\/doi\.org\/xxxxx/);
