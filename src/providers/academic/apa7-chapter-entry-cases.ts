@@ -118,7 +118,7 @@ Capítulo de audiolibro: ${completeChapterAuthors} (Año). Título del capítulo
   'reference-entry-group-author': {
     ...base, id: 'reference-entry-group-author', label: 'Entrada de diccionario, tesauro o enciclopedia con autor grupal', manualExample: 47, manualPrintedPages: '334',
     requiredMetadata: ['autor grupal', 'fecha o s. f.', 'título de entrada', 'obra de consulta', 'URL', 'fecha de recuperación si cambia sin archivo'],
-    referenceTemplate: 'Entrada estable o archivada: Autor grupal. (Fecha). Título de la entrada. En Obra de consulta. URL. Entrada que cambia continuamente sin archivo: Autor grupal. (s. f.). Título de la entrada. En Obra de consulta. Recuperado el día de mes de año, de URL',
+    referenceTemplate: 'Entrada estable o archivada: Autor grupal. (Fecha). Título de la entrada. En Obra de consulta. URL\nEntrada que cambia continuamente sin archivo: Autor grupal. (s. f.). Título de la entrada. En Obra de consulta. Recuperado el día de mes de año, de URL',
     parentheticalCitation: '(Autor grupal, Año o s. f.)', narrativeCitation: 'Autor grupal (Año o s. f.)',
     rules: ['Usa s. f. y fecha de recuperación cuando la entrada cambia continuamente y no se archivan versiones.', 'Una entrada estable o archivada conserva la URL sin fecha de recuperación.', 'No repite como editorial una entidad que ya figura como autor.'],
   },

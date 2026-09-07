@@ -903,6 +903,7 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   const stableEntry = JSON.parse((await handler({ topic: 'reference', caseId: 'reference-entry-group-author' })).content[0].text).case;
   assert.match(stableEntry.referenceTemplate, /Entrada estable o archivada:.*URL/);
   assert.match(stableEntry.referenceTemplate, /Entrada que cambia continuamente sin archivo:.*Recuperado/);
+  assert.doesNotMatch(stableEntry.referenceTemplate, /URL\./);
   assert.match(ancient.parentheticalCitation, /fecha original es exacta/);
   assert.match(ancient.parentheticalCitation, /ca\. Año original.*si es aproximada/);
   assert.match(ancient.parentheticalCitation, /Año versión\) si el año original es desconocido o discutido/);
@@ -1436,6 +1437,7 @@ test('APA 7 guidance covers visual, social and web works through example 114', a
   assert.match(news.referenceTemplate, /De 3 a 20:.*\(Año, día de mes; incluye todos\)/);
   assert.match(news.referenceTemplate, /21 o más: autores 1–19, …, Último autor \(Año, día de mes\)/);
   assert.match(news.referenceTemplate, /Entidad autora: Entidad\. \(Año, día de mes\)/);
+  assert.doesNotMatch(news.referenceTemplate, /URL\./);
   assert.match(news.parentheticalCitation, /Entidad, Año/);
   assert.match(changing.rules.join(' '), /no existe versión archivada/);
   assert.match(infographic.parentheticalCitation, /tres o más autores/);
