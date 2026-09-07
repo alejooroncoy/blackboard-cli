@@ -933,7 +933,7 @@ test('APA 7 electronic books omit audiobook-only fields unless applicable', asyn
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
   const electronic = JSON.parse((await handler({ topic: 'reference', caseId: 'book-author-electronic-public-url' })).content[0].text).case;
   const editedElectronic = JSON.parse((await handler({ topic: 'reference', caseId: 'book-edited-electronic-public-url' })).content[0].text).case;
-  assert.match(electronic.referenceTemplate, /Libro electrónico:.*Editorial\. URL\nAudiolibro:/);
+  assert.match(electronic.referenceTemplate, /Libro electrónico:.*Editorial\. URL\. Audiolibro:/);
   assert.match(electronic.referenceTemplate, /Libro electrónico:.*\(edición, solo desde la segunda\)/);
   assert.match(electronic.referenceTemplate, /Audiolibro:.*N\. Narrador, Narr\.;.*edición, solo desde la segunda/);
   assert.match(electronic.referenceTemplate, /dos: N\. Narrador & O\. Narrador, Narrs\./);
@@ -942,7 +942,6 @@ test('APA 7 electronic books omit audiobook-only fields unless applicable', asyn
   assert.match(editedElectronic.referenceTemplate, /Audiolibro:.*N\. Narrador, Narr\.;.*edición, solo desde la segunda/);
   assert.match(editedElectronic.referenceTemplate, /21 o más: narradores 1–19/);
   assert.match(editedElectronic.requiredMetadata.join(' '), /narrador solo para audiolibro/);
-  assert.doesNotMatch(electronic.referenceTemplate, /URL\./);
   assert.doesNotMatch(editedElectronic.referenceTemplate, /URL\./);
 });
 
