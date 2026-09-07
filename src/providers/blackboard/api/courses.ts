@@ -45,7 +45,7 @@ export async function getCourseContents(
   const r = await client.get(path, {
     params: {
       limit: 100,
-      fields: 'id,parentId,title,body,created,modified,position,hasChildren,launchInNewWindow,availability,contentHandler',
+      fields: 'id,parentId,title,body,created,modified,position,hasChildren,hasGradebookColumns,hasAssociatedGroups,launchInNewWindow,availability,contentHandler',
     },
   });
   return r.data;
@@ -117,22 +117,46 @@ export async function getGradeColumns(
   client: AxiosInstance,
   courseId: string
 ): Promise<PaginatedResponse<any>> {
-  const r = await client.get(`/learn/api/public/v1/courses/${courseId}/gradebook/columns`, {
+  const path = `/learn/api/public/v1/courses/${courseId}/gradebook/columns`;
+  let page = await client.get(path, {
     params: { limit: 50 },
   });
-  return r.data;
+  const results: any[] = [];
+
+  while (true) {
+    results.push(...(page.data.results ?? []));
+    const nextPage = page.data.paging?.nextPage as string | undefined;
+    if (!nextPage) break;
+    if (!nextPage.startsWith(path)) {
+      throw new Error('Refusing an unexpected Blackboard gradebook columns page');
+    }
+    page = await client.get(nextPage);
+  }
+
+  return { results, paging: page.data.paging };
 }
 
 export async function getGrades(
   client: AxiosInstance,
   courseId: string,
-  userId: string
+  userId: string,
+  opts: { limit?: number } = {}
 ): Promise<PaginatedResponse<any>> {
-  const r = await client.get(
-    `/learn/api/public/v1/courses/${courseId}/gradebook/users/${userId}`,
-    { params: { limit: 50 } }
-  );
-  return r.data;
+  const path = `/learn/api/public/v1/courses/${courseId}/gradebook/users/${userId}`;
+  let page = await client.get(path, { params: { limit: opts.limit ?? 50 } });
+  const results: any[] = [];
+
+  while (true) {
+    results.push(...(page.data.results ?? []));
+    const nextPage = page.data.paging?.nextPage as string | undefined;
+    if (!nextPage) break;
+    if (!nextPage.startsWith(path)) {
+      throw new Error('Refusing an unexpected Blackboard grades page');
+    }
+    page = await client.get(nextPage);
+  }
+
+  return { results, paging: page.data.paging };
 }
 
 export async function getCourseMemberships(

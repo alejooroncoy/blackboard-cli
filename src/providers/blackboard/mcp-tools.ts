@@ -16,7 +16,7 @@ import {
   getGradeColumns,
   getSystemVersion,
 } from './api/courses.js';
-import { listAssignments, listAttempts, submitAttempt, uploadFile, getAttemptFiles } from './api/assignments.js';
+import { listAssignments, listPublishedAssignments, listAttempts, submitAttempt, uploadFile, getAttemptFiles } from './api/assignments.js';
 import { track } from '../../analytics.js';
 import { downloadRoot, resolveDownloadDir, safeNewFilePath, writeNamedDownload } from '../../security/files.js';
 
@@ -284,12 +284,12 @@ export function registerBlackboardTools(server: McpServer) {
   registerTrackedTool(
     'blackboard_list_assignments',
     {
-      description: 'List assignments and tasks in a course with due dates, scores and submission status',
+      description: 'List assignments and tasks in a course with due dates, scores and submission status. Includes published group assessments hidden from the student gradebook API, marked gradebookAccess: restricted.',
       inputSchema: { courseId: blackboardId('courseId').describe('Blackboard course ID') },
     },
     async ({ courseId }) => {
       const { client } = await getClient();
-      const data = await listAssignments(client, courseId);
+      const data = await listPublishedAssignments(client, courseId);
       return { content: [{ type: 'text', text: JSON.stringify(data) }] };
     }
   );
