@@ -926,6 +926,9 @@ test('APA 7 standard journals preserve every credited author', async () => {
   assert.match(reprint.referenceTemplate, /con DOI: https:\/\/doi\.org\/xxxxx/);
   assert.match(reprint.rules.join(' '), /editores, páginas y editorial/);
   assert.match(reprint.referenceFormatting.italicize.join(' '), /título del libro de la reimpresión consultada/);
+  const chapterReprint = JSON.parse((await handler({ topic: 'reference', caseId: 'chapter-reprinted-from-journal' })).content[0].text).case;
+  assert.match(chapterReprint.referenceFormatting.italicize.join(' '), /publicación periódica original/);
+  assert.match(chapterReprint.referenceFormatting.italicize.join(' '), /número entre corchetes queda sin cursiva/);
   const eLocator = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-elocator' })).content[0].text).case;
   assert.match(eLocator.requiredMetadata.join(' '), /volumen\/número si existen/);
   assert.match(eLocator.referenceTemplate, /Sin volumen: Revista, \(número\), Artículo eLocator/);

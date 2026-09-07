@@ -87,6 +87,10 @@ function referenceFormattingForCase(id: VerifiedCaseId) {
     encoding,
     italicize: ['título del libro de la reimpresión consultada', 'nombre y volumen de la publicación periódica original o de la reimpresión cuando corresponda; el número entre paréntesis queda sin cursiva'],
   };
+  if (id === 'chapter-reprinted-from-journal') return {
+    encoding,
+    italicize: ['título del libro de la reimpresión consultada', 'nombre y volumen de la publicación periódica original; el número entre corchetes queda sin cursiva'],
+  };
   if (id in periodicalCases) return {
     encoding,
     italicize: ['nombre de la publicación periódica o base de revisiones', 'volumen de la publicación; el número entre paréntesis queda sin cursiva'],
