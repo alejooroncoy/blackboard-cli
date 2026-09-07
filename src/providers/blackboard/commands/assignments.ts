@@ -126,7 +126,10 @@ export function assignmentsCommand(program: Command) {
             listPublishedAssignments(client, id),
             getGrades(client, id, userId!, { limit: 200 })
               .then((grades) => grades.results)
-              .catch(() => [] as any[]),
+              .catch((err: any) => {
+                if (err.response?.status === 403) return [] as any[];
+                throw err;
+              }),
           ]);
           return { courseId: id, courseName: name ?? id, columns, gradesRes };
         };
