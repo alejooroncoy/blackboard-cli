@@ -402,7 +402,7 @@ export const referenceRules: Record<ReferenceRuleId, Apa7VerifiedReferenceRule> 
   'reference-list-alphabetical-order': verified({
     id: 'reference-list-alphabetical-order', label: 'Orden alfabético general', manualSection: '9.44', manualPrintedPages: '309-310',
     whenToUse: 'Para ordenar todas las entradas de la lista.',
-    rules: ['Ordena por el primer elemento de cada entrada, normalmente el apellido del primer autor seguido de sus iniciales.', 'Alfabetiza letra por letra: cuando una forma está contenida en otra, “nada precede a algo”.', 'Ignora espacios y signos de puntuación en apellidos de dos palabras, y también el contenido entre paréntesis o corchetes.', 'Ordena los sufijos de nacimiento como II y III cronológicamente, con el mayor primero.', 'Ordena prefijos y partículas según la forma del apellido presentada por el autor.'],
+    rules: ['Ordena por el primer elemento de cada entrada, normalmente el apellido del primer autor seguido de sus iniciales.', 'Alfabetiza letra por letra: cuando una forma está contenida en otra, “nada precede a algo”.', 'Ignora espacios y signos de puntuación en apellidos de dos palabras, y también el contenido entre paréntesis o corchetes.', 'Ordena los sufijos de nacimiento como II y III cronológicamente, del menor al mayor.', 'Ordena prefijos y partículas según la forma del apellido presentada por el autor.'],
     citationImpact: ['El orden de la lista no cambia la cita, pero debe permitir localizarla por su primer elemento.'],
     referencePattern: 'Entradas ordenadas letra por letra según el primer elemento.',
   }),

@@ -863,7 +863,9 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(stableEntry.referenceTemplate, /Entrada que cambia continuamente sin archivo:.*Recuperado/);
   assert.match(ancient.parentheticalCitation, /fecha original es exacta/);
   assert.match(ancient.parentheticalCitation, /ca\. Año original.*si es aproximada/);
+  assert.match(ancient.parentheticalCitation, /Año versión\) si el año original es desconocido o discutido/);
   assert.match(ancient.referenceTemplate, /Con traductor.*Con editor:/);
+  assert.match(ancient.referenceTemplate, /Si no se conoce o se disputa: omite toda esa nota/);
   assert.match(ancient.rules.join(' '), /\(Trad\.\).*\(Ed\.\)/);
   const shakespeare = JSON.parse((await handler({ topic: 'citation', caseId: 'shakespeare-work' })).content[0].text).case;
   assert.match(shakespeare.referenceTemplate, /Con editor:.*Con traductor:/);
@@ -1521,10 +1523,12 @@ test('APA 7 reference-list rules cover formatting, ordering, annotations and met
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
   const format = JSON.parse((await handler({ topic: 'reference', referenceRuleId: 'reference-list-format' })).content[0].text).referenceRule;
   const sameDate = JSON.parse((await handler({ topic: 'reference', referenceRuleId: 'same-author-same-date-order' })).content[0].text).referenceRule;
+  const alphabetical = JSON.parse((await handler({ topic: 'reference', referenceRuleId: 'reference-list-alphabetical-order' })).content[0].text).referenceRule;
   const annotations = JSON.parse((await handler({ topic: 'reference', referenceRuleId: 'annotated-bibliography' })).content[0].text).referenceRule;
   const meta = JSON.parse((await handler({ topic: 'reference', referenceRuleId: 'meta-analysis-references' })).content[0].text).referenceRule;
   assert.match(format.rules.join(' '), /1\.27 cm/);
   assert.match(sameDate.rules.join(' '), /2020a, 2020b/);
+  assert.match(alphabetical.rules.join(' '), /del menor al mayor/);
   assert.match(annotations.rules.join(' '), /párrafo nuevo debajo/);
   assert.match(meta.rules.join(' '), /asterisco al inicio/);
   assert.match(meta.rules.join(' '), /no crees una lista aparte/);

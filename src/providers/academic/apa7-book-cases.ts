@@ -166,10 +166,10 @@ export const bookCases: Record<BookCaseId, Apa7VerifiedBookCase> = {
   },
   'ancient-greek-roman-work': {
     ...base, id: 'ancient-greek-roman-work', label: 'Obra griega o romana antigua', manualExample: 36, manualPrintedPages: '331',
-    requiredMetadata: ['autor clásico', 'año de la versión consultada', 'título', 'traductor/editor', 'editorial/URL', 'fecha original o aproximada'],
-    referenceTemplate: 'Con traductor, sin URL: Autor. (Año versión). Título (T. Traductor, Trad.). Editorial. (Obra original publicada en Año antiguo exacto) o (Obra original publicada ca. Año antiguo aproximado). Con URL, coloca la URL antes de esa nota final. Con editor: sustituye (T. Traductor, Trad.) por (E. Editor, Ed.).',
-    parentheticalCitation: '(Autor, Año original/Año versión) si la fecha original es exacta; (Autor, ca. Año original/Año versión) si es aproximada', narrativeCitation: 'Autor (Año original/Año versión) si la fecha original es exacta; Autor (ca. Año original/Año versión) si es aproximada',
-    rules: ['Usa (Trad.) si la edición acredita un traductor o (Ed.) si acredita un editor; no cambies el rol acreditado.', 'Usa ca. únicamente cuando la fecha original es aproximada; omítelo ante una fecha exacta verificada.', 'Las partes canónicas requieren su localizador propio en la cita.'],
+    requiredMetadata: ['autor clásico', 'año de la versión consultada', 'título', 'traductor/editor', 'editorial/URL', 'fecha original exacta o aproximada si se conoce'],
+    referenceTemplate: 'Con traductor, sin URL: Autor. (Año versión). Título (T. Traductor, Trad.). Editorial. Si existe fecha original: finaliza con (Obra original publicada en Año antiguo exacto) o (Obra original publicada ca. Año antiguo aproximado). Si no se conoce o se disputa: omite toda esa nota. Con URL, coloca la URL antes de esa nota final cuando corresponda. Con editor: sustituye (T. Traductor, Trad.) por (E. Editor, Ed.).',
+    parentheticalCitation: '(Autor, Año original/Año versión) si la fecha original es exacta; (Autor, ca. Año original/Año versión) si es aproximada; (Autor, Año versión) si el año original es desconocido o discutido', narrativeCitation: 'Autor (Año original/Año versión) si la fecha original es exacta; Autor (ca. Año original/Año versión) si es aproximada; Autor (Año versión) si el año original es desconocido o discutido',
+    rules: ['Usa (Trad.) si la edición acredita un traductor o (Ed.) si acredita un editor; no cambies el rol acreditado.', 'Usa ca. únicamente cuando la fecha original es aproximada; omítelo ante una fecha exacta verificada.', 'No inventes una fecha original: omite la nota de obra original y cita solo la versión consultada cuando sea desconocida o discutida.', 'Las partes canónicas requieren su localizador propio en la cita.'],
   },
   'shakespeare-work': {
     ...base, id: 'shakespeare-work', label: 'Obra de Shakespeare u otra obra clásica con edición moderna', manualExample: 37, manualPrintedPages: '331',
