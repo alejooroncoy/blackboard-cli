@@ -133,6 +133,8 @@ test('reference templates preserve APA italics with explicit Markdown notation',
   const chapter = JSON.parse((await handler({ topic: 'reference', sourceType: 'book-chapter' })).content[0].text);
   assert.match(chapter.template, /E\. Editor & F\. Editor \(Eds\.\)/);
   assert.doesNotMatch(chapter.template, /E\. Editor, & F\. Editor/);
+  assert.match(chapter.template, /Sin autor acreditado: Título del capítulo\. \(Año\)/);
+  assert.match(chapter.template, /\(“Título abreviado”, Año\)/);
   const thesis = JSON.parse((await handler({ topic: 'reference', sourceType: 'thesis' })).content[0].text);
   const podcast = JSON.parse((await handler({ topic: 'reference', sourceType: 'podcast' })).content[0].text);
   const social = JSON.parse((await handler({ topic: 'reference', sourceType: 'social-media' })).content[0].text);
@@ -825,6 +827,7 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(authoredWithEditor.rules.join(' '), /\(Eds\.\) para varios/);
   const seriesBook = JSON.parse((await handler({ topic: 'reference', caseId: 'book-in-series' })).content[0].text).case;
   assert.match(seriesBook.requiredMetadata.join(' '), /edición, solo desde la segunda/);
+  assert.match(seriesBook.referenceTemplate, /Con DOI: añade https:\/\/doi\.org\/xxxxx al final/);
   const dictionary = JSON.parse((await handler({ topic: 'reference', caseId: 'dictionary-thesaurus-encyclopedia' })).content[0].text);
   assert.match(dictionary.case.rules.join(' '), /fecha de recuperación/);
   assert.match(dictionary.case.requiredMetadata.join(' '), /edición\/versión si existe/);
