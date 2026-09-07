@@ -815,7 +815,8 @@ test('APA 7 guidance covers all 18 verified book and reference-work examples', a
   assert.match(edited.case.rules.join(' '), /DOI como URL completa/);
   const authoredWithEditor = JSON.parse((await handler({ topic: 'reference', caseId: 'book-author-editor-on-cover' })).content[0].text).case;
   assert.match(authoredWithEditor.requiredMetadata.join(' '), /edición desde la segunda/);
-  assert.match(authoredWithEditor.referenceTemplate, /\(E\. Editor, Ed\.; edición, solo desde la segunda\)/);
+  assert.match(authoredWithEditor.referenceTemplate, /Un editor: E\. E\. Editor, Ed\.; dos: E\. E\. Editor & F\. F\. Editor, Eds\./);
+  assert.match(authoredWithEditor.rules.join(' '), /\(Eds\.\) para varios/);
   const seriesBook = JSON.parse((await handler({ topic: 'reference', caseId: 'book-in-series' })).content[0].text).case;
   assert.match(seriesBook.requiredMetadata.join(' '), /edición, solo desde la segunda/);
   const dictionary = JSON.parse((await handler({ topic: 'reference', caseId: 'dictionary-thesaurus-encyclopedia' })).content[0].text);
@@ -1245,6 +1246,7 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   const interview = JSON.parse((await handler({ topic: 'reference', caseId: 'archived-radio-interview' })).content[0].text).case;
   const podcast = JSON.parse((await handler({ topic: 'reference', caseId: 'podcast-series' })).content[0].text).case;
   const song = JSON.parse((await handler({ topic: 'reference', caseId: 'song-or-track' })).content[0].text).case;
+  const album = JSON.parse((await handler({ topic: 'citation', caseId: 'music-album' })).content[0].text).case;
   const episode = JSON.parse((await handler({ topic: 'citation', caseId: 'television-episode-or-webisode' })).content[0].text).case;
   assert.match(episode.referenceTemplate, /dos guionistas y director:.*Guionista, H\. H\. \(Guionista\), & Director/);
   assert.doesNotMatch(episode.referenceTemplate, /Guionistas\).*&, & Director/);
@@ -1263,6 +1265,9 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   assert.match(podcast.rules.join(' '), /comenzó y terminó ese año/);
   assert.match(song.referenceTemplate, /solo cuando exista un año original verificado/);
   assert.match(song.rules.join(' '), /canción moderna o sin año original verificado/);
+  assert.match(album.referenceTemplate, /solo cuando exista un año original verificado/);
+  assert.match(album.parentheticalCitation, /si no, \(Compositor, Año versión\)/);
+  assert.match(album.rules.join(' '), /año original no está verificado/);
   assert.match(podcast.requiredMetadata.join(' '), /lista completa/);
   assert.match(podcast.parentheticalCitation, /tres o más responsables/);
   const podcastEpisode = JSON.parse((await handler({ topic: 'reference', caseId: 'podcast-episode' })).content[0].text).case;
