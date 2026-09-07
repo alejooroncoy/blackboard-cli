@@ -64,7 +64,6 @@ export async function startMcpServer() {
   registerBlackboardTools(server);
   registerBannerTools(server);
   registerUclassTools(server);
-
   const transport = new StdioServerTransport();
   await server.connect(transport);
 }

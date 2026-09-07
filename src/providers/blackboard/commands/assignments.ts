@@ -5,9 +5,9 @@ import path from 'path';
 import fs from 'fs';
 import { loadSession, isSessionValid } from '../auth/session.js';
 import { createClient } from '../api/client.js';
-import { getMe, getMyCourses } from '../api/courses.js';
+import { getMe, getMyCourses, getGrades } from '../api/courses.js';
 import {
-  listAssignments,
+  listPublishedAssignments,
   listAttempts,
   getAttempt,
   uploadFile,
@@ -42,8 +42,24 @@ function dueStatus(due?: string) {
   return chalk.gray(` (vence en ${days}d)`);
 }
 
-export function isPendingAssignment(grade: any) {
-  return grade?.displayGrade?.score == null && grade?.score == null && grade?.status !== 'NeedsGrading';
+export function isPendingAssignment(grade: any, groupAttemptStatus?: string, groupAttemptStateKnown = true) {
+  const submittedGroupAttempt = groupAttemptStatus === 'NeedsGrading'
+    || groupAttemptStatus === 'Completed'
+    || groupAttemptStatus === 'NeedsGradingAgain';
+  return grade?.displayGrade?.score == null
+    && grade?.score == null
+    && grade?.status !== 'NeedsGrading'
+    && !submittedGroupAttempt
+    && groupAttemptStateKnown;
+}
+
+export function getCurrentGroupAttempt<T extends { created?: string; status?: string }>(groupAttempts?: T[]): T | undefined {
+  return groupAttempts?.reduce((current, candidate) => {
+    if (!current) return candidate;
+    const currentTime = current.created ? new Date(current.created).getTime() : Number.NEGATIVE_INFINITY;
+    const candidateTime = candidate.created ? new Date(candidate.created).getTime() : Number.NEGATIVE_INFINITY;
+    return candidateTime > currentTime ? candidate : current;
+  }, undefined as T | undefined);
 }
 
 function getGradeScore(grade: any) {
@@ -58,9 +74,14 @@ function formatAssignment(col: any, grade: any, opts: { pending?: boolean; cours
   const attemptsAllowed = col.grading?.attemptsAllowed === 0
     ? 'ilimitados'
     : `${col.grading?.attemptsAllowed ?? '?'} intento(s)`;
-  const type = col.grading?.type === 'Manual' ? chalk.gray('[manual]') : '';
+  const type = col.gradebookAccess === 'restricted'
+    ? chalk.yellow('[visible en contenido; notas restringidas]')
+    : col.grading?.type === 'Manual' ? chalk.gray('[manual]') : '';
 
-  let gradeStr = chalk.gray('sin entregar');
+  const groupAttempt = getCurrentGroupAttempt(col.groupAttempts);
+  let gradeStr = col.gradebookAccess === 'restricted'
+    ? chalk.yellow(groupAttempt ? `grupo: ${groupAttempt.status}` : 'estado de entrega no disponible')
+    : chalk.gray('sin entregar');
   const score = getGradeScore(grade);
   if (score != null) {
     const pct = possible !== '?' ? Math.round((score / Number(possible)) * 100) : null;
@@ -70,7 +91,7 @@ function formatAssignment(col: any, grade: any, opts: { pending?: boolean; cours
     gradeStr = chalk.yellow('entregada — pendiente de nota');
   }
 
-  if (opts.pending && !isPendingAssignment(grade)) return false;
+  if (opts.pending && !isPendingAssignment(grade, groupAttempt?.status, col.groupAttemptsAccess !== 'restricted')) return false;
 
   const coursePrefix = opts.courseName ? `${chalk.gray(`[${opts.courseName}] `)}` : '';
   console.log(
@@ -80,6 +101,9 @@ function formatAssignment(col: any, grade: any, opts: { pending?: boolean; cours
     `    Nota: ${gradeStr}  ·  Máx: ${possible} pts  ·  ${attemptsAllowed}` +
     (due ? `  ·  Entrega: ${formatDate(due)}${dueStatus(due)}` : '')
   );
+  if (col.gradebookAccess === 'restricted' && !groupAttempt) {
+    console.log(chalk.yellow('    Blackboard la publica en el curso, pero no permite consultar su estado o nota por API.'));
+  }
   console.log('');
   return true;
 }
@@ -109,13 +133,13 @@ export function assignmentsCommand(program: Command) {
 
         const loadCourseAssignments = async (id: string, name?: string) => {
           const [columns, gradesRes] = await Promise.all([
-            listAssignments(client, id),
-            client
-              .get(`/learn/api/public/v1/courses/${id}/gradebook/users/${userId}`, {
-                params: { limit: 200 },
-              })
-              .then((r) => r.data.results as any[])
-              .catch(() => [] as any[]),
+            listPublishedAssignments(client, id),
+            getGrades(client, id, userId!, { limit: 200 })
+              .then((grades) => grades.results)
+              .catch((err: any) => {
+                if (err.response?.status === 403) return [] as any[];
+                throw err;
+              }),
           ]);
           return { courseId: id, courseName: name ?? id, columns, gradesRes };
         };
@@ -164,7 +188,7 @@ export function assignmentsCommand(program: Command) {
                 courseName: r.courseName,
                 assignments: r.columns.filter((col) => {
                   const grade = gradeMap.get(col.id) ?? null;
-                  return !opts.pending || isPendingAssignment(grade);
+                  return !opts.pending || isPendingAssignment(grade, getCurrentGroupAttempt(col.groupAttempts)?.status, col.groupAttemptsAccess !== 'restricted');
                 }),
               };
             });
@@ -207,7 +231,7 @@ export function assignmentsCommand(program: Command) {
           const gradeMap = new Map(gradesRes.map((g: any) => [g.columnId, g]));
           const filtered = columns.filter((col) => {
             const grade = gradeMap.get(col.id) ?? null;
-            return !opts.pending || isPendingAssignment(grade);
+            return !opts.pending || isPendingAssignment(grade, getCurrentGroupAttempt(col.groupAttempts)?.status, col.groupAttemptsAccess !== 'restricted');
           });
           console.log(JSON.stringify(filtered, null, 2));
           return;
