@@ -34,6 +34,9 @@ test('pending filter includes only assignments without a score or submitted atte
   assert.equal(isPendingAssignment({ displayGrade: { score: 15 } }), false);
   assert.equal(isPendingAssignment({ score: 15 }), false);
   assert.equal(isPendingAssignment({ status: 'NeedsGrading' }), false);
+  assert.equal(isPendingAssignment(null, 'NeedsGrading'), false);
+  assert.equal(isPendingAssignment(null, 'Completed'), false);
+  assert.equal(isPendingAssignment(null, 'InProgress'), true);
 });
 
 test('published group assessment is listed when its gradebook column is restricted', async () => {
@@ -65,4 +68,38 @@ test('published group assessment is listed when its gradebook column is restrict
     groupAttempts: [{ id: '_attempt_1', groupId: '_group_1', status: 'InProgress' }],
   }]);
   assert.equal(requested.filter((url) => url.includes('_restricted_column_1')).length, 1);
+});
+
+test('published assessment discovery follows content pages and ignores hidden folders', async () => {
+  const client = {
+    get: async (url: string) => {
+      if (url.endsWith('/gradebook/columns')) return { data: { results: [] } };
+      if (url.endsWith('/contents')) {
+        return {
+          data: {
+            results: [{ id: '_hidden_1', title: 'Hidden', hasChildren: true, availability: { available: 'No' } }],
+            paging: { nextPage: '/learn/api/public/v1/courses/_course_1/contents?offset=100' },
+          },
+        };
+      }
+      if (url.endsWith('/contents?offset=100')) {
+        return {
+          data: {
+            results: [{
+              id: '_content_2', title: 'Later activity', hasGradebookColumns: true,
+              availability: { available: 'Yes' }, contentHandler: { gradeColumnId: '_column_2' },
+            }],
+          },
+        };
+      }
+      if (url.endsWith('/gradebook/columns/_column_2/groupAttempts')) return { data: { results: [] } };
+      if (url.endsWith('/contents/_hidden_1/children')) throw new Error('Hidden folder must not be visited');
+      throw new Error(`Unexpected request: ${url}`);
+    },
+  } as any;
+
+  const assignments = await listPublishedAssignments(client, '_course_1');
+
+  assert.equal(assignments.length, 1);
+  assert.equal(assignments[0].name, 'Later activity');
 });

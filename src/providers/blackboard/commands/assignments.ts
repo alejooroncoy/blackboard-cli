@@ -42,8 +42,14 @@ function dueStatus(due?: string) {
   return chalk.gray(` (vence en ${days}d)`);
 }
 
-export function isPendingAssignment(grade: any) {
-  return grade?.displayGrade?.score == null && grade?.score == null && grade?.status !== 'NeedsGrading';
+export function isPendingAssignment(grade: any, groupAttemptStatus?: string) {
+  const submittedGroupAttempt = groupAttemptStatus === 'NeedsGrading'
+    || groupAttemptStatus === 'Completed'
+    || groupAttemptStatus === 'NeedsGradingAgain';
+  return grade?.displayGrade?.score == null
+    && grade?.score == null
+    && grade?.status !== 'NeedsGrading'
+    && !submittedGroupAttempt;
 }
 
 function getGradeScore(grade: any) {
@@ -75,7 +81,7 @@ function formatAssignment(col: any, grade: any, opts: { pending?: boolean; cours
     gradeStr = chalk.yellow('entregada — pendiente de nota');
   }
 
-  if (opts.pending && !isPendingAssignment(grade)) return false;
+  if (opts.pending && !isPendingAssignment(grade, groupAttempt?.status)) return false;
 
   const coursePrefix = opts.courseName ? `${chalk.gray(`[${opts.courseName}] `)}` : '';
   console.log(
@@ -172,7 +178,7 @@ export function assignmentsCommand(program: Command) {
                 courseName: r.courseName,
                 assignments: r.columns.filter((col) => {
                   const grade = gradeMap.get(col.id) ?? null;
-                  return !opts.pending || isPendingAssignment(grade);
+                  return !opts.pending || isPendingAssignment(grade, col.groupAttempts?.[0]?.status);
                 }),
               };
             });
@@ -215,7 +221,7 @@ export function assignmentsCommand(program: Command) {
           const gradeMap = new Map(gradesRes.map((g: any) => [g.columnId, g]));
           const filtered = columns.filter((col) => {
             const grade = gradeMap.get(col.id) ?? null;
-            return !opts.pending || isPendingAssignment(grade);
+            return !opts.pending || isPendingAssignment(grade, col.groupAttempts?.[0]?.status);
           });
           console.log(JSON.stringify(filtered, null, 2));
           return;

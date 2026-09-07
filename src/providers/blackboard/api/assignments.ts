@@ -106,24 +106,36 @@ export async function listPublishedAssignments(
 
   while (parents.length > 0) {
     const parentId = parents.shift();
-    const page = await getCourseContents(client, courseId, parentId);
+    let page = await getCourseContents(client, courseId, parentId);
 
-    for (const item of page.results as CourseContentItem[]) {
-      if (visited.has(item.id)) continue;
-      visited.add(item.id);
-      if (item.hasChildren) parents.push(item.id);
+    while (true) {
+      for (const item of page.results as CourseContentItem[]) {
+        if (visited.has(item.id)) continue;
+        visited.add(item.id);
 
-      const columnId = item.contentHandler?.gradeColumnId;
-      if (item.availability?.available === 'No' || !item.hasGradebookColumns || !columnId || readableColumnIds.has(columnId)) continue;
+        const isAvailable = item.availability?.available !== 'No';
+        if (isAvailable && item.hasChildren) parents.push(item.id);
 
-      restricted.push({
-        id: columnId,
-        name: item.title,
-        contentId: item.id,
-        grading: { type: 'Attempts' },
-        gradebookAccess: 'restricted',
-        hasAssociatedGroups: item.hasAssociatedGroups,
-      });
+        const columnId = item.contentHandler?.gradeColumnId;
+        if (!isAvailable || !item.hasGradebookColumns || !columnId || readableColumnIds.has(columnId)) continue;
+
+        restricted.push({
+          id: columnId,
+          name: item.title,
+          contentId: item.id,
+          grading: { type: 'Attempts' },
+          gradebookAccess: 'restricted',
+          hasAssociatedGroups: item.hasAssociatedGroups,
+        });
+      }
+
+      const nextPage = page.paging?.nextPage as string | undefined;
+      if (!nextPage) break;
+      const expectedPrefix = `/learn/api/public/v1/courses/${courseId}/contents`;
+      if (!nextPage.startsWith(expectedPrefix)) {
+        throw new Error('Refusing an unexpected Blackboard content page');
+      }
+      page = (await client.get(nextPage)).data;
     }
   }
 
