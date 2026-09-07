@@ -51,7 +51,7 @@ test('APA 7 case contracts guard optional metadata and every author cardinality'
 
 test('APA 7 quick reference never leaves a book URL or DOI as an unconditional placeholder', async () => {
   const quickReference = await readFile('.agents/skills/apa7-campus/references/apa7-quick-reference.md', 'utf8');
-  assert.match(quickReference, /Con DOI o URL pública:/);
+  assert.match(quickReference, /\| Libro \| Con DOI:.*https:\/\/doi\.org\/xxxxx`; sin DOI con URL pública:/);
   assert.match(quickReference, /impreso o en base académica común sin localizador:/);
   assert.match(quickReference, /Artículo científico \| Con DOI:.*sin DOI con URL pública:.*impreso o base académica común sin localizador:/);
   assert.match(quickReference, /Artículo con eLocator.*https:\/\/doi\.org\/xxxxx/);
