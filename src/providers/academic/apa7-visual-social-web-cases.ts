@@ -64,8 +64,8 @@ export const visualSocialWebCases: Record<VisualSocialWebCaseId, Apa7VerifiedVis
   'clip-art-or-stock-image': {
     ...visualBase, id: 'clip-art-or-stock-image', label: 'Clip art o imagen de stock', manualExample: 98, manualPrintedPages: '352-353',
     requiredMetadata: ['creador o entidad', 'año', 'título o descripción', 'tipo clip art/imagen de stock', 'sitio', 'URL'],
-    referenceTemplate: 'Autor o entidad. (Año). Título o descripción [Clip art o Imagen de stock]. Sitio. URL',
-    rules: ['Este formato sirve para citar, no necesariamente para autorizar la reproducción.', 'Clip art incluido en programas como Microsoft Word o PowerPoint no requiere cita, permiso ni atribución.', 'Otras imágenes de stock pueden requerir permiso o atribución de derechos para reproducirse.'],
+    referenceTemplate: 'Con título: Autor o entidad. (Año). Título [Clip art o Imagen de stock]. Sitio. URL. Sin título: Autor o entidad. (Año). [Descripción de la imagen de stock]. Sitio. URL',
+    rules: ['Si no hay título, la descripción lo reemplaza en una sola expresión entre corchetes; no añade un segundo corchete de formato.', 'Este formato sirve para citar, no necesariamente para autorizar la reproducción.', 'Clip art incluido en programas como Microsoft Word o PowerPoint no requiere cita, permiso ni atribución.', 'Otras imágenes de stock pueden requerir permiso o atribución de derechos para reproducirse.'],
   },
   infographic: {
     ...visualBase, id: 'infographic', label: 'Infografía', manualExample: 99, manualPrintedPages: '353',

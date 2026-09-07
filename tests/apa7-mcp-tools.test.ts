@@ -110,9 +110,13 @@ test('reference templates preserve APA italics with explicit Markdown notation',
   }
 
   const report = JSON.parse((await handler({ topic: 'reference', sourceType: 'report' })).content[0].text);
+  const journal = JSON.parse((await handler({ topic: 'reference', sourceType: 'journal-article' })).content[0].text);
   assert.match(report.template, /N.º de informe xxx, solo si existe/);
   assert.match(report.template, /omite por completo ese paréntesis/);
   assert.match(report.template, /solo si difiere del autor/);
+  assert.match(journal.template, /Sin autor acreditado: Título del artículo\. \(Año\)/);
+  assert.match(journal.template, /\("Título abreviado", Año\)/);
+  assert.match(journal.template, /“Título abreviado” \(Año\)/);
   const webpage = JSON.parse((await handler({ topic: 'reference', sourceType: 'webpage' })).content[0].text);
   assert.match(webpage.template, /\(Año\), \(Año, mes\), \(Año, día de mes\) o \(s\. f\.\)/);
   assert.match(webpage.template, /No inventes mes ni día/);
@@ -182,8 +186,12 @@ test('APA 7 case formatting distinguishes blog and untitled visual works', async
   for (const caseId of ['artwork-museum-or-museum-site', 'clip-art-or-stock-image', 'map', 'photograph', 'slides-or-lecture-notes']) {
     const formatting = JSON.parse((await handler({ topic: 'reference', caseId })).content[0].text).case.referenceFormatting;
     assert.match(formatting.italicize.join(' '), /título real/);
-    assert.match(formatting.doNotItalicize.join(' '), /descripción entre corchetes/, caseId);
+    assert.match(formatting.italicize.join(' '), /descripción entre corchetes que reemplaza/, caseId);
+    assert.match(formatting.doNotItalicize.join(' '), /descripción de medio o formato/, caseId);
   }
+  const stockImage = JSON.parse((await handler({ topic: 'reference', caseId: 'clip-art-or-stock-image' })).content[0].text).case;
+  assert.match(stockImage.referenceTemplate, /Sin título:.*\[Descripción de la imagen de stock\]/);
+  assert.match(stockImage.rules.join(' '), /no añade un segundo corchete/);
 });
 
 test('APA 7 guidance keeps unresolved placeholders out of final references', async () => {
