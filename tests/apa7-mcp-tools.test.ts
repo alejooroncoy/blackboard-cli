@@ -160,6 +160,7 @@ test('reference templates preserve APA italics with explicit Markdown notation',
   assert.match(chapter.template, /G\. Editor \(Eds\.\)/);
   assert.match(thesis.template, /Inédita:.*En base de datos:.*En repositorio:/);
   assert.match(thesis.template, /N.º de publicación, solo si existe/);
+  assert.doesNotMatch(thesis.template, /URL\./);
 });
 
 test('APA 7 catalogues only advertise selectors accepted by their topic', async () => {
@@ -554,6 +555,8 @@ test('APA 7 guidance covers every legal-reference section 11.1 through 11.12', a
   assert.match(rules.find(rule => rule.id === 'legal-versus-apa').rules.join(' '), /citaciones paralelas/);
   assert.match(rules.find(rule => rule.id === 'legal-in-text-citation').rules.join(' '), /título y año/);
   assert.match(rules.find(rule => rule.id === 'mexico-examples').peruApplicability.join(' '), /No aplicable por analogía/);
+  assert.doesNotMatch(rules.find(rule => rule.id === 'court-cases').referenceTreatment.join(' '), /URL\./);
+  assert.doesNotMatch(rules.find(rule => rule.id === 'patents').referenceTreatment.join(' '), /URL\./);
 });
 
 test('Campus exposes citation and reference handling for every Peruvian legal case', async () => {
@@ -930,15 +933,17 @@ test('APA 7 electronic books omit audiobook-only fields unless applicable', asyn
   registerAcademicTools({ registerTool(_n: string, _c: unknown, h: unknown) { handler = h; } } as any);
   const electronic = JSON.parse((await handler({ topic: 'reference', caseId: 'book-author-electronic-public-url' })).content[0].text).case;
   const editedElectronic = JSON.parse((await handler({ topic: 'reference', caseId: 'book-edited-electronic-public-url' })).content[0].text).case;
-  assert.match(electronic.referenceTemplate, /Libro electrónico:.*Editorial\. URL\. Audiolibro:/);
+  assert.match(electronic.referenceTemplate, /Libro electrónico:.*Editorial\. URL\nAudiolibro:/);
   assert.match(electronic.referenceTemplate, /Libro electrónico:.*\(edición, solo desde la segunda\)/);
   assert.match(electronic.referenceTemplate, /Audiolibro:.*N\. Narrador, Narr\.;.*edición, solo desde la segunda/);
   assert.match(electronic.referenceTemplate, /dos: N\. Narrador & O\. Narrador, Narrs\./);
   assert.match(electronic.rules.join(' '), /únicamente cuando la versión consultada es un audiolibro/);
-  assert.match(editedElectronic.referenceTemplate, /Libro electrónico:.*Editorial\. URL\. Audiolibro:/);
+  assert.match(editedElectronic.referenceTemplate, /Libro electrónico:.*Editorial\. URL\nAudiolibro:/);
   assert.match(editedElectronic.referenceTemplate, /Audiolibro:.*N\. Narrador, Narr\.;.*edición, solo desde la segunda/);
   assert.match(editedElectronic.referenceTemplate, /21 o más: narradores 1–19/);
   assert.match(editedElectronic.requiredMetadata.join(' '), /narrador solo para audiolibro/);
+  assert.doesNotMatch(electronic.referenceTemplate, /URL\./);
+  assert.doesNotMatch(editedElectronic.referenceTemplate, /URL\./);
 });
 
 test('APA 7 standard journals preserve every credited author', async () => {

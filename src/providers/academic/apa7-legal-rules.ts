@@ -67,7 +67,7 @@ export const legalRules: Record<LegalRuleId, Apa7VerifiedLegalRule> = {
     id: 'court-cases', label: 'Casos o fallos de tribunales', manualSection: '11.4', manualPrintedPages: '363-367', jurisdiction: 'United States',
     rules: ['Incluye nombre del caso, citación al relator o registro, tribunal que decidió, fecha y URL opcional.', 'Si hay número de página del fallo, usa solo la primera página, no el rango completo.', 'El nombre del caso va en tipografía estándar en la referencia y en cursiva en la cita en el texto.', 'Una apelación puede exigir historia procesal y años separados por una diagonal.', 'Las citaciones paralelas se conservan juntas.'],
     citationTreatment: ['Parentética: (Nombre vs. Nombre, Año).', 'Narrativa: Nombre vs. Nombre (Año).'],
-    referenceTreatment: ['Plantilla estadounidense: Nombre vs. Nombre, volumen Relator página (Tribunal año). URL.'],
+    referenceTreatment: ['Plantilla estadounidense: Nombre vs. Nombre, volumen Relator página (Tribunal año). URL'],
     peruApplicability: ['Sustituye el relator estadounidense por el identificador oficial peruano: expediente, casación o número de sentencia, órgano y sala, fecha y URL oficial.'],
   }),
   'statutes-laws-decrees': verified({
@@ -95,7 +95,7 @@ export const legalRules: Record<LegalRuleId, Apa7VerifiedLegalRule> = {
     id: 'patents', label: 'Patentes', manualSection: '11.8', manualPrintedPages: '373', jurisdiction: 'general',
     rules: ['Una patente sigue el orden APA autor/inventor, año, título, número y fuente.', 'Usa el año de expedición o concesión, no el de solicitud.', 'El número de patente es un identificador único.', 'La URL es opcional pero útil cuando es oficial y recuperable.'],
     citationTreatment: ['La cita autor-fecha usa inventor o inventores y año de expedición.'],
-    referenceTreatment: ['Plantilla: Inventor, A. A. (Año de expedición). Título (Patente de país N.º ...). Oficina de patentes. URL.'],
+    referenceTreatment: ['Plantilla: Inventor, A. A. (Año de expedición). Título (Patente de país N.º ...). Oficina de patentes. URL'],
     peruApplicability: ['Verifica solicitante/inventor, título, número, estado y fechas en la Gaceta Electrónica de Propiedad Industrial de Indecopi.'],
   }),
   'constitutions-charters': verified({
