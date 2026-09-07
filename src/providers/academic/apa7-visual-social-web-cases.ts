@@ -86,7 +86,7 @@ export const visualSocialWebCases: Record<VisualSocialWebCaseId, Apa7VerifiedVis
   photograph: {
     ...visualBase, id: 'photograph', label: 'Fotografía fuera de un museo', manualExample: 101, manualPrintedPages: '353',
     requiredMetadata: ['fotógrafo', 'año', 'título o descripción', 'descripción fotografía', 'sitio', 'URL'],
-    referenceTemplate: 'Con título: Fotógrafo, A. A. (Año). Título [Fotografía]. Nombre del sitio. URL. Sin título: Fotógrafo, A. A. (Año). [Fotografía de descripción]. Nombre del sitio. URL',
+    referenceTemplate: 'Con título: Fotógrafo, A. A. (Año). Título [Fotografía]. Nombre del sitio. URL\nSin título: Fotógrafo, A. A. (Año). [Fotografía de descripción]. Nombre del sitio. URL',
     parentheticalCitation: '(Fotógrafo, Año)', narrativeCitation: 'Fotógrafo (Año)',
     rules: ['La fuente es el nombre del sitio que aloja la fotografía.', 'Si carece de título, usa una sola descripción combinada entre corchetes, como [Fotografía de descripción].', 'Reproducirla puede exigir permiso o atribución de derechos además de la cita.'],
   },

@@ -50,7 +50,9 @@ export const dataSoftwareTestCases: Record<DataSoftwareTestCaseId, Apa7VerifiedD
   'dataset-published': {
     ...dataBase, id: 'dataset-published', label: 'Conjunto de datos publicado', manualExample: 75, manualPrintedPages: '344',
     requiredMetadata: ['autores o entidad', 'año de publicación', 'título', 'identificador y versión si existen', 'descripción del conjunto', 'organización publicadora/archivo si difiere del autor', 'DOI o URL pública', 'fecha de recuperación si el conjunto cambia con el tiempo'],
-    referenceTemplate: `${completePersonalAuthors} o Entidad autora. (Año). Elige una sola forma de título: Título del conjunto; Título del conjunto (Identificador); Título del conjunto (Versión x); o Título del conjunto (Identificador; Versión x), seguido sin punto por [Conjunto de datos y libro de códigos, si corresponde]. Organización o archivo, solo si difiere del autor. Estable: Con DOI: https://doi.org/xxxxx. Con URL pública sin DOI: URL. Cambiante: Recuperado el día de mes de año, de URL.`,
+    referenceTemplate: `${completePersonalAuthors} o Entidad autora. (Año). Elige una sola forma de título: Título del conjunto; Título del conjunto (Identificador); Título del conjunto (Versión x); o Título del conjunto (Identificador; Versión x), seguido sin punto por [Conjunto de datos y libro de códigos, si corresponde]. Organización o archivo, solo si difiere del autor. Estable con DOI: https://doi.org/xxxxx
+Estable con URL pública sin DOI: URL
+Cambiante: Recuperado el día de mes de año, de URL`,
     rules: [completePersonalAuthorRule, 'Prefiere DOI y exprésalo como URL completa https://doi.org/...; usa URL pública solo si no existe DOI.', 'Cita el conjunto cuando realizas análisis secundarios de datos públicos o archivas datos propios presentados por primera vez.', 'Incluye entre paréntesis únicamente el identificador y/o la versión que realmente existan; omite todo el paréntesis si no existe ninguno.', 'Incluye fecha de recuperación solo si el conjunto está diseñado para cambiar con el tiempo.'],
   },
   'raw-data-unpublished': {

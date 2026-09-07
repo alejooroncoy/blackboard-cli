@@ -975,7 +975,7 @@ test('APA 7 standard journals preserve every credited author', async () => {
   assert.match(inPress.rules.join(' '), /no lo sustituye por datos periódicos aún no publicados/);
   const reprint = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-reprint' })).content[0].text).case;
   assert.match(reprint.referenceTemplate, /Reimpresión en libro: En .*Libro de la reimpresión \(pp\. xx-xx\)\. Editorial/);
-  assert.match(reprint.referenceTemplate, /Revista original, volumen\[número\], páginas o eLocator/);
+  assert.match(reprint.referenceTemplate, /Revista original, volumen\(número\), páginas o eLocator/);
   assert.match(reprint.referenceTemplate, /con DOI: https:\/\/doi\.org\/xxxxx/);
   assert.match(reprint.rules.join(' '), /editores, páginas y editorial/);
   assert.match(reprint.referenceFormatting.italicize.join(' '), /título del libro de la reimpresión consultada/);
@@ -1260,7 +1260,8 @@ test('APA 7 guidance covers datasets, software and tests through example 83', as
   assert.match(dataset.referenceTemplate, /Título del conjunto \(Identificador\); Título del conjunto \(Versión x\); o Título del conjunto \(Identificador; Versión x\)/);
   assert.match(dataset.rules.join(' '), /omite todo el paréntesis si no existe ninguno/);
   assert.match(dataset.requiredMetadata.join(' '), /organización publicadora\/archivo si difiere del autor/);
-  assert.match(dataset.referenceTemplate, /Con DOI: https:\/\/doi\.org\/xxxxx/);
+  assert.match(dataset.referenceTemplate, /Estable con DOI: https:\/\/doi\.org\/xxxxx/);
+  assert.doesNotMatch(dataset.referenceTemplate, /(?:URL|https:\/\/doi\.org\/xxxxx)\./);
   assert.match(dataset.rules.join(' '), /Prefiere DOI/);
   const foreignJournal = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-other-language' })).content[0].text).case;
   assert.match(foreignJournal.referenceTemplate, /Sin volumen: Revista, \(número\), páginas o eLocator/);
@@ -1411,6 +1412,7 @@ test('APA 7 guidance covers visual, social and web works through example 114', a
   const photograph = JSON.parse((await handler({ topic: 'reference', caseId: 'photograph' })).content[0].text).case;
   assert.match(photograph.referenceTemplate, /\[Fotografía de descripción\]/);
   assert.doesNotMatch(photograph.referenceTemplate, /\[Descripción\] \[Fotografía\]/);
+  assert.doesNotMatch(photograph.referenceTemplate, /URL\./);
   assert.match(slides.referenceTemplate, /\[Diapositivas de PowerPoint o Notas de conferencia sobre descripción\]/);
   assert.match(tweet.rules.join(' '), /Cada emoji cuenta como una palabra/);
   assert.match(tweet.referenceTemplate, /Plataforma verificada/);
