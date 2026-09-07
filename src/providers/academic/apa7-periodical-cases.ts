@@ -133,9 +133,9 @@ export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   'journal-special-section-issue': {
     ...base, id: 'journal-special-section-issue', label: 'Sección especial o edición especial', manualExample: 12, manualPrintedPages: '325',
     requiredMetadata: ['editores', 'año', 'título', 'tipo sección/edición', 'revista', 'volumen/número', 'páginas si es sección', 'DOI o URL pública si corresponde'],
-    referenceTemplate: `${completePeriodicalEditors}. (Año). Título [Sección especial o Edición especial]. Revista, volumen(número), páginas solo si corresponde. Con DOI: añade DOI al final. Con URL pública sin DOI: añade URL al final. Impreso o base académica común sin localizador: termina después de los datos periódicos.`,
+    referenceTemplate: `${completePeriodicalEditors}. (Año). Título [Sección especial o Edición especial]. Revista, volumen(número), páginas solo si corresponde. Con DOI: añade https://doi.org/xxxxx al final. Con URL pública sin DOI: añade URL al final. Impreso o base académica común sin localizador: termina después de los datos periódicos.`,
     parentheticalCitation: '(Editor, Año); (Editor & Editor, Año); (Primer editor et al., Año) con tres o más editores', narrativeCitation: 'Editor (Año); Editor y Editor (Año); Primer editor et al. (Año) con tres o más editores',
-    rules: ['Incluye la lista completa de editores y usa (Ed.) para uno o (Eds.) para varios.', 'Incluye páginas para una sección especial, no para una edición especial completa.', 'Prefiere DOI; usa URL pública si no hay DOI y omite ambos en una versión impresa o base académica común sin localizador.', 'Un artículo individual dentro del especial usa el formato normal de artículo.'],
+    rules: ['Incluye la lista completa de editores y usa (Ed.) para uno o (Eds.) para varios.', 'Incluye páginas para una sección especial, no para una edición especial completa.', 'Prefiere DOI y exprésalo como URL completa https://doi.org/...; usa URL pública si no hay DOI y omite ambos en una versión impresa o base académica común sin localizador.', 'Un artículo individual dentro del especial usa el formato normal de artículo.'],
   },
   'journal-cochrane': {
     ...base, id: 'journal-cochrane', label: 'Artículo de Cochrane Database of Systematic Reviews', manualExample: 13, manualPrintedPages: '325',
