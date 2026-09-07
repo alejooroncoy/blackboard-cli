@@ -60,9 +60,9 @@ const titlePositionTranslators = 'Un traductor: A. Traductor, Trad.; dos: A. Tra
 export const periodicalCases: Record<PeriodicalCaseId, Apa7VerifiedCase> = {
   'journal-doi': {
     ...base, id: 'journal-doi', label: 'Artículo de revista científica con DOI', manualExample: 1, manualPrintedPages: '323',
-    requiredMetadata: ['autores', 'año', 'título del artículo', 'revista', 'volumen/número/páginas o eLocator si existen', 'DOI verificado'],
-    referenceTemplate: `${completeAuthorList} (Año). Título del artículo. Con volumen, número y páginas/eLocator: Título de la revista, volumen(número), páginas o eLocator. Sin número: Título de la revista, volumen, páginas o eLocator. Sin volumen: Título de la revista, (número), páginas o eLocator. Sin volumen ni número: Título de la revista, páginas o eLocator; omite también páginas/eLocator si no existen. https://doi.org/xxxxx`,
-    parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores',
+    requiredMetadata: ['autores si se acreditan', 'año', 'título del artículo', 'revista', 'volumen/número/páginas o eLocator si existen', 'DOI verificado'],
+    referenceTemplate: `Con autor: ${completeAuthorList} (Año). Título del artículo. Sin autor acreditado: Título del artículo. (Año). En ambos casos: Con volumen, número y páginas/eLocator: Título de la revista, volumen(número), páginas o eLocator. Sin número: Título de la revista, volumen, páginas o eLocator. Sin volumen: Título de la revista, (número), páginas o eLocator. Sin volumen ni número: Título de la revista, páginas o eLocator; omite también páginas/eLocator si no existen. https://doi.org/xxxxx`,
+    parentheticalCitation: '(Autor, Año); (Autor & Autor, Año); (Primer autor et al., Año) con tres o más autores. Sin autor: (“Título abreviado”, Año)', narrativeCitation: 'Autor (Año); Autor y Autor (Año); Primer autor et al. (Año) con tres o más autores. Sin autor: “Título abreviado” (Año)',
     rules: [completeAuthorRule, 'El DOI se expresa como URL https://doi.org/...', 'Se omiten los elementos que realmente no existen.'],
   },
   'journal-no-doi-public-url': {
