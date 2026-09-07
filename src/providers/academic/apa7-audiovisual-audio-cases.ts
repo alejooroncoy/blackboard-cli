@@ -79,7 +79,7 @@ export const audiovisualAudioCases: Record<AudiovisualAudioCaseId, Apa7VerifiedA
   'ted-talk': {
     ...audiovisualBase, id: 'ted-talk', label: 'Charla TED', manualExample: 88, manualPrintedPages: '349-350',
     requiredMetadata: ['sitio donde se consultó', 'orador o cuenta que subió el video', 'fecha disponible', 'título', 'plataforma/productora', 'URL'],
-    referenceTemplate: 'En TED: Orador, A. A. (Año, mes). Título [Video]. TED Conferences. URL. En YouTube: Cuenta que subió. (Año, día de mes). Título [Video]. YouTube. URL',
+    referenceTemplate: 'En TED: Orador, A. A. (Año, mes). Título [Video]. TED Conferences. URL\nEn YouTube: Cuenta que subió. (Año, día de mes). Título [Video]. YouTube. URL',
     parentheticalCitation: '(Orador, Año) si está en TED; (Cuenta, Año) si está en YouTube', narrativeCitation: 'Orador (Año) si está en TED; Cuenta (Año) si está en YouTube',
     rules: ['En la web de TED, el orador es autor.', 'En YouTube, el dueño de la cuenta que subió el video es autor; el orador puede mencionarse narrativamente sin cambiar la cita.'],
   },
@@ -128,7 +128,7 @@ export const audiovisualAudioCases: Record<AudiovisualAudioCaseId, Apa7VerifiedA
   'archived-radio-interview': {
     ...audioBase, id: 'archived-radio-interview', label: 'Grabación de entrevista de radio en archivo', manualExample: 95, manualPrintedPages: '352',
     requiredMetadata: ['persona entrevistada', 'fecha completa', 'título', 'descripción entrevista', 'archivo', 'institución/museo si corresponde', 'URL si existe'],
-    referenceTemplate: 'Archivo digital: Entrevistado, A. A. (Año, día de mes). Título [Entrevista]. Archivo; Institución o museo, solo si corresponde. URL. Archivo físico sin URL: Entrevistado, A. A. (Año, día de mes). Título [Entrevista]. Archivo; Institución o museo, solo si corresponde.',
+    referenceTemplate: 'Archivo digital: Entrevistado, A. A. (Año, día de mes). Título [Entrevista]. Archivo; Institución o museo, solo si corresponde. URL\nArchivo físico sin URL: Entrevistado, A. A. (Año, día de mes). Título [Entrevista]. Archivo; Institución o museo, solo si corresponde.',
     parentheticalCitation: '(Entrevistado, Año)', narrativeCitation: 'Entrevistado (Año)',
     rules: ['En entrevistas recuperadas desde archivos digitales o físicos, la persona entrevistada ocupa la posición de autor.', 'Para una colección física, omite URL e institución/museo cuando esos elementos no existan.'],
   },

@@ -64,7 +64,7 @@ export const visualSocialWebCases: Record<VisualSocialWebCaseId, Apa7VerifiedVis
   'clip-art-or-stock-image': {
     ...visualBase, id: 'clip-art-or-stock-image', label: 'Clip art o imagen de stock', manualExample: 98, manualPrintedPages: '352-353',
     requiredMetadata: ['procedencia confirmada: clip art incluido en el programa o imagen externa', 'para imagen externa: creador o entidad, año, título o descripción, tipo, sitio y URL'],
-    referenceTemplate: 'Clip art incluido y confirmado en Word, PowerPoint u otro programa equivalente: no requiere referencia. Imagen externa con título: Autor o entidad. (Año). Título [Clip art o Imagen de stock]. Sitio. URL. Imagen externa sin título: Autor o entidad. (Año). [Descripción de la imagen de stock]. Sitio. URL',
+    referenceTemplate: 'Clip art incluido y confirmado en Word, PowerPoint u otro programa equivalente: no requiere referencia.\nImagen externa con título: Autor o entidad. (Año). Título [Clip art o Imagen de stock]. Sitio. URL\nImagen externa sin título: Autor o entidad. (Año). [Descripción de la imagen de stock]. Sitio. URL',
     parentheticalCitation: 'Clip art incluido y confirmado: no requiere cita autor-fecha. Imagen externa: (Autor o entidad, Año)', narrativeCitation: 'Clip art incluido y confirmado: no requiere cita narrativa. Imagen externa: Autor o entidad (Año)',
     rules: ['Si no hay título, la descripción lo reemplaza en una sola expresión entre corchetes; no añade un segundo corchete de formato.', 'El clip art incluido y confirmado en programas como Microsoft Word o PowerPoint no requiere cita, permiso ni atribución ni datos bibliográficos.', 'Esta excepción no cubre una imagen descargada de internet, una imagen de stock externa ni material de terceros incorporado al programa.', 'Otras imágenes de stock pueden requerir permiso o atribución de derechos para reproducirse.'],
     refuseWhen: ['No se confirmó la procedencia: clip art incluido o imagen externa.', 'Para una imagen externa no se verificó creador o entidad, fecha, título/descripción, sitio o URL.', 'Se pretende extender la excepción de clip art incluido a una imagen externa sin verificar su procedencia.'],
@@ -114,7 +114,7 @@ export const visualSocialWebCases: Record<VisualSocialWebCaseId, Apa7VerifiedVis
   'facebook-post': {
     ...socialBase, id: 'facebook-post', label: 'Publicación de Facebook', manualExample: 105, manualPrintedPages: '355',
     requiredMetadata: ['autor o entidad', 'fecha completa', 'primeras 20 palabras', 'descripción de medios o enlaces solo si existen', 'tipo de publicación', 'URL'],
-    referenceTemplate: 'Solo texto: Autor o entidad. (Año, día de mes). Primeras 20 palabras [Actualización de estado]. Facebook. URL. Con imagen, infografía, video o enlace: Autor o entidad. (Año, día de mes). Primeras 20 palabras [Descripción del medio o enlace] [Actualización de estado]. Facebook. URL',
+    referenceTemplate: 'Solo texto: Autor o entidad. (Año, día de mes). Primeras 20 palabras [Actualización de estado]. Facebook. URL\nCon imagen, infografía, video o enlace: Autor o entidad. (Año, día de mes). Primeras 20 palabras [Descripción del medio o enlace] [Actualización de estado]. Facebook. URL',
     rules: ['El formato puede adaptarse a otras plataformas de publicaciones.', 'Identifica entre corchetes imágenes, videos, miniaturas o contenido compartido solo cuando realmente están presentes; para texto solo, omite toda esa descripción adicional.', 'Conserva los emojis cuando sea posible.'],
   },
   'facebook-page': {

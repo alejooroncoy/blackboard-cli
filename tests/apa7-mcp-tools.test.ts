@@ -123,6 +123,7 @@ test('reference templates preserve APA italics with explicit Markdown notation',
   assert.match(webpage.template, /\(Año\), \(Año, mes\), \(Año, día de mes\) o \(s\. f\.\)/);
   assert.match(webpage.template, /Sin autor identificable: \*Título de la página\*\. \(Año\)/);
   assert.match(webpage.template, /Sin autor identificable:.*Nombre del sitio\. URL/);
+  assert.doesNotMatch(webpage.template, /URL\./);
   assert.doesNotMatch(webpage.template, /Nombre del sitio, solo si difiere del título/);
   assert.match(webpage.template, /\(\*Título abreviado\*, Año\)/);
   assert.match(webpage.template, /\*Título abreviado\* \(Año\)/);
@@ -146,14 +147,18 @@ test('reference templates preserve APA italics with explicit Markdown notation',
   assert.match(podcast.template, /Episodio:.*N.º de episodio, solo si existe/);
   assert.match(podcast.template, /dos: Responsable, R\. R\., & Responsable, S\. S\. \(Anfitriones o Productores ejecutivos\)/);
   assert.match(podcast.template, /21 o más: responsables 1–19/);
-  assert.match(social.template, /Publicación individual:.*Perfil, página o historia destacada que cambia:/);
+  assert.match(social.template, /Publicación individual:[\s\S]*Perfil, página o historia destacada que cambia:/);
   assert.match(social.template, /Recuperado el día de mes de año/);
+  assert.doesNotMatch(social.template, /URL\./);
   assert.match(software.template, /tienda, solo si difiere del autor/);
   assert.match(software.requiredMetadata.join(' '), /clasificación: mención general o software especializado/);
   assert.match(software.requiredMetadata.join(' '), /solo para software especializado o directamente citado/);
   assert.match(softwareCitation.sourceTypeNote, /Primero clasifica el uso/);
   assert.match(softwareCitation.rules.join(' '), /mención general de software común.*no agregues cita autor-fecha/);
   assert.match(softwareCitation.rules.join(' '), /software especializado.*usa el caso especializado/);
+  assert.match(report.template, /Sin autor ni entidad acreditados: \*Título del informe\*/);
+  assert.match(report.template, /\(\*Título abreviado\*, Año\)/);
+  assert.match(report.requiredMetadata.join(' '), /autor o entidad si se acreditan/);
   assert.match(book.template, /omite DOI y URL/);
   assert.ok(book.requiredMetadata.includes('autor o entidad si se acredita'));
   assert.ok(chapter.requiredMetadata.includes('autor o entidad si se acredita'));
@@ -1265,6 +1270,7 @@ test('APA 7 guidance covers datasets, software and tests through example 83', as
   assert.match(dataset.requiredMetadata.join(' '), /organización publicadora\/archivo si difiere del autor/);
   assert.match(dataset.referenceTemplate, /Estable con DOI: https:\/\/doi\.org\/xxxxx/);
   assert.doesNotMatch(dataset.referenceTemplate, /(?:URL|https:\/\/doi\.org\/xxxxx)\./);
+  assert.doesNotMatch(testRecord.referenceTemplate, /(?:URL|https:\/\/doi\.org\/xxxxx)\./);
   assert.match(dataset.rules.join(' '), /Prefiere DOI/);
   const foreignJournal = JSON.parse((await handler({ topic: 'reference', caseId: 'journal-other-language' })).content[0].text).case;
   assert.match(foreignJournal.referenceTemplate, /Sin volumen: Revista, \(número\), páginas o eLocator/);
@@ -1330,6 +1336,8 @@ test('APA 7 guidance covers audiovisual and audio works through example 96', asy
   const series = JSON.parse((await handler({ topic: 'citation', caseId: 'television-series' })).content[0].text).case;
   const film = JSON.parse((await handler({ topic: 'citation', caseId: 'film-or-video' })).content[0].text).case;
   assert.equal(ted.manualExample, 88);
+  assert.doesNotMatch(ted.referenceTemplate, /URL\./);
+  assert.doesNotMatch(interview.referenceTemplate, /URL\./);
   assert.match(ted.rules.join(' '), /En YouTube/);
   assert.match(webinar.rules.join(' '), /comunicación personal/);
   assert.match(webinar.referenceTemplate, /Dos: Instructor, I\. I\., & Instructor, J\. J\./);
@@ -1416,6 +1424,7 @@ test('APA 7 guidance covers visual, social and web works through example 114', a
   assert.match(photograph.referenceTemplate, /\[Fotografía de descripción\]/);
   assert.doesNotMatch(photograph.referenceTemplate, /\[Descripción\] \[Fotografía\]/);
   assert.doesNotMatch(photograph.referenceTemplate, /URL\./);
+  assert.doesNotMatch(facebook.referenceTemplate, /URL\./);
   assert.match(slides.referenceTemplate, /\[Diapositivas de PowerPoint o Notas de conferencia sobre descripción\]/);
   assert.match(tweet.rules.join(' '), /Cada emoji cuenta como una palabra/);
   assert.match(tweet.referenceTemplate, /Plataforma verificada/);
