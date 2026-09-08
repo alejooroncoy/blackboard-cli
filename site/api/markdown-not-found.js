@@ -47,7 +47,7 @@ export default {
           },
         });
       } catch (error) {
-        if (error?.code !== "ENOENT") throw error;
+        if (error?.code !== "ENOENT" && error?.code !== "ENOTDIR") throw error;
       }
     }
 

@@ -51,4 +51,10 @@ assert.equal(response.status, 404);
 assert.equal(response.headers.get("content-type"), "text/markdown; charset=utf-8");
 assert.match(await response.text(), /^# Página no encontrada \| Campus$/m);
 
+for (const path of ["/auth.md/missing", "/auth.md/missing.md"]) {
+  const nestedResponse = await markdownNotFoundHandler.fetch(new Request(`https://campuscli.com${path}`));
+  assert.equal(nestedResponse.status, 404);
+  assert.match(await nestedResponse.text(), /^# Página no encontrada \| Campus$/m);
+}
+
 console.log("Agent discovery metadata is internally consistent.");
