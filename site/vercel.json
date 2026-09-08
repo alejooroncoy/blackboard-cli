@@ -9,7 +9,7 @@
   "rewrites": [
     {
       "source": "/:path*",
-      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "has": [{ "type": "header", "key": "accept", "value": "(.*)text/markdown(.*)" }],
       "destination": "/api/markdown-not-found"
     }
   ],
@@ -92,6 +92,10 @@
     },
     {
       "source": "/.well-known/mcp-server-card.json",
+      "headers": [{ "key": "Content-Type", "value": "application/mcp-server-card+json; charset=utf-8" }, { "key": "Access-Control-Allow-Origin", "value": "*" }]
+    },
+    {
+      "source": "/.well-known/mcp/server-card.json",
       "headers": [{ "key": "Content-Type", "value": "application/mcp-server-card+json; charset=utf-8" }, { "key": "Access-Control-Allow-Origin", "value": "*" }]
     },
     {
