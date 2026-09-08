@@ -6,34 +6,18 @@
       "permanent": true
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "^/$",
+      "source": "/:path*",
       "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
-      "dest": "/index.md"
-    },
-    {
-      "src": "^/(?<section>campus-cli|profes|blackboard-mcp|blackboard-cli|blackboard-chatgpt|blog)/$",
-      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
-      "dest": "/$section/index.md"
-    },
-    {
-      "src": "^/blog/(?<slug>[^/]+)/$",
-      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
-      "dest": "/blog/$slug/index.md"
-    },
-    {
-      "src": "^/blackboard-mcp/(?<client>[^/]+)/$",
-      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
-      "dest": "/blackboard-mcp/$client/index.md"
-    },
-    { "handle": "filesystem" },
-    {
-      "src": "/(.*)",
-      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
-      "dest": "/api/markdown-not-found"
+      "destination": "/api/markdown-not-found"
     }
   ],
+  "functions": {
+    "api/markdown-not-found.js": {
+      "includeFiles": "dist/**/*.md"
+    }
+  },
   "headers": [
     {
       "source": "/(.*)",

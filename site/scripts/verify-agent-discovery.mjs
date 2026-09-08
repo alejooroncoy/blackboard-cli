@@ -35,21 +35,18 @@ const fallback = await read("404.md");
 assert.match(fallback, /^# Página no encontrada \| Campus$/m);
 
 const vercelConfig = JSON.parse(await readFile(new URL("../vercel.json", import.meta.url), "utf8"));
-const markdownFallback = vercelConfig.routes.find(
-  (route) => route.handle === "filesystem",
+const markdownFallback = vercelConfig.rewrites.find(
+  (rewrite) => rewrite.source === "/:path*" && rewrite.destination === "/api/markdown-not-found",
 );
-assert.ok(markdownFallback, "The filesystem must be checked before the Markdown 404 fallback.");
-const filesystemIndex = vercelConfig.routes.indexOf(markdownFallback);
-const markdownNotFoundRoute = vercelConfig.routes[filesystemIndex + 1];
-assert.equal(markdownNotFoundRoute.dest, "/api/markdown-not-found");
-assert.equal(markdownNotFoundRoute.src, "/(.*)");
+assert.ok(markdownFallback, "Markdown requests must be routed through the Markdown resolver.");
+assert.equal(vercelConfig.functions["api/markdown-not-found.js"].includeFiles, "dist/**/*.md");
 
 const markdownNotFound = await readFile(new URL("../api/markdown-not-found.js", import.meta.url), "utf8");
 assert.match(markdownNotFound, /status:\s*404/);
 assert.match(markdownNotFound, /text\/markdown; charset=utf-8/);
 
 const { default: markdownNotFoundHandler } = await import(new URL("../api/markdown-not-found.js", import.meta.url));
-const response = markdownNotFoundHandler.fetch(new Request("https://campuscli.com/a-path-that-does-not-exist"));
+const response = await markdownNotFoundHandler.fetch(new Request("https://campuscli.com/a-path-that-does-not-exist"));
 assert.equal(response.status, 404);
 assert.equal(response.headers.get("content-type"), "text/markdown; charset=utf-8");
 assert.match(await response.text(), /^# Página no encontrada \| Campus$/m);
