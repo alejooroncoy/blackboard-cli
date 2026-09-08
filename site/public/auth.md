@@ -19,6 +19,10 @@ Solicita únicamente los scopes necesarios:
 - `campus.read`: consulta de cursos, tareas, notas y materiales disponibles para
   esa cuenta.
 
-Los permisos son de solo lectura. La autorización pertenece al estudiante y
-puede revocarse desde Campus. Para instrucciones de conexión y clientes
-compatibles, consulta la [documentación de Blackboard MCP](https://campuscli.com/blackboard-mcp/).
+Las consultas disponibles son de solo lectura de forma predeterminada. Campus
+también puede preparar y enviar una entrega a Blackboard mediante
+`blackboard_submit_attempt`; esa acción nunca se ejecuta automáticamente: el
+estudiante debe revisar el contenido y confirmar explícitamente el envío final.
+La autorización pertenece al estudiante y puede revocarse desde Campus. Para
+instrucciones de conexión y clientes compatibles, consulta la
+[documentación de Blackboard MCP](https://campuscli.com/blackboard-mcp/).

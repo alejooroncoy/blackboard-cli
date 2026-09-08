@@ -30,7 +30,7 @@
     {
       "source": "/:path*",
       "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
-      "destination": "/404.md"
+      "destination": "/api/markdown-not-found"
     }
   ],
   "headers": [

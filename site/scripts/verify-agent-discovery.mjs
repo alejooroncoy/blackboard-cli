@@ -34,4 +34,20 @@ assert.match(source, /^name: campus-blackboard$/m);
 const fallback = await read("404.md");
 assert.match(fallback, /^# Página no encontrada \| Campus$/m);
 
+const vercelConfig = JSON.parse(await readFile(new URL("../vercel.json", import.meta.url), "utf8"));
+const markdownFallback = vercelConfig.rewrites.find(
+  (rewrite) => rewrite.source === "/:path*" && rewrite.destination === "/api/markdown-not-found",
+);
+assert.ok(markdownFallback, "Markdown requests for missing paths must be routed through the 404 function.");
+
+const markdownNotFound = await readFile(new URL("../api/markdown-not-found.js", import.meta.url), "utf8");
+assert.match(markdownNotFound, /status:\s*404/);
+assert.match(markdownNotFound, /text\/markdown; charset=utf-8/);
+
+const { GET: markdownNotFoundResponse } = await import(new URL("../api/markdown-not-found.js", import.meta.url));
+const response = markdownNotFoundResponse();
+assert.equal(response.status, 404);
+assert.equal(response.headers.get("content-type"), "text/markdown; charset=utf-8");
+assert.match(await response.text(), /^# Página no encontrada \| Campus$/m);
+
 console.log("Agent discovery metadata is internally consistent.");
