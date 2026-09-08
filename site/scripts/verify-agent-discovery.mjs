@@ -44,8 +44,8 @@ const markdownNotFound = await readFile(new URL("../api/markdown-not-found.js", 
 assert.match(markdownNotFound, /status:\s*404/);
 assert.match(markdownNotFound, /text\/markdown; charset=utf-8/);
 
-const { GET: markdownNotFoundResponse } = await import(new URL("../api/markdown-not-found.js", import.meta.url));
-const response = markdownNotFoundResponse();
+const { default: markdownNotFoundHandler } = await import(new URL("../api/markdown-not-found.js", import.meta.url));
+const response = markdownNotFoundHandler.fetch(new Request("https://campuscli.com/a-path-that-does-not-exist"));
 assert.equal(response.status, 404);
 assert.equal(response.headers.get("content-type"), "text/markdown; charset=utf-8");
 assert.match(await response.text(), /^# Página no encontrada \| Campus$/m);
