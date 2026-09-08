@@ -35,11 +35,14 @@ const fallback = await read("404.md");
 assert.match(fallback, /^# Página no encontrada \| Campus$/m);
 
 const vercelConfig = JSON.parse(await readFile(new URL("../vercel.json", import.meta.url), "utf8"));
-const markdownFallback = vercelConfig.rewrites.find(
-  (rewrite) => rewrite.source === "/((?!.*\\.md$).*)" && rewrite.destination === "/api/markdown-not-found",
+const markdownFallback = vercelConfig.routes.find(
+  (route) => route.handle === "filesystem",
 );
-assert.ok(markdownFallback, "Missing HTML routes must be routed through the Markdown 404 function.");
-assert.doesNotMatch(markdownFallback.source, /:path/);
+assert.ok(markdownFallback, "The filesystem must be checked before the Markdown 404 fallback.");
+const filesystemIndex = vercelConfig.routes.indexOf(markdownFallback);
+const markdownNotFoundRoute = vercelConfig.routes[filesystemIndex + 1];
+assert.equal(markdownNotFoundRoute.dest, "/api/markdown-not-found");
+assert.equal(markdownNotFoundRoute.src, "/(.*)");
 
 const markdownNotFound = await readFile(new URL("../api/markdown-not-found.js", import.meta.url), "utf8");
 assert.match(markdownNotFound, /status:\s*404/);

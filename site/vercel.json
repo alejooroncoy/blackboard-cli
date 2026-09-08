@@ -6,31 +6,32 @@
       "permanent": true
     }
   ],
-  "rewrites": [
+  "routes": [
     {
-      "source": "/",
+      "src": "^/$",
       "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
-      "destination": "/index.md"
+      "dest": "/index.md"
     },
     {
-      "source": "/:section(campus-cli|profes|blackboard-mcp|blackboard-cli|blackboard-chatgpt|blog)/",
+      "src": "^/(?<section>campus-cli|profes|blackboard-mcp|blackboard-cli|blackboard-chatgpt|blog)/$",
       "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
-      "destination": "/:section/index.md"
+      "dest": "/$section/index.md"
     },
     {
-      "source": "/blog/:slug/",
+      "src": "^/blog/(?<slug>[^/]+)/$",
       "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
-      "destination": "/blog/:slug/index.md"
+      "dest": "/blog/$slug/index.md"
     },
     {
-      "source": "/blackboard-mcp/:client/",
+      "src": "^/blackboard-mcp/(?<client>[^/]+)/$",
       "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
-      "destination": "/blackboard-mcp/:client/index.md"
+      "dest": "/blackboard-mcp/$client/index.md"
     },
+    { "handle": "filesystem" },
     {
-      "source": "/((?!.*\\.md$).*)",
+      "src": "/(.*)",
       "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
-      "destination": "/api/markdown-not-found"
+      "dest": "/api/markdown-not-found"
     }
   ],
   "headers": [
