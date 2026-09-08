@@ -14,7 +14,7 @@ export const GET: APIRoute = () => {
   const markdown = [
     "# Campus",
     "",
-    "> Herramientas independientes para estudiantes: Campus CLI (Blackboard UPC en tu asistente de IA) y Campus Profes (calificaciones de profesores por WhatsApp). Más de 350 estudiantes ya se han ayudado con Campus Profes.",
+    "> Campus Plus reúne Campus Profes, horarios para tu matrícula y Blackboard UPC conectado para asistentes de IA. Más de 350 estudiantes ya se han ayudado con Campus Profes.",
     "",
     "Fuente: https://campuscli.com/",
     "Campus CLI: https://campuscli.com/campus-cli/",
