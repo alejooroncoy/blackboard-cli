@@ -37,8 +37,8 @@ const section = (title: string, description: string, url: string, text: string) 
 export const GET: APIRoute = async () => {
   const products = [
     {
-      title: "Campus: dos productos independientes",
-      description: "Por qué existen dos productos separados y cuál usar según lo que necesitas resolver.",
+      title: "Campus Plus: profes, horarios y Blackboard UPC conectado",
+      description: "Una membresía para tu matrícula y tu ciclo universitario.",
       url: "https://campuscli.com/",
       body: homeBody,
     },
@@ -114,7 +114,7 @@ export const GET: APIRoute = async () => {
     "# Campus — el sitio completo en texto plano",
     "",
     "Campus es una empresa independiente que construye herramientas para",
-    "estudiantes universitarios en Perú. Tiene dos productos separados: Campus",
+    "estudiantes universitarios en Perú. Campus Plus reúne profesores, horarios y la conexión de Blackboard. Campus",
     "CLI conecta el Aula Virtual (Blackboard UPC) con asistentes de IA por MCP",
     "y con la terminal; Campus Profes es un bot de WhatsApp para elegir",
     "profesor antes de matricularse. Ninguno está afiliado a UPC, Blackboard",
@@ -130,7 +130,7 @@ export const GET: APIRoute = async () => {
     "",
     "1. Productos: Campus CLI (Blackboard en ChatGPT de pago, Blackboard MCP y",
     "   Blackboard CLI gratis y de código abierto) y Campus Profes (WhatsApp,",
-    "   gratis en beta).",
+    "   incluido en Campus Plus).",
     "2. Conexión por asistente: Cursor, Claude Code, Claude Desktop, Codex,",
     "   GitHub Copilot, Windsurf, y la comparativa de servidores MCP.",
     "3. Guías del blog.",

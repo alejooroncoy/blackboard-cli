@@ -1,0 +1,14 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://mcp.campuscli.com/mcp",
+      "service-doc": [
+        {
+          "href": "https://campuscli.com/blackboard-mcp/",
+          "type": "text/html",
+          "title": "Campus Blackboard MCP documentation"
+        }
+      ]
+    }
+  ]
+}

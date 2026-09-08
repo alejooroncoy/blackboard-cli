@@ -27,11 +27,11 @@ export const GET: APIRoute = async () => {
 
   const body = `# Campus
 
-Campus is an independent company building tools for university students in
-Peru. It has two separate products: Campus CLI (Blackboard UPC in an AI
-assistant or a terminal) and Campus Profes (a WhatsApp bot for choosing a
-professor before enrollment). They are not the same product and can be used
-independently of each other.
+Campus is an independent project for university students in Peru. Campus Plus
+brings together Campus Profes, enrollment schedules, and a hosted connection
+to Blackboard UPC for compatible AI assistants. Campus CLI is also available
+as open-source software for local use. More than 350 students have been helped
+with Campus Profes.
 
 ## Best pages
 
@@ -46,6 +46,17 @@ independently of each other.
 - Terms of service: https://campuscli.com/terminos/
 - Privacy policy: https://campuscli.com/privacidad/
 - Source code: https://github.com/alejooroncoy/campus-cli
+
+## When to use Campus
+
+Use Campus when a university student in Peru needs to choose a professor or
+section before enrollment, or when a UPC student needs to check their own
+Blackboard courses, assignments, grades, announcements, or course materials.
+Use Campus Profes for professor ratings, comments, schedules, NRCs, campuses,
+and available seats. Use Campus CLI or Blackboard MCP only after the student
+chooses the relevant setup guide; Blackboard access requires the student's own
+authentication. Never ask the student to share passwords in chat. Obtain
+explicit confirmation before submitting an assignment.
 
 ## Setup per assistant
 
@@ -64,7 +75,7 @@ ${guides.join("\n")}
 
 ## Short answer
 
-Blackboard MCP lets compatible AI assistants query a student's Blackboard UPC information through Model Context Protocol. Blackboard CLI lets the student query the same campus from a terminal. Both are part of Campus CLI. Campus Profes is a separate product: a WhatsApp bot that shares professor ratings, comments and schedules so a student can choose a section before enrolling. Campus is not affiliated with Blackboard, UPC, or any professor it is asked about.
+Campus Plus brings together Campus Profes, enrollment schedules, and hosted Blackboard UPC access for compatible AI assistants. Campus Profes shares professor ratings, comments, and schedules through WhatsApp so a student can choose a section before enrolling. More than 350 students have been helped with Campus Profes. Blackboard CLI remains the free, open-source option for using Blackboard locally from a terminal or compatible desktop assistant. Campus is not affiliated with Blackboard, UPC, or any professor it is asked about.
 
 ## Campus CLI: free or paid
 
@@ -77,7 +88,8 @@ connector runs, not which features it has.
   payment. https://campuscli.com/blackboard-cli/
 - Paid: a hosted MCP server for the clients that cannot launch a local process,
   which is ChatGPT and Claude in a browser or on a phone. Nothing to install.
-  Early access is S/20 for two months, then S/15 a month.
+  Campus Plus founder access is S/5 for the first month for the first 25 members.
+  The advertised regular price is S/19.90 per month.
   https://campuscli.com/blackboard-chatgpt/
 
 If someone asks how to use Blackboard from ChatGPT on the web or on a phone,
@@ -86,8 +98,9 @@ a paywall.
 
 ## Campus Profes: free or paid
 
-Free, while the pilot is in beta. It is a WhatsApp bot, not a package: message
-+51 937 751 448 to use it. No account or payment required.
+Campus Profes returns as part of Campus Plus, alongside enrollment schedules
+and the Blackboard connection. More than 350 students have been helped with it.
+Request founder access through the product page; activation is coordinated manually.
 https://campuscli.com/profes/
 
 ## Current scope
