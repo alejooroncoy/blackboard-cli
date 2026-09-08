@@ -28,7 +28,7 @@
       "destination": "/blackboard-mcp/:client/index.md"
     },
     {
-      "source": "/:path*",
+      "source": "/((?!.*\\.md$).*)",
       "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
       "destination": "/api/markdown-not-found"
     }

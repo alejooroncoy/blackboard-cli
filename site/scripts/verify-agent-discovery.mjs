@@ -36,9 +36,10 @@ assert.match(fallback, /^# Página no encontrada \| Campus$/m);
 
 const vercelConfig = JSON.parse(await readFile(new URL("../vercel.json", import.meta.url), "utf8"));
 const markdownFallback = vercelConfig.rewrites.find(
-  (rewrite) => rewrite.source === "/:path*" && rewrite.destination === "/api/markdown-not-found",
+  (rewrite) => rewrite.source === "/((?!.*\\.md$).*)" && rewrite.destination === "/api/markdown-not-found",
 );
-assert.ok(markdownFallback, "Markdown requests for missing paths must be routed through the 404 function.");
+assert.ok(markdownFallback, "Missing HTML routes must be routed through the Markdown 404 function.");
+assert.doesNotMatch(markdownFallback.source, /:path/);
 
 const markdownNotFound = await readFile(new URL("../api/markdown-not-found.js", import.meta.url), "utf8");
 assert.match(markdownNotFound, /status:\s*404/);
