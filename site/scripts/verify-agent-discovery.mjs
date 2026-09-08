@@ -31,4 +31,7 @@ const digest = createHash("sha256").update(source).digest("hex");
 assert.equal(skill?.digest, `sha256:${digest}`);
 assert.match(source, /^name: campus-blackboard$/m);
 
+const fallback = await read("404.md");
+assert.match(fallback, /^# Página no encontrada \| Campus$/m);
+
 console.log("Agent discovery metadata is internally consistent.");

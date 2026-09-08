@@ -26,6 +26,11 @@
       "source": "/blackboard-mcp/:client/",
       "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
       "destination": "/blackboard-mcp/:client/index.md"
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "destination": "/404.md"
     }
   ],
   "headers": [
