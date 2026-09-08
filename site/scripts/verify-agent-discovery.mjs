@@ -67,6 +67,7 @@ for (const path of ["/auth.md/missing", "/auth.md/missing.md"]) {
 
 const clientScript = await read("app.js");
 assert.match(clientScript, /navigator\.modelContext/);
+assert.match(clientScript, /modelContext\.registerTool/);
 assert.match(clientScript, /provideContext\(\{/);
 assert.match(clientScript, /campus_get_overview/);
 assert.match(clientScript, /campus_open_section/);
