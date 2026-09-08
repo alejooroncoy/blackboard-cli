@@ -6,11 +6,12 @@
     "css": "esbuild public/styles.css --minify --outfile=public/styles.min.css --allow-overwrite",
     "dev": "npm run css && astro dev",
     "build": "npm run css && astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "test:agent-discovery": "node scripts/verify-agent-discovery.mjs"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.7.4",
-    "astro": "^7.2.10"
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "^7.2.3"
   },
   "devDependencies": {
     "esbuild": "^0.28.2"

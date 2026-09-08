@@ -7,3 +7,9 @@ Allow: /
 # 404. /sitemap.xml now redirects here as well, for anything that still asks
 # for it by that name.
 Sitemap: https://campuscli.com/sitemap-index.xml
+
+# Campus permite la búsqueda y el uso interactivo por agentes, pero no autoriza
+# entrenar modelos con su contenido. El catálogo describe los recursos para
+# agentes que sí están disponibles públicamente.
+Content-Signal: ai-train=no, search=yes, ai-input=yes
+Agentmap: https://campuscli.com/.well-known/ard.json
