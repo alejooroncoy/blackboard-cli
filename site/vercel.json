@@ -33,6 +33,10 @@
         {
           "key": "X-Frame-Options",
           "value": "DENY"
+        },
+        {
+          "key": "Link",
+          "value": "</blackboard-mcp/>; rel=\"service-doc\"; type=\"text/html\", </.well-known/api-catalog>; rel=\"api-catalog\""
         }
       ]
     },
@@ -46,6 +50,19 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=3600"
+        }
+      ]
+    },
+    {
+      "source": "/.well-known/api-catalog",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/linkset+json; charset=utf-8"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
         }
       ]
     },
