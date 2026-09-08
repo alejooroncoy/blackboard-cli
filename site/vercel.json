@@ -6,6 +6,28 @@
       "permanent": true
     }
   ],
+  "rewrites": [
+    {
+      "source": "/",
+      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "destination": "/index.md"
+    },
+    {
+      "source": "/:section(campus-cli|profes|blackboard-mcp|blackboard-cli|blackboard-chatgpt|blog)/",
+      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "destination": "/:section/index.md"
+    },
+    {
+      "source": "/blog/:slug/",
+      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "destination": "/blog/:slug/index.md"
+    },
+    {
+      "source": "/blackboard-mcp/:client/",
+      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "destination": "/blackboard-mcp/:client/index.md"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
@@ -36,7 +58,11 @@
         },
         {
           "key": "Link",
-          "value": "</blackboard-mcp/>; rel=\"service-doc\"; type=\"text/html\", </.well-known/api-catalog>; rel=\"api-catalog\""
+          "value": "</blackboard-mcp/>; rel=\"service-doc\"; type=\"text/html\", </.well-known/api-catalog>; rel=\"api-catalog\", </.well-known/ard.json>; rel=\"ard\"; type=\"application/json\", </.well-known/oauth-protected-resource>; rel=\"oauth-protected-resource\"; type=\"application/json\""
+        },
+        {
+          "key": "Vary",
+          "value": "Accept, Accept-Encoding"
         }
       ]
     },
@@ -65,6 +91,26 @@
           "value": "*"
         }
       ]
+    },
+    {
+      "source": "/.well-known/ard.json",
+      "headers": [{ "key": "Content-Type", "value": "application/json; charset=utf-8" }, { "key": "Access-Control-Allow-Origin", "value": "*" }]
+    },
+    {
+      "source": "/.well-known/ai-catalog.json",
+      "headers": [{ "key": "Content-Type", "value": "application/json; charset=utf-8" }, { "key": "Access-Control-Allow-Origin", "value": "*" }]
+    },
+    {
+      "source": "/.well-known/mcp-server-card.json",
+      "headers": [{ "key": "Content-Type", "value": "application/mcp-server-card+json; charset=utf-8" }, { "key": "Access-Control-Allow-Origin", "value": "*" }]
+    },
+    {
+      "source": "/.well-known/oauth-protected-resource",
+      "headers": [{ "key": "Content-Type", "value": "application/json; charset=utf-8" }, { "key": "Access-Control-Allow-Origin", "value": "*" }]
+    },
+    {
+      "source": "/.well-known/agent-skills/(.*)",
+      "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }]
     },
     {
       "source": "/sitemap.xsl",

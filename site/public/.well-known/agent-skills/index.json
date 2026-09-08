@@ -1,0 +1,12 @@
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "campus-blackboard",
+      "type": "skill-md",
+      "description": "Consulta de forma segura cursos, tareas, notas, anuncios y materiales de Blackboard UPC mediante Campus MCP.",
+      "url": "https://campuscli.com/.well-known/agent-skills/campus-blackboard/SKILL.md",
+      "digest": "sha256:40fc2c69ed75ba894f792ca0393a97bda01af1e2396cc911cb0b120dcb923ebb"
+    }
+  ]
+}
