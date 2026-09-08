@@ -4,23 +4,23 @@ seoTitle: "Campus Profes: elige a tu profesor por WhatsApp"
 ogTitle: "Lancé Campus Profes: elige a tu profesor antes de matricularte"
 description: "Lancé Campus Profes, un bot de WhatsApp para consultar calificaciones, comentarios y horarios de profesores antes de matricularte. Por qué lo construí."
 published: "2026-08-10"
-updated: "2026-08-10"
+updated: "2026-09-07"
 tag: "Lanzamiento · Fundador"
 section: fundador
 readingMinutes: 5
 author: "Alejandro Oroncoy"
 faq:
   - q: "¿Campus Profes es lo mismo que Campus para Blackboard?"
-    a: "No. Campus para Blackboard conecta tu Aula Virtual con ChatGPT o Claude. Campus Profes es un producto aparte, enfocado en elegir profesor y sección antes de matricularte, y funciona por WhatsApp."
+    a: "Campus Profes es la parte de Campus Plus enfocada en elegir profesor y sección antes de matricularte. La conexión con Blackboard UPC es otra parte de Campus Plus."
   - q: "¿Cuánto cuesta Campus Profes?"
-    a: "Por ahora es gratis, mientras dura la beta. La idea es validar si de verdad ayuda antes de pensar en cobrar algo."
+    a: "Campus Plus ofrece acceso fundador de S/5 el primer mes para los primeros 25 miembros. El precio regular anunciado es S/19.90 al mes."
   - q: "¿De dónde salen las calificaciones de los profesores?"
     a: "De alumnos que ya llevaron el curso y califican después de terminarlo. No es un formulario anónimo abierto a cualquiera ni información inventada."
 summary:
   - "Acabo de lanzar **Campus Profes**, un bot de WhatsApp para consultar calificaciones, comentarios y horarios de profesores antes de matricularte."
   - "Nace del mismo problema de siempre en época de matrícula: elegir profesor a ciegas, preguntando en tres grupos de WhatsApp distintos y confiando en la primera respuesta que llega."
   - "Sirve para comparar secciones del mismo curso antes de matricular, armar tu horario sin cruces comparando quién enseña mejor en cada bloque, y dejar tu propia calificación para el que pregunte después."
-  - "Está **gratis mientras dura la beta**, sin registro: le escribes por WhatsApp y listo."
+  - "Campus Profes vuelve como parte de **Campus Plus**: solicita acceso fundador y consulta por WhatsApp antes de matricularte."
 ---
 Cada ciclo pasa lo mismo en época de matrícula. Entras a elegir horario, ves cuatro o cinco secciones del mismo curso, cada una con un profesor distinto, y no tienes ninguna forma de saber, desde el sistema de matrícula, cuál es cuál. Así que abres WhatsApp y preguntas en dos o tres grupos a la vez: "¿alguien sabe cómo es el profesor de Gerencia de Proyectos?". Decides con la primera respuesta que te llega, venga de quien venga, y a veces ni siquiera es de alguien que lo llevó de verdad. Ese momento, repetido ciclo tras ciclo, es la razón por la que construí Campus Profes.
 
@@ -44,10 +44,10 @@ Con Campus para Blackboard, la respuesta fue conectar el Aula Virtual a un asist
 - **Consultar en el momento de matrícula**, que en la UPC son minutos contrarreloj, sin salir del chat a buscar en tres grupos distintos.
 - **Dejar tu propia calificación** cuando termines el curso, para que la próxima persona que pregunte tenga tu experiencia disponible en vez de tener que preguntar de nuevo desde cero.
 
-## Por qué arranca gratis y por qué te pido que participes
+## Por qué sigue creciendo con la participación de los alumnos
 
-Campus Profes recién está en beta y por ahora es gratis: antes de pensar en cobrar algo, quiero confirmar que de verdad resuelve el problema para el que lo construí. Pero a diferencia de Blackboard, esto no funciona solo con que yo escriba código: la calidad de cada respuesta depende de que más alumnos califiquen a sus profesores después de llevarlos. Si lo pruebas, te pido lo mismo que le pido a cualquiera: cuando termines un curso, vuelve y deja tu calificación. Es lo que hace que la próxima persona que pregunte reciba una respuesta real y no un silencio.
+Campus Profes ya ayudó a más de 350 estudiantes a decidir antes de su matrícula. Ahora vuelve como parte de Campus Plus, junto con horarios y Blackboard UPC conectado. Pero a diferencia de Blackboard, esto no funciona solo con que yo escriba código: la calidad de cada respuesta depende de que más alumnos califiquen a sus profesores después de llevarlos. Si lo pruebas, cuando termines un curso vuelve y deja tu calificación. Es lo que hace que la próxima persona que pregunte reciba una respuesta real y no un silencio.
 
 ## Cómo empezar
 
-Campus Profes es un producto aparte de Campus para Blackboard: no necesitas tener una cuenta ni haber usado el otro producto antes. Le escribes por WhatsApp y consultas gratis mientras dura la beta, sin registro y sin tarjeta. Puedes ver el detalle completo en [la página de Campus Profes](https://campuscli.com/profes/), o directamente [escribirle por WhatsApp](https://wa.me/51937751448?text=Hola%2C%20quiero%20probar%20Campus%20Profes.) y preguntar por el profesor que te está haciendo dudar esta matrícula.
+Campus Profes forma parte de Campus Plus. Puedes solicitar el acceso fundador en [la página de Campus Profes](https://campuscli.com/profes/) y recibir acompañamiento para empezar a consultar por WhatsApp antes de tu matrícula. El acceso fundador cuesta S/5 el primer mes para los primeros 25 miembros; el precio regular anunciado es S/19.90 al mes.

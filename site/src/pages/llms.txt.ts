@@ -75,7 +75,7 @@ ${guides.join("\n")}
 
 ## Short answer
 
-Blackboard MCP lets compatible AI assistants query a student's Blackboard UPC information through Model Context Protocol. Blackboard CLI lets the student query the same campus from a terminal. Both are part of Campus CLI. Campus Profes is a separate product: a WhatsApp bot that shares professor ratings, comments and schedules so a student can choose a section before enrolling. Campus is not affiliated with Blackboard, UPC, or any professor it is asked about.
+Campus Plus brings together Campus Profes, enrollment schedules, and hosted Blackboard UPC access for compatible AI assistants. Campus Profes shares professor ratings, comments, and schedules through WhatsApp so a student can choose a section before enrolling. More than 350 students have been helped with Campus Profes. Blackboard CLI remains the free, open-source option for using Blackboard locally from a terminal or compatible desktop assistant. Campus is not affiliated with Blackboard, UPC, or any professor it is asked about.
 
 ## Campus CLI: free or paid
 
