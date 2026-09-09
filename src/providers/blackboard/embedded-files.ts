@@ -41,9 +41,19 @@ function mediaCategoryFromUrl(url: URL): 'audio' | 'video' | undefined {
 export function extractEmbeddedFiles(body: string): EmbeddedFile[] {
   const seen = new Set<string>();
   const files: EmbeddedFile[] = [];
+  const mediaAncestors: Array<'audio' | 'video'> = [];
 
-  for (const match of body.matchAll(/<(?:a|iframe|embed|object|audio|video|source)\b[^>]*>/gi)) {
+  for (const match of body.matchAll(/<\/?(?:a|iframe|embed|object|audio|video|source)\b[^>]*>/gi)) {
     const tag = match[0];
+    const tagName = tag.match(/^<\/?\s*(a|iframe|embed|object|audio|video|source)\b/i)?.[1]?.toLowerCase();
+    if (tagName === 'audio' || tagName === 'video') {
+      if (/^<\//.test(tag)) {
+        const ancestor = mediaAncestors.lastIndexOf(tagName);
+        if (ancestor >= 0) mediaAncestors.splice(ancestor, 1);
+        continue;
+      }
+      if (!/\/\s*>$/.test(tag)) mediaAncestors.push(tagName);
+    }
     const href = attribute(tag, 'href') ?? attribute(tag, 'src') ?? attribute(tag, 'data');
     const rawMetadata = attribute(tag, 'data-bbfile');
     let metadata: Record<string, unknown> = {};
@@ -73,7 +83,11 @@ export function extractEmbeddedFiles(body: string): EmbeddedFile[] {
     }
     if (!url || seen.has(url.href)) continue;
     seen.add(url.href);
-    const mediaElement = tag.match(/^<\s*(audio|video)\b/i)?.[1]?.toLowerCase() as 'audio' | 'video' | undefined;
+    const mediaElement = (tagName === 'audio' || tagName === 'video')
+      ? tagName
+      : tagName === 'source'
+        ? mediaAncestors[mediaAncestors.length - 1]
+        : undefined;
     const mediaCategory = mediaElement ?? mediaCategoryFromUrl(url);
     const urlMimeType = mediaCategory ? `${mediaCategory}/${mediaSubtypeFromUrl(url) ?? '*'}` : undefined;
 

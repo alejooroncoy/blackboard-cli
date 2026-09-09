@@ -27,6 +27,14 @@ test('infers media type for an untyped source element from its URL', () => {
   assert.equal(embeddedMediaResourceLink(files[0]!)?.type, 'resource_link');
 });
 
+test('source elements retain their parent media category when the URL is ambiguous', () => {
+  const files = extractEmbeddedFiles('<video><source src="/bbcswebdav/pid-7/xid-3"></video><audio><source src="/bbcswebdav/pid-8/clip.webm"></audio>');
+  assert.equal(files[0]?.mimeType, 'video/*');
+  assert.equal(files[1]?.mimeType, 'audio/webm');
+  assert.ok(embeddedMediaResourceLink(files[0]!));
+  assert.ok(embeddedMediaResourceLink(files[1]!));
+});
+
 test('infers media type from a direct video URL when Blackboard omits type', () => {
   const files = extractEmbeddedFiles('<video src="/bbcswebdav/pid-9/self-introduction.mp4"></video>');
 
