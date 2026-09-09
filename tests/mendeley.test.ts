@@ -21,18 +21,23 @@ test('checks second page for duplicates',async()=>{
  assert.equal((await s.saveDoi(doi)).status,'already_saved');assert.equal(calls,2);
 });
 test('lists groups and saves a DOI to a writable group without duplicating it',async()=>{
- const groupId='ec47684d-4e4b-3f12-ba38-01509619c415';let docs:any[]=[];let payload:any;
+ const groupId='ec47684d-4e4b-3f12-ba38-01509619c415';let docs:any[]=[];let payload:any;let writeUrl='';
  const s=new MendeleyService(store(),{},async(u,init)=>{
   const url=String(u);
   if(url.includes('/groups?'))return json([{id:groupId,name:'Shared research',role:'normal'}]);
-  if(init?.method==='POST'){payload=JSON.parse(init.body as string);const d={id:'group-doc',...payload};docs.push(d);return json(d,{},201);}
+  if(init?.method==='POST'){writeUrl=url;payload=JSON.parse(init.body as string);const d={id:'group-doc',...payload};docs.push(d);return json(d,{},201);}
   if(url.includes('group_id='))return json(docs);
   return json([]);
  },metadata);
  assert.equal((await s.listGroups()).groups[0].name,'Shared research');
  assert.equal((await s.saveDoi(doi,groupId)).status,'saved');
- assert.equal(payload.group_id,groupId);
+ assert.equal(new URL(writeUrl).searchParams.get('group_id'),groupId);assert.equal(payload.group_id,undefined);
  assert.equal((await s.saveDoi(doi,groupId)).status,'already_saved');
+});
+test('saves metadata whose Crossref publication date has an unknown component', async () => {
+ const s=new MendeleyService(store(),{},async(_u,init)=>init?.method==='POST' ? json({id:'id1'}, {}, 201) : json([]),
+  async()=>({message:{DOI:doi,title:['Verified title'],type:'journal-article',issued:{'date-parts':[[2024,null]]}}}));
+ assert.equal((await s.saveDoi(doi)).status,'saved');
 });
 test('does not write to an inaccessible or read-only group',async()=>{
  const groupId='ec47684d-4e4b-3f12-ba38-01509619c415';let writes=0;

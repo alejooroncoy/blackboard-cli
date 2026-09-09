@@ -49,7 +49,8 @@ const { parentPort, workerData } = require('node:worker_threads');
     const last = pages[pages.length - 1].page;
     parentPort.postMessage({ result: { totalPages: doc.numPages, pages, nextPage: last < doc.numPages ? last + 1 : null } });
   } finally { await task.destroy(); }
-})().catch(() => parentPort.postMessage({ error: 'No se pudo leer el PDF o el rango solicitado. Puede estar dañado, cifrado o fuera de rango.' }));
+})().catch(error => parentPort.postMessage({ error: error instanceof Error && error.message === 'La página inicial supera el documento.'
+  ? error.message : 'No se pudo leer el PDF. Puede estar dañado o cifrado.' }));
 `;
 
 export async function extractPdfBytes(bytes: Uint8Array, startPage = 1, pageCount = 5): Promise<PdfEvidence> {

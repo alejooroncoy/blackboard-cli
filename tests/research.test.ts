@@ -321,8 +321,19 @@ test('real PDF parser returns page evidence, continuation, and explicit OCR need
 test('PDF parser rejects HTML login pages, malformed PDFs, and invalid page ranges', async () => {
   await assert.rejects(extractPdfBytes(Buffer.from('<html>login</html>')), /PDF válido/);
   await assert.rejects(extractPdfBytes(Buffer.from('%PDF-broken')), /No se pudo leer/);
-  await assert.rejects(extractPdfBytes(pdfFixture(), 3, 1), /No se pudo leer/);
+  await assert.rejects(extractPdfBytes(pdfFixture(), 3, 1), /página inicial supera/);
   await assert.rejects(extractPdfBytes(pdfFixture(), 0, 30));
+});
+
+test('an invalid PDF page range stays an input error instead of a client handoff', async () => {
+  const handlers = new Map<string, any>();
+  registerResearchTools({ registerTool(name: string, _config: unknown, handler: unknown) {
+    handlers.set(name, handler);
+  } } as any, { authorize: () => true,
+    readPdf: async () => { throw new Error('La página inicial supera el documento.'); } });
+  const result = await handlers.get('campus_research_read_pdf')({ url: 'https://publisher.example.edu/article.pdf' });
+  assert.equal(result.isError, true);
+  assert.match(result.content[0].text, /página inicial supera/);
 });
 
 test('sources Campus cannot process return their original link for client handling', async () => {

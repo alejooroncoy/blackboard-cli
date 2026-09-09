@@ -25,7 +25,7 @@ export class LocalMendeleyTokenStore implements MendeleyTokenStore {
 }
 const documentSchema = z.object({ id:z.string(), title:z.string().optional(), identifiers:z.object({doi:z.string().optional()}).passthrough().optional() }).passthrough();
 const groupSchema = z.object({ id:z.string().uuid(), name:z.string().min(1), role:z.string().optional() }).passthrough();
-const crossrefSchema = z.object({message:z.object({DOI:z.string(),title:z.array(z.string()).min(1),type:z.string(),author:z.array(z.object({given:z.string().optional(),family:z.string().optional(),name:z.string().optional()})).optional(),issued:z.object({'date-parts':z.array(z.array(z.number()))}).optional(),'container-title':z.array(z.string()).optional(),volume:z.string().optional(),issue:z.string().optional(),page:z.string().optional()})});
+const crossrefSchema = z.object({message:z.object({DOI:z.string(),title:z.array(z.string()).min(1),type:z.string(),author:z.array(z.object({given:z.string().optional(),family:z.string().optional(),name:z.string().optional()})).optional(),issued:z.object({'date-parts':z.array(z.array(z.number().nullable()))}).optional(),'container-title':z.array(z.string()).optional(),volume:z.string().optional(),issue:z.string().optional(),page:z.string().optional()})});
 export class MendeleyService {
   private queue: Promise<unknown> = Promise.resolve();
   private refresh?: Promise<string>;
@@ -106,8 +106,9 @@ export class MendeleyService {
     if(normalizeDoi(w.DOI)!==doi) throw new Error('El DOI recibido no coincide; no se guardó.');
     const year=w.issued?.['date-parts']?.[0]?.[0];
     const type:Record<string,string>={'journal-article':'journal','proceedings-article':'conference_proceedings',book:'book','book-chapter':'book_section',dissertation:'thesis',report:'report'};
-    const payload={...(targetGroup?{group_id:targetGroup}:{}),title:w.title[0],type:type[w.type]||'generic',identifiers:{doi},...(year?{year}:{}),source:w['container-title']?.[0],authors:w.author?.map(a=>({first_name:a.given||'',last_name:a.family||a.name||''})),volume:w.volume,issue:w.issue,pages:w.page,websites:['https://doi.org/'+doi]};
-    const document=documentSchema.parse((await this.api('/documents','POST',payload)).data);
+    const payload={title:w.title[0],type:type[w.type]||'generic',identifiers:{doi},...(year?{year}:{}),source:w['container-title']?.[0],authors:w.author?.map(a=>({first_name:a.given||'',last_name:a.family||a.name||''})),volume:w.volume,issue:w.issue,pages:w.page,websites:['https://doi.org/'+doi]};
+    const destination='/documents'+(targetGroup?'?'+new URLSearchParams({group_id:targetGroup}):'');
+    const document=documentSchema.parse((await this.api(destination,'POST',payload)).data);
     return {status:'saved',doi,document,groupId:targetGroup,verifiedVia:'crossref',peerReview:'unknown'};
   }
 }
