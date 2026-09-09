@@ -15,6 +15,12 @@ export type PdfEvidence = {
   nextPage: number | null;
 };
 
+export type PdfSource = {
+  requestedUrl: string;
+  resolvedUrl: string;
+  retrievedAt?: string;
+};
+
 // Parse untrusted files off the MCP event loop, with a hard deadline and heap cap.
 // Native import inside the worker loads PDF.js's ESM build from this installation.
 const PARSER = `
@@ -82,9 +88,14 @@ export async function extractPdfBytes(bytes: Uint8Array, startPage = 1, pageCoun
 export async function readResearchPdf(raw: z.input<typeof pdfInput>) {
   const { url, startPage, pageCount } = pdfInput.parse(raw);
   const downloaded = await researchDownload(url, { maxBytes: 20 * 1024 * 1024, redirects: 4 });
-  const result = await extractPdfBytes(downloaded.bytes, startPage, pageCount);
-  return { requestedUrl: url, resolvedUrl: downloaded.url, retrievedAt: new Date().toISOString(),
-    sha256: createHash('sha256').update(downloaded.bytes).digest('hex'), ...result,
+  return readResearchPdfBytes(downloaded.bytes, { requestedUrl: url, resolvedUrl: downloaded.url }, startPage, pageCount);
+}
+
+/** Parse already-downloaded public PDF bytes without issuing another network request. */
+export async function readResearchPdfBytes(bytes: Uint8Array, source: PdfSource, startPage = 1, pageCount = 5) {
+  const result = await extractPdfBytes(bytes, startPage, pageCount);
+  return { requestedUrl: source.requestedUrl, resolvedUrl: source.resolvedUrl, retrievedAt: source.retrievedAt ?? new Date().toISOString(),
+    sha256: createHash('sha256').update(bytes).digest('hex'), ...result,
     guidance: [
       'Texto extraído para análisis, no una evaluación científica automática. Su lectura no verifica identidad bibliográfica ni revisión por pares.',
       'Cita la URL y el número de página PDF (puede diferir de la numeración impresa). No atribuyas hallazgos a páginas no leídas.',

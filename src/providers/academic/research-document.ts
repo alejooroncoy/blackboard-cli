@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { strFromU8, unzipSync } from 'fflate';
 import { z } from 'zod';
 import { researchDownload } from './research-http.js';
-import { readResearchPdf } from './research-pdf.js';
+import { readResearchPdfBytes } from './research-pdf.js';
 
 const MAX_DOCUMENT_BYTES = 20 * 1024 * 1024;
 const MAX_ARCHIVE_FILES = 200;
@@ -41,15 +41,50 @@ function xmlText(value: string): string {
 function docxText(files: Record<string, Uint8Array>): string {
   const body = files['word/document.xml'];
   if (!body) throw new Error('El DOCX no contiene word/document.xml.');
-  return normalizeText(strFromU8(body).replace(/<w:p\b[^>]*>/g, '\n').replace(/<w:tab\b[^>]*\/>/g, '\t')
+  return normalizeText(strFromU8(body).replace(/<w:p\b[^>]*>/g, '\n\n').replace(/<w:tab\b[^>]*\/>/g, '\t')
     .replace(/<w:br\b[^>]*\/>/g, '\n').replace(/<w:t\b[^>]*>/g, '').replace(/<\/w:t>/g, '')
     .replace(/<[^>]+>/g, ' '));
 }
 
+function xmlAttribute(tag: string, name: string): string | null {
+  const match = tag.match(new RegExp(`\\s${name}\\s*=\\s*(["'])(.*?)\\1`, 'i'));
+  return match?.[2] ?? null;
+}
+
+function epubSpineNames(files: Record<string, Uint8Array>): string[] {
+  const container = files['META-INF/container.xml'];
+  if (!container) return [];
+  const containerXml = strFromU8(container);
+  const rootfile = xmlAttribute(containerXml.match(/<rootfile\b[^>]*>/i)?.[0] ?? '', 'full-path');
+  if (!rootfile || !files[rootfile]) return [];
+  const opf = strFromU8(files[rootfile]);
+  const manifest = new Map<string, string>();
+  for (const tag of opf.match(/<item\b[^>]*>/gi) ?? []) {
+    const id = xmlAttribute(tag, 'id');
+    const href = xmlAttribute(tag, 'href');
+    if (id && href) manifest.set(id, href);
+  }
+  const directory = rootfile.slice(0, rootfile.lastIndexOf('/') + 1);
+  return (opf.match(/<itemref\b[^>]*>/gi) ?? []).flatMap(tag => {
+    const href = manifest.get(xmlAttribute(tag, 'idref') ?? '');
+    if (!href || /^[a-z][a-z0-9+.-]*:/i.test(href)) return [];
+    const path = `${directory}${href.split(/[?#]/, 1)[0]}`.replace(/\\/g, '/');
+    const parts: string[] = [];
+    for (const part of path.split('/')) {
+      if (!part || part === '.') continue;
+      if (part === '..') return [];
+      parts.push(part);
+    }
+    const name = parts.join('/');
+    return /\.(?:xhtml|html|htm)$/i.test(name) && files[name] ? [name] : [];
+  });
+}
+
 function epubText(files: Record<string, Uint8Array>): string {
-  const names = Object.keys(files).filter(name => /\.(?:xhtml|html|htm)$/i.test(name)).sort();
-  if (!names.length) throw new Error('El EPUB no contiene capítulos HTML legibles.');
-  return names.map(name => htmlText(strFromU8(files[name]))).filter(Boolean).join('\n\n');
+  const names = epubSpineNames(files);
+  const chapterNames = names.length ? names : Object.keys(files).filter(name => /\.(?:xhtml|html|htm)$/i.test(name)).sort();
+  if (!chapterNames.length) throw new Error('El EPUB no contiene capítulos HTML legibles.');
+  return chapterNames.map(name => htmlText(strFromU8(files[name]))).filter(Boolean).join('\n\n');
 }
 
 function archiveText(bytes: Uint8Array, format: 'docx' | 'epub'): string {
@@ -59,7 +94,8 @@ function archiveText(bytes: Uint8Array, format: 'docx' | 'epub'): string {
   try {
     files = unzipSync(bytes, { filter: file => {
       if (file.name.includes('..') || file.name.length > 500) throw new Error('El archivo contiene una ruta no permitida.');
-      const wanted = format === 'docx' ? file.name === 'word/document.xml' : /\.(?:xhtml|html|htm)$/i.test(file.name);
+      const wanted = format === 'docx' ? file.name === 'word/document.xml'
+        : /^(?:META-INF\/container\.xml|.*\.opf|.*\.(?:xhtml|html|htm))$/i.test(file.name);
       if (!wanted) return false;
       selected++;
       originalBytes += file.originalSize;
@@ -120,7 +156,9 @@ export async function readResearchDocument(raw: z.input<typeof documentInput>) {
   const downloaded = await researchDownload(input.url, { maxBytes: MAX_DOCUMENT_BYTES, redirects: 4,
     headers: { Accept: 'application/pdf, application/epub+zip, application/vnd.openxmlformats-officedocument.wordprocessingml.document, text/html, application/xhtml+xml, application/xml, text/plain, text/markdown;q=0.9' } });
   const extracted = extractDocumentBytes(downloaded.bytes, input.format, input.startSection, input.sectionCount, downloaded.contentType);
-  if (extracted.format === 'pdf') return readResearchPdf({ url: input.url, startPage: input.startSection, pageCount: input.sectionCount });
+  if (extracted.format === 'pdf') {
+    return readResearchPdfBytes(downloaded.bytes, { requestedUrl: input.url, resolvedUrl: downloaded.url }, input.startSection, input.sectionCount);
+  }
   return { requestedUrl: input.url, resolvedUrl: downloaded.url, retrievedAt: new Date().toISOString(),
     sha256: createHash('sha256').update(downloaded.bytes).digest('hex'), ...extracted,
     guidance: [

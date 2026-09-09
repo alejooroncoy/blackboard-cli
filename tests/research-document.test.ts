@@ -32,6 +32,29 @@ test('academic document reader extracts DOCX paragraphs and EPUB chapters', () =
   assert.match(epubResult.sections.map(section => section.text).join(' '), /improved delivery/);
 });
 
+test('academic document reader pages long DOCX files by paragraph', () => {
+  const docx = zipSync({ 'word/document.xml': strToU8(`<w:document><w:body>
+    <w:p><w:t>${'a'.repeat(12_001)}</w:t></w:p><w:p><w:t>Methods remain available.</w:t></w:p>
+    </w:body></w:document>`) });
+  const result = text(extractDocumentBytes(docx, 'docx', 2, 1));
+  assert.equal(result.totalSections, 2);
+  assert.match(result.sections[0].text, /Methods remain available/);
+  assert.equal(result.nextSection, null);
+});
+
+test('academic document reader follows EPUB spine order', () => {
+  const epub = zipSync({
+    'META-INF/container.xml': strToU8('<container><rootfiles><rootfile full-path="OPS/book.opf"/></rootfiles></container>'),
+    'OPS/book.opf': strToU8('<package><manifest><item id="one" href="chapter-1.xhtml"/><item id="two" href="chapter-2.xhtml"/><item id="ten" href="chapter-10.xhtml"/></manifest><spine><itemref idref="one"/><itemref idref="two"/><itemref idref="ten"/></spine></package>'),
+    'OPS/chapter-1.xhtml': strToU8('<html><body><p>First chapter.</p></body></html>'),
+    'OPS/chapter-2.xhtml': strToU8('<html><body><p>Second chapter.</p></body></html>'),
+    'OPS/chapter-10.xhtml': strToU8('<html><body><p>Tenth chapter.</p></body></html>'),
+    'OPS/nav.xhtml': strToU8('<html><body><p>Navigation that is not evidence.</p></body></html>'),
+  });
+  const result = text(extractDocumentBytes(epub, 'epub', 1, 3));
+  assert.deepEqual(result.sections.map(section => section.text), ['First chapter.', 'Second chapter.', 'Tenth chapter.']);
+});
+
 test('academic document reader delegates PDFs to the page reader', () => {
   assert.deepEqual(extractDocumentBytes(Buffer.from('%PDF-1.4\n'), 'auto'), { format: 'pdf', delegated: true });
 });
