@@ -26,7 +26,7 @@ export function extractEmbeddedFiles(body: string): EmbeddedFile[] {
   const seen = new Set<string>();
   const files: EmbeddedFile[] = [];
 
-  for (const match of body.matchAll(/<(?:a|iframe|embed|object|video|source)\b[^>]*>/gi)) {
+  for (const match of body.matchAll(/<(?:a|iframe|embed|object|audio|video|source)\b[^>]*>/gi)) {
     const tag = match[0];
     const href = attribute(tag, 'href') ?? attribute(tag, 'src') ?? attribute(tag, 'data');
     const rawMetadata = attribute(tag, 'data-bbfile');

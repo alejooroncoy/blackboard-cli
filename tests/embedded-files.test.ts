@@ -21,6 +21,14 @@ test('finds Blackboard video elements embedded in assignment instructions', () =
   assert.equal(embeddedMediaResourceLink(files[0]!)?.type, 'resource_link');
 });
 
+test('finds Blackboard audio elements embedded in assignment instructions', () => {
+  const files = extractEmbeddedFiles('<audio title="Pronunciación" type="audio/mpeg" src="/bbcswebdav/pid-8/audio.mp3"></audio>');
+
+  assert.equal(files.length, 1);
+  assert.equal(files[0]?.mimeType, 'audio/mpeg');
+  assert.equal(embeddedMediaResourceLink(files[0]!)?.type, 'resource_link');
+});
+
 test('turns embedded Blackboard media into a resource link', () => {
   const link = embeddedMediaResourceLink({ displayName: 'Self-introduction.mp4', mimeType: 'video/mp4', downloadUrl: 'https://aulavirtual.upc.edu.pe/bbcswebdav/pid-7/video.mp4' });
   assert.equal(link?.type, 'resource_link');
