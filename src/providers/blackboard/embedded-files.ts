@@ -65,7 +65,9 @@ export function extractEmbeddedFiles(body: string): EmbeddedFile[] {
         : typeof metadata.linkName === 'string'
           ? metadata.linkName
           : attribute(tag, 'title') ?? attribute(tag, 'aria-label') ?? fileNameFromUrl(url.href),
-      mimeType: typeof metadata.mimeType === 'string' ? metadata.mimeType : 'application/octet-stream',
+      mimeType: typeof metadata.mimeType === 'string'
+        ? metadata.mimeType
+        : attribute(tag, 'type') ?? 'application/octet-stream',
       downloadUrl: url.href,
     });
   }

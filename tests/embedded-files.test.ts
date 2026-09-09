@@ -16,7 +16,9 @@ test('rejects external and non-file links', () => {
 test('finds Blackboard video elements embedded in assignment instructions', () => {
   const files = extractEmbeddedFiles('<video title="Self-introduction"><source type="video/mp4" src="/bbcswebdav/pid-7/video.mp4"></video>');
   assert.equal(files.length, 1);
+  assert.equal(files[0]?.mimeType, 'video/mp4');
   assert.equal(files[0]?.downloadUrl, 'https://aulavirtual.upc.edu.pe/bbcswebdav/pid-7/video.mp4');
+  assert.equal(embeddedMediaResourceLink(files[0]!)?.type, 'resource_link');
 });
 
 test('turns embedded Blackboard media into a resource link', () => {
