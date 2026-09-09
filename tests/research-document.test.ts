@@ -1,0 +1,79 @@
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import { strToU8, zipSync } from 'fflate';
+import { extractDocumentBytes } from '../src/providers/academic/research-document.js';
+import { documentInput } from '../src/providers/academic/research-document.js';
+
+function text(result: ReturnType<typeof extractDocumentBytes>) {
+  assert.notEqual(result.format, 'pdf');
+  return result;
+}
+
+test('academic document reader extracts bounded HTML sections without scripts', () => {
+  const result = text(extractDocumentBytes(Buffer.from(`<!doctype html><html><body><h1>Method</h1><p>Sample: 42 students.</p><script>ignore()</script><p>Result: improved fluency.</p></body></html>`), 'auto', 1, 4, 'text/html'));
+  assert.equal(result.format, 'html');
+  assert.match(result.sections.map(section => section.text).join(' '), /42 students/);
+  assert.doesNotMatch(result.sections.map(section => section.text).join(' '), /ignore/);
+});
+
+test('academic document reader requires an explicit format for ZIP containers', () => {
+  const zip = zipSync({ 'word/document.xml': strToU8('<w:document/>') });
+  assert.throws(() => extractDocumentBytes(zip, 'auto'), /format="docx"/);
+});
+
+test('academic document reader extracts DOCX paragraphs and EPUB chapters', () => {
+  const docx = zipSync({ 'word/document.xml': strToU8('<w:document><w:body><w:p><w:t>Objective</w:t></w:p><w:p><w:t>Study with 80 students.</w:t></w:p></w:body></w:document>') });
+  const docxResult = text(extractDocumentBytes(docx, 'docx'));
+  assert.equal(docxResult.format, 'docx');
+  assert.match(docxResult.sections.map(section => section.text).join(' '), /80 students/);
+  const epub = zipSync({ 'OPS/chapter-1.xhtml': strToU8('<html><body><h1>Results</h1><p>Feedback improved delivery.</p></body></html>') });
+  const epubResult = text(extractDocumentBytes(epub, 'epub'));
+  assert.equal(epubResult.format, 'epub');
+  assert.match(epubResult.sections.map(section => section.text).join(' '), /improved delivery/);
+});
+
+test('academic document reader pages long DOCX files by paragraph', () => {
+  const docx = zipSync({ 'word/document.xml': strToU8(`<w:document><w:body>
+    <w:p><w:t>${'a'.repeat(12_001)}</w:t></w:p><w:p><w:t>Methods remain available.</w:t></w:p>
+    </w:body></w:document>`) });
+  const result = text(extractDocumentBytes(docx, 'docx', 2, 1));
+  assert.equal(result.totalSections, 2);
+  assert.match(result.sections[0].text, /Methods remain available/);
+  assert.equal(result.nextSection, null);
+});
+
+test('academic document reader follows EPUB spine order', () => {
+  const epub = zipSync({
+    'META-INF/container.xml': strToU8('<container><rootfiles><rootfile full-path="OPS/book.opf"/></rootfiles></container>'),
+    'OPS/book.opf': strToU8('<package><manifest><item id="one" href="chapter-1.xhtml"/><item id="two" href="chapter-2.xhtml"/><item id="ten" href="chapter-10.xhtml"/></manifest><spine><itemref idref="one"/><itemref idref="two"/><itemref idref="ten"/></spine></package>'),
+    'OPS/chapter-1.xhtml': strToU8('<html><body><p>First chapter.</p></body></html>'),
+    'OPS/chapter-2.xhtml': strToU8('<html><body><p>Second chapter.</p></body></html>'),
+    'OPS/chapter-10.xhtml': strToU8('<html><body><p>Tenth chapter.</p></body></html>'),
+    'OPS/nav.xhtml': strToU8('<html><body><p>Navigation that is not evidence.</p></body></html>'),
+  });
+  const result = text(extractDocumentBytes(epub, 'epub', 1, 3));
+  assert.deepEqual(result.sections.map(section => section.text), ['First chapter.', 'Second chapter.', 'Tenth chapter.']);
+});
+
+test('academic document reader delegates PDFs to the page reader', () => {
+  assert.deepEqual(extractDocumentBytes(Buffer.from('%PDF-1.4\n'), 'auto'), { format: 'pdf', delegated: true });
+});
+
+test('academic document reader keeps later sections available after a large prefix', () => {
+  const prefix = 'a'.repeat(100_001);
+  const result = text(extractDocumentBytes(Buffer.from(`${prefix}\n\nMethods\nParticipants were surveyed.`), 'text', 2, 1));
+  assert.equal(result.totalSections, 2);
+  assert.equal(result.sections[0].heading, 'Methods');
+  assert.match(result.sections[0].text, /Participants/);
+});
+
+test('academic document reader pages long JATS paragraphs without losing later evidence', () => {
+  const jats = `<article><body><sec><p>${'a'.repeat(12_001)}</p><p>Results remain available.</p></sec></body></article>`;
+  const result = text(extractDocumentBytes(Buffer.from(jats), 'jats', 2, 1));
+  assert.equal(result.totalSections, 2);
+  assert.match(result.sections[0].text, /Results remain available/);
+});
+
+test('academic document reader uses the PDF reader page limit', () => {
+  assert.throws(() => documentInput.parse({ url: 'https://example.edu/study.pdf', sectionCount: 21 }));
+});
