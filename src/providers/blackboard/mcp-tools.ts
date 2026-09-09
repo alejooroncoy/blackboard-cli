@@ -413,7 +413,11 @@ export function registerBlackboardTools(server: McpServer) {
             try { return await attachmentMediaResourceLink(client, courseId, contentId, attachment); } catch { return null; }
           })).filter((link): link is NonNullable<typeof link> => Boolean(link));
           return { content: [
-            { type: 'text', text: JSON.stringify({ ...r.data, ...(links.length ? { note: 'Multimedia is also returned as resource_link; use blackboard_download_attachment if the client cannot process it.' } : {}) }) },
+            { type: 'text', text: JSON.stringify(
+              links.length && !Array.isArray(r.data)
+                ? { ...r.data, note: 'Multimedia is also returned as resource_link; use blackboard_download_attachment if the client cannot process it.' }
+                : r.data,
+            ) },
             ...links,
           ] };
         }
