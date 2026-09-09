@@ -21,6 +21,13 @@ test('finds Blackboard video elements embedded in assignment instructions', () =
   assert.equal(embeddedMediaResourceLink(files[0]!)?.type, 'resource_link');
 });
 
+test('infers media type from a direct video URL when Blackboard omits type', () => {
+  const files = extractEmbeddedFiles('<video src="/bbcswebdav/pid-9/self-introduction.mp4"></video>');
+
+  assert.equal(files[0]?.mimeType, 'video/mp4');
+  assert.equal(embeddedMediaResourceLink(files[0]!)?.type, 'resource_link');
+});
+
 test('finds Blackboard audio elements embedded in assignment instructions', () => {
   const files = extractEmbeddedFiles('<audio title="Pronunciación" type="audio/mpeg" src="/bbcswebdav/pid-8/audio.mp3"></audio>');
 

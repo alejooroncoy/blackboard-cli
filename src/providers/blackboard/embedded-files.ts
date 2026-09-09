@@ -20,6 +20,26 @@ function fileNameFromUrl(url: string): string {
   }
 }
 
+function mimeTypeFromUrl(url: URL): string | undefined {
+  const extension = url.pathname.match(/\.([a-z0-9]+)$/i)?.[1]?.toLowerCase();
+  const types: Record<string, string> = {
+    aac: 'audio/aac',
+    flac: 'audio/flac',
+    m4a: 'audio/mp4',
+    mp3: 'audio/mpeg',
+    oga: 'audio/ogg',
+    ogg: 'audio/ogg',
+    wav: 'audio/wav',
+    weba: 'audio/webm',
+    m4v: 'video/mp4',
+    mov: 'video/quicktime',
+    mp4: 'video/mp4',
+    ogv: 'video/ogg',
+    webm: 'video/webm',
+  };
+  return extension ? types[extension] : undefined;
+}
+
 /** Blackboard's document viewer can render a file even when it is not exposed
  * by the REST attachments endpoint. */
 export function extractEmbeddedFiles(body: string): EmbeddedFile[] {
@@ -67,7 +87,7 @@ export function extractEmbeddedFiles(body: string): EmbeddedFile[] {
           : attribute(tag, 'title') ?? attribute(tag, 'aria-label') ?? fileNameFromUrl(url.href),
       mimeType: typeof metadata.mimeType === 'string'
         ? metadata.mimeType
-        : attribute(tag, 'type') ?? 'application/octet-stream',
+        : attribute(tag, 'type') ?? mimeTypeFromUrl(url) ?? 'application/octet-stream',
       downloadUrl: url.href,
     });
   }
