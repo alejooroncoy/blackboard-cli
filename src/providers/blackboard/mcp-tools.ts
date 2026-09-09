@@ -402,24 +402,18 @@ export function registerBlackboardTools(server: McpServer) {
     async ({ courseId, contentId }) => {
       const { client } = await getClient();
 
-      // Try standard REST attachments endpoint first (works for x-bb-file).
+      // Read standard REST attachments first, then merge any media embedded in the
+      // content HTML. An assignment can contain both kinds at once.
+      let attachmentData: any;
+      let attachments: any[] | undefined;
       try {
         const r = await client.get(
           `/learn/api/public/v1/courses/${courseId}/contents/${contentId}/attachments`
         );
-        const results = Array.isArray(r.data?.results) ? r.data.results : Array.isArray(r.data) ? r.data : undefined;
-        if (results === undefined || results.length > 0) {
-          const links = results === undefined ? [] : (await mapWithConcurrency(results, MCP_MAX_PARALLELISM, async (attachment: any) => {
-            try { return await attachmentMediaResourceLink(client, courseId, contentId, attachment); } catch { return null; }
-          })).filter((link): link is NonNullable<typeof link> => Boolean(link));
-          return { content: [
-            { type: 'text', text: JSON.stringify(
-              links.length && !Array.isArray(r.data)
-                ? { ...r.data, note: 'Multimedia is also returned as resource_link; use blackboard_download_attachment if the client cannot process it.' }
-                : r.data,
-            ) },
-            ...links,
-          ] };
+        attachmentData = r.data;
+        attachments = Array.isArray(r.data?.results) ? r.data.results : Array.isArray(r.data) ? r.data : undefined;
+        if (attachments === undefined) {
+          return { content: [{ type: 'text', text: JSON.stringify(attachmentData) }] };
         }
       } catch (err: any) {
         if (err.response?.status !== 400 && err.response?.status !== 404) throw err;
@@ -432,16 +426,35 @@ export function registerBlackboardTools(server: McpServer) {
       const body: string = [r.data?.body, r.data?.contentHandler?.instructions]
         .filter((value): value is string => typeof value === 'string').join('\n');
       const files = extractEmbeddedFiles(body);
-      const links = files.map(embeddedMediaResourceLink).filter((link): link is NonNullable<typeof link> => Boolean(link));
+      const embeddedLinks = files.map(embeddedMediaResourceLink).filter((link): link is NonNullable<typeof link> => Boolean(link));
+
+      if (attachments && attachments.length > 0) {
+        const attachmentLinks = (await mapWithConcurrency(attachments, MCP_MAX_PARALLELISM, async (attachment: any) => {
+          try { return await attachmentMediaResourceLink(client, courseId, contentId, attachment); } catch { return null; }
+        })).filter((link): link is NonNullable<typeof link> => Boolean(link));
+        const links = [...attachmentLinks, ...embeddedLinks];
+        return { content: [
+          { type: 'text', text: JSON.stringify(
+            !Array.isArray(attachmentData)
+              ? {
+                ...attachmentData,
+                ...(files.length ? { embeddedFiles: files } : {}),
+                ...(links.length ? { note: 'Multimedia is also returned as resource_link; use blackboard_download_attachment with an embeddedFiles downloadUrl if the client cannot process it.' } : {}),
+              }
+              : attachmentData,
+          ) },
+          ...links,
+        ] };
+      }
 
       return {
         content: [
           { type: 'text', text: JSON.stringify({
             type: 'embedded_files',
-            note: links.length ? 'Multimedia is also returned as resource_link; pass downloadUrl as attachmentId to blackboard_download_attachment if the client cannot process it.' : 'Pass downloadUrl as attachmentId to blackboard_download_attachment',
+            note: embeddedLinks.length ? 'Multimedia is also returned as resource_link; pass downloadUrl as attachmentId to blackboard_download_attachment if the client cannot process it.' : 'Pass downloadUrl as attachmentId to blackboard_download_attachment',
             results: files,
           }) },
-          ...links,
+          ...embeddedLinks,
         ],
       };
     }
