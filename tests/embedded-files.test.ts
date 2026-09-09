@@ -28,6 +28,14 @@ test('infers media type from a direct video URL when Blackboard omits type', () 
   assert.equal(embeddedMediaResourceLink(files[0]!)?.type, 'resource_link');
 });
 
+test('keeps the media element category for untyped extensionless and WebM embeds', () => {
+  const files = extractEmbeddedFiles('<video src="/bbcswebdav/pid-9/xid-3"></video><audio src="/bbcswebdav/pid-10/clip.webm"></audio>');
+  assert.equal(files[0]?.mimeType, 'video/*');
+  assert.equal(files[1]?.mimeType, 'audio/webm');
+  assert.ok(embeddedMediaResourceLink(files[0]!));
+  assert.ok(embeddedMediaResourceLink(files[1]!));
+});
+
 test('finds Blackboard audio elements embedded in assignment instructions', () => {
   const files = extractEmbeddedFiles('<audio title="Pronunciación" type="audio/mpeg" src="/bbcswebdav/pid-8/audio.mp3"></audio>');
 
@@ -48,6 +56,12 @@ test('resolves an attached video without downloading it', async () => {
   const link = await attachmentMediaResourceLink(client, '_10_1', '_20_1', { id: '_30_1', fileName: 'Video de Adrián.mp4', mimeType: 'video/mp4', size: 5_996_902 });
   assert.equal(destroyed, true);
   assert.deepEqual(link && { type: link.type, name: link.name, mimeType: link.mimeType, size: link.size }, { type: 'resource_link', name: 'Video de Adrián.mp4', mimeType: 'video/mp4', size: 5_996_902 });
+});
+
+test('resolves relative Blackboard attachment redirects before exposing them', async () => {
+  const client = { get: async () => ({ data: { destroy() {} }, headers: { location: '/bbcswebdav/pid-8/video.mp4' } }) } as any;
+  const link = await attachmentMediaResourceLink(client, '_10_1', '_20_1', { id: '_30_1', mimeType: 'video/mp4' });
+  assert.equal(link?.uri, 'https://aulavirtual.upc.edu.pe/bbcswebdav/pid-8/video.mp4');
 });
 
 test('does not resolve ordinary documents as media resource links', async () => {

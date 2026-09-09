@@ -1,6 +1,8 @@
 import type { AxiosInstance } from 'axios';
 import { assertBlackboardFileUrl } from './api/client.js';
 
+const BLACKBOARD_ORIGIN = 'https://aulavirtual.upc.edu.pe';
+
 export type BlackboardAttachment = {
   id: string;
   fileName?: string;
@@ -44,9 +46,10 @@ export async function attachmentMediaResourceLink(
   response.data?.destroy?.();
   const location = response.headers.location as string | undefined;
   if (!location) return null;
-  assertBlackboardFileUrl(location);
+  const uri = new URL(location, BLACKBOARD_ORIGIN).href;
+  assertBlackboardFileUrl(uri);
   return {
-    type: 'resource_link', uri: location,
+    type: 'resource_link', uri,
     name: attachment.fileName ?? attachment.displayName ?? 'Recurso multimedia de Blackboard',
     mimeType: attachment.mimeType!,
     ...(typeof attachment.size === 'number' && Number.isFinite(attachment.size) ? { size: attachment.size } : {}),

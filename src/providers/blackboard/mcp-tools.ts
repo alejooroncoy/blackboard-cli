@@ -433,13 +433,18 @@ export function registerBlackboardTools(server: McpServer) {
           try { return await attachmentMediaResourceLink(client, courseId, contentId, attachment); } catch { return null; }
         })).filter((link): link is NonNullable<typeof link> => Boolean(link));
         const links = [...attachmentLinks, ...embeddedLinks];
+        const note = attachmentLinks.length && embeddedLinks.length
+          ? 'Multimedia is also returned as resource_link; use blackboard_download_attachment with the REST attachment id, or blackboard_download_file_url with an embeddedFiles downloadUrl.'
+          : attachmentLinks.length
+            ? 'Multimedia is also returned as resource_link; use blackboard_download_attachment with the attachment id if the client cannot process it.'
+            : 'Multimedia is also returned as resource_link; use blackboard_download_file_url with an embeddedFiles downloadUrl if the client cannot process it.';
         return { content: [
           { type: 'text', text: JSON.stringify(
             !Array.isArray(attachmentData)
               ? {
                 ...attachmentData,
                 ...(files.length ? { embeddedFiles: files } : {}),
-                ...(links.length ? { note: 'Multimedia is also returned as resource_link; use blackboard_download_attachment with an embeddedFiles downloadUrl if the client cannot process it.' } : {}),
+                ...(links.length ? { note } : {}),
               }
               : attachmentData,
           ) },
@@ -451,7 +456,7 @@ export function registerBlackboardTools(server: McpServer) {
         content: [
           { type: 'text', text: JSON.stringify({
             type: 'embedded_files',
-            note: embeddedLinks.length ? 'Multimedia is also returned as resource_link; pass downloadUrl as attachmentId to blackboard_download_attachment if the client cannot process it.' : 'Pass downloadUrl as attachmentId to blackboard_download_attachment',
+            note: embeddedLinks.length ? 'Multimedia is also returned as resource_link; use blackboard_download_file_url with an embedded file downloadUrl if the client cannot process it.' : 'Use blackboard_download_file_url with an embedded file downloadUrl.',
             results: files,
           }) },
           ...embeddedLinks,

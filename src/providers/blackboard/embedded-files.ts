@@ -20,24 +20,13 @@ function fileNameFromUrl(url: string): string {
   }
 }
 
-function mimeTypeFromUrl(url: URL): string | undefined {
+function mediaSubtypeFromUrl(url: URL): string | undefined {
   const extension = url.pathname.match(/\.([a-z0-9]+)$/i)?.[1]?.toLowerCase();
-  const types: Record<string, string> = {
-    aac: 'audio/aac',
-    flac: 'audio/flac',
-    m4a: 'audio/mp4',
-    mp3: 'audio/mpeg',
-    oga: 'audio/ogg',
-    ogg: 'audio/ogg',
-    wav: 'audio/wav',
-    weba: 'audio/webm',
-    m4v: 'video/mp4',
-    mov: 'video/quicktime',
-    mp4: 'video/mp4',
-    ogv: 'video/ogg',
-    webm: 'video/webm',
+  const subtypes: Record<string, string> = {
+    aac: 'aac', flac: 'flac', m4a: 'mp4', mp3: 'mpeg', oga: 'ogg', ogg: 'ogg', wav: 'wav', weba: 'webm',
+    m4v: 'mp4', mov: 'quicktime', mp4: 'mp4', ogv: 'ogg', webm: 'webm',
   };
-  return extension ? types[extension] : undefined;
+  return extension ? subtypes[extension] : undefined;
 }
 
 /** Blackboard's document viewer can render a file even when it is not exposed
@@ -77,6 +66,8 @@ export function extractEmbeddedFiles(body: string): EmbeddedFile[] {
     }
     if (!url || seen.has(url.href)) continue;
     seen.add(url.href);
+    const mediaElement = tag.match(/^<\s*(audio|video)\b/i)?.[1]?.toLowerCase() as 'audio' | 'video' | undefined;
+    const urlMimeType = mediaElement ? `${mediaElement}/${mediaSubtypeFromUrl(url) ?? '*'}` : undefined;
 
     files.push({
       type: 'embedded',
@@ -87,7 +78,7 @@ export function extractEmbeddedFiles(body: string): EmbeddedFile[] {
           : attribute(tag, 'title') ?? attribute(tag, 'aria-label') ?? fileNameFromUrl(url.href),
       mimeType: typeof metadata.mimeType === 'string'
         ? metadata.mimeType
-        : attribute(tag, 'type') ?? mimeTypeFromUrl(url) ?? 'application/octet-stream',
+        : attribute(tag, 'type') ?? urlMimeType ?? 'application/octet-stream',
       downloadUrl: url.href,
     });
   }
