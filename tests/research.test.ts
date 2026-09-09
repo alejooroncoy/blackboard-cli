@@ -325,7 +325,7 @@ test('PDF parser rejects HTML login pages, malformed PDFs, and invalid page rang
   await assert.rejects(extractPdfBytes(pdfFixture(), 0, 30));
 });
 
-test('oversized academic PDFs return a resource link for the MCP client', async () => {
+test('sources Campus cannot process return their original link for client handling', async () => {
   const handlers = new Map<string, any>();
   registerResearchTools({ registerTool(name: string, _config: unknown, handler: unknown) {
     handlers.set(name, handler);
@@ -333,7 +333,21 @@ test('oversized academic PDFs return a resource link for the MCP client', async 
     readPdf: async () => { throw new Error('El documento supera el tamaño permitido.'); } });
   const result = await handlers.get('campus_research_read_pdf')({ url: 'https://publisher.example.edu/article.pdf' });
   assert.equal(result.isError, undefined);
+  assert.match(result.content[0].text, /client_processing_required/);
   assert.equal(result.content[1].type, 'resource_link');
   assert.equal(result.content[1].uri, 'https://publisher.example.edu/article.pdf');
   assert.equal(result.content[1].mimeType, 'application/pdf');
+});
+
+test('safe document-processing failures return a client resource link', async () => {
+  const handlers = new Map<string, any>();
+  registerResearchTools({ registerTool(name: string, _config: unknown, handler: unknown) {
+    handlers.set(name, handler);
+  } } as any, { authorize: () => true,
+    readDocument: async () => { throw new Error('El contenido descomprimido supera el límite de análisis seguro.'); } });
+  const result = await handlers.get('campus_research_read_document')({ url: 'https://repository.example.edu/thesis.docx', format: 'docx' });
+  assert.equal(result.isError, undefined);
+  assert.match(result.content[0].text, /server_processing_unavailable/);
+  assert.equal(result.content[1].type, 'resource_link');
+  assert.equal(result.content[1].uri, 'https://repository.example.edu/thesis.docx');
 });
