@@ -29,6 +29,13 @@ function mediaSubtypeFromUrl(url: URL): string | undefined {
   return extension ? subtypes[extension] : undefined;
 }
 
+function mediaCategoryFromUrl(url: URL): 'audio' | 'video' | undefined {
+  const extension = url.pathname.match(/\.([a-z0-9]+)$/i)?.[1]?.toLowerCase();
+  if (extension && ['aac', 'flac', 'm4a', 'mp3', 'oga', 'ogg', 'wav', 'weba'].includes(extension)) return 'audio';
+  if (extension && ['m4v', 'mov', 'mp4', 'ogv', 'webm'].includes(extension)) return 'video';
+  return undefined;
+}
+
 /** Blackboard's document viewer can render a file even when it is not exposed
  * by the REST attachments endpoint. */
 export function extractEmbeddedFiles(body: string): EmbeddedFile[] {
@@ -67,7 +74,8 @@ export function extractEmbeddedFiles(body: string): EmbeddedFile[] {
     if (!url || seen.has(url.href)) continue;
     seen.add(url.href);
     const mediaElement = tag.match(/^<\s*(audio|video)\b/i)?.[1]?.toLowerCase() as 'audio' | 'video' | undefined;
-    const urlMimeType = mediaElement ? `${mediaElement}/${mediaSubtypeFromUrl(url) ?? '*'}` : undefined;
+    const mediaCategory = mediaElement ?? mediaCategoryFromUrl(url);
+    const urlMimeType = mediaCategory ? `${mediaCategory}/${mediaSubtypeFromUrl(url) ?? '*'}` : undefined;
 
     files.push({
       type: 'embedded',
