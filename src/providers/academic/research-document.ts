@@ -35,7 +35,7 @@ function htmlText(value: string): string {
 }
 
 function xmlText(value: string): string {
-  return htmlText(value.replace(/<[^>]+(?:\/|)>/g, tag => /<(?:p|title|sec|abstract|body|article-title|chapter)\b/i.test(tag) ? '\n' : ' '));
+  return htmlText(value.replace(/<[^>]+(?:\/|)>/g, tag => /<(?:p|title|sec|abstract|body|article-title|chapter)\b/i.test(tag) ? '\n\n' : ' '));
 }
 
 function docxText(files: Record<string, Uint8Array>): string {

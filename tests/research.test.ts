@@ -28,10 +28,9 @@ test('Crossref search preserves provenance, encodes query and does not invent pe
 });
 
 test('OpenAlex returns repository version and license separately from peer review', async () => {
-  const service = new ResearchService(async (url, headers) => {
+  const service = new ResearchService(async url => {
     assert.equal(new URL(url).searchParams.get('filter'), 'locations.source.type:repository');
-    assert.equal(headers?.Authorization, 'Bearer secret');
-    assert.ok(!url.includes('secret'));
+    assert.equal(new URL(url).searchParams.get('api_key'), 'secret');
     return { meta: { count: 1 }, results: [{ id: 'https://openalex.org/W123', display_name: 'Thesis',
       type: 'dissertation', doi: null, is_retracted: false,
       locations: [{ source: { type: 'repository', display_name: 'University repository' },
@@ -44,6 +43,7 @@ test('OpenAlex returns repository version and license separately from peer revie
   assert.equal(source.doi, null);
   assert.equal(source.retractionStatus, 'not_flagged_by_openalex');
   assert.ok(!JSON.stringify(result).includes('secret'));
+  assert.equal(new URL(result.requestUrl).searchParams.get('api_key'), null);
 });
 
 test('Scopus fails explicitly without credentials and never calls the API', async () => {

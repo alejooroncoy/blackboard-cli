@@ -54,6 +54,17 @@ test('refreshes and persists rotated tokens before API request',async()=>{
  });
  await s.list();assert.equal((await st.load()).refresh_token,'rotated');
 });
+test('concurrent expired-token reads share one rotating-token refresh',async()=>{
+ const token:MendeleyTokens={access_token:'old',refresh_token:'refresh',expires_at:0};
+ let loads=0,refreshes=0;
+ const st={load:async()=>{loads++;await Promise.resolve();return token;},save:async(n:MendeleyTokens)=>Object.assign(token,n)};
+ const s=new MendeleyService(st,{MENDELEY_CLIENT_ID:'id',MENDELEY_CLIENT_SECRET:'secret'},async(u)=>{
+  if(String(u).endsWith('/oauth/token')){refreshes++;return json({access_token:'new',refresh_token:'rotated',expires_in:3600});}
+  return json([]);
+ });
+ await Promise.all([s.list(),s.list()]);
+ assert.equal(loads,2);assert.equal(refreshes,1);
+});
 test('authorization fails before library operations and save is annotated as a write',async()=>{
  const tools=new Map<string,any>();registerMendeleyTools({registerTool:(n:any,s:any,h:any)=>tools.set(n,{s,h})} as any,{authorize:()=>false,service:{} as any});
  assert.equal(tools.get('campus_mendeley_save_doi').s.annotations.readOnlyHint,false);

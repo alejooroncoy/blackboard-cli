@@ -67,6 +67,13 @@ test('academic document reader keeps later sections available after a large pref
   assert.match(result.sections[0].text, /Participants/);
 });
 
+test('academic document reader pages long JATS paragraphs without losing later evidence', () => {
+  const jats = `<article><body><sec><p>${'a'.repeat(12_001)}</p><p>Results remain available.</p></sec></body></article>`;
+  const result = text(extractDocumentBytes(Buffer.from(jats), 'jats', 2, 1));
+  assert.equal(result.totalSections, 2);
+  assert.match(result.sections[0].text, /Results remain available/);
+});
+
 test('academic document reader uses the PDF reader page limit', () => {
   assert.throws(() => documentInput.parse({ url: 'https://example.edu/study.pdf', sectionCount: 21 }));
 });

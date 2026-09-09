@@ -34,6 +34,9 @@ export class MendeleyService {
   private async accessToken(force=false):Promise<string> {
     if(this.refresh) return this.refresh;
     const t=await this.store.load();
+    // Another caller may have started the refresh while this caller was loading
+    // tokens. Reuse its promise so a rotating refresh token is never spent twice.
+    if(this.refresh) return this.refresh;
     if(!force && t.expires_at>Date.now()+60000) return t.access_token;
     this.refresh=(async()=>{
       const id=this.env.MENDELEY_CLIENT_ID,secret=this.env.MENDELEY_CLIENT_SECRET;

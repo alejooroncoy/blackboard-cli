@@ -204,8 +204,10 @@ export class ResearchService {
       if (repositoriesOnly) filters.push('locations.source.type:repository');
       requestUrl = endpoint('https://api.openalex.org/works', { search: query, per_page: limit, page,
         ...(filters.length ? { filter: filters.join(',') } : {}) });
-      const headers = this.env.OPENALEX_API_KEY ? { Authorization: `Bearer ${this.env.OPENALEX_API_KEY}` } : undefined;
-      const data = z.object({ meta: z.object({ count: z.number() }), results: z.array(openalexWork) }).parse(await this.json(requestUrl, headers));
+      const fetchUrl = this.env.OPENALEX_API_KEY
+        ? endpoint(requestUrl, { api_key: this.env.OPENALEX_API_KEY })
+        : requestUrl;
+      const data = z.object({ meta: z.object({ count: z.number() }), results: z.array(openalexWork) }).parse(await this.json(fetchUrl));
       total = data.meta.count;
       results = data.results.map(w => ({
         id: w.id, doi: w.doi ? normalizeDoi(w.doi) : null, title: w.display_name,
