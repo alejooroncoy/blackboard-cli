@@ -124,7 +124,7 @@ test('ScienceDirect uses Elsevier credentials, date range and supported page siz
     assert.equal(headers?.['X-ELS-APIKey'], 'elsevier-secret');
     assert.equal(parsed.searchParams.get('date'), '2024-2026');
     assert.equal(parsed.searchParams.get('count'), '10');
-    assert.equal(parsed.searchParams.get('start'), '10');
+    assert.equal(parsed.searchParams.get('start'), '5');
     return { 'search-results': { 'opensearch:totalResults': '11', entry: [{ 'dc:identifier': 'SD:1',
       'dc:title': 'ScienceDirect study', 'prism:doi': '10.1016/J.TEST.2025.1', 'dc:creator': 'Perez A',
       link: [{ '@ref': 'scidir', '@href': 'https://www.sciencedirect.com/science/article/pii/1' }] }] } };

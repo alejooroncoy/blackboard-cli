@@ -44,6 +44,18 @@ async function withSlot<T>(run: () => Promise<T>): Promise<T> {
 
 export type ResearchDownload = { bytes: Buffer; url: string; contentType: string };
 
+function hasSensitiveHeaders(headers: Record<string, string> | undefined): boolean {
+  return Object.keys(headers ?? {}).some(name => {
+    const normalized = name.toLowerCase();
+    return normalized === 'authorization'
+      || normalized === 'proxy-authorization'
+      || normalized === 'cookie'
+      || normalized === 'x-api-key'
+      || normalized === 'x-els-apikey'
+      || normalized === 'x-els-insttoken';
+  });
+}
+
 /** No campus cookies, proxies, automatic redirects, or unbounded response bodies. */
 export async function researchDownload(value: string, options: {
   headers?: Record<string, string>; maxBytes?: number; redirects?: number;
@@ -99,7 +111,7 @@ export async function researchDownload(value: string, options: {
       });
       if (response.status < 300) return { bytes: response.bytes, url: url.toString(), contentType: response.contentType };
       // Authenticated API requests never follow redirects or forward API keys.
-      if (options.headers || hop >= (options.redirects ?? 0) || !response.location) {
+      if (hasSensitiveHeaders(options.headers) || hop >= (options.redirects ?? 0) || !response.location) {
         throw new Error('Redirección del proveedor no permitida.');
       }
       url = publicHttpsUrl(new URL(response.location, url).toString());

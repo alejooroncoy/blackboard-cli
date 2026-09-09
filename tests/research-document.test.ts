@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { strToU8, zipSync } from 'fflate';
 import { extractDocumentBytes } from '../src/providers/academic/research-document.js';
+import { documentInput } from '../src/providers/academic/research-document.js';
 
 function text(result: ReturnType<typeof extractDocumentBytes>) {
   assert.notEqual(result.format, 'pdf');
@@ -33,4 +34,16 @@ test('academic document reader extracts DOCX paragraphs and EPUB chapters', () =
 
 test('academic document reader delegates PDFs to the page reader', () => {
   assert.deepEqual(extractDocumentBytes(Buffer.from('%PDF-1.4\n'), 'auto'), { format: 'pdf', delegated: true });
+});
+
+test('academic document reader keeps later sections available after a large prefix', () => {
+  const prefix = 'a'.repeat(100_001);
+  const result = text(extractDocumentBytes(Buffer.from(`${prefix}\n\nMethods\nParticipants were surveyed.`), 'text', 2, 1));
+  assert.equal(result.totalSections, 2);
+  assert.equal(result.sections[0].heading, 'Methods');
+  assert.match(result.sections[0].text, /Participants/);
+});
+
+test('academic document reader uses the PDF reader page limit', () => {
+  assert.throws(() => documentInput.parse({ url: 'https://example.edu/study.pdf', sectionCount: 21 }));
 });

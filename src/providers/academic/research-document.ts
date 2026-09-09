@@ -5,7 +5,6 @@ import { researchDownload } from './research-http.js';
 import { readResearchPdf } from './research-pdf.js';
 
 const MAX_DOCUMENT_BYTES = 20 * 1024 * 1024;
-const MAX_TEXT_CHARS = 100_000;
 const MAX_ARCHIVE_FILES = 200;
 const MAX_ARCHIVE_TEXT_BYTES = 4 * 1024 * 1024;
 
@@ -14,7 +13,7 @@ export const documentInput = z.object({
   url: z.string().url().max(4000),
   format: documentFormat.default('auto').describe('Use auto for HTML, text, XML and PDF. For a ZIP file, specify docx or epub explicitly.'),
   startSection: z.number().int().min(1).default(1),
-  sectionCount: z.number().int().min(1).max(30).default(8),
+  sectionCount: z.number().int().min(1).max(20).default(8),
 });
 
 type Section = { section: number; heading: string | null; text: string; truncated: boolean };
@@ -109,8 +108,10 @@ export function extractDocumentBytes(bytes: Uint8Array, requested: z.infer<typeo
   if (format === 'pdf') return { format: 'pdf', delegated: true };
   const raw = format === 'docx' || format === 'epub' ? archiveText(bytes, format) : strFromU8(bytes);
   const text = format === 'html' ? htmlText(raw) : format === 'xml' || format === 'jats' ? xmlText(raw) : normalizeText(raw);
-  const bounded = text.slice(0, MAX_TEXT_CHARS);
-  const result = splitSections(bounded, startSection, sectionCount);
+  // Preserve the full section index so a later request can reach material
+  // after the response-size boundary (for example, methods or references).
+  // Each returned section remains bounded in splitSections.
+  const result = splitSections(text, startSection, sectionCount);
   return { format, ...result };
 }
 

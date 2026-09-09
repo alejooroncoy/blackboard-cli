@@ -267,8 +267,11 @@ export class ResearchService {
       if (!elsevierKey) throw new Error('ScienceDirect requiere ELSEVIER_API_KEY (o SCOPUS_API_KEY compatible) de Elsevier.');
       const terms = query.replace(/[(){}"\\]/g, ' ').trim();
       if (!terms) throw new Error('La búsqueda debe contener texto.');
+      // ScienceDirect accepts only certain page sizes, but callers can ask for
+      // any limit from 1 to 25. Advance by the visible page size so a request
+      // for five results does not skip records 5–9 on its second page.
       const count = limit <= 10 ? 10 : 25;
-      const apiOffset = (page - 1) * count;
+      const apiOffset = (page - 1) * limit;
       requestUrl = endpoint('https://api.elsevier.com/content/search/sciencedirect', {
         query: `all(${terms})`, count, start: apiOffset, view: 'STANDARD',
         ...(yearFrom || yearTo ? { date: `${yearFrom ?? 1500}-${yearTo ?? 2100}` } : {}),

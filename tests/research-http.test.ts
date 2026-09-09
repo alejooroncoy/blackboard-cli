@@ -63,6 +63,20 @@ test('API credential headers never follow even a public redirect', async t => {
   assert.equal(requests.length, 1);
 });
 
+test('an ordinary Accept header may follow a public redirect', async t => {
+  t.mock.method(dns, 'lookup', async () => [{ address: '8.8.8.8', family: 4 }]);
+  const requests = mockHttp(t, [
+    { status: 302, location: 'https://cdn.example.edu/file.xml' },
+    { status: 200, body: '<article>public</article>' },
+  ]);
+  const result = await researchDownload('https://example.edu/file.xml', {
+    headers: { Accept: 'application/xml' }, redirects: 4,
+  });
+  assert.equal(result.bytes.toString(), '<article>public</article>');
+  assert.equal(requests.length, 2);
+  assert.equal(requests[1].options.headers.Accept, 'application/xml');
+});
+
 test('HTTP enforces size caps both with and without Content-Length', async t => {
   t.mock.method(dns, 'lookup', async () => [{ address: '8.8.8.8', family: 4 }]);
   mockHttp(t, [{ status: 200, body: '123456', length: '6' }, { status: 200, body: '123456' }]);
